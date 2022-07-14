@@ -12,6 +12,8 @@ namespace Assets.Code.Data
         public string Name;
         public BigVector2 Position;
         public BigVector2 Velocity;
+        public float Rotation;
+        public float AngularVelocity;
         public ShipData ShipData = new();
         [NonSerialized] public GameObject GameObject;
 
@@ -56,11 +58,16 @@ namespace Assets.Code.Data
                     Position.y;
         }
 
-        public void UpdateVelocity()
+        public void UpdateRigidbodyData()
         {
             if (GameObject != null)
                 if (GameObject.GetComponent<Rigidbody2D>())
-                    Velocity = GameObject.GetComponent<Rigidbody2D>().velocity;
+                {
+                    var rb = GameObject.GetComponent<Rigidbody2D>();
+                    Velocity = rb.velocity;
+                    Rotation = rb.rotation;
+                    AngularVelocity = rb.angularVelocity;
+                }
         }
 
         public void UpdateShipData() =>

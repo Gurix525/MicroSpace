@@ -51,6 +51,7 @@ namespace Assets.Code.Main
         private IEnumerator BuildShipCoroutine()
         {
             SwitchSetup();
+            SwitchPause();
             GameObject designation = Instantiate(ShipDesignationPrefab, _world);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -62,12 +63,14 @@ namespace Assets.Code.Main
             Destroy(designation);
             yield return null;
             SelectFocusedShip(ship);
+            SwitchPause();
             SwitchSetup();
         }
 
         private IEnumerator DesignateWallCoroutine()
         {
             SwitchSetup();
+            SwitchPause();
             GameObject designation = Instantiate(WallDesignationPrefab, _world);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -80,26 +83,28 @@ namespace Assets.Code.Main
             {
                 Instantiate(
                     WallPrefab,
-                    designation.transform.position.Round(),
+                    designation.transform.position,
                     designation.transform.rotation,
-                    designation.transform.parent
-                    );
+                    designation.transform.parent);
+                UpdateShipData(designation.transform.parent.gameObject);
             }
-            UpdateShipData(designation.transform.parent.gameObject);
             Destroy(designation);
+            SwitchPause();
             SwitchSetup();
         }
 
         private BoxCollider2D FindClosestWall(
             GameObject designation, Vector3 v3)
         {
-            BoxCollider2D closestWall = FindObjectsOfType<BoxCollider2D>()
-                    .Where(x => x != designation.GetComponent<BoxCollider2D>())
-                    .Aggregate(
-                        (closest, next) =>
-                            Vector2.Distance(closest.transform.position, v3)
-                            < Vector2.Distance(next.transform.position, v3)
-                            ? closest : next);
+            var num = FindObjectsOfType<BoxCollider2D>()
+                .Where(x => x != designation.GetComponent<BoxCollider2D>())
+                .Where(x => x.transform.parent.GetComponent<Ship>() != null);
+            var closestWall = num.Count() > 0 ?
+                num.Aggregate((closest, next) =>
+                Vector2.Distance(closest.transform.position, v3) <
+                Vector2.Distance(next.transform.position, v3) ?
+                closest : next) :
+                null;
             return closestWall;
         }
 
@@ -260,7 +265,10 @@ namespace Assets.Code.Main
                 dbo.Position - Database.FocusedShip.Position);
             ship.name = dbo.Name;
             ship.GetComponent<Ship>().DBObject = dbo;
-            ship.GetComponent<Rigidbody2D>().velocity = (Vector3)dbo.Velocity;
+            var rb = ship.GetComponent<Rigidbody2D>();
+            rb.velocity = (Vector3)dbo.Velocity;
+            rb.rotation = dbo.Rotation;
+            rb.angularVelocity = dbo.AngularVelocity;
             foreach (WallData wallData in dbo.ShipData.Walls)
             {
                 if (wallData.Name == "Core")

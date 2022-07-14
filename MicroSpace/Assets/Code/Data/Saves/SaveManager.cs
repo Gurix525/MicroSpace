@@ -31,7 +31,8 @@ namespace Assets.Code.Data.Saves
             ClearWorld();
             string toLoad = string.Empty;
             if (File.Exists(Path.Combine(Application.persistentDataPath, name)))
-                toLoad = File.ReadAllText(Path.Combine(Application.persistentDataPath, name));
+                toLoad = File.ReadAllText(
+                    Path.Combine(Application.persistentDataPath, name));
             else
             {
                 var directory = new DirectoryInfo(Application.persistentDataPath);

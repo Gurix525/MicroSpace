@@ -79,7 +79,7 @@ namespace Assets.Code.Data
                     var a = DBObjects.Count;
                     DBObjects
                         ?.Find(x => x.GameObject == item.gameObject)
-                        ?.UpdateVelocity();
+                        ?.UpdateRigidbodyData();
                 }
         }
 
