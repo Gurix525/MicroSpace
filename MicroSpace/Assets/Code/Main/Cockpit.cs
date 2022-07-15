@@ -15,6 +15,7 @@ namespace Assets.Code.Main
         public GameObject ShipPrefab;
         public GameObject WallDesignationPrefab;
         public GameObject WallPrefab;
+        public UIController UIController;
 
         private bool isSetupRunnning = false;
 
@@ -237,9 +238,10 @@ namespace Assets.Code.Main
                 return;
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
-                SelectFocusedShip(null, true);
+                UIController.OpenContextualMenu();
+                //SelectFocusedShip(null, true);
                 return;
             }
 
