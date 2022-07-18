@@ -16,6 +16,7 @@ namespace Assets.Code.Data
         public float MaxEndurance;
         public string Name;
         public float Resilience;
+        public RoomData Room;
 
         public static implicit operator WallData(Wall wall)
         {
@@ -30,6 +31,7 @@ namespace Assets.Code.Data
                 wall.gameObject.transform.localPosition.y
             };
             wallData.LocalRotation = wall.gameObject.transform.localEulerAngles.z;
+            wallData.Room = wall.Room;
 
             return wallData;
         }

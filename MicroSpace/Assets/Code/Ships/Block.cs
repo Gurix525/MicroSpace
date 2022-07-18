@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Assets.Code.Data;
 
 namespace Assets.Code.Ships
 {
-    public class Wall : MonoBehaviour
+    /// <summary>
+    /// Komponent umieszczany w konkretnych prefabach Block,
+    /// ma swój odpowiednik w Data.BlockData.
+    /// </summary>
+    public class Block : MonoBehaviour
     {
         public string Name;
         public float Resilience; // Minimum energy to do damage
         public float MaxEndurance; // Maximum taken damage
         public float CurrentEndurance;
-        public RoomData Room;
     }
 }

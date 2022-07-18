@@ -155,8 +155,8 @@ MonoBehaviour:
   SelectedShipRigidbody: {fileID: 0}
   ShipDesignationPrefab: {fileID: 2505317657868975611, guid: 6b5ddd6ec463ed443941755e0845defa, type: 3}
   ShipPrefab: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
-  WallDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
-  WallPrefab: {fileID: 7440152704112946889, guid: e288380be1584ea4189ffa8e1fc7d7ca, type: 3}
+  BlockDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
+  BlockPrefab: {fileID: 7440152704112946889, guid: e288380be1584ea4189ffa8e1fc7d7ca, type: 3}
   UIController: {fileID: 472914255}
   _world: {fileID: 445740361}
 --- !u!4 &98350693

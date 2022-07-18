@@ -13,7 +13,8 @@ namespace Assets.Code.Main
         public Rigidbody2D SelectedShipRigidbody = null;
         public GameObject ShipDesignationPrefab;
         public GameObject ShipPrefab;
-        public GameObject WallDesignationPrefab;
+        public GameObject BlockDesignationPrefab;
+        public GameObject BlockPrefab;
         public GameObject WallPrefab;
         public UIController UIController;
 
@@ -68,22 +69,22 @@ namespace Assets.Code.Main
             SwitchSetup();
         }
 
-        private IEnumerator DesignateWallCoroutine()
+        private IEnumerator DesignateBlockCoroutine()
         {
             SwitchSetup();
             SwitchPause();
-            GameObject designation = Instantiate(WallDesignationPrefab, _world);
+            GameObject designation = Instantiate(BlockDesignationPrefab, _world);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
                 Vector3 v3 = MousePosition();
-                BoxCollider2D closestWall = FindClosestWall(designation, v3);
-                MoveWallDesignation(designation, closestWall, v3);
+                BoxCollider2D closestBlock = FindClosestBlock(designation, v3);
+                MoveBlockDesignation(designation, closestBlock, v3);
                 yield return null;
             }
             if (designation.transform.parent != null)
             {
                 Instantiate(
-                    WallPrefab,
+                    BlockPrefab,
                     designation.transform.position,
                     designation.transform.rotation,
                     designation.transform.parent);
@@ -94,19 +95,19 @@ namespace Assets.Code.Main
             SwitchSetup();
         }
 
-        private BoxCollider2D FindClosestWall(
+        private BoxCollider2D FindClosestBlock(
             GameObject designation, Vector3 v3)
         {
             var num = FindObjectsOfType<BoxCollider2D>()
                 .Where(x => x != designation.GetComponent<BoxCollider2D>())
                 .Where(x => x.transform.parent.GetComponent<Ship>() != null);
-            var closestWall = num.Count() > 0 ?
+            var closestBlock = num.Count() > 0 ?
                 num.Aggregate((closest, next) =>
                 Vector2.Distance(closest.transform.position, v3) <
                 Vector2.Distance(next.transform.position, v3) ?
                 closest : next) :
                 null;
-            return closestWall;
+            return closestBlock;
         }
 
         private void FixedUpdate()
@@ -135,17 +136,17 @@ namespace Assets.Code.Main
             designation.transform.position = v3;
         }
 
-        private void MoveWallDesignation(
-            GameObject designation, BoxCollider2D closestWall, Vector3 v3)
+        private void MoveBlockDesignation(
+            GameObject designation, BoxCollider2D closestBlock, Vector3 v3)
         {
-            if (closestWall != null ?
-                    Vector2.Distance(closestWall.transform.position, v3) < 2 :
+            if (closestBlock != null ?
+                    Vector2.Distance(closestBlock.transform.position, v3) < 2 :
                     false)
             {
-                var v3relative = closestWall.transform.InverseTransformPoint(v3);
-                designation.transform.parent = closestWall.transform.parent;
+                var v3relative = closestBlock.transform.InverseTransformPoint(v3);
+                designation.transform.parent = closestBlock.transform.parent;
                 designation.transform.localPosition =
-                    closestWall.transform.localPosition +
+                    closestBlock.transform.localPosition +
                     v3relative
                     .normalized
                     .Round();
@@ -234,7 +235,7 @@ namespace Assets.Code.Main
 
             if (Input.GetKeyDown(KeyCode.B))
             {
-                StartCoroutine(DesignateWallCoroutine());
+                StartCoroutine(DesignateBlockCoroutine());
                 return;
             }
 
@@ -271,20 +272,34 @@ namespace Assets.Code.Main
             rb.velocity = (Vector3)dbo.Velocity;
             rb.rotation = dbo.Rotation;
             rb.angularVelocity = dbo.AngularVelocity;
+            foreach (BlockData blockData in dbo.ShipData.Blocks)
+            {
+                if (blockData.Name == "Core")
+                    continue;
+                GameObject block = Instantiate(
+                    _cockpit.BlockPrefab, ship.transform);
+                block.transform.localPosition = new Vector2(
+                     blockData.LocalPosition[0], blockData.LocalPosition[1]);
+                block.name = blockData.Name;
+                var blockComponent = block.GetComponent<Block>();
+                blockComponent.Name = blockData.Name;
+                blockComponent.Resilience = blockData.Resilience;
+                blockComponent.MaxEndurance = blockData.MaxEndurance;
+                blockComponent.CurrentEndurance = blockData.CurrentEndurance;
+            }
             foreach (WallData wallData in dbo.ShipData.Walls)
             {
-                if (wallData.Name == "Core")
-                    continue;
                 GameObject wall = Instantiate(
                     _cockpit.WallPrefab, ship.transform);
                 wall.transform.localPosition = new Vector2(
-                     wallData.LocalPosition[0], wallData.LocalPosition[1]);
+                    wallData.LocalPosition[0], wallData.LocalPosition[1]);
                 wall.name = wallData.Name;
                 var wallComponent = wall.GetComponent<Wall>();
                 wallComponent.Name = wallData.Name;
                 wallComponent.Resilience = wallData.Resilience;
                 wallComponent.MaxEndurance = wallData.MaxEndurance;
                 wallComponent.CurrentEndurance = wallData.CurrentEndurance;
+                wallComponent.Room = wallData.Room;
             }
         }
     }
