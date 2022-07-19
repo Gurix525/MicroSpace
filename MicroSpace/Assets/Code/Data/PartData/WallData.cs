@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Code.Data
+namespace Assets.Code.Data.PartDataImplementations
 {
     [Serializable]
-    public class WallData
+    public class WallData : PartData
     {
-        public float CurrentEndurance;
-        public float[] LocalPosition = new float[2];
-        public float LocalRotation;
-        public float MaxEndurance;
-        public string Name;
-        public float Resilience;
+        //public float CurrentEndurance;
+        //public float[] LocalPosition = new float[2];
+        //public float LocalRotation;
+        //public float MaxEndurance;
+        //public string Name;
+        //public float Resilience;
         public RoomData Room;
 
         public static implicit operator WallData(Wall wall)

@@ -1,4 +1,5 @@
 using Assets.Code.Data;
+using Assets.Code.Data.PartDataImplementations;
 using Assets.Code.Data.Saves;
 using Assets.Code.ExtensionMethods;
 using Assets.Code.Ships;
@@ -95,6 +96,32 @@ namespace Assets.Code.Main
             SwitchSetup();
         }
 
+        private IEnumerator DesignateWallCoroutine()
+        {
+            SwitchSetup();
+            SwitchPause();
+            GameObject designation = Instantiate(BlockDesignationPrefab, _world);
+            while (!Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Vector3 v3 = MousePosition();
+                BoxCollider2D closestBlock = FindClosestBlock(designation, v3);
+                MoveBlockDesignation(designation, closestBlock, v3);
+                yield return null;
+            }
+            if (designation.transform.parent != null)
+            {
+                Instantiate(
+                    WallPrefab,
+                    designation.transform.position,
+                    designation.transform.rotation,
+                    designation.transform.parent);
+                UpdateShipData(designation.transform.parent.gameObject);
+            }
+            Destroy(designation);
+            SwitchPause();
+            SwitchSetup();
+        }
+
         private BoxCollider2D FindClosestBlock(
             GameObject designation, Vector3 v3)
         {
@@ -171,7 +198,7 @@ namespace Assets.Code.Main
             }
             if (ship != null)
             {
-                Debug.Log(ship);
+                //Debug.Log(ship);
                 SelectedShipRigidbody = ship.GetComponent<Rigidbody2D>();
                 Database.FocusedShip = Database.DBObjects
                     .Find(x => x.GameObject == ship);
@@ -236,6 +263,12 @@ namespace Assets.Code.Main
             if (Input.GetKeyDown(KeyCode.B))
             {
                 StartCoroutine(DesignateBlockCoroutine());
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                StartCoroutine(DesignateWallCoroutine());
                 return;
             }
 
