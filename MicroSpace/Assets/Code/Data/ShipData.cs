@@ -53,69 +53,102 @@ namespace Assets.Code.Data
             Walls = walls;
         }
 
-        private PartData[,] CreateGrid()
+        private void UpdateRooms()
         {
             List<PartData> parts = new();
             foreach (var item in Blocks)
                 parts.Add(item);
             foreach (var item in Walls)
                 parts.Add(item);
-            int minX = (int)(parts.Min(x => x.LocalPosition[0]));
-            int maxX = (int)(parts.Max(x => x.LocalPosition[0]));
-            int minY = (int)(parts.Min(x => x.LocalPosition[1]));
-            int maxY = (int)(parts.Max(x => x.LocalPosition[1]));
-            int width = maxX - minX + 1;
-            int height = maxY - minY + 1;
-            PartData[,] grid = new PartData[width, height];
-            foreach (var item in parts)
+
+            foreach (PartData part in parts)
             {
-                grid[
-                    (int)item.LocalPosition[0] - minX,
-                    (int)item.LocalPosition[1] - minY] = item;
+                if (part is not WallData)
+                    continue;
+
+                var upPart = parts.Find(
+                    x => x.LocalPosition[0] == part.LocalPosition[0] &&
+                    x.LocalPosition[1] == part.LocalPosition[1] + 1);
+                var downPart = parts.Find(
+                    x => x.LocalPosition[0] == part.LocalPosition[0] &&
+                    x.LocalPosition[1] == part.LocalPosition[1] - 1);
+                var leftPart = parts.Find(
+                    x => x.LocalPosition[0] == part.LocalPosition[0] - 1 &&
+                    x.LocalPosition[1] == part.LocalPosition[1]);
+                var rightPart = parts.Find(
+                    x => x.LocalPosition[0] == part.LocalPosition[0] + 1 &&
+                    x.LocalPosition[1] == part.LocalPosition[1]);
+
+                if (upPart == null || downPart == null ||
+                    leftPart == null || rightPart == null)
+                    ((WallData)part).IsExposed = true;
+
+                if (upPart is WallData)
+                    ((WallData)part).UpWall = (WallData)upPart;
+                if (downPart is WallData)
+                    ((WallData)part).DownWall = (WallData)downPart;
+                if (leftPart is WallData)
+                    ((WallData)part).LeftWall = (WallData)leftPart;
+                if (rightPart is WallData)
+                    ((WallData)part).RightWall = (WallData)rightPart;
             }
-            return grid;
-        }
 
-        private void UpdateRooms()
-        {
-            var grid = CreateGrid();
-            int width = grid.GetLength(0);
-            int height = grid.GetLength(1);
-            if (width < 3 || height < 3)
-                return;
+            var exposedWalls = parts
+                .Where(x => x is WallData)
+                .Where(x => ((WallData)x).IsExposed);
 
-            bool[,] boolGrid = new bool[width, height];
-            for (int x = 1; x <= width - 2; x++)
-                for (int y = 1; y <= height - 2; y++)
-                    if (grid[x - 1, y] != null &&
-                        grid[x + 1, y] != null &&
-                        grid[x, y - 1] != null &&
-                        grid[x, y + 1] != null &&
-                        grid[x, y] is WallData)
-                        boolGrid[x, y] = true;
+            foreach (var wall in exposedWalls)
+                ExposeWall((WallData)wall);
 
-            for (int x = 1; x <= width - 2; x++)
-                for (int y = 1; y <= height - 2; y++)
+            foreach (var wall in Walls)
+                SetRoom(wall);
+
+            void ExposeWall(WallData wall)
+            {
+                wall.IsExposed = true;
+
+                if (wall.UpWall != null)
+                    if (!wall.UpWall.IsExposed)
+                        ExposeWall(wall.UpWall);
+
+                if (wall.DownWall != null)
+                    if (!wall.DownWall.IsExposed)
+                        ExposeWall(wall.DownWall);
+
+                if (wall.LeftWall != null)
+                    if (!wall.LeftWall.IsExposed)
+                        ExposeWall(wall.LeftWall);
+
+                if (wall.RightWall != null)
+                    if (!wall.RightWall.IsExposed)
+                        ExposeWall(wall.RightWall);
+            }
+
+            void SetRoom(WallData wall, RoomData room = null)
+            {
+                if (wall == null)
+                    return;
+
+                if (wall.Room != null)
+                    return;
+
+                if (room == null)
                 {
-                    if (boolGrid[x, y])
-                    {
-                        var wall = grid[x, y] as WallData;
-                        if (grid[x - 1, y] is WallData)
-                            wall.Room = (grid[x - 1, y] as WallData).Room;
-                        else if (grid[x, y - 1] is WallData)
-                            wall.Room = (grid[x, y - 1] as WallData).Room;
-                        else
-                        {
-                            Rooms.Add(new());
-                            var room = Rooms[^1];
-                            wall.Room = room;
-                            room.Walls.Add(wall);
-                            room.Id = Rooms.Count;
-                        }
-                    }
-                } // ten algorytm jest zły, nie sprawdza czy pokój jest ograniczony blokami
-            // Poza tym trzeba jeszcze się upewnić że roomy nie będą się tworzyć w nieskończonośc dla tych samych walli
-            // No i z jakiegoś powodu na razie roomy w ogóle się nie tworzą
-        }
+                    Rooms.Add(new(Rooms.Count));
+                    room = Rooms[^1];
+                }
+
+                if (wall.Room == null)
+                {
+                    room.Walls.Add(wall);
+                    wall.Room = room;
+                }
+
+                SetRoom(wall.UpWall, room);
+                SetRoom(wall.DownWall, room);
+                SetRoom(wall.LeftWall, room);
+                SetRoom(wall.RightWall, room);
+            }
+        } // Jeszcze sie za duzo roommow tworzy z jakiegoś powodu
     }
 }

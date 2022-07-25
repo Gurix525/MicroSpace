@@ -16,7 +16,14 @@ namespace Assets.Code.Data.PartDataImplementations
         //public float MaxEndurance;
         //public string Name;
         //public float Resilience;
-        public RoomData Room;
+        public bool IsExposed = false;
+
+        public WallData UpWall = null;
+        public WallData DownWall = null;
+        public WallData LeftWall = null;
+        public WallData RightWall = null;
+
+        public RoomData Room = null;
 
         public static implicit operator WallData(Wall wall)
         {
@@ -25,10 +32,10 @@ namespace Assets.Code.Data.PartDataImplementations
             wallData.Resilience = wall.Resilience;
             wallData.MaxEndurance = wall.MaxEndurance;
             wallData.CurrentEndurance = wall.CurrentEndurance;
-            wallData.LocalPosition = new float[]
+            wallData.LocalPosition = new int[]
             {
-                wall.gameObject.transform.localPosition.x,
-                wall.gameObject.transform.localPosition.y
+                (int)wall.gameObject.transform.localPosition.x,
+                (int)wall.gameObject.transform.localPosition.y
             };
             wallData.LocalRotation = wall.gameObject.transform.localEulerAngles.z;
             wallData.Room = wall.Room;

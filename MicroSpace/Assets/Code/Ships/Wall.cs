@@ -14,6 +14,6 @@ namespace Assets.Code.Ships
         public float Resilience; // Minimum energy to do damage
         public float MaxEndurance; // Maximum taken damage
         public float CurrentEndurance;
-        public RoomData Room;
+        [NonSerialized] public RoomData Room = null;
     }
 }

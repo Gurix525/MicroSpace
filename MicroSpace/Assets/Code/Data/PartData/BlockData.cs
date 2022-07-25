@@ -24,10 +24,10 @@ namespace Assets.Code.Data.PartDataImplementations
             blockData.Resilience = block.Resilience;
             blockData.MaxEndurance = block.MaxEndurance;
             blockData.CurrentEndurance = block.CurrentEndurance;
-            blockData.LocalPosition = new float[]
+            blockData.LocalPosition = new int[]
             {
-                block.gameObject.transform.localPosition.x,
-                block.gameObject.transform.localPosition.y
+                (int)block.gameObject.transform.localPosition.x,
+                (int)block.gameObject.transform.localPosition.y
             };
             blockData.LocalRotation = block.gameObject.transform.localEulerAngles.z;
 

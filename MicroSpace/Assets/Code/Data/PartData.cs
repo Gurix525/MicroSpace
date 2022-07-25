@@ -10,7 +10,7 @@ namespace Assets.Code.Data
     public abstract class PartData
     {
         public float CurrentEndurance;
-        public float[] LocalPosition = new float[2];
+        public int[] LocalPosition = new int[2];
         public float LocalRotation;
         public float MaxEndurance;
         public string Name;
