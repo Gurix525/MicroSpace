@@ -46,7 +46,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120e8bc0890221840b27d581f25eca50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Walls: []
+  DBObject:
+    Name: 
+    Position:
+      x: 0
+      y: 0
+    Velocity:
+      x: 0
+      y: 0
+    Rotation: 0
+    AngularVelocity: 0
+    ShipData:
+      Blocks: []
+      Walls: []
+      Rooms: []
 --- !u!50 &4542050502911274631
 Rigidbody2D:
   serializedVersion: 4
@@ -61,7 +74,7 @@ Rigidbody2D:
   m_UseAutoMass: 1
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0
+  m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0

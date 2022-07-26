@@ -66,6 +66,9 @@ namespace Assets.Code.Main
             }
             GameObject ship = Instantiate(ShipPrefab, _world);
             ship.transform.localPosition = designation.transform.localPosition;
+            ship.GetComponent<Rigidbody2D>().velocity =
+                SelectedShipRigidbody != null ?
+                SelectedShipRigidbody.velocity : Vector2.zero;
             Destroy(designation);
             yield return null;
             SelectFocusedShip(ship);
@@ -147,7 +150,7 @@ namespace Assets.Code.Main
                 SteerTheShip();
                 AlignScenePosition();
                 AlignCamera();
-                UpdateSpeed();
+                UpdateSpeedometer();
             }
         }
 
@@ -206,6 +209,8 @@ namespace Assets.Code.Main
         {
             if (target != null)
                 _target = target.GetComponent<Rigidbody2D>();
+            else
+                _target = null;
         }
 
         private void SteerTheShip()
@@ -229,15 +234,31 @@ namespace Assets.Code.Main
             if (Input.GetKey(KeyCode.Q))
                 SelectedShipRigidbody.AddTorque(speed);
             if (Input.GetKey(KeyCode.Space))
-            {
-                SelectedShipRigidbody.drag = 10;
-                SelectedShipRigidbody.angularDrag = 10;
-            }
+                AdjustSpeed(speed * Time.fixedDeltaTime);
+        }
+
+        private void AdjustSpeed(float speed)
+        {
+            Vector2 desiredVelocity = _target != null ?
+                _target.velocity : Vector2.zero;
+            var currentVelocity = SelectedShipRigidbody.velocity;
+            float x = 0;
+            float y = 0;
+
+            int xSign = Math.Sign(desiredVelocity.x - currentVelocity.x);
+            int ySign = Math.Sign(desiredVelocity.y - currentVelocity.y);
+
+            if (Math.Abs(desiredVelocity.x - currentVelocity.x) >= speed)
+                x = speed * xSign;
             else
-            {
-                SelectedShipRigidbody.drag = 0;
-                SelectedShipRigidbody.angularDrag = 0;
-            }
+                x = desiredVelocity.x - currentVelocity.x;
+
+            if (Math.Abs(desiredVelocity.y - currentVelocity.y) >= speed)
+                y = speed * ySign;
+            else
+                y = desiredVelocity.y - currentVelocity.y;
+
+            SelectedShipRigidbody.velocity += new Vector2(x, y);
         }
 
         private void SwitchPause()
@@ -248,7 +269,7 @@ namespace Assets.Code.Main
         private void SwitchSetup() => // Used to switch setup on/off
                     _isSetupRunnning ^= true;
 
-        private void UpdateSpeed()
+        private void UpdateSpeedometer()
         {
             Speedometer = _target == null ?
                 SelectedShipRigidbody.velocity.magnitude :
