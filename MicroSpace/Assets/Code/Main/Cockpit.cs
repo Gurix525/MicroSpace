@@ -314,6 +314,7 @@ namespace Assets.Code.Main
             rb.velocity = (Vector3)dbo.Velocity;
             rb.rotation = dbo.Rotation;
             rb.angularVelocity = dbo.AngularVelocity;
+
             foreach (BlockData blockData in dbo.ShipData.Blocks)
             {
                 if (blockData.Name == "Core")
@@ -325,11 +326,8 @@ namespace Assets.Code.Main
                 block.name = blockData.Name;
                 var blockComponent = block.GetComponent<Block>();
                 blockComponent.BlockData = blockData;
-                //blockComponent.Name = blockData.Name;
-                //blockComponent.Resilience = blockData.Resilience;
-                //blockComponent.MaxEndurance = blockData.MaxEndurance;
-                //blockComponent.CurrentEndurance = blockData.CurrentEndurance;
             }
+
             foreach (WallData wallData in dbo.ShipData.Walls)
             {
                 GameObject wall = Instantiate(
@@ -339,11 +337,8 @@ namespace Assets.Code.Main
                 wall.name = wallData.Name;
                 var wallComponent = wall.GetComponent<Wall>();
                 wallComponent.WallData = wallData;
-                //wallComponent.Name = wallData.Name;
-                //wallComponent.Resilience = wallData.Resilience;
-                //wallComponent.MaxEndurance = wallData.MaxEndurance;
-                //wallComponent.CurrentEndurance = wallData.CurrentEndurance;
-                //wallComponent.Room = wallData.Room;
+                wallData.Room = dbo.ShipData.Rooms
+                    .Find(x => x.Id == wallData.Room.Id);
             }
         }
     }
