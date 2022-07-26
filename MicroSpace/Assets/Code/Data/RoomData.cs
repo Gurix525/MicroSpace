@@ -12,9 +12,7 @@ namespace Assets.Code.Data
     public class RoomData
     {
         public int Id;
-
         public float MaxPressure;
-
         public float Pressure;
         [NonSerialized] public List<WallData> Walls = new();
 

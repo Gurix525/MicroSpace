@@ -293,9 +293,11 @@ namespace Assets.Code.Main
                 return;
             }
 
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            if (Input.GetAxis("Mouse ScrollWheel") > 0 &&
+                Camera.main.orthographicSize > 5)
                 Camera.main.orthographicSize -= 5;
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0 &&
+                Camera.main.orthographicSize < 100)
                 Camera.main.orthographicSize += 5;
         }
 
