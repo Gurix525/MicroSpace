@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Code.Data.PartDataImplementations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,11 @@ namespace Assets.Code.Ships
     /// </summary>
     public class Block : MonoBehaviour
     {
-        public string Name;
-        public float Resilience; // Minimum energy to do damage
-        public float MaxEndurance; // Maximum taken damage
-        public float CurrentEndurance;
+        //public string Name;
+        //public float Resilience; // Minimum energy to do damage
+        //public float MaxEndurance; // Maximum taken damage
+        //public float CurrentEndurance;
+
+        public BlockData BlockData;
     }
 }

@@ -16,6 +16,8 @@ namespace Assets.Code.Data
         public List<WallData> Walls = new();
         public List<RoomData> Rooms = new();
 
+        public int ElementsCount { get => Walls.Count + Blocks.Count; }
+
         private PartData[,] _grid;
 
         public void Update(GameObject ship)
@@ -82,6 +84,8 @@ namespace Assets.Code.Data
                 if (upPart == null || downPart == null ||
                     leftPart == null || rightPart == null)
                     ((WallData)part).IsExposed = true;
+                else
+                    ((WallData)part).IsExposed = false;
 
                 if (upPart is WallData)
                     ((WallData)part).UpWall = (WallData)upPart;
@@ -98,57 +102,87 @@ namespace Assets.Code.Data
                 .Where(x => ((WallData)x).IsExposed);
 
             foreach (var wall in exposedWalls)
-                ExposeWall((WallData)wall);
+                exposeWall((WallData)wall);
 
             foreach (var wall in Walls)
-                SetRoom(wall);
+                setRoom(wall);
 
-            void ExposeWall(WallData wall)
+            void exposeWall(WallData wall)
             {
                 wall.IsExposed = true;
 
                 if (wall.UpWall != null)
                     if (!wall.UpWall.IsExposed)
-                        ExposeWall(wall.UpWall);
+                        exposeWall(wall.UpWall);
 
                 if (wall.DownWall != null)
                     if (!wall.DownWall.IsExposed)
-                        ExposeWall(wall.DownWall);
+                        exposeWall(wall.DownWall);
 
                 if (wall.LeftWall != null)
                     if (!wall.LeftWall.IsExposed)
-                        ExposeWall(wall.LeftWall);
+                        exposeWall(wall.LeftWall);
 
                 if (wall.RightWall != null)
                     if (!wall.RightWall.IsExposed)
-                        ExposeWall(wall.RightWall);
+                        exposeWall(wall.RightWall);
             }
 
-            void SetRoom(WallData wall, RoomData room = null)
+            void setRoom(WallData wall, RoomData room = null)
             {
-                if (wall == null)
-                    return;
-
-                if (wall.Room != null)
-                    return;
-
-                if (room == null)
+                if (wall.Room.Id > 0)
+                    room = wall.Room;
+                else
                 {
-                    Rooms.Add(new(Rooms.Count));
-                    room = Rooms[^1];
-                }
-
-                if (wall.Room == null)
-                {
-                    room.Walls.Add(wall);
+                    if (room == null)
+                    {
+                        Rooms.Add(new(Rooms.Count + 1));
+                        room = Rooms[^1];
+                    }
                     wall.Room = room;
                 }
 
-                SetRoom(wall.UpWall, room);
-                SetRoom(wall.DownWall, room);
-                SetRoom(wall.LeftWall, room);
-                SetRoom(wall.RightWall, room);
-            }
-        } // Jeszcze sie za duzo roommow tworzy z jakiegoś powodu
+                if (wall.UpWall != null)
+                    if (wall.UpWall.Room.Id == 0)
+                        setRoom(wall.UpWall, room);
+                if (wall.DownWall != null)
+                    if (wall.DownWall.Room.Id == 0)
+                        setRoom(wall.DownWall, room);
+                if (wall.LeftWall != null)
+                    if (wall.LeftWall.Room.Id == 0)
+                        setRoom(wall.LeftWall, room);
+                if (wall.RightWall != null)
+                    if (wall.RightWall.Room.Id == 0)
+                        setRoom(wall.RightWall, room);
+                //void setRoom(WallData wall, RoomData room = null)
+                //{
+                //    if (wall == null)
+                //        return;
+
+                //    if (wall.Room != null)
+                //        if (wall.Room.Id != 0)
+                //            return;
+
+                //    if (room == null)
+                //    {
+                //        Rooms.Add(new(Rooms.Count + 1));
+                //        room = Rooms[^1];
+                //    }
+
+                //    if (wall.Room == null)
+                //    {
+                //        room.Walls.Add(wall);
+                //        wall.Room = room;
+                //    }
+
+                //    setRoom(wall.UpWall, room);
+                //    setRoom(wall.DownWall, room);
+                //    setRoom(wall.LeftWall, room);
+                //    setRoom(wall.RightWall, room);
+                //}
+            } // Jeszcze sie za duzo roomow tworzy bo
+
+            // walle sie kopiują z pustymi roomami na WallData
+        }
     }
 }

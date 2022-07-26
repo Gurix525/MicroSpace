@@ -11,16 +11,16 @@ namespace Assets.Code.Data
     [Serializable]
     public class RoomData
     {
-        public int Name;
+        public int Id;
 
         public float MaxPressure;
 
         public float Pressure;
         [NonSerialized] public List<WallData> Walls = new();
 
-        public RoomData(int name)
+        public RoomData(int id)
         {
-            Name = name;
+            Id = id;
         }
     }
 }

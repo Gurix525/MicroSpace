@@ -207,22 +207,24 @@ namespace Assets.Code.Main
 
         private void SteerTheShip()
         {
+            int speed = 5 * Database.FocusedShip.ShipData.ElementsCount;
+
             if (Input.GetKey(KeyCode.W))
                 SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.up * 5);
+                    SelectedShipRigidbody.transform.up * speed);
             if (Input.GetKey(KeyCode.S))
                 SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.up * -5);
+                    SelectedShipRigidbody.transform.up * -speed);
             if (Input.GetKey(KeyCode.D))
                 SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.right * 5);
+                    SelectedShipRigidbody.transform.right * speed);
             if (Input.GetKey(KeyCode.A))
                 SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.right * -5);
+                    SelectedShipRigidbody.transform.right * -speed);
             if (Input.GetKey(KeyCode.E))
-                SelectedShipRigidbody.AddTorque(-5);
+                SelectedShipRigidbody.AddTorque(-speed);
             if (Input.GetKey(KeyCode.Q))
-                SelectedShipRigidbody.AddTorque(5);
+                SelectedShipRigidbody.AddTorque(speed);
             if (Input.GetKey(KeyCode.Space))
             {
                 SelectedShipRigidbody.drag = 10;
@@ -290,6 +292,11 @@ namespace Assets.Code.Main
                 SaveManager.LoadGame();
                 return;
             }
+
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+                Camera.main.orthographicSize -= 5;
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+                Camera.main.orthographicSize += 5;
         }
 
         public static void InstantiateShipFromDB(DBObject dbo)
@@ -315,10 +322,11 @@ namespace Assets.Code.Main
                      blockData.LocalPosition[0], blockData.LocalPosition[1]);
                 block.name = blockData.Name;
                 var blockComponent = block.GetComponent<Block>();
-                blockComponent.Name = blockData.Name;
-                blockComponent.Resilience = blockData.Resilience;
-                blockComponent.MaxEndurance = blockData.MaxEndurance;
-                blockComponent.CurrentEndurance = blockData.CurrentEndurance;
+                blockComponent.BlockData = blockData;
+                //blockComponent.Name = blockData.Name;
+                //blockComponent.Resilience = blockData.Resilience;
+                //blockComponent.MaxEndurance = blockData.MaxEndurance;
+                //blockComponent.CurrentEndurance = blockData.CurrentEndurance;
             }
             foreach (WallData wallData in dbo.ShipData.Walls)
             {
@@ -328,11 +336,12 @@ namespace Assets.Code.Main
                     wallData.LocalPosition[0], wallData.LocalPosition[1]);
                 wall.name = wallData.Name;
                 var wallComponent = wall.GetComponent<Wall>();
-                wallComponent.Name = wallData.Name;
-                wallComponent.Resilience = wallData.Resilience;
-                wallComponent.MaxEndurance = wallData.MaxEndurance;
-                wallComponent.CurrentEndurance = wallData.CurrentEndurance;
-                wallComponent.Room = wallData.Room;
+                wallComponent.WallData = wallData;
+                //wallComponent.Name = wallData.Name;
+                //wallComponent.Resilience = wallData.Resilience;
+                //wallComponent.MaxEndurance = wallData.MaxEndurance;
+                //wallComponent.CurrentEndurance = wallData.CurrentEndurance;
+                //wallComponent.Room = wallData.Room;
             }
         }
     }
