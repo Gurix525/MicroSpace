@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="background" style="background-color: rgba(64, 112, 123, 0.76); justify-content: center; align-items: center; bottom: auto; top: 90%; position: relative; min-width: auto; min-height: 10%; max-width: 20%; max-height: 100px; left: 40%;">
+        <ui:Label text="m/s" display-tooltip-when-elided="true" name="speed" style="font-size: 50px;" />
+    </ui:VisualElement>
+</ui:UXML>

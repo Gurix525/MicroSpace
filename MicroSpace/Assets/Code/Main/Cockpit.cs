@@ -3,6 +3,7 @@ using Assets.Code.Data.PartDataImplementations;
 using Assets.Code.Data.Saves;
 using Assets.Code.ExtensionMethods;
 using Assets.Code.Ships;
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -19,8 +20,10 @@ namespace Assets.Code.Main
         public GameObject WallPrefab;
         public UIController UIController;
 
-        private bool isSetupRunnning = false;
+        private bool _isSetupRunnning = false;
+        public float Speedometer; // For UI speedometer purposes
 
+        [SerializeField] private Rigidbody2D _target;
         [SerializeField] private Transform _world;
         [SerializeField] private static Cockpit _cockpit; // singleton
 
@@ -144,6 +147,7 @@ namespace Assets.Code.Main
                 SteerTheShip();
                 AlignScenePosition();
                 AlignCamera();
+                UpdateSpeed();
             }
         }
 
@@ -187,15 +191,8 @@ namespace Assets.Code.Main
             }
         }
 
-        private void SelectFocusedShip(GameObject ship, bool mouseSelection = false)
+        public void SelectFocusedShip(GameObject ship)
         {
-            if (mouseSelection)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
-                if (hit.collider != null)
-                    ship = hit.collider.transform.parent.gameObject;
-            }
             if (ship != null)
             {
                 //Debug.Log(ship);
@@ -203,6 +200,12 @@ namespace Assets.Code.Main
                 Database.FocusedShip = Database.DBObjects
                     .Find(x => x.GameObject == ship);
             }
+        }
+
+        public void SelectTarget(GameObject target)
+        {
+            if (target != null)
+                _target = target.GetComponent<Rigidbody2D>();
         }
 
         private void SteerTheShip()
@@ -243,11 +246,19 @@ namespace Assets.Code.Main
         }
 
         private void SwitchSetup() => // Used to switch setup on/off
-                    isSetupRunnning ^= true;
+                    _isSetupRunnning ^= true;
+
+        private void UpdateSpeed()
+        {
+            Speedometer = _target == null ?
+                SelectedShipRigidbody.velocity.magnitude :
+                Math.Abs(SelectedShipRigidbody.velocity.magnitude -
+                _target.velocity.magnitude);
+        }
 
         private void Update()
         {
-            if (isSetupRunnning)
+            if (_isSetupRunnning)
                 return;
 
             if (Input.GetKeyDown(KeyCode.N))
