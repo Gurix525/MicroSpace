@@ -97,7 +97,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daa4b5353f8d14e85d8cf629d8b8a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Steel Wall
-  Resilience: 10
-  MaxEndurance: 10
-  CurrentEndurance: 10
+  WallData:
+    CurrentEndurance: 0
+    LocalPosition: 0000000000000000
+    LocalRotation: 0
+    MaxEndurance: 0
+    Name: 
+    Resilience: 0
+    IsExposed: 0
+    Room:
+      Id: 0
+      MaxPressure: 0
+      Pressure: 0

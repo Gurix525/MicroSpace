@@ -343,7 +343,7 @@ namespace Assets.Code.Main
             ship.name = dbo.Name;
             ship.GetComponent<Ship>().DBObject = dbo;
             var rb = ship.GetComponent<Rigidbody2D>();
-            rb.velocity = (Vector3)dbo.Velocity;
+            rb.velocity = dbo.Velocity;
             rb.rotation = dbo.Rotation;
             rb.angularVelocity = dbo.AngularVelocity;
 

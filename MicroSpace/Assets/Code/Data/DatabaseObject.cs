@@ -11,7 +11,7 @@ namespace Assets.Code.Data
     {
         public string Name;
         public BigVector2 Position;
-        public BigVector2 Velocity;
+        public Vector2 Velocity;
         public float Rotation;
         public float AngularVelocity;
         public ShipData ShipData = new();
@@ -20,18 +20,18 @@ namespace Assets.Code.Data
         public DBObject(string name = "", string desc = "")
         {
             Position = BigVector2.zero;
-            Velocity = BigVector2.zero;
+            Velocity = Vector2.zero;
             Name = name;
         }
 
         public DBObject(BigVector2 pos, string name = "", string desc = "")
         {
             Position = pos;
-            Velocity = BigVector2.zero;
+            Velocity = Vector2.zero;
             Name = name;
         }
 
-        public DBObject(BigVector2 pos, BigVector2 vel, string name = "", string desc = "")
+        public DBObject(BigVector2 pos, Vector2 vel, string name = "", string desc = "")
         {
             Position = pos;
             Velocity = vel;
