@@ -6,6 +6,16 @@ namespace Assets.Code.Pathfinding
 {
     public class NavMesh : MonoBehaviour
     {
-        [SerializeField] private Agent[] _agents;
+        [SerializeField] private List<Agent> _agents;
+
+        private void FixedUpdate()
+        {
+            if (_agents.Count > 0)
+                UpdateMesh();
+        }
+
+        private void UpdateMesh()
+        {
+        }
     }
 }
