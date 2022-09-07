@@ -21,6 +21,17 @@ namespace Assets.Code.Pathfinding
 
         private float _vOffset => _verticeSize / 2;
 
+        private void Awake()
+        {
+            _vertices = new List<Vector2>()
+            {
+                new Vector2(-_navMeshSizeFromCenter, -_navMeshSizeFromCenter),
+                new Vector2(_navMeshSizeFromCenter, -_navMeshSizeFromCenter),
+                new Vector2(-_navMeshSizeFromCenter, _navMeshSizeFromCenter),
+                new Vector2(_navMeshSizeFromCenter, _navMeshSizeFromCenter)
+            };
+        }
+
         private void FixedUpdate()
         {
             if (_agents.Count > 0)
@@ -30,7 +41,10 @@ namespace Assets.Code.Pathfinding
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.T))
+            {
+                _colliders = FindObjectsOfType<BoxCollider2D>();
                 UpdateMesh();
+            }
         }
 
         private void UpdateMesh()
@@ -47,17 +61,13 @@ namespace Assets.Code.Pathfinding
             Delaunator delaunator = new(Points);
 
             // Rysowanie do debugowania
-            int lineCount = 0;
-
             delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
             //_vertices.ForEach(x => DrawVertice(x));
-            delaunator.ForEachTriangleEdge(x => DrawEdge(x, ref lineCount));
+            //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
         }
 
-        private void DrawEdge(IEdge edge, ref int lineCount)
+        private void DrawEdge(IEdge edge)
         {
-            lineCount++;
-            Debug.Log(lineCount);
             Debug.DrawLine(((Point)edge.P).ToVector2(), ((Point)edge.Q).ToVector2(),
                 Color.red, _lineDrawTime);
         }
@@ -117,17 +127,19 @@ namespace Assets.Code.Pathfinding
             System.Random rand = new();
 
             renderer.material = new Material(_simpleMaterial);
+            renderer.material.color = new Color32(0, 0, 127, 0);
 
-            renderer.material.color = Color.HSVToRGB(
-                    (float)rand.Next(3600) / 3600,
-                    (float)rand.Next(20, 55) / 100,
-                    (float)rand.Next(85, 95)) / 100;
+            // Random color to triangles
+            //renderer.material.color = Color.HSVToRGB(
+            //        (float)rand.Next(3600) / 3600,
+            //        (float)rand.Next(20, 55) / 100,
+            //        (float)rand.Next(85, 95)) / 100;
 
             var centroid = delaunator.GetCentroid(triangleToDraw.Index);
 
             foreach (var box in _colliders)
             {
-                if (Vector2.Distance(((Point)centroid).ToVector2(), box.transform.position) < 2 * _navBorder)
+                if (Vector2.Distance(((Point)centroid).ToVector2(), box.transform.position) < 0.05F + 2 * _navBorder)
                 {
                     renderer.material.color = Color.black;
                     return;
@@ -170,7 +182,6 @@ namespace Assets.Code.Pathfinding
                 new Vector2(-_navMeshSizeFromCenter, _navMeshSizeFromCenter),
                 new Vector2(_navMeshSizeFromCenter, _navMeshSizeFromCenter)
             };
-            _colliders = FindObjectsOfType<BoxCollider2D>();
 
             float num = 0.5F + _navBorder;
 
