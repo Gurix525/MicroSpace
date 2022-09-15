@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace Assets.Code.Pathfinding
 {
@@ -17,9 +18,94 @@ namespace Assets.Code.Pathfinding
         [SerializeField] private float _lineDrawTime = 5F;
 
         private List<Vector2> _vertices = new();
+        private List<Vector2> _nodesPositions = new();
+        private List<Node> _nodes = new();
         private BoxCollider2D[] _colliders = { };
 
         private float _vOffset => _verticeSize / 2;
+
+        public Path FindPath(Vector2 startPos, Vector2 endPos)
+        {
+            Node start = FindClosestNode(startPos);
+            Node end = FindClosestNode(endPos);
+
+            Path path = new Path();
+
+            List<TempNode> open = new();
+            List<TempNode> closed = new();
+
+            open.Add(new(start, 0, 0, null));
+
+            IterateOverNodes(open, closed, endPos, end);
+
+            var finalNode = closed.Find(x => x.Node == end);
+
+            if (finalNode != null)
+            {
+                TraceParent(finalNode, path);
+                return path;
+            }
+            else return null;
+        }
+
+        private void TraceParent(TempNode node, Path path)
+        {
+            path.Nodes.Push(node.Node);
+            if (node.Parent != null)
+                TraceParent(node.Parent, path);
+        }
+
+        private void IterateOverNodes(List<TempNode> open, List<TempNode> closed,
+            Vector2 endPos, Node end)
+        {
+            while (open.Count > 0)
+            {
+                open.OrderBy(x => x.F);
+                TempNode activeNode = open[0];
+                open.RemoveAt(0);
+
+                foreach (var connectedNode in activeNode.Node.ConnectedNodes)
+                {
+                    var successor = new TempNode(connectedNode.Key,
+                        connectedNode.Value + activeNode.G,
+                        Vector2.Distance(connectedNode.Key.Position, endPos),
+                        activeNode);
+
+                    if (successor.Node == end)
+                    {
+                        closed.Add(activeNode);
+                        closed.Add(successor);
+                        return;
+                    }
+
+                    bool isWorse = false;
+
+                    foreach (TempNode node in open)
+                    {
+                        if (node.Node == successor.Node)
+                            if (node.F < successor.F)
+                            {
+                                isWorse = true;
+                                break;
+                            }
+                    }
+                    foreach (TempNode node in closed)
+                    {
+                        if (node.Node == successor.Node)
+                            if (node.F < successor.F)
+                            {
+                                isWorse = true;
+                                break;
+                            }
+                    }
+
+                    if (!isWorse)
+                        open.Add(successor);
+                }
+
+                closed.Add(activeNode);
+            }
+        }
 
         private void Awake()
         {
@@ -45,7 +131,16 @@ namespace Assets.Code.Pathfinding
                 _colliders = FindObjectsOfType<BoxCollider2D>();
                 UpdateMesh();
             }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                var path = FindPath(new(-20, -20), new(20, 20));
+                foreach (var item in path.Nodes)
+                    DrawVertice(item.Position);
+            }
         }
+
+        private Node FindClosestNode(Vector2 pos) =>
+            _nodes.OrderBy(x => Vector2.Distance(x.Position, pos)).ToArray()[0];
 
         private void UpdateMesh()
         {
@@ -60,18 +155,63 @@ namespace Assets.Code.Pathfinding
                 Points[i] = _vertices[i].ToPoint();
             Delaunator delaunator = new(Points);
 
-            // Rysowanie do debugowania
-            delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
+            _nodes.Clear();
+            delaunator.ForEachTriangle(x => FindNodes((Triangle)x, delaunator));
+            _nodesPositions = _nodesPositions.Distinct().ToList();
+            foreach (var item in _nodesPositions)
+            {
+                _nodes.Add(new(item));
+            }
+
+            delaunator.ForEachTriangleEdge(x => SetNeighbours((Edge)x));
+
+            // DEBUG
+            //_nodes.ForEach(x => DrawVertice(x));
+            //delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
             //_vertices.ForEach(x => DrawVertice(x));
             //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
         }
 
+        private void SetNeighbours(Edge edge)
+        {
+            Vector2 a = ((Point)edge.P).ToVector2();
+            Vector2 b = ((Point)edge.Q).ToVector2();
+
+            Node nodeA = _nodes.Find(x => x.Position == a);
+            Node nodeB = _nodes.Find(x => x.Position == b);
+
+            float distance = Vector2.Distance(a, b);
+            nodeA.ConnectedNodes.Add(nodeB, distance);
+            nodeB.ConnectedNodes.Add(nodeA, distance);
+        }
+
+        private void FindNodes(Triangle triangle, Delaunator delaunator)
+        {
+            var centroid = delaunator.GetCentroid(triangle.Index);
+            foreach (var box in _colliders)
+            {
+                if (Vector2.Distance(
+                    ((Point)centroid).ToVector2(), box.transform.position) <
+                    0.05F + 2 * _navBorder)
+                {
+                    return;
+                }
+            }
+
+            foreach (Point point in triangle.Points)
+            {
+                _nodesPositions.Add(point.ToVector2());
+            }
+        }
+
+        // DEBUG
         private void DrawEdge(IEdge edge)
         {
             Debug.DrawLine(((Point)edge.P).ToVector2(), ((Point)edge.Q).ToVector2(),
                 Color.red, _lineDrawTime);
         }
 
+        // DEBUG
         private void DrawVertice(Vector2 v)
         {
             GameObject vertice = new GameObject();
@@ -99,6 +239,7 @@ namespace Assets.Code.Pathfinding
             renderer.material.color = Color.red;
         }
 
+        // DEBUG
         private void DrawTriangle(Triangle triangleToDraw, Delaunator delaunator)
         {
             GameObject triangle = new GameObject();
@@ -213,6 +354,24 @@ namespace Assets.Code.Pathfinding
                     return;
             }
             _vertices.Add(v);
+        }
+
+        private class TempNode
+        {
+            public TempNode(Node node, float g, float h, TempNode parent)
+            {
+                Node = node;
+                G = g;
+                H = h;
+                F = G + H;
+                Parent = parent;
+            }
+
+            public Node Node { get; }
+            public float G { get; set; }
+            public float H { get; set; }
+            public float F { get; }
+            public TempNode Parent { get; set; }
         }
     }
 }
