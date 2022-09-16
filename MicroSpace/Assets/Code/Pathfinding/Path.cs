@@ -16,14 +16,16 @@ namespace Assets.Code.Pathfinding
         public Path(Node start)
         {
             Nodes = new();
-            Nodes.Push(start);
+            Nodes.Add(start);
         }
 
-        public Stack<Node> Nodes { get; set; }
+        public List<Node> Nodes { get; set; }
+
+        public int Count => Nodes.Count;
 
         public Node this[int index]
         {
-            get => Nodes.ElementAt(index);
+            get => Nodes[index];
         }
     }
 }
