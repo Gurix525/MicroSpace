@@ -43,9 +43,18 @@ namespace Assets.Code.Pathfinding
             if (finalNode != null)
             {
                 TraceParent(finalNode, path);
+                ShortenPath(path);
                 return path;
             }
             else return null;
+        }
+
+        private void ShortenPath(Path path)
+        {
+            while (true)
+            {
+                /////////// DO ZROBIENIA CZYM PREDZEJ
+            }
         }
 
         private void TraceParent(TempNode node, Path path)
@@ -60,7 +69,7 @@ namespace Assets.Code.Pathfinding
         {
             while (open.Count > 0)
             {
-                open.OrderBy(x => x.F);
+                open = open.OrderBy(x => x.F).ToList();
                 TempNode activeNode = open[0];
                 open.RemoveAt(0);
 
@@ -134,8 +143,13 @@ namespace Assets.Code.Pathfinding
             if (Input.GetKeyDown(KeyCode.F))
             {
                 var path = FindPath(new(-20, -20), new(20, 20));
-                foreach (var item in path.Nodes)
-                    DrawVertice(item.Position);
+                //foreach (var item in path.Nodes)
+                //    DrawVertice(item.Position);
+                for (int i = 0; i < path.Nodes.Count - 1; i++)
+                {
+                    DrawEdge(new Edge(0, path.Nodes.ElementAt(i).Position.ToPoint(),
+                        path.Nodes.ElementAt(i + 1).Position.ToPoint()));
+                }
             }
         }
 
@@ -163,26 +177,57 @@ namespace Assets.Code.Pathfinding
                 _nodes.Add(new(item));
             }
 
-            delaunator.ForEachTriangleEdge(x => SetNeighbours((Edge)x));
+            List<(Vector2, Vector2)> validEdges = new();
+            delaunator.ForEachTriangle(x => AddEdgesFromTriangle((Triangle)x, validEdges, delaunator));
+            validEdges = validEdges.Distinct().ToList();
+            foreach (var item in validEdges)
+            {
+                SetNeighbours(item);
+            }
+
+            // To musi zostać zastąpione
+            //delaunator.ForEachTriangleEdge(x => SetNeighbours((Edge)x));
 
             // DEBUG
-            //_nodes.ForEach(x => DrawVertice(x));
-            //delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
+            _nodes.ForEach(x => DrawVertice(x.Position));
+            delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
             //_vertices.ForEach(x => DrawVertice(x));
             //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
         }
 
-        private void SetNeighbours(Edge edge)
+        private void AddEdgesFromTriangle(Triangle triangle, List<(Vector2, Vector2)> validEdges, Delaunator delaunator)
         {
-            Vector2 a = ((Point)edge.P).ToVector2();
-            Vector2 b = ((Point)edge.Q).ToVector2();
+            var centroid = delaunator.GetCentroid(triangle.Index);
+            foreach (var box in _colliders)
+            {
+                if (Vector2.Distance(((Point)centroid).ToVector2(), box.transform.position) < 0.05F + 2 * _navBorder)
+                {
+                    return;
+                }
+            }
+
+            validEdges.Add(new(((Point)triangle.Points.ElementAt(0)).ToVector2(),
+                ((Point)triangle.Points.ElementAt(1)).ToVector2()));
+            validEdges.Add(new(((Point)triangle.Points.ElementAt(1)).ToVector2(),
+                ((Point)triangle.Points.ElementAt(2)).ToVector2()));
+            validEdges.Add(new(((Point)triangle.Points.ElementAt(2)).ToVector2(),
+                ((Point)triangle.Points.ElementAt(0)).ToVector2()));
+        }
+
+        private void SetNeighbours((Vector2, Vector2) edge)
+        {
+            Vector2 a = edge.Item1;
+            Vector2 b = edge.Item2;
 
             Node nodeA = _nodes.Find(x => x.Position == a);
             Node nodeB = _nodes.Find(x => x.Position == b);
 
             float distance = Vector2.Distance(a, b);
-            nodeA.ConnectedNodes.Add(nodeB, distance);
-            nodeB.ConnectedNodes.Add(nodeA, distance);
+            if (!nodeA.ConnectedNodes.ContainsKey(nodeB))
+            {
+                nodeA.ConnectedNodes.Add(nodeB, distance);
+                nodeB.ConnectedNodes.Add(nodeA, distance);
+            }
         }
 
         private void FindNodes(Triangle triangle, Delaunator delaunator)
@@ -208,7 +253,7 @@ namespace Assets.Code.Pathfinding
         private void DrawEdge(IEdge edge)
         {
             Debug.DrawLine(((Point)edge.P).ToVector2(), ((Point)edge.Q).ToVector2(),
-                Color.red, _lineDrawTime);
+                Color.green, _lineDrawTime);
         }
 
         // DEBUG
@@ -372,6 +417,11 @@ namespace Assets.Code.Pathfinding
             public float H { get; set; }
             public float F { get; }
             public TempNode Parent { get; set; }
+
+            public override string ToString()
+            {
+                return Node.ToString();
+            }
         }
     }
 }

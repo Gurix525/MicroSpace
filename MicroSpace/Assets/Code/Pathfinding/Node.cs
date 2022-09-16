@@ -50,5 +50,10 @@ namespace Assets.Code.Pathfinding
         {
             return !(left == right);
         }
+
+        public override string ToString()
+        {
+            return Position.ToString();
+        }
     }
 }
