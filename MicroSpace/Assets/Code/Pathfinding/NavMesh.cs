@@ -177,16 +177,16 @@ namespace Assets.Code.Pathfinding
                 _nodes.Add(new(item));
             }
 
-            List<(Vector2, Vector2)> validEdges = new();
-            delaunator.ForEachTriangle(x => AddEdgesFromTriangle((Triangle)x, validEdges, delaunator));
+            List<(Vector2, Vector2)> validEdges = new(); // Do wyszukiwania ścieżki
+            List<(Vector2, Vector2)> invalidEdges = new(); // Do skracania ścieżki
+            delaunator.ForEachTriangle(x => AddEdgesFromTriangle(
+                (Triangle)x, validEdges, invalidEdges, delaunator));
             validEdges = validEdges.Distinct().ToList();
+            invalidEdges = invalidEdges.Distinct().ToList();
             foreach (var item in validEdges)
             {
                 SetNeighbours(item);
             }
-
-            // To musi zostać zastąpione
-            //delaunator.ForEachTriangleEdge(x => SetNeighbours((Edge)x));
 
             // DEBUG
             _nodes.ForEach(x => DrawVertice(x.Position));
@@ -195,23 +195,40 @@ namespace Assets.Code.Pathfinding
             //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
         }
 
-        private void AddEdgesFromTriangle(Triangle triangle, List<(Vector2, Vector2)> validEdges, Delaunator delaunator)
+        private void AddEdgesFromTriangle(Triangle triangle,
+            List<(Vector2, Vector2)> validEdges,
+            List<(Vector2, Vector2)> invalidEdges,
+            Delaunator delaunator)
         {
+            bool isValid = true;
             var centroid = delaunator.GetCentroid(triangle.Index);
             foreach (var box in _colliders)
             {
                 if (Vector2.Distance(((Point)centroid).ToVector2(), box.transform.position) < 0.05F + 2 * _navBorder)
                 {
-                    return;
+                    isValid = false;
+                    break;
                 }
             }
 
-            validEdges.Add(new(((Point)triangle.Points.ElementAt(0)).ToVector2(),
-                ((Point)triangle.Points.ElementAt(1)).ToVector2()));
-            validEdges.Add(new(((Point)triangle.Points.ElementAt(1)).ToVector2(),
-                ((Point)triangle.Points.ElementAt(2)).ToVector2()));
-            validEdges.Add(new(((Point)triangle.Points.ElementAt(2)).ToVector2(),
-                ((Point)triangle.Points.ElementAt(0)).ToVector2()));
+            if (isValid)
+            {
+                validEdges.Add(new(((Point)triangle.Points.ElementAt(0)).ToVector2(),
+                    ((Point)triangle.Points.ElementAt(1)).ToVector2()));
+                validEdges.Add(new(((Point)triangle.Points.ElementAt(1)).ToVector2(),
+                    ((Point)triangle.Points.ElementAt(2)).ToVector2()));
+                validEdges.Add(new(((Point)triangle.Points.ElementAt(2)).ToVector2(),
+                    ((Point)triangle.Points.ElementAt(0)).ToVector2()));
+            }
+            else
+            {
+                invalidEdges.Add(new(((Point)triangle.Points.ElementAt(0)).ToVector2(),
+                    ((Point)triangle.Points.ElementAt(1)).ToVector2()));
+                invalidEdges.Add(new(((Point)triangle.Points.ElementAt(1)).ToVector2(),
+                    ((Point)triangle.Points.ElementAt(2)).ToVector2()));
+                invalidEdges.Add(new(((Point)triangle.Points.ElementAt(2)).ToVector2(),
+                    ((Point)triangle.Points.ElementAt(0)).ToVector2()));
+            }
         }
 
         private void SetNeighbours((Vector2, Vector2) edge)
