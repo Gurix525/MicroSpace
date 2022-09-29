@@ -83,7 +83,7 @@ namespace Assets.Code.Main
             GameObject designation = Instantiate(BlockDesignationPrefab, _world);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Vector3 v3 = MousePosition();
+                Vector3 v3 = GetMousePosition();
                 BoxCollider2D closestBlock = FindClosestBlock(designation, v3);
                 MoveBlockDesignation(designation, closestBlock, v3);
                 yield return null;
@@ -109,7 +109,7 @@ namespace Assets.Code.Main
             GameObject designation = Instantiate(BlockDesignationPrefab, _world);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Vector3 v3 = MousePosition();
+                Vector3 v3 = GetMousePosition();
                 BoxCollider2D closestBlock = FindClosestBlock(designation, v3);
                 MoveBlockDesignation(designation, closestBlock, v3);
                 yield return null;
@@ -154,7 +154,7 @@ namespace Assets.Code.Main
             }
         }
 
-        private Vector3 MousePosition()
+        private Vector3 GetMousePosition()
         {
             Vector3 v3 = Input.mousePosition;
             v3.z = 10;

@@ -10,7 +10,7 @@ namespace Assets.Code.Pathfinding
     public class Node : IEquatable<Node>
     {
         public int Index { get; }
-        public Vector2 Position { get; }
+        public Vector2 Position { get; set; }
         public Dictionary<Node, float> ConnectedNodes { get; set; }
 
         private static int _index = 0;
@@ -20,6 +20,13 @@ namespace Assets.Code.Pathfinding
             Index = _index++;
             Position = position;
             ConnectedNodes = new();
+        }
+
+        public Node(Node node)
+        {
+            Index = node.Index;
+            Position = node.Position;
+            ConnectedNodes = node.ConnectedNodes;
         }
 
         public override bool Equals(object obj)

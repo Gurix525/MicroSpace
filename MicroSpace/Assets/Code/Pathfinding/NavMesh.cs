@@ -47,6 +47,15 @@ namespace Assets.Code.Pathfinding
                 path.Nodes.Insert(0, new(startPos)); // Dodaję pozycję startową
                 path.Nodes.Add(new(endPos)); // Dodaję pozycję końcową
                 ShortenPath(path);
+
+                // DEBUG
+                //for (int i = 0; i < path.Nodes.Count - 1; i++)
+                //{
+                //    DrawEdge(new Edge(0, path.Nodes[i].Position.ToPoint(),
+                //        path.Nodes[i + 1].Position.ToPoint()), Color.green);
+                //}
+                // DEBUG END
+
                 return path;
             }
             else return null;
@@ -318,7 +327,8 @@ namespace Assets.Code.Pathfinding
         }
 
         private Node FindClosestNode(Vector2 pos) =>
-            _nodes.OrderBy(x => Vector2.Distance(x.Position, pos)).ToArray()[0];
+            _nodes.OrderBy(x => Vector2.Distance(x.Position, pos))
+            .ToArray()[0];
 
         private void FindNodes(Triangle triangle, Delaunator delaunator)
         {
@@ -368,6 +378,8 @@ namespace Assets.Code.Pathfinding
         {
             if (_agents.Count > 0)
                 UpdateMesh();
+            transform.eulerAngles = Vector2.zero;
+            transform.parent.GetChild(1).eulerAngles = Vector2.zero;
         }
 
         private void IterateOverNodes(List<TempNode> open, List<TempNode> closed,
@@ -438,7 +450,7 @@ namespace Assets.Code.Pathfinding
             }
         }
 
-        private void ShortenPath(Path path)
+        private void ShortenWholePath(Path path)
         {
             for (int i = 0; i < path.Count - 2; i++)
             {
@@ -449,6 +461,18 @@ namespace Assets.Code.Pathfinding
                         path.Nodes.RemoveRange(i + 1, j - i - 1);
                         break;
                     }
+                }
+            }
+        }
+
+        private void ShortenPath(Path path)
+        {
+            for (int i = path.Count - 1; i >= 1; i--)
+            {
+                if (!isLineObstructed((path[i].Position, path[0].Position)))
+                {
+                    path.Nodes.RemoveRange(1, i - 1);
+                    break;
                 }
             }
         }
@@ -473,30 +497,31 @@ namespace Assets.Code.Pathfinding
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                _colliders = FindObjectsOfType<BoxCollider2D>();
-                UpdateMesh();
-            }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                var path = FindPath(new(-20, -20), new(20, 20));
-                //foreach (var item in path.Nodes)
-                //    DrawVertice(item.Position);
-                if (path != null)
-                {
-                    for (int i = 0; i < path.Nodes.Count - 1; i++)
-                    {
-                        DrawEdge(new Edge(0, path.Nodes[i].Position.ToPoint(),
-                            path.Nodes[i + 1].Position.ToPoint()), Color.green);
-                    }
-                }
-                else Debug.Log("Path not found.");
-            }
+            //if (Input.GetKeyDown(KeyCode.T))
+            //{
+            //    _colliders = FindObjectsOfType<BoxCollider2D>();
+            //    UpdateMesh();
+            //}
+            //if (Input.GetKeyDown(KeyCode.F))
+            //{
+            //    var path = FindPath(new(-20, -20), new(20, 20));
+            //    //foreach (var item in path.Nodes)
+            //    //    DrawVertice(item.Position);
+            //    if (path != null)
+            //    {
+            //        for (int i = 0; i < path.Nodes.Count - 1; i++)
+            //        {
+            //            DrawEdge(new Edge(0, path.Nodes[i].Position.ToPoint(),
+            //                path.Nodes[i + 1].Position.ToPoint()), Color.green);
+            //        }
+            //    }
+            //    else Debug.Log("Path not found.");
+            //}
         }
 
-        private void UpdateMesh()
+        public void UpdateMesh()
         {
+            _colliders = FindObjectsOfType<BoxCollider2D>();
             FindVertices();
 
             foreach (Transform item in transform)
@@ -509,6 +534,7 @@ namespace Assets.Code.Pathfinding
             Delaunator delaunator = new(Points);
 
             _nodes.Clear();
+            _nodesPositions.Clear();
             delaunator.ForEachTriangle(x => FindNodes((Triangle)x, delaunator));
             _nodesPositions = _nodesPositions.Distinct().ToList();
             _nodesPositions = _nodesPositions.OrderBy(x => x.x)
@@ -539,13 +565,11 @@ namespace Assets.Code.Pathfinding
 
             // DEBUG
             //_nodes.ForEach(x => DrawVertice(x.Position));
-            delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
-            _vertices.ForEach(x => DrawVertice(x));
+            //delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
+            //_vertices.ForEach(x => DrawVertice(x));
             //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
-            foreach (var item in _validEdges)
-            {
-                DrawEdge(new Edge(0, item.A.ToPoint(), item.B.ToPoint()), Color.red);
-            }
+            //_validEdges.ForEach(
+            //    x => DrawEdge(new Edge(0, x.A.ToPoint(), x.B.ToPoint()), Color.red));
         }
 
         private class TempNode
