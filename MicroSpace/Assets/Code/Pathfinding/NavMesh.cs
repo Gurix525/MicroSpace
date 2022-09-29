@@ -122,7 +122,7 @@ namespace Assets.Code.Pathfinding
             return Mathf.Abs(a - b) <= tolerance;
         }
 
-        private bool areLinesIntersecting(Vector2 A, Vector2 B, Vector2 C, Vector2 D, out Vector2 intersection)
+        private bool AreLinesIntersecting(Vector2 A, Vector2 B, Vector2 C, Vector2 D, out Vector2 intersection)
         {
             if (A == C || A == D || B == C || B == D)
             {
@@ -208,10 +208,10 @@ namespace Assets.Code.Pathfinding
         }
 
         // DEBUG
-        private void DrawEdge(IEdge edge)
+        private void DrawEdge(IEdge edge, Color color)
         {
             Debug.DrawLine(((Point)edge.P).ToVector2(), ((Point)edge.Q).ToVector2(),
-                Color.green, _lineDrawTime);
+                color, _lineDrawTime);
         }
 
         // DEBUG
@@ -457,7 +457,7 @@ namespace Assets.Code.Pathfinding
         {
             foreach (var invalidEdge in _invalidEdges)
             {
-                if (areLinesIntersecting(edge.A, edge.B, invalidEdge.A, invalidEdge.B,
+                if (AreLinesIntersecting(edge.A, edge.B, invalidEdge.A, invalidEdge.B,
                     out Vector2 intersection))
                     return true;
             }
@@ -483,11 +483,15 @@ namespace Assets.Code.Pathfinding
                 var path = FindPath(new(-20, -20), new(20, 20));
                 //foreach (var item in path.Nodes)
                 //    DrawVertice(item.Position);
-                for (int i = 0; i < path.Nodes.Count - 1; i++)
+                if (path != null)
                 {
-                    DrawEdge(new Edge(0, path.Nodes[i].Position.ToPoint(),
-                        path.Nodes[i + 1].Position.ToPoint()));
+                    for (int i = 0; i < path.Nodes.Count - 1; i++)
+                    {
+                        DrawEdge(new Edge(0, path.Nodes[i].Position.ToPoint(),
+                            path.Nodes[i + 1].Position.ToPoint()), Color.green);
+                    }
                 }
+                else Debug.Log("Path not found.");
             }
         }
 
@@ -507,6 +511,8 @@ namespace Assets.Code.Pathfinding
             _nodes.Clear();
             delaunator.ForEachTriangle(x => FindNodes((Triangle)x, delaunator));
             _nodesPositions = _nodesPositions.Distinct().ToList();
+            _nodesPositions = _nodesPositions.OrderBy(x => x.x)
+                .ThenBy(x => x.y).ToList();
             foreach (var item in _nodesPositions)
             {
                 _nodes.Add(new(item));
@@ -522,12 +528,24 @@ namespace Assets.Code.Pathfinding
             {
                 SetNeighbours(item);
             }
+            for (int i = 0; i < _nodes.Count; i++)
+            {
+                if (_nodes[i].ConnectedNodes.Count == 0)
+                {
+                    _nodes.RemoveAt(i);
+                    i--;
+                }
+            }
 
             // DEBUG
             //_nodes.ForEach(x => DrawVertice(x.Position));
             delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
-            //_vertices.ForEach(x => DrawVertice(x));
+            _vertices.ForEach(x => DrawVertice(x));
             //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
+            foreach (var item in _validEdges)
+            {
+                DrawEdge(new Edge(0, item.A.ToPoint(), item.B.ToPoint()), Color.red);
+            }
         }
 
         private class TempNode
