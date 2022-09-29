@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Code.Pathfinding
 {
@@ -16,14 +17,16 @@ namespace Assets.Code.Pathfinding
         public Path(Node start)
         {
             Nodes = new();
-            Nodes.Add(start);
+            Nodes.Add(start.Position);
         }
 
-        public List<Node> Nodes { get; set; }
+        //public List<Node> Nodes { get; set; }
+
+        public List<Vector2> Nodes { get; set; }
 
         public int Count => Nodes.Count;
 
-        public Node this[int index]
+        public Vector2 this[int index]
         {
             get => Nodes[index];
         }

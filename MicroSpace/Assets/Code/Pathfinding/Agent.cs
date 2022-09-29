@@ -35,8 +35,8 @@ namespace Assets.Code.Pathfinding
             {
                 for (int i = 0; i < _originalPath.Nodes.Count - 1; i++)
                 {
-                    DrawEdge(new Edge(0, _originalPath.Nodes[i].Position.ToPoint(),
-                        _originalPath.Nodes[i + 1].Position.ToPoint()), Color.green);
+                    DrawEdge(new Edge(0, _originalPath.Nodes[i].ToPoint(),
+                        _originalPath.Nodes[i + 1].ToPoint()), Color.green);
                 }
             }
         }
@@ -58,16 +58,16 @@ namespace Assets.Code.Pathfinding
             {
                 _adjustedPath.Nodes.Clear();
                 _originalPath.Nodes.ForEach(
-                    x => _adjustedPath.Nodes.Add(new(x)));
+                    x => _adjustedPath.Nodes.Add(x));
                 //_adjustedPath.Nodes.ForEach(
                 //    x => x.Position += (Vector2)_navMesh
                 //    .transform.parent.localPosition);
 
-                if (Vector2.Distance(_adjustedPath[0].Position, (Vector2)transform.position) < 0.1F)
+                if (Vector2.Distance(_adjustedPath[0], (Vector2)transform.position) < 0.1F)
                     _adjustedPath.Nodes.RemoveAt(0);
                 if (Vector2.Distance(transform.position, _targetPosition) > 1.5F)
                     transform.Translate(
-                        (_adjustedPath[0].Position - (Vector2)transform.position)
+                        (_adjustedPath[0] - (Vector2)transform.position)
                         .normalized * Time.fixedDeltaTime * _movingSpeed);
             }
         }
@@ -81,8 +81,8 @@ namespace Assets.Code.Pathfinding
         private void FindStaightPath()
         {
             _originalPath = new Path();
-            _originalPath.Nodes.Add(new Node(transform.position));
-            _originalPath.Nodes.Add(new Node(_targetPosition));
+            _originalPath.Nodes.Add(transform.position);
+            _originalPath.Nodes.Add(_targetPosition);
         }
 
         private Vector3 GetMousePosition()

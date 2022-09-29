@@ -44,8 +44,8 @@ namespace Assets.Code.Pathfinding
             {
                 TraceParent(finalNode, path);
                 // Dodawanie pozycji (ważne żeby było przed skracaniem ścieżki)
-                path.Nodes.Insert(0, new(startPos)); // Dodaję pozycję startową
-                path.Nodes.Add(new(endPos)); // Dodaję pozycję końcową
+                path.Nodes.Insert(0, startPos); // Dodaję pozycję startową
+                path.Nodes.Add(endPos); // Dodaję pozycję końcową
                 ShortenPath(path);
 
                 // DEBUG
@@ -456,7 +456,7 @@ namespace Assets.Code.Pathfinding
             {
                 for (int j = path.Count - 1; j > i + 1; j--)
                 {
-                    if (!isLineObstructed((path[i].Position, path[j].Position)))
+                    if (!isLineObstructed((path[i], path[j])))
                     {
                         path.Nodes.RemoveRange(i + 1, j - i - 1);
                         break;
@@ -469,7 +469,7 @@ namespace Assets.Code.Pathfinding
         {
             for (int i = path.Count - 1; i >= 1; i--)
             {
-                if (!isLineObstructed((path[i].Position, path[0].Position)))
+                if (!isLineObstructed((path[i], path[0])))
                 {
                     path.Nodes.RemoveRange(1, i - 1);
                     break;
@@ -490,7 +490,7 @@ namespace Assets.Code.Pathfinding
 
         private void TraceParent(TempNode node, Path path)
         {
-            path.Nodes.Insert(0, node.Node);
+            path.Nodes.Insert(0, node.Node.Position);
             if (node.Parent != null)
                 TraceParent(node.Parent, path);
         }
