@@ -16,35 +16,39 @@ namespace Assets.Code.Pathfinding
 
         [SerializeField] private Vector2 _targetPosition;
         [SerializeField] private NavMesh _navMesh;
-        [SerializeField] private Path _originalPath = new();
-        [SerializeField] private Path _adjustedPath = new();
+        [SerializeField] private Path _path = new();
 
         private List<BoxCollider2D> _colliders;
         private BoxCollider2D _targetCollider;
+        private float _deltaTimeSincePathUpdate = 0F;
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
+                _deltaTimeSincePathUpdate = 1F;
                 _colliders = FindObjectsOfType<BoxCollider2D>().ToList();
                 float closestColliderDistance = _colliders.Min(x => Vector2.Distance(x.transform.position, GetMousePosition()));
                 _targetCollider = _colliders.Find(x => Vector2.Distance(x.transform.position, GetMousePosition()) == closestColliderDistance);
             }
 
-            if (_originalPath.Count > 0)
+            if (_path.Count > 0)
             {
-                for (int i = 0; i < _originalPath.Nodes.Count - 1; i++)
+                DrawEdge(new Edge(0, ((Vector2)transform.position).ToPoint(),
+                    _path.Nodes[0].ToPoint()), Color.green);
+                for (int i = 0; i < _path.Nodes.Count - 1; i++)
                 {
-                    DrawEdge(new Edge(0, _originalPath.Nodes[i].ToPoint(),
-                        _originalPath.Nodes[i + 1].ToPoint()), Color.green);
+                    DrawEdge(new Edge(0, _path.Nodes[i].ToPoint(),
+                        _path.Nodes[i + 1].ToPoint()), Color.green);
                 }
             }
         }
 
         private void FixedUpdate()
         {
-            if (_targetCollider != null)
+            if (_targetCollider != null && _deltaTimeSincePathUpdate >= 1F)
             {
+                _deltaTimeSincePathUpdate -= 1F;
                 var hit = Physics2D.Linecast(transform.position, _targetPosition);
                 if (hit != false)
                 {
@@ -54,20 +58,21 @@ namespace Assets.Code.Pathfinding
                 _targetPosition = _targetCollider.transform.position;
                 FindPath();
             }
-            if (_originalPath.Count > 0)
+            _deltaTimeSincePathUpdate += Time.fixedDeltaTime;
+            if (_path.Count > 0)
             {
-                _adjustedPath.Nodes.Clear();
-                _originalPath.Nodes.ForEach(
-                    x => _adjustedPath.Nodes.Add(x));
+                //_path.Nodes.Clear();
+                //_path.Nodes.ForEach(
+                //    x => _path.Nodes.Add(x));
                 //_adjustedPath.Nodes.ForEach(
                 //    x => x.Position += (Vector2)_navMesh
                 //    .transform.parent.localPosition);
 
-                if (Vector2.Distance(_adjustedPath[0], (Vector2)transform.position) < 0.1F)
-                    _adjustedPath.Nodes.RemoveAt(0);
+                if (Vector2.Distance(_path[0], (Vector2)transform.position) < 0.1F)
+                    _path.Nodes.RemoveAt(0);
                 if (Vector2.Distance(transform.position, _targetPosition) > 1.5F)
                     transform.Translate(
-                        (_adjustedPath[0] - (Vector2)transform.position)
+                        (_path[0] - (Vector2)transform.position)
                         .normalized * Time.fixedDeltaTime * _movingSpeed);
             }
         }
@@ -75,14 +80,14 @@ namespace Assets.Code.Pathfinding
         private void FindPath()
         {
             _navMesh.UpdateMesh();
-            _originalPath = _navMesh.FindPath(transform.position, _targetPosition);
+            _path = _navMesh.FindPath(transform.position, _targetPosition);
         }
 
-        private void FindStaightPath()
+        private void FindStraightPath()
         {
-            _originalPath = new Path();
-            _originalPath.Nodes.Add(transform.position);
-            _originalPath.Nodes.Add(_targetPosition);
+            _path = new Path();
+            _path.Nodes.Add(transform.position);
+            _path.Nodes.Add(_targetPosition);
         }
 
         private Vector3 GetMousePosition()

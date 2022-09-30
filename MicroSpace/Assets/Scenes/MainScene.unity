@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc2db225728f6a46b8cf7e2002b2f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _movingSpeed: 5
   _targetPosition: {x: 0, y: 0}
   _navMesh: {fileID: 0}
 --- !u!212 &392410842
