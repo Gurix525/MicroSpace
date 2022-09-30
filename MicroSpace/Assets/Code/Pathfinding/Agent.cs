@@ -65,7 +65,7 @@ namespace Assets.Code.Pathfinding
                         _hasNavMeshChanged = true;
                         _deltaTimeSincePathUpdate = 1F;
                     }
-                        _navMesh = newNavMesh;
+                    _navMesh = newNavMesh;
                 }
                 if (_deltaTimeSincePathUpdate >= 1F)
                 {
