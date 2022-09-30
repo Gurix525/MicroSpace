@@ -24,6 +24,8 @@ namespace Assets.Code.Pathfinding
         private Vector2 _originalPos;
         private Vector2 _deltaNavMeshPos;
 
+        private bool _hasNavMeshChanged = false;
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F))
@@ -48,27 +50,36 @@ namespace Assets.Code.Pathfinding
 
         private void FixedUpdate()
         {
-            if (_navMesh != null)
-            {
-                _deltaNavMeshPos = (Vector2)transform.parent.parent.position - _originalPos;
-                _originalPos = transform.parent.parent.position;
-            }
             if (_path != null)
                 UpdatePath();
             if (_targetCollider != null)
             {
+                _targetPosition = _targetCollider.transform.position;
                 var hit = Physics2D.Linecast(transform.position, _targetPosition);
                 if (hit != false)
                 {
                     transform.parent = hit.transform.GetChild(1);
-                    _navMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
+                    var newNavMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
+                    if (newNavMesh != _navMesh)
+                    {
+                        _hasNavMeshChanged = true;
+                        _deltaTimeSincePathUpdate = 1F;
+                    }
+                        _navMesh = newNavMesh;
                 }
-                _targetPosition = _targetCollider.transform.position;
                 if (_deltaTimeSincePathUpdate >= 1F)
                 {
                     FindPath();
                     _deltaTimeSincePathUpdate -= 1F;
                 }
+            }
+            if (_navMesh != null)
+            {
+                if (!_hasNavMeshChanged)
+                    _deltaNavMeshPos = (Vector2)transform.parent.parent.position - _originalPos;
+                else
+                    _hasNavMeshChanged = false;
+                _originalPos = transform.parent.parent.position;
             }
             _deltaTimeSincePathUpdate += Time.fixedDeltaTime;
             if (_path.Count > 0)
