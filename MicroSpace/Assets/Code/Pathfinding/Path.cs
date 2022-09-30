@@ -29,6 +29,10 @@ namespace Assets.Code.Pathfinding
         public Vector2 this[int index]
         {
             get => Nodes[index];
+            set
+            {
+                Nodes[index] = value;
+            }
         }
     }
 }

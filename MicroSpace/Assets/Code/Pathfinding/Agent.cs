@@ -21,6 +21,8 @@ namespace Assets.Code.Pathfinding
         private List<BoxCollider2D> _colliders;
         private BoxCollider2D _targetCollider;
         private float _deltaTimeSincePathUpdate = 0F;
+        private Vector2 _originalPos;
+        private Vector2 _deltaNavMeshPos;
 
         private void Update()
         {
@@ -46,9 +48,15 @@ namespace Assets.Code.Pathfinding
 
         private void FixedUpdate()
         {
-            if (_targetCollider != null && _deltaTimeSincePathUpdate >= 1F)
+            if (_navMesh != null)
             {
-                _deltaTimeSincePathUpdate -= 1F;
+                _deltaNavMeshPos = (Vector2)transform.parent.parent.position - _originalPos;
+                _originalPos = transform.parent.parent.position;
+            }
+            if (_path != null)
+                UpdatePath();
+            if (_targetCollider != null)
+            {
                 var hit = Physics2D.Linecast(transform.position, _targetPosition);
                 if (hit != false)
                 {
@@ -56,7 +64,11 @@ namespace Assets.Code.Pathfinding
                     _navMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
                 }
                 _targetPosition = _targetCollider.transform.position;
-                FindPath();
+                if (_deltaTimeSincePathUpdate >= 1F)
+                {
+                    FindPath();
+                    _deltaTimeSincePathUpdate -= 1F;
+                }
             }
             _deltaTimeSincePathUpdate += Time.fixedDeltaTime;
             if (_path.Count > 0)
@@ -81,6 +93,12 @@ namespace Assets.Code.Pathfinding
         {
             _navMesh.UpdateMesh();
             _path = _navMesh.FindPath(transform.position, _targetPosition);
+        }
+
+        private void UpdatePath()
+        {
+            for (int i = 0; i < _path.Count; i++)
+                _path[i] = _path[i] + _deltaNavMeshPos;
         }
 
         private void FindStraightPath()
