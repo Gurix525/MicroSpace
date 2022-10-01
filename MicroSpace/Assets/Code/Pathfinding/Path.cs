@@ -7,32 +7,15 @@ using UnityEngine;
 
 namespace Assets.Code.Pathfinding
 {
-    public class Path
+    public class Path : List<Vector2>
     {
         public Path()
         {
-            Nodes = new();
         }
 
         public Path(Node start)
         {
-            Nodes = new();
-            Nodes.Add(start.Position);
-        }
-
-        //public List<Node> Nodes { get; set; }
-
-        public List<Vector2> Nodes { get; set; }
-
-        public int Count => Nodes.Count;
-
-        public Vector2 this[int index]
-        {
-            get => Nodes[index];
-            set
-            {
-                Nodes[index] = value;
-            }
+            Add(start.Position);
         }
     }
 }

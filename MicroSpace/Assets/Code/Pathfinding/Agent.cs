@@ -39,11 +39,11 @@ namespace Assets.Code.Pathfinding
             if (_path.Count > 0)
             {
                 DrawEdge(new Edge(0, ((Vector2)transform.position).ToPoint(),
-                    _path.Nodes[0].ToPoint()), Color.green);
-                for (int i = 0; i < _path.Nodes.Count - 1; i++)
+                    _path[0].ToPoint()), Color.green);
+                for (int i = 0; i < _path.Count - 1; i++)
                 {
-                    DrawEdge(new Edge(0, _path.Nodes[i].ToPoint(),
-                        _path.Nodes[i + 1].ToPoint()), Color.green);
+                    DrawEdge(new Edge(0, _path[i].ToPoint(),
+                        _path[i + 1].ToPoint()), Color.green);
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace Assets.Code.Pathfinding
                 //    .transform.parent.localPosition);
 
                 if (Vector2.Distance(_path[0], (Vector2)transform.position) < 0.1F)
-                    _path.Nodes.RemoveAt(0);
+                    _path.RemoveAt(0);
                 if (Vector2.Distance(transform.position, _targetPosition) > 1.5F)
                     transform.Translate(
                         (_path[0] - (Vector2)transform.position)
@@ -115,8 +115,8 @@ namespace Assets.Code.Pathfinding
         private void FindStraightPath()
         {
             _path = new Path();
-            _path.Nodes.Add(transform.position);
-            _path.Nodes.Add(_targetPosition);
+            _path.Add(transform.position);
+            _path.Add(_targetPosition);
         }
 
         private Vector3 GetMousePosition()
