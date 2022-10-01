@@ -25,11 +25,11 @@ namespace Assets.Code.Pathfinding
         [SerializeField]
         private float _verticeSize = 0.1F;
 
-        private List<Node> _nodes = new();
         private BoxCollider2D[] _colliders = { };
         private List<Vector2> _nodesPositions = new();
         private List<Vector2> _vertices = new();
-        private List<(Vector2 A, Vector2 B)> _invalidEdges = new();
+        private List<Node> _nodes = new();
+        private List<Line> _invalidEdges = new();
 
         #endregion Fields
 
@@ -41,7 +41,10 @@ namespace Assets.Code.Pathfinding
 
         #region Public
 
-        // Skrócić
+        /// <summary>
+        /// Wyszukuje ścieżkę bazując na przygotowanych już nodach
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
         public Path FindPath(Vector2 startPos, Vector2 endPos)
         {
             Node start = FindClosestNode(startPos);
@@ -60,23 +63,72 @@ namespace Assets.Code.Pathfinding
 
             if (finalNode != null)
             {
-                TraceParent(finalNode, path);
-                // Dodawanie pozycji (ważne żeby było przed skracaniem ścieżki)
+                TraceParents(finalNode, path);
+                // Dodawanie pozycji start i end
+                // (ważne żeby było przed skracaniem ścieżki)
                 path.Nodes.Insert(0, startPos); // Dodaję pozycję startową
                 path.Nodes.Add(endPos); // Dodaję pozycję końcową
                 ShortenPath(path);
-
-                // DEBUG
-                //for (int i = 0; i < path.Nodes.Count - 1; i++)
-                //{
-                //    DrawEdge(new Edge(0, path.Nodes[i].Position.ToPoint(),
-                //        path.Nodes[i + 1].Position.ToPoint()), Color.green);
-                //}
-                // DEBUG END
-
                 return path;
             }
-            else return null;
+            else
+                throw new NotImplementedException(
+                    "Brak obsługi braku istniejącej ścieżki");
+        }
+
+        /// <summary>
+        /// Aktualizuje NavMesha (oblicza pozycje i składniki nodów)
+        /// </summary>
+        public void UpdateMesh()
+        {
+            _colliders = FindObjectsOfType<BoxCollider2D>();
+            FindVertices();
+
+            foreach (Transform item in transform)
+                Destroy(item.gameObject);
+
+            IPoint[] Points = new IPoint[_vertices.Count];
+            for (int i = 0; i < Points.Length; i++)
+                Points[i] = _vertices[i].ToPoint();
+            Delaunator delaunator = new(Points);
+
+            _nodes.Clear();
+            _nodesPositions.Clear();
+            delaunator.ForEachTriangle(x => FindNodes((Triangle)x, delaunator));
+            _nodesPositions = _nodesPositions.Distinct().ToList();
+            _nodesPositions = _nodesPositions.OrderBy(x => x.x)
+                .ThenBy(x => x.y).ToList();
+            foreach (var item in _nodesPositions)
+            {
+                _nodes.Add(new(item));
+            }
+
+            List<Line> _validEdges = new(); // Do wyszukiwania ścieżki
+            _invalidEdges = new(); // Do skracania ścieżki
+            delaunator.ForEachTriangle(x => AddEdgesFromTriangle(
+                (Triangle)x, _validEdges, _invalidEdges, delaunator));
+            _validEdges = _validEdges.Distinct().ToList();
+            _invalidEdges = _invalidEdges.Distinct().ToList();
+            foreach (var item in _validEdges)
+            {
+                SetNeighbours(item);
+            }
+            for (int i = 0; i < _nodes.Count; i++)
+            {
+                if (_nodes[i].ConnectedNodes.Count == 0)
+                {
+                    _nodes.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // DEBUG
+            //_nodes.ForEach(x => DrawVertice(x.Position));
+            //delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
+            //_vertices.ForEach(x => DrawVertice(x));
+            //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
+            //_validEdges.ForEach(
+            //    x => DrawEdge(new Edge(0, x.A.ToPoint(), x.B.ToPoint()), Color.red));
         }
 
         #endregion Public
@@ -102,9 +154,10 @@ namespace Assets.Code.Pathfinding
         }
 
         // Skrócić i wyjaśnić
-        private void AddEdgesFromTriangle(Triangle triangle,
-            List<(Vector2, Vector2)> validEdges,
-            List<(Vector2, Vector2)> invalidEdges,
+        private void AddEdgesFromTriangle(
+            Triangle triangle,
+            List<Line> validEdges,
+            List<Line> invalidEdges,
             Delaunator delaunator)
         {
             bool isValid = true;
@@ -259,9 +312,8 @@ namespace Assets.Code.Pathfinding
         }
 
         /// <summary>
-        ///
+        /// Zwraca najbliższy node dla podanego punktu
         /// </summary>
-        /// <returns>Najbliższy Node dla podanej pozycji</returns>
         private Node FindClosestNode(Vector2 pos) =>
             _nodes.OrderBy(x => Vector2.Distance(x.Position, pos))
             .ToArray()[0];
@@ -372,7 +424,11 @@ namespace Assets.Code.Pathfinding
             }
         }
 
-        private void SetNeighbours((Vector2 A, Vector2 B) edge)
+        /// <summary>
+        /// Ustawia sąsiadów nodów względem podanej linii
+        /// </summary>
+        /// <param name="edge"></param>
+        private void SetNeighbours(Line edge)
         {
             Vector2 a = edge.A;
             Vector2 b = edge.B;
@@ -388,13 +444,17 @@ namespace Assets.Code.Pathfinding
             }
         }
 
+        /// <summary>
+        /// Skraca całą ścieżkę naraz (procesorożerne)
+        /// </summary>
+        /// <param name="path"></param>
         private void ShortenWholePath(Path path)
         {
             for (int i = 0; i < path.Count - 2; i++)
             {
                 for (int j = path.Count - 1; j > i + 1; j--)
                 {
-                    if (!isLineObstructed((path[i], path[j])))
+                    if (!isLineObstructed(new(path[i], path[j])))
                     {
                         path.Nodes.RemoveRange(i + 1, j - i - 1);
                         break;
@@ -403,11 +463,15 @@ namespace Assets.Code.Pathfinding
             }
         }
 
+        /// <summary>
+        /// Skraca ścieżkę obliczając tylko najbliższy punkt
+        /// </summary>
+        /// <param name="path"></param>
         private void ShortenPath(Path path)
         {
             for (int i = path.Count - 1; i >= 1; i--)
             {
-                if (!isLineObstructed((path[i], path[0])))
+                if (!isLineObstructed(new(path[i], path[0])))
                 {
                     path.Nodes.RemoveRange(1, i - 1);
                     break;
@@ -415,7 +479,10 @@ namespace Assets.Code.Pathfinding
             }
         }
 
-        private bool isLineObstructed((Vector2 A, Vector2 B) edge)
+        /// <summary>
+        /// Sprawdza, czy podana linia jest przecięta przez jakąkolwiek inną
+        /// </summary>
+        private bool isLineObstructed(Line edge)
         {
             foreach (var invalidEdge in _invalidEdges)
             {
@@ -426,63 +493,15 @@ namespace Assets.Code.Pathfinding
             return false;
         }
 
-        private void TraceParent(TempNode node, Path path)
+        /// <summary>
+        /// Buduje ścieżkę, zaczynając od ostatniego punktu i skacząc po rodzicach
+        /// (część algorytmu A*)
+        /// </summary>
+        private void TraceParents(TempNode node, Path path)
         {
             path.Nodes.Insert(0, node.Node.Position);
             if (node.Parent != null)
-                TraceParent(node.Parent, path);
-        }
-
-        public void UpdateMesh()
-        {
-            _colliders = FindObjectsOfType<BoxCollider2D>();
-            FindVertices();
-
-            foreach (Transform item in transform)
-                Destroy(item.gameObject);
-
-            IPoint[] Points = new IPoint[_vertices.Count];
-            for (int i = 0; i < Points.Length; i++)
-                Points[i] = _vertices[i].ToPoint();
-            Delaunator delaunator = new(Points);
-
-            _nodes.Clear();
-            _nodesPositions.Clear();
-            delaunator.ForEachTriangle(x => FindNodes((Triangle)x, delaunator));
-            _nodesPositions = _nodesPositions.Distinct().ToList();
-            _nodesPositions = _nodesPositions.OrderBy(x => x.x)
-                .ThenBy(x => x.y).ToList();
-            foreach (var item in _nodesPositions)
-            {
-                _nodes.Add(new(item));
-            }
-
-            List<(Vector2, Vector2)> _validEdges = new(); // Do wyszukiwania ścieżki
-            _invalidEdges = new(); // Do skracania ścieżki
-            delaunator.ForEachTriangle(x => AddEdgesFromTriangle(
-                (Triangle)x, _validEdges, _invalidEdges, delaunator));
-            _validEdges = _validEdges.Distinct().ToList();
-            _invalidEdges = _invalidEdges.Distinct().ToList();
-            foreach (var item in _validEdges)
-            {
-                SetNeighbours(item);
-            }
-            for (int i = 0; i < _nodes.Count; i++)
-            {
-                if (_nodes[i].ConnectedNodes.Count == 0)
-                {
-                    _nodes.RemoveAt(i);
-                    i--;
-                }
-            }
-
-            // DEBUG
-            //_nodes.ForEach(x => DrawVertice(x.Position));
-            //delaunator.ForEachTriangle(x => DrawTriangle((Triangle)x, delaunator));
-            //_vertices.ForEach(x => DrawVertice(x));
-            //delaunator.ForEachTriangleEdge(x => DrawEdge(x));
-            //_validEdges.ForEach(
-            //    x => DrawEdge(new Edge(0, x.A.ToPoint(), x.B.ToPoint()), Color.red));
+                TraceParents(node.Parent, path);
         }
 
         #endregion Private
