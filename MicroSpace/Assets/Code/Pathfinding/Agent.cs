@@ -12,30 +12,129 @@ namespace Assets.Code.Pathfinding
 {
     public class Agent : MonoBehaviour
     {
-        [SerializeField] private float _movingSpeed = 2F;
+        #region Fields
 
-        [SerializeField] private Vector2 _targetPosition;
-        [SerializeField] private NavMesh _navMesh;
-        [SerializeField] private Path _path = new();
+        [SerializeField]
+        private float _movingSpeed = 2F;
 
         private List<BoxCollider2D> _colliders;
         private BoxCollider2D _targetCollider;
-        private float _deltaTimeSincePathUpdate = 0F;
+        private Vector2 _targetPosition;
         private Vector2 _originalPos;
         private Vector2 _deltaNavMeshPos;
-
+        private NavMesh _navMesh;
+        private float _deltaTimeSincePathUpdate = 0F;
         private bool _hasNavMeshChanged = false;
+        private Path _path = new();
+
+        #endregion Fields
+
+        #region Private
+
+        /// <summary>
+        /// Znajduje ścieżkę
+        /// </summary>
+        private void FindPath()
+        {
+            _navMesh.UpdateMesh();
+            _path = _navMesh.FindPath(transform.position, _targetPosition);
+        }
+
+        /// <summary>
+        /// Aktualizuje pozycję ścieżki co klatkę
+        /// </summary>
+        private void UpdatePath()
+        {
+            for (int i = 0; i < _path.Count; i++)
+                _path[i] = _path[i] + _deltaNavMeshPos;
+        }
+
+        /// <summary>
+        /// Zwraca pozycję myszki w świecie
+        /// </summary>
+        /// <returns></returns>
+        private Vector3 GetMousePosition()
+        {
+            Vector3 v3 = Input.mousePosition;
+            v3.z = 10;
+            v3 = Camera.main.ScreenToWorldPoint(v3);
+            return v3;
+        }
+
+        /// <summary>
+        /// Ustawia cel na podstawie wskazanego punktu
+        /// </summary>
+        private void SetTarget()
+        {
+            _deltaTimeSincePathUpdate = 1F;
+            _colliders = FindObjectsOfType<BoxCollider2D>().ToList();
+            float closestColliderDistance = _colliders.Min(x => Vector2.Distance(x.transform.position, GetMousePosition()));
+            _targetCollider = _colliders.Find(x => Vector2.Distance(x.transform.position, GetMousePosition()) == closestColliderDistance);
+        }
+
+        /// <summary>
+        /// Porusza agentem
+        /// </summary>
+        private void MoveAgent()
+        {
+            if (Vector2.Distance(_path[0], (Vector2)transform.position) < 0.1F)
+                _path.RemoveAt(0);
+            if (Vector2.Distance(transform.position, _targetPosition) > 1.5F)
+                transform.Translate(
+                    (_path[0] - (Vector2)transform.position)
+                    .normalized * Time.fixedDeltaTime * _movingSpeed);
+        }
+
+        /// <summary>
+        /// Oblicza różnicę między pozycjami statku po klatce
+        /// dla aktualizowania pozycji scieżki
+        /// </summary>
+        private void CalculateNavMeshDeltaPos()
+        {
+            if (!_hasNavMeshChanged)
+                _deltaNavMeshPos = (Vector2)transform.parent.parent.position - _originalPos;
+            else
+                _hasNavMeshChanged = false;
+            _originalPos = transform.parent.parent.position;
+        }
+
+        /// <summary>
+        /// Tworzy ścieżkę do celu
+        /// </summary>
+        private void CreatePath()
+        {
+            _targetPosition = _targetCollider.transform.position;
+            var hit = Physics2D.Linecast(transform.position, _targetPosition);
+            if (hit != false)
+            {
+                transform.parent = hit.transform.GetChild(1);
+                var newNavMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
+                if (newNavMesh != _navMesh)
+                {
+                    _hasNavMeshChanged = true;
+                    _deltaTimeSincePathUpdate = 1F;
+                }
+                _navMesh = newNavMesh;
+            }
+            if (_deltaTimeSincePathUpdate >= 1F)
+            {
+                FindPath();
+                _deltaTimeSincePathUpdate -= 1F;
+            }
+        }
+
+        #endregion Private
+
+        #region Unity
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                _deltaTimeSincePathUpdate = 1F;
-                _colliders = FindObjectsOfType<BoxCollider2D>().ToList();
-                float closestColliderDistance = _colliders.Min(x => Vector2.Distance(x.transform.position, GetMousePosition()));
-                _targetCollider = _colliders.Find(x => Vector2.Distance(x.transform.position, GetMousePosition()) == closestColliderDistance);
+                SetTarget();
             }
 
+            // Debug
             if (_path.Count > 0)
             {
                 DrawEdge(new Edge(0, ((Vector2)transform.position).ToPoint(),
@@ -53,84 +152,24 @@ namespace Assets.Code.Pathfinding
             if (_path != null)
                 UpdatePath();
             if (_targetCollider != null)
-            {
-                _targetPosition = _targetCollider.transform.position;
-                var hit = Physics2D.Linecast(transform.position, _targetPosition);
-                if (hit != false)
-                {
-                    transform.parent = hit.transform.GetChild(1);
-                    var newNavMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
-                    if (newNavMesh != _navMesh)
-                    {
-                        _hasNavMeshChanged = true;
-                        _deltaTimeSincePathUpdate = 1F;
-                    }
-                    _navMesh = newNavMesh;
-                }
-                if (_deltaTimeSincePathUpdate >= 1F)
-                {
-                    FindPath();
-                    _deltaTimeSincePathUpdate -= 1F;
-                }
-            }
+                CreatePath();
             if (_navMesh != null)
-            {
-                if (!_hasNavMeshChanged)
-                    _deltaNavMeshPos = (Vector2)transform.parent.parent.position - _originalPos;
-                else
-                    _hasNavMeshChanged = false;
-                _originalPos = transform.parent.parent.position;
-            }
-            _deltaTimeSincePathUpdate += Time.fixedDeltaTime;
+                CalculateNavMeshDeltaPos();
             if (_path.Count > 0)
-            {
-                //_path.Nodes.Clear();
-                //_path.Nodes.ForEach(
-                //    x => _path.Nodes.Add(x));
-                //_adjustedPath.Nodes.ForEach(
-                //    x => x.Position += (Vector2)_navMesh
-                //    .transform.parent.localPosition);
-
-                if (Vector2.Distance(_path[0], (Vector2)transform.position) < 0.1F)
-                    _path.RemoveAt(0);
-                if (Vector2.Distance(transform.position, _targetPosition) > 1.5F)
-                    transform.Translate(
-                        (_path[0] - (Vector2)transform.position)
-                        .normalized * Time.fixedDeltaTime * _movingSpeed);
-            }
+                MoveAgent();
+            _deltaTimeSincePathUpdate += Time.fixedDeltaTime;
         }
 
-        private void FindPath()
-        {
-            _navMesh.UpdateMesh();
-            _path = _navMesh.FindPath(transform.position, _targetPosition);
-        }
+        #endregion Unity
 
-        private void UpdatePath()
-        {
-            for (int i = 0; i < _path.Count; i++)
-                _path[i] = _path[i] + _deltaNavMeshPos;
-        }
-
-        private void FindStraightPath()
-        {
-            _path = new Path();
-            _path.Add(transform.position);
-            _path.Add(_targetPosition);
-        }
-
-        private Vector3 GetMousePosition()
-        {
-            Vector3 v3 = Input.mousePosition;
-            v3.z = 10;
-            v3 = Camera.main.ScreenToWorldPoint(v3);
-            return v3;
-        }
+        #region Debug
 
         private void DrawEdge(IEdge edge, Color color)
         {
             Debug.DrawLine(((Point)edge.P).ToVector2(), ((Point)edge.Q).ToVector2(),
                 color);
         }
+
+        #endregion Debug
     }
 }
