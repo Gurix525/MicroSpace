@@ -29,7 +29,7 @@ namespace Assets.Code.Ships
             db.Add(new());
             var shipData = db[^1];
             shipData.GameObject = gameObject;
-            shipData.Name = $"Ship Nº {Database.DBObjects.Count}";
+            shipData.Name = $"Ship No {Database.DBObjects.Count}";
             shipData.Position = db.Count == 1 ?
                 BigVector2.zero :
                 (db[^2].Position +
