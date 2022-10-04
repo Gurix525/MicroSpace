@@ -155,8 +155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShipDesignationPrefab: {fileID: 2505317657868975611, guid: 6b5ddd6ec463ed443941755e0845defa, type: 3}
   ShipPrefab: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
-  WallPrefab: {fileID: 0}
-  FloorPrefab: {fileID: 0}
   UIController: {fileID: 472914255}
   Speedometer: 0
   _target: {fileID: 0}
@@ -188,8 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e743ea3ae8463643a29eb3e6e26d71d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wallPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
-  _floorPrefab: {fileID: 0}
+  _wallPrefab: {fileID: 7440152704112946889, guid: e288380be1584ea4189ffa8e1fc7d7ca, type: 3}
+  _floorPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
   _designationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
   _worldTransform: {fileID: 445740361}
 --- !u!1 &292762465
