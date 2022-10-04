@@ -362,10 +362,10 @@ namespace Assets.Code.Pathfinding
                 AddBoxVertice(item, new Vector2(-num, num));
                 AddBoxVertice(item, new Vector2(num, -num));
                 AddBoxVertice(item, new Vector2(num, num));
-                //AddBoxVertice(item, new Vector2(-num, 0));
-                //AddBoxVertice(item, new Vector2(num, 0));
-                //AddBoxVertice(item, new Vector2(0, -num));
-                //AddBoxVertice(item, new Vector2(0, num));
+                AddBoxVertice(item, new Vector2(-num, 0));
+                AddBoxVertice(item, new Vector2(num, 0));
+                AddBoxVertice(item, new Vector2(0, -num));
+                AddBoxVertice(item, new Vector2(0, num));
             }
         }
 

@@ -86,7 +86,7 @@ namespace Assets.Code.Main
                     designations.RemoveAt(0);
                     i--;
                 }
-                localMousePos = closestBlock.transform.InverseTransformPoint(GetMousePosition());
+                localMousePos = closestBlock.transform.parent.InverseTransformPoint(GetMousePosition());
                 localMousePos = localMousePos.Round();
                 int lesserX = 0;
                 int lesserY = 0;
