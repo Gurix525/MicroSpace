@@ -82,7 +82,11 @@ namespace Assets.Code.Data
         public void InstantiateCloseShip()
         {
             if (!IsShipDistant())
+                throw new NotImplementedException("Dodać prefaby bloków i " +
+                    "wyłączyć ify LOL (w sumie w 3 miejscach)");
+#if LOL
                 Cockpit.InstantiateShipFromDB(this);
+#endif
         }
 
         private bool IsShipDistant()
