@@ -58,7 +58,7 @@ namespace Assets.Code.Main
 
         public static void InstantiateShipFromDB(DBObject dbo)
         {
-            GameObject ship = GameObject.Instantiate(
+            GameObject ship = Instantiate(
                 _cockpit.ShipPrefab, GameObject.Find("World").transform);
             dbo.GameObject = ship;
             ship.transform.position = (Vector3)(
@@ -75,7 +75,7 @@ namespace Assets.Code.Main
                 if (wallData.Name == "Core")
                     continue;
                 GameObject wall = Instantiate(
-                    _cockpit.WallPrefab, ship.transform);
+                    _designManager.WallPrefab, ship.transform);
                 wall.transform.localPosition = new Vector2(
                      wallData.LocalPosition[0], wallData.LocalPosition[1]);
                 wall.name = wallData.Name;
@@ -86,7 +86,7 @@ namespace Assets.Code.Main
             foreach (FloorData floorData in dbo.ShipData.Floors)
             {
                 GameObject floor = Instantiate(
-                    _cockpit.FloorPrefab, ship.transform);
+                    _designManager.FloorPrefab, ship.transform);
                 floor.transform.localPosition = new Vector2(
                     floorData.LocalPosition[0], floorData.LocalPosition[1]);
                 floor.name = floorData.Name;

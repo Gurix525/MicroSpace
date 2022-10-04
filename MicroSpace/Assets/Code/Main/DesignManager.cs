@@ -28,6 +28,14 @@ namespace Assets.Code.Main
 
         #endregion Fields
 
+        #region Properties
+
+        public GameObject WallPrefab => _wallPrefab;
+
+        public GameObject FloorPrefab => _floorPrefab;
+
+        #endregion Properties
+
         #region Public
 
         public IEnumerator DesignateBlock(BlockType blockType)
