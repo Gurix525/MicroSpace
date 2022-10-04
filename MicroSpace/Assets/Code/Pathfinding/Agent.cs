@@ -113,7 +113,9 @@ namespace Assets.Code.Pathfinding
         /// </summary>
         private void MoveAgent()
         {
-            if (Vector2.Distance(_path[0], (Vector2)transform.position) < _minDistanceToRemoveNode)
+            if (Vector2.Distance(
+                _path[0], (Vector2)transform.position) < _minDistanceToRemoveNode &&
+                 _path.Count > 1)
                 _path.RemoveAt(0);
             if (Vector2.Distance(transform.position, _targetPosition) > _minDistanceToMove)
                 transform.Translate(
