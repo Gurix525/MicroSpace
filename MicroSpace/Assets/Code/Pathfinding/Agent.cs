@@ -18,6 +18,12 @@ namespace Assets.Code.Pathfinding
         private float _movingSpeed = 2F;
 
         [SerializeField]
+        private float _minDistanceToMove = 1F;
+
+        [SerializeField]
+        private float _minDistanceToRemoveNode = 0.2F;
+
+        [SerializeField]
         private float _minDistanceFromCloseShipToChangeShips = 1F;
 
         private List<BoxCollider2D> _colliders;
@@ -43,6 +49,26 @@ namespace Assets.Code.Pathfinding
         {
             _navMesh.UpdateMesh();
             _path = _navMesh.FindPath(transform.position, _targetPosition);
+        }
+
+        /// <summary>
+        /// Tworzy ścieżkę prosto do celu (na razie zdezaktywowane bo robi problemy)
+        /// </summary>
+        private Path FindStraightPath()
+        {
+            if (_targetCollider != null)
+            {
+                var hit = Physics2D.Linecast(
+                    transform.position, _targetCollider.transform.position);
+                if (hit.collider == _targetCollider)
+                {
+                    var path = new Path(new Vector2[] {
+                    transform.position,
+                    hit.point });
+                    return path;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -87,9 +113,9 @@ namespace Assets.Code.Pathfinding
         /// </summary>
         private void MoveAgent()
         {
-            if (Vector2.Distance(_path[0], (Vector2)transform.position) < 0.1F)
+            if (Vector2.Distance(_path[0], (Vector2)transform.position) < _minDistanceToRemoveNode)
                 _path.RemoveAt(0);
-            if (Vector2.Distance(transform.position, _targetPosition) > 1.5F)
+            if (Vector2.Distance(transform.position, _targetPosition) > _minDistanceToMove)
                 transform.Translate(
                     (_path[0] - (Vector2)transform.position)
                     .normalized * Time.fixedDeltaTime * _movingSpeed);
@@ -135,6 +161,8 @@ namespace Assets.Code.Pathfinding
             }
             if (_deltaTimeSincePathUpdate >= 1F)
             {
+                //_path = FindStraightPath();
+                //if (_path == null)
                 FindPath();
                 _deltaTimeSincePathUpdate -= 1F;
             }

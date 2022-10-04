@@ -304,8 +304,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movingSpeed: 5
-  _targetPosition: {x: 0, y: 0}
-  _navMesh: {fileID: 0}
+  _minDistanceToMove: 0.5
+  _minDistanceToRemoveNode: 0.2
+  _minDistanceFromCloseShipToChangeShips: 1.5
 --- !u!212 &392410842
 SpriteRenderer:
   m_ObjectHideFlags: 0

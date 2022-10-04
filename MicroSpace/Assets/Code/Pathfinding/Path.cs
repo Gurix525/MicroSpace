@@ -17,5 +17,16 @@ namespace Assets.Code.Pathfinding
         {
             Add(start.Position);
         }
+
+        public Path(Vector2 start)
+        {
+            Add(start);
+        }
+
+        public Path(IEnumerable<Vector2> path)
+        {
+            foreach (var item in path)
+                Add(item);
+        }
     }
 }

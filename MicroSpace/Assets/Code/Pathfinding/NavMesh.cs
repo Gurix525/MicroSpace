@@ -67,7 +67,7 @@ namespace Assets.Code.Pathfinding
                 // Dodawanie pozycji start i end
                 // (ważne żeby było przed skracaniem ścieżki)
                 path.Insert(0, startPos); // Dodaję pozycję startową
-                path.Add(endPos); // Dodaję pozycję końcową
+                //path.Add(endPos); // Dodaję pozycję końcową
                 ShortenPath(path);
                 return path;
             }
