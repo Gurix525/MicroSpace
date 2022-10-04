@@ -17,11 +17,16 @@ namespace Assets.Code.Pathfinding
         [SerializeField]
         private float _movingSpeed = 2F;
 
+        [SerializeField]
+        private float _minDistanceFromCloseShipToChangeShips = 1F;
+
         private List<BoxCollider2D> _colliders;
         private BoxCollider2D _targetCollider;
         private Vector2 _targetPosition;
         private Vector2 _originalPos;
         private Vector2 _deltaNavMeshPos;
+        private Vector3 _originalRotation;
+        private Vector3 _deltaNavMeshRotation;
         private NavMesh _navMesh;
         private float _deltaTimeSincePathUpdate = 0F;
         private bool _hasNavMeshChanged = false;
@@ -46,7 +51,12 @@ namespace Assets.Code.Pathfinding
         private void UpdatePath()
         {
             for (int i = 0; i < _path.Count; i++)
+            {
                 _path[i] = _path[i] + _deltaNavMeshPos;
+                _path[i] = ((Vector3)_path[i]).RotateAroundPivot(
+                    transform.parent.parent.position,
+                    _deltaNavMeshRotation);
+            }
         }
 
         /// <summary>
@@ -89,13 +99,17 @@ namespace Assets.Code.Pathfinding
         /// Oblicza różnicę między pozycjami statku po klatce
         /// dla aktualizowania pozycji scieżki
         /// </summary>
-        private void CalculateNavMeshDeltaPos()
+        private void CalculateNavMeshDeltas()
         {
             if (!_hasNavMeshChanged)
+            {
                 _deltaNavMeshPos = (Vector2)transform.parent.parent.position - _originalPos;
+                _deltaNavMeshRotation = transform.parent.parent.eulerAngles - _originalRotation;
+            }
             else
                 _hasNavMeshChanged = false;
             _originalPos = transform.parent.parent.position;
+            _originalRotation = transform.parent.parent.eulerAngles;
         }
 
         /// <summary>
@@ -104,8 +118,11 @@ namespace Assets.Code.Pathfinding
         private void CreatePath()
         {
             _targetPosition = _targetCollider.transform.position;
-            var hit = Physics2D.Linecast(transform.position, _targetPosition);
-            if (hit != false)
+            RaycastHit2D hit = new();
+            var closeHit = CheckCloseSurroundings(transform.position);
+            if (closeHit.collider == null)
+                hit = Physics2D.Linecast(transform.position, _targetPosition);
+            if (hit.collider != null)
             {
                 transform.parent = hit.transform.GetChild(1);
                 var newNavMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
@@ -121,6 +138,22 @@ namespace Assets.Code.Pathfinding
                 FindPath();
                 _deltaTimeSincePathUpdate -= 1F;
             }
+        }
+
+        private RaycastHit2D CheckCloseSurroundings(Vector3 position)
+        {
+            RaycastHit2D lastHit = new();
+            for (int i = 0; i < 360; i += 45)
+            {
+                var a = Vector3.up * _minDistanceFromCloseShipToChangeShips;
+                var hit = Physics2D.Linecast(
+                    position,
+                    position + (Vector3.up * _minDistanceFromCloseShipToChangeShips)
+                    .RotateAroundPivot(Vector3.zero, new(0, 0, i)));
+                if (hit.collider != null) return hit;
+                lastHit = hit;
+            }
+            return lastHit;
         }
 
         #endregion Private
@@ -154,7 +187,7 @@ namespace Assets.Code.Pathfinding
             if (_targetCollider != null)
                 CreatePath();
             if (_navMesh != null)
-                CalculateNavMeshDeltaPos();
+                CalculateNavMeshDeltas();
             if (_path.Count > 0)
                 MoveAgent();
             _deltaTimeSincePathUpdate += Time.fixedDeltaTime;
