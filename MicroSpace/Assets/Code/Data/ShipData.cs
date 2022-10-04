@@ -12,33 +12,19 @@ namespace Assets.Code.Data
     [Serializable]
     public class ShipData
     {
-        public List<BlockData> Blocks = new();
         public List<WallData> Walls = new();
+        public List<FloorData> Floors = new();
         public List<RoomData> Rooms = new();
 
-        public int ElementsCount { get => Walls.Count + Blocks.Count; }
+        public int ElementsCount { get => Floors.Count + Walls.Count; }
 
         private PartData[,] _grid;
 
         public void Update(GameObject ship)
         {
-            UpdateBlocks(ship);
             UpdateWalls(ship);
+            UpdateFloors(ship);
             UpdateRooms();
-        }
-
-        private void UpdateBlocks(GameObject ship)
-        {
-            List<BlockData> blocks = new();
-
-            foreach (Transform item in ship.transform)
-            {
-                var block = item.gameObject.GetComponent<Block>();
-                if (block != null)
-                    blocks.Add(block);
-            }
-
-            Blocks = blocks;
         }
 
         private void UpdateWalls(GameObject ship)
@@ -55,17 +41,31 @@ namespace Assets.Code.Data
             Walls = walls;
         }
 
+        private void UpdateFloors(GameObject ship)
+        {
+            List<FloorData> floors = new();
+
+            foreach (Transform item in ship.transform)
+            {
+                var floor = item.gameObject.GetComponent<Floor>();
+                if (floor != null)
+                    floors.Add(floor);
+            }
+
+            Floors = floors;
+        }
+
         private void UpdateRooms()
         {
             List<PartData> parts = new();
-            foreach (var item in Blocks)
-                parts.Add(item);
             foreach (var item in Walls)
+                parts.Add(item);
+            foreach (var item in Floors)
                 parts.Add(item);
 
             foreach (PartData part in parts)
             {
-                if (part is not WallData)
+                if (part is not FloorData)
                     continue;
 
                 var upPart = parts.Find(
@@ -83,55 +83,55 @@ namespace Assets.Code.Data
 
                 if (upPart == null || downPart == null ||
                     leftPart == null || rightPart == null)
-                    ((WallData)part).IsExposed = true;
+                    ((FloorData)part).IsExposed = true;
                 else
-                    ((WallData)part).IsExposed = false;
+                    ((FloorData)part).IsExposed = false;
 
-                if (upPart is WallData)
-                    ((WallData)part).UpWall = (WallData)upPart;
-                if (downPart is WallData)
-                    ((WallData)part).DownWall = (WallData)downPart;
-                if (leftPart is WallData)
-                    ((WallData)part).LeftWall = (WallData)leftPart;
-                if (rightPart is WallData)
-                    ((WallData)part).RightWall = (WallData)rightPart;
+                if (upPart is FloorData)
+                    ((FloorData)part).UpFloor = (FloorData)upPart;
+                if (downPart is FloorData)
+                    ((FloorData)part).DownFloor = (FloorData)downPart;
+                if (leftPart is FloorData)
+                    ((FloorData)part).LeftFloor = (FloorData)leftPart;
+                if (rightPart is FloorData)
+                    ((FloorData)part).RightFloor = (FloorData)rightPart;
             }
 
-            var exposedWalls = parts
-                .Where(x => x is WallData)
-                .Where(x => ((WallData)x).IsExposed);
+            var exposedFloors = parts
+                .Where(x => x is FloorData)
+                .Where(x => ((FloorData)x).IsExposed);
 
-            foreach (var wall in exposedWalls)
-                exposeWall((WallData)wall);
+            foreach (var floor in exposedFloors)
+                exposeFloor((FloorData)floor);
 
-            foreach (var wall in Walls)
-                setRoom(wall);
+            foreach (var floor in Floors)
+                setRoom(floor);
 
-            void exposeWall(WallData wall)
+            void exposeFloor(FloorData floor)
             {
-                wall.IsExposed = true;
+                floor.IsExposed = true;
 
-                if (wall.UpWall != null)
-                    if (!wall.UpWall.IsExposed)
-                        exposeWall(wall.UpWall);
+                if (floor.UpFloor != null)
+                    if (!floor.UpFloor.IsExposed)
+                        exposeFloor(floor.UpFloor);
 
-                if (wall.DownWall != null)
-                    if (!wall.DownWall.IsExposed)
-                        exposeWall(wall.DownWall);
+                if (floor.DownFloor != null)
+                    if (!floor.DownFloor.IsExposed)
+                        exposeFloor(floor.DownFloor);
 
-                if (wall.LeftWall != null)
-                    if (!wall.LeftWall.IsExposed)
-                        exposeWall(wall.LeftWall);
+                if (floor.LeftFloor != null)
+                    if (!floor.LeftFloor.IsExposed)
+                        exposeFloor(floor.LeftFloor);
 
-                if (wall.RightWall != null)
-                    if (!wall.RightWall.IsExposed)
-                        exposeWall(wall.RightWall);
+                if (floor.RightFloor != null)
+                    if (!floor.RightFloor.IsExposed)
+                        exposeFloor(floor.RightFloor);
             }
 
-            void setRoom(WallData wall, RoomData room = null)
+            void setRoom(FloorData floor, RoomData room = null)
             {
-                if (wall.Room.Id > 0)
-                    room = wall.Room;
+                if (floor.Room.Id > 0)
+                    room = floor.Room;
                 else
                 {
                     if (room == null)
@@ -139,21 +139,21 @@ namespace Assets.Code.Data
                         Rooms.Add(new(Rooms.Count + 1));
                         room = Rooms[^1];
                     }
-                    wall.Room = room;
+                    floor.Room = room;
                 }
 
-                if (wall.UpWall != null)
-                    if (wall.UpWall.Room.Id == 0)
-                        setRoom(wall.UpWall, room);
-                if (wall.DownWall != null)
-                    if (wall.DownWall.Room.Id == 0)
-                        setRoom(wall.DownWall, room);
-                if (wall.LeftWall != null)
-                    if (wall.LeftWall.Room.Id == 0)
-                        setRoom(wall.LeftWall, room);
-                if (wall.RightWall != null)
-                    if (wall.RightWall.Room.Id == 0)
-                        setRoom(wall.RightWall, room);
+                if (floor.UpFloor != null)
+                    if (floor.UpFloor.Room.Id == 0)
+                        setRoom(floor.UpFloor, room);
+                if (floor.DownFloor != null)
+                    if (floor.DownFloor.Room.Id == 0)
+                        setRoom(floor.DownFloor, room);
+                if (floor.LeftFloor != null)
+                    if (floor.LeftFloor.Room.Id == 0)
+                        setRoom(floor.LeftFloor, room);
+                if (floor.RightFloor != null)
+                    if (floor.RightFloor.Room.Id == 0)
+                        setRoom(floor.RightFloor, room);
                 //void setRoom(WallData wall, RoomData room = null)
                 //{
                 //    if (wall == null)

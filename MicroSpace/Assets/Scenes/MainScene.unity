@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 98350693}
   - component: {fileID: 98350692}
+  - component: {fileID: 98350694}
   m_Layer: 0
   m_Name: Cockpit
   m_TagString: Untagged
@@ -152,12 +153,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e65ed417998eac428096de8af86d51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedShipRigidbody: {fileID: 0}
   ShipDesignationPrefab: {fileID: 2505317657868975611, guid: 6b5ddd6ec463ed443941755e0845defa, type: 3}
   ShipPrefab: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
-  BlockDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
-  BlockPrefab: {fileID: 7440152704112946889, guid: e288380be1584ea4189ffa8e1fc7d7ca, type: 3}
-  WallPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
+  WallPrefab: {fileID: 0}
+  FloorPrefab: {fileID: 0}
   UIController: {fileID: 472914255}
   Speedometer: 0
   _target: {fileID: 0}
@@ -177,6 +176,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &98350694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98350691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e743ea3ae8463643a29eb3e6e26d71d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
+  _floorPrefab: {fileID: 0}
+  _designationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
+  _worldTransform: {fileID: 445740361}
 --- !u!1 &292762465
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movingSpeed: 5
-  _minDistanceToMove: 0.5
+  _minDistanceToMove: 1.5
   _minDistanceToRemoveNode: 0.2
   _minDistanceFromCloseShipToChangeShips: 1.5
 --- !u!212 &392410842

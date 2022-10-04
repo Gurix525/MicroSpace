@@ -14,7 +14,7 @@ namespace Assets.Code.Data
         public int Id;
         public float MaxPressure;
         public float Pressure;
-        [NonSerialized] public List<WallData> Walls = new();
+        [NonSerialized] public List<FloorData> Floors = new();
 
         public RoomData(int id)
         {

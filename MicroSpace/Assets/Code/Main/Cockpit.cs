@@ -17,7 +17,6 @@ namespace Assets.Code.Main
         private Rigidbody2D SelectedShipRigidbody = null;
         public GameObject ShipDesignationPrefab;
         public GameObject ShipPrefab;
-        public GameObject BlockPrefab;
         public UIController UIController;
         public float Speedometer; // For UI speedometer purposes
 
@@ -57,7 +56,6 @@ namespace Assets.Code.Main
                 _target = null;
         }
 
-#if LOL
         public static void InstantiateShipFromDB(DBObject dbo)
         {
             GameObject ship = GameObject.Instantiate(
@@ -72,33 +70,32 @@ namespace Assets.Code.Main
             rb.rotation = dbo.Rotation;
             rb.angularVelocity = dbo.AngularVelocity;
 
-            foreach (BlockData blockData in dbo.ShipData.Blocks)
-            {
-                if (blockData.Name == "Core")
-                    continue;
-                GameObject block = Instantiate(
-                    _cockpit.BlockPrefab, ship.transform);
-                block.transform.localPosition = new Vector2(
-                     blockData.LocalPosition[0], blockData.LocalPosition[1]);
-                block.name = blockData.Name;
-                var blockComponent = block.GetComponent<Block>();
-                blockComponent.BlockData = blockData;
-            }
-
             foreach (WallData wallData in dbo.ShipData.Walls)
             {
+                if (wallData.Name == "Core")
+                    continue;
                 GameObject wall = Instantiate(
                     _cockpit.WallPrefab, ship.transform);
                 wall.transform.localPosition = new Vector2(
-                    wallData.LocalPosition[0], wallData.LocalPosition[1]);
+                     wallData.LocalPosition[0], wallData.LocalPosition[1]);
                 wall.name = wallData.Name;
                 var wallComponent = wall.GetComponent<Wall>();
                 wallComponent.WallData = wallData;
-                wallData.Room = dbo.ShipData.Rooms
-                    .Find(x => x.Id == wallData.Room.Id);
+            }
+
+            foreach (FloorData floorData in dbo.ShipData.Floors)
+            {
+                GameObject floor = Instantiate(
+                    _cockpit.FloorPrefab, ship.transform);
+                floor.transform.localPosition = new Vector2(
+                    floorData.LocalPosition[0], floorData.LocalPosition[1]);
+                floor.name = floorData.Name;
+                var floorComponent = floor.GetComponent<Floor>();
+                floorComponent.FloorData = floorData;
+                floorData.Room = dbo.ShipData.Rooms
+                    .Find(x => x.Id == floorData.Room.Id);
             }
         }
-#endif
 
         #endregion Public
 
@@ -236,16 +233,15 @@ namespace Assets.Code.Main
                 return;
             }
 
-#if LOL
             if (Input.GetKeyDown(KeyCode.V))
             {
-                StartCoroutine(_designManager.DesignateBlockCoroutine(WallPrefab));
+                StartCoroutine(_designManager.DesignateBlock(BlockType.Floor));
                 return;
             }
-#endif
+
             if (Input.GetKeyDown(KeyCode.B))
             {
-                StartCoroutine(_designManager.DesignateBlock(BlockPrefab));
+                StartCoroutine(_designManager.DesignateBlock(BlockType.Wall));
                 return;
             }
 
@@ -280,7 +276,8 @@ namespace Assets.Code.Main
         {
             if (SelectedShipRigidbody != null)
             {
-                SteerTheShip();
+                if (!_isSetupRunnning)
+                    SteerTheShip();
                 AlignScenePosition();
                 AlignCamera();
                 UpdateSpeedometer();
