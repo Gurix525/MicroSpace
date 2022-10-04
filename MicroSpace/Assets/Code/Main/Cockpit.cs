@@ -17,6 +17,7 @@ namespace Assets.Code.Main
         private Rigidbody2D SelectedShipRigidbody = null;
         public GameObject ShipDesignationPrefab;
         public GameObject ShipPrefab;
+        public GameObject BlockPrefab;
         public UIController UIController;
         public float Speedometer; // For UI speedometer purposes
 
@@ -236,18 +237,18 @@ namespace Assets.Code.Main
             }
 
 #if LOL
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                StartCoroutine(_designManager.DesignateBlockCoroutine(BlockPrefab));
-                return;
-            }
-
             if (Input.GetKeyDown(KeyCode.V))
             {
                 StartCoroutine(_designManager.DesignateBlockCoroutine(WallPrefab));
                 return;
             }
 #endif
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                StartCoroutine(_designManager.DesignateBlock(BlockPrefab));
+                return;
+            }
+
             if (Input.GetMouseButtonDown(1))
             {
                 UIController.OpenContextualMenu();
