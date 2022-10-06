@@ -148,6 +148,7 @@ namespace Assets.Code.Main
         private void SteerTheShip()
         {
             int speed = 5 * Database.FocusedShip.ShipData.ElementsCount;
+            float rotationSpeed = speed / 5;
 
             if (Input.GetKey(KeyCode.W))
                 SelectedShipRigidbody.AddForce(
@@ -162,9 +163,9 @@ namespace Assets.Code.Main
                 SelectedShipRigidbody.AddForce(
                     SelectedShipRigidbody.transform.right * -speed);
             if (Input.GetKey(KeyCode.E))
-                SelectedShipRigidbody.AddTorque(-speed);
+                SelectedShipRigidbody.AddTorque(-rotationSpeed);
             if (Input.GetKey(KeyCode.Q))
-                SelectedShipRigidbody.AddTorque(speed);
+                SelectedShipRigidbody.AddTorque(rotationSpeed);
             if (Input.GetKey(KeyCode.Space))
                 AdjustSpeed(speed * Time.fixedDeltaTime);
         }

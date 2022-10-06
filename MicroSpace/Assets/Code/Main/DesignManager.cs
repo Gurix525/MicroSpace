@@ -13,13 +13,19 @@ namespace Assets.Code.Main
         #region Fields
 
         [SerializeField]
+        private GameObject _designationPrefab;
+
+        [SerializeField]
         private GameObject _wallPrefab;
 
         [SerializeField]
         private GameObject _floorPrefab;
 
         [SerializeField]
-        private GameObject _designationPrefab;
+        private GameObject _wallDesignationPrefab;
+
+        [SerializeField]
+        private GameObject _floorDesignationPrefab;
 
         [SerializeField]
         private Transform _worldTransform;
@@ -42,16 +48,17 @@ namespace Assets.Code.Main
         {
             var prefab = blockType switch
             {
-                BlockType.Floor => _floorPrefab,
-                _ => _wallPrefab
+                BlockType.Floor => _floorDesignationPrefab,
+                _ => _wallDesignationPrefab
             };
             _cockpit.SwitchSetup();
             GameObject designation = Instantiate(_designationPrefab, _worldTransform);
-            BoxCollider2D closestBlock = new();
+            // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
+            IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
                 var mousePos = GetMousePosition();
-                closestBlock = FindClosestWall(designation, mousePos);
+                closestBlock = FindClosestBlock(designation, mousePos);
                 MoveBlockDesignation(designation, closestBlock, mousePos);
                 yield return null;
             }
@@ -81,12 +88,12 @@ namespace Assets.Code.Main
             }
             for (int i = 0; i < designations.Count; i++)
             {
-                var block = Instantiate(prefab, closestBlock.transform.parent);
+                var block = Instantiate(prefab, closestBlock.Parent);
                 block.transform.localPosition = designations[i].transform.localPosition;
             }
             for (int i = 0; i < designations.Count; i++)
                 Destroy(designations[i]);
-            UpdateShipData(closestBlock.transform.parent.gameObject);
+            UpdateShipData(closestBlock.Parent.gameObject);
             _cockpit.SwitchSetup();
         }
 
@@ -112,16 +119,16 @@ namespace Assets.Code.Main
             return v3;
         }
 
-        private BoxCollider2D FindClosestWall(
+        private IBlock FindClosestBlock(
             GameObject designation, Vector3 v3)
         {
-            var num = FindObjectsOfType<BoxCollider2D>()
-                .Where(x => x != designation.GetComponent<BoxCollider2D>())
-                .Where(x => x.transform.parent.GetComponent<Ship>() != null);
+            var num = FindObjectsOfType<MonoBehaviour>()
+                .OfType<IBlock>()
+                .Where(x => x.Parent.GetComponent<Ship>() != null);
             var closestWall = num.Count() > 0 ?
                 num.Aggregate((closest, next) =>
-                Vector2.Distance(closest.transform.position, v3) <
-                Vector2.Distance(next.transform.position, v3) ?
+                Vector2.Distance(closest.Transform.position, v3) <
+                Vector2.Distance(next.Transform.position, v3) ?
                 closest : next) :
                 null;
             return closestWall;
@@ -135,16 +142,16 @@ namespace Assets.Code.Main
         }
 
         private void MoveBlockDesignation(
-            GameObject designation, BoxCollider2D closestBlock, Vector3 v3)
+            GameObject designation, IBlock closestBlock, Vector3 v3)
         {
             if (closestBlock != null ?
-                    Vector2.Distance(closestBlock.transform.position, v3) < 2 :
+                    Vector2.Distance(closestBlock.Transform.position, v3) < 2 :
                     false)
             {
-                var v3relative = closestBlock.transform.InverseTransformPoint(v3);
-                designation.transform.parent = closestBlock.transform.parent;
+                var v3relative = closestBlock.Transform.InverseTransformPoint(v3);
+                designation.transform.parent = closestBlock.Parent;
                 designation.transform.localPosition =
-                    closestBlock.transform.localPosition +
+                    closestBlock.Transform.localPosition +
                     v3relative
                     .normalized
                     .Round();
@@ -158,10 +165,10 @@ namespace Assets.Code.Main
             }
         }
 
-        private void CreateDesignations(BoxCollider2D closestBlock,
+        private void CreateDesignations(IBlock closestBlock,
             Vector3 originalPos, List<GameObject> designations, ref Vector3 localMousePos)
         {
-            localMousePos = closestBlock.transform.parent
+            localMousePos = closestBlock.Parent
                 .InverseTransformPoint(GetMousePosition());
             localMousePos = localMousePos.Round();
             int lesserX = 0;
@@ -193,7 +200,7 @@ namespace Assets.Code.Main
                 {
                     designations.Add(Instantiate(
                         _designationPrefab,
-                        closestBlock.transform.parent));
+                        closestBlock.Parent));
                     designations[^1].transform.localPosition = new Vector3(x, y, 0);
                 }
         }

@@ -88,8 +88,8 @@ MonoBehaviour:
     Rotation: 0
     AngularVelocity: 0
     ShipData:
-      Blocks: []
       Walls: []
+      Floors: []
       Rooms: []
 --- !u!50 &4542050502911274631
 Rigidbody2D:
@@ -105,7 +105,7 @@ Rigidbody2D:
   m_UseAutoMass: 1
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 1
+  m_AngularDrag: 2
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0

@@ -9,16 +9,21 @@ using UnityEngine;
 namespace Assets.Code.Ships
 {
     /// <summary>
-    /// Komponent umieszczany w konkretnych prefabach Block,
-    /// ma swój odpowiednik w Data.BlockData.
+    /// Ma swój odpowiednik w Data.WallData.
     /// </summary>
-    public class Wall : MonoBehaviour
+    public class Wall : MonoBehaviour, IBlock
     {
-        //public string Name;
-        //public float Resilience; // Minimum energy to do damage
-        //public float MaxEndurance; // Maximum taken damage
-        //public float CurrentEndurance;
+        [SerializeField]
+        private WallData _wallData;
 
-        public WallData WallData;
+        public Transform Transform => transform;
+
+        public Transform Parent
+        {
+            get => transform.parent;
+            set => transform.parent = value;
+        }
+
+        public WallData WallData { get => _wallData; set => _wallData = value; }
     }
 }

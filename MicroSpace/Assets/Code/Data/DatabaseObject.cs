@@ -19,7 +19,7 @@ namespace Assets.Code.Data
 
         public DBObject(string name = "", string desc = "")
         {
-            Position = BigVector2.zero;
+            Position = BigVector2.Zero;
             Velocity = Vector2.zero;
             Name = name;
         }
@@ -46,16 +46,16 @@ namespace Assets.Code.Data
         public void CalculatePosition(long physicsFrames = 1)
         {
             Position += Velocity * physicsFrames * Time.fixedDeltaTime;
-            Position.x = Position.x > Database.WorldBorder ?
-                Position.x - 2 * Database.WorldBorder :
-                Position.x < -Database.WorldBorder ?
-                    Position.x + 2 * Database.WorldBorder :
-                    Position.x;
-            Position.y = Position.y > Database.WorldBorder ?
-                Position.y - 2 * Database.WorldBorder :
-                Position.y < -Database.WorldBorder ?
-                    Position.y + 2 * Database.WorldBorder :
-                    Position.y;
+            Position.X = Position.X > Database.WorldBorder ?
+                Position.X - 2 * Database.WorldBorder :
+                Position.X < -Database.WorldBorder ?
+                    Position.X + 2 * Database.WorldBorder :
+                    Position.X;
+            Position.Y = Position.Y > Database.WorldBorder ?
+                Position.Y - 2 * Database.WorldBorder :
+                Position.Y < -Database.WorldBorder ?
+                    Position.Y + 2 * Database.WorldBorder :
+                    Position.Y;
         }
 
         public void UpdateRigidbodyData()
@@ -82,17 +82,13 @@ namespace Assets.Code.Data
         public void InstantiateCloseShip()
         {
             if (!IsShipDistant())
-                throw new NotImplementedException("Dodać prefaby bloków i " +
-                    "wyłączyć ify LOL (w sumie w 3 miejscach)");
-#if LOL
                 Cockpit.InstantiateShipFromDB(this);
-#endif
         }
 
         private bool IsShipDistant()
         {
-            double x = Position.x - Database.FocusedShip.Position.x;
-            double y = Position.y - Database.FocusedShip.Position.y;
+            double x = Position.X - Database.FocusedShip.Position.X;
+            double y = Position.Y - Database.FocusedShip.Position.Y;
 
             bool isXDistant = x > 60 ?
                 true :

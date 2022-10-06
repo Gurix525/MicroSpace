@@ -55,9 +55,9 @@ namespace Assets.Code.Data
 
         private Vector3 MapPosition(BigVector2 pos)
         {
-            float num = (float)Math.Clamp(pos.x, -WorldBorder, WorldBorder);
+            float num = (float)Math.Clamp(pos.X, -WorldBorder, WorldBorder);
             num /= 100000;
-            float num2 = (float)Math.Clamp(pos.y, -WorldBorder, WorldBorder);
+            float num2 = (float)Math.Clamp(pos.Y, -WorldBorder, WorldBorder);
             num2 /= 100000;
 
             return new Vector3(num, num2, 0);

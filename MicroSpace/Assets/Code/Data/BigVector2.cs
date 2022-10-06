@@ -12,20 +12,20 @@ namespace Assets.Code.Data
     {
         #region Fields
 
-        public double x;
-        public double y;
+        public double X;
+        public double Y;
 
-        private static readonly BigVector2 zeroVector = new(0d, 0d);
-        private static readonly BigVector2 oneVector = new(1d, 1d);
-        private static readonly BigVector2 upVector = new(0d, 1d);
-        private static readonly BigVector2 downVector = new(0d, -1d);
-        private static readonly BigVector2 leftVector = new(-1d, 0d);
-        private static readonly BigVector2 rightVector = new(1d, 0d);
+        private static readonly BigVector2 _zeroVector = new(0d, 0d);
+        private static readonly BigVector2 _oneVector = new(1d, 1d);
+        private static readonly BigVector2 _upVector = new(0d, 1d);
+        private static readonly BigVector2 _downVector = new(0d, -1d);
+        private static readonly BigVector2 _leftVector = new(-1d, 0d);
+        private static readonly BigVector2 _rightVector = new(1d, 0d);
 
-        private static readonly BigVector2 positiveInfinityVector =
+        private static readonly BigVector2 _positiveInfinityVector =
             new(double.PositiveInfinity, double.PositiveInfinity);
 
-        private static readonly BigVector2 negativeInfinityVector =
+        private static readonly BigVector2 _negativeInfinityVector =
             new(double.NegativeInfinity, double.NegativeInfinity);
 
         #endregion Fields
@@ -36,8 +36,8 @@ namespace Assets.Code.Data
         {
             get => index switch
             {
-                0 => x,
-                1 => y,
+                0 => X,
+                1 => Y,
                 _ => throw new IndexOutOfRangeException("Invalid BigVector2 index!")
             };
             set
@@ -45,11 +45,11 @@ namespace Assets.Code.Data
                 switch (index)
                 {
                     case 0:
-                        x = value;
+                        X = value;
                         break;
 
                     case 1:
-                        y = value;
+                        Y = value;
                         break;
 
                     default:
@@ -58,45 +58,45 @@ namespace Assets.Code.Data
             }
         }
 
-        public BigVector2 normalized
+        public BigVector2 Normalized
         {
             get
             {
-                BigVector2 result = new BigVector2(x, y);
+                BigVector2 result = new BigVector2(X, Y);
                 result.Normalize();
                 return result;
             }
         }
 
-        public double magnitude =>
-            (double)Math.Sqrt(x * x + y * y);
+        public double Magnitude =>
+            (double)Math.Sqrt(X * X + Y * Y);
 
         public double sqrMagnitude =>
-            x * x + y * y;
+            X * X + Y * Y;
 
-        public static BigVector2 zero =>
-            zeroVector;
+        public static BigVector2 Zero =>
+            _zeroVector;
 
-        public static BigVector2 one =>
-            oneVector;
+        public static BigVector2 One =>
+            _oneVector;
 
-        public static BigVector2 up =>
-            upVector;
+        public static BigVector2 Up =>
+            _upVector;
 
-        public static BigVector2 down =>
-            downVector;
+        public static BigVector2 Down =>
+            _downVector;
 
-        public static BigVector2 left =>
-            leftVector;
+        public static BigVector2 Left =>
+            _leftVector;
 
-        public static BigVector2 right =>
-            rightVector;
+        public static BigVector2 Right =>
+            _rightVector;
 
-        public static BigVector2 positiveInfinity =>
-            positiveInfinityVector;
+        public static BigVector2 PositiveInfinity =>
+            _positiveInfinityVector;
 
-        public static BigVector2 negativeInfinity =>
-            negativeInfinityVector;
+        public static BigVector2 NegativeInfinity =>
+            _negativeInfinityVector;
 
         #endregion Properties
 
@@ -104,8 +104,8 @@ namespace Assets.Code.Data
 
         public BigVector2(double x, double y)
         {
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
         }
 
         #endregion Constructors
@@ -114,18 +114,18 @@ namespace Assets.Code.Data
 
         public void Set(double newX, double newY)
         {
-            x = newX;
-            y = newY;
+            X = newX;
+            Y = newY;
         }
 
         public static BigVector2 Lerp(BigVector2 a, BigVector2 b, double t)
         {
             t = t < 0 ? 0 : t > 1 ? 1 : t;
-            return new(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+            return new(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
         }
 
         public static BigVector2 LerpUnclamped(BigVector2 a, BigVector2 b, double t) =>
-            new(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+            new(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
 
         public static BigVector2 MoveTowards(
             BigVector2 current,
@@ -133,8 +133,8 @@ namespace Assets.Code.Data
             double maxDistanceDelta
             )
         {
-            double num = target.x - current.x;
-            double num2 = target.y - current.y;
+            double num = target.X - current.X;
+            double num2 = target.Y - current.Y;
             double num3 = num * num + num2 * num2;
             if (
                 num3 == 0d ||
@@ -144,22 +144,22 @@ namespace Assets.Code.Data
 
             double num4 = (double)Math.Sqrt(num3);
             return new(
-                current.x + num / num4 * maxDistanceDelta,
-                current.y + num2 / num4 * maxDistanceDelta
+                current.X + num / num4 * maxDistanceDelta,
+                current.Y + num2 / num4 * maxDistanceDelta
                 );
         }
 
         public static BigVector2 Scale(BigVector2 a, BigVector2 b) =>
-            new(a.x * b.x, a.y * b.y);
+            new(a.X * b.X, a.Y * b.Y);
 
         public void Scale(BigVector2 scale)
         {
-            x *= scale.x;
-            y *= scale.y;
+            X *= scale.X;
+            Y *= scale.Y;
         }
 
         public void Normalize() =>
-            this = magnitude > 1E-50d ? this /= magnitude : zero;
+            this = Magnitude > 1E-50d ? this /= Magnitude : Zero;
 
         public override string ToString() =>
             ToString(null, null);
@@ -178,13 +178,13 @@ namespace Assets.Code.Data
             return string.Format(
                 CultureInfo.InvariantCulture.NumberFormat,
                 "({0}, {1})",
-                x.ToString(format, formatProvider),
-                y.ToString(format, formatProvider)
+                X.ToString(format, formatProvider),
+                Y.ToString(format, formatProvider)
                 );
         }
 
         public override int GetHashCode() =>
-            x.GetHashCode() ^ (y.GetHashCode() << 3);
+            X.GetHashCode() ^ (Y.GetHashCode() << 3);
 
         public override bool Equals(object other)
         {
@@ -194,22 +194,22 @@ namespace Assets.Code.Data
         }
 
         public bool Equals(BigVector2 other) =>
-            x == other.x && y == other.y;
+            X == other.X && Y == other.Y;
 
         public static BigVector2 Reflect(BigVector2 inDirection, BigVector2 inNormal)
         {
             double num = -2f * Dot(inNormal, inDirection);
             return new(
-                num * inNormal.x + inDirection.x,
-                num * inNormal.y + inDirection.y
+                num * inNormal.X + inDirection.X,
+                num * inNormal.Y + inDirection.Y
                 );
         }
 
         public static BigVector2 Perpendicular(BigVector2 inDirection) =>
-            new BigVector2(0d - inDirection.y, inDirection.x);
+            new BigVector2(0d - inDirection.Y, inDirection.X);
 
         public static double Dot(BigVector2 lhs, BigVector2 rhs) =>
-            lhs.x * rhs.x + lhs.y * rhs.y;
+            lhs.X * rhs.X + lhs.Y * rhs.Y;
 
         public static double Angle(BigVector2 from, BigVector2 to)
         {
@@ -224,14 +224,14 @@ namespace Assets.Code.Data
         public static double SignedAngle(BigVector2 from, BigVector2 to)
         {
             double num = Angle(from, to);
-            double num2 = Math.Sign(from.x * to.y - from.y * to.x);
+            double num2 = Math.Sign(from.X * to.Y - from.Y * to.X);
             return num * num2;
         }
 
         public static double Distance(BigVector2 a, BigVector2 b)
         {
-            double num = a.x - b.x;
-            double num2 = a.y - b.y;
+            double num = a.X - b.X;
+            double num2 = a.Y - b.Y;
             return (double)Math.Sqrt(num * num + num2 * num2);
         }
 
@@ -241,8 +241,8 @@ namespace Assets.Code.Data
             if (sqrMagnitude > maxLength * maxLength)
             {
                 double num = (double)Math.Sqrt(sqrMagnitude);
-                double num2 = vector.x / num;
-                double num3 = vector.y / num;
+                double num2 = vector.X / num;
+                double num3 = vector.Y / num;
                 return new(num2 * maxLength, num3 * maxLength);
             }
 
@@ -250,44 +250,44 @@ namespace Assets.Code.Data
         }
 
         public static double SqrMagnitude(BigVector2 a) =>
-            a.x * a.x + a.y * a.y;
+            a.X * a.X + a.Y * a.Y;
 
         public double SqrMagnitude() =>
-            x * x + y * y;
+            X * X + Y * Y;
 
         public static BigVector2 Min(BigVector2 lhs, BigVector2 rhs) =>
-            new(Math.Min(lhs.x, rhs.x), Math.Min(lhs.y, rhs.y));
+            new(Math.Min(lhs.X, rhs.X), Math.Min(lhs.Y, rhs.Y));
 
         public static BigVector2 Max(BigVector2 lhs, BigVector2 rhs) =>
-            new(Math.Max(lhs.x, rhs.x), Math.Max(lhs.y, rhs.y));
+            new(Math.Max(lhs.X, rhs.X), Math.Max(lhs.Y, rhs.Y));
 
         #endregion Public methods
 
         #region Operators
 
         public static BigVector2 operator +(BigVector2 a, BigVector2 b) =>
-            new(a.x + b.x, a.y + b.y);
+            new(a.X + b.X, a.Y + b.Y);
 
         public static BigVector2 operator -(BigVector2 a, BigVector2 b) =>
-            new(a.x - b.x, a.y - b.y);
+            new(a.X - b.X, a.Y - b.Y);
 
         public static BigVector2 operator *(BigVector2 a, BigVector2 b) =>
-            new(a.x * b.x, a.y * b.y);
+            new(a.X * b.X, a.Y * b.Y);
 
         public static BigVector2 operator /(BigVector2 a, BigVector2 b) =>
-            new(a.x / b.x, a.y / b.y);
+            new(a.X / b.X, a.Y / b.Y);
 
         public static BigVector2 operator -(BigVector2 a) =>
-            new(-a.x, -a.y);
+            new(-a.X, -a.Y);
 
         public static BigVector2 operator *(BigVector2 a, double d) =>
-            new(a.x * d, a.y * d);
+            new(a.X * d, a.Y * d);
 
         public static BigVector2 operator *(double d, BigVector2 a) =>
             a * d;
 
         public static BigVector2 operator /(BigVector2 a, double d) =>
-            new(a.x / d, a.y / d);
+            new(a.X / d, a.Y / d);
 
         public static bool operator ==(BigVector2 a, BigVector2 b) =>
             a.Equals(b);
@@ -302,10 +302,10 @@ namespace Assets.Code.Data
             new(v.x, v.y);
 
         public static explicit operator Vector2(BigVector2 v) =>
-            new((float)v.x, (float)v.y);
+            new((float)v.X, (float)v.Y);
 
         public static explicit operator Vector3(BigVector2 v) =>
-            new((float)v.x, (float)v.y);
+            new((float)v.X, (float)v.Y);
 
         #endregion Operators
     }

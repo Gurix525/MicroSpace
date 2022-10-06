@@ -31,7 +31,7 @@ namespace Assets.Code.Ships
             shipData.GameObject = gameObject;
             shipData.Name = $"Ship No {Database.DBObjects.Count}";
             shipData.Position = db.Count == 1 ?
-                BigVector2.zero :
+                BigVector2.Zero :
                 (db[^2].Position +
                 (BigVector2)transform.localPosition);
             return db[^1];
