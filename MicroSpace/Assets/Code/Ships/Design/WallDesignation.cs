@@ -1,17 +1,24 @@
+using Assets.Code.Main;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Code.Ships
 {
-    public class WallDesignation : MonoBehaviour, IBlock
+    public class WallDesignation : BlockDesignation
     {
-        public Transform Transform => transform;
-
-        public Transform Parent
+        private void FixedUpdate()
         {
-            get => transform.parent;
-            set => transform.parent = value;
+            if (IsCollidingWithAnotherBlock())
+            {
+                IsObstructed = true;
+                _spriteRenderer.color = ColorBank.WallDesignationObstructed;
+            }
+            else
+            {
+                IsObstructed = false;
+                _spriteRenderer.color = ColorBank.WallDesignationNormal;
+            }
         }
     }
 }

@@ -72,6 +72,16 @@ namespace Assets.Code.Maths
             return Geometry.AreSquaresIntersecting(this, other, out intersections);
         }
 
+        public bool IsIntersecting(Line other)
+        {
+            return Geometry.AreLineAndSquareIntersecting(other, this);
+        }
+
+        public bool IsIntersecting(Square other)
+        {
+            return Geometry.AreSquaresIntersecting(this, other);
+        }
+
         public override bool Equals(object other)
         {
             if (other is not Square)

@@ -90,6 +90,12 @@ namespace Assets.Code.Maths
             }
         }
 
+        public static bool AreLinesIntersecting(Vector2 A, Vector2 B,
+            Vector2 C, Vector2 D)
+        {
+            return AreLinesIntersecting(A, B, C, D, out _);
+        }
+
         /// <summary>
         /// Sprawdza, czy podane linie AB i CD się przecinają
         /// </summary>
@@ -98,6 +104,12 @@ namespace Assets.Code.Maths
             Line first, Line second, out Vector2 intersection)
         {
             return AreLinesIntersecting(first.A, first.B, second.A, second.B, out intersection);
+        }
+
+        public static bool AreLinesIntersecting(
+            Line first, Line second)
+        {
+            return AreLinesIntersecting(first, second, out _);
         }
 
         /// <summary>
@@ -122,6 +134,17 @@ namespace Assets.Code.Maths
             else
                 intersections = newIntersections.ToArray();
             return isIntersecting;
+        }
+
+        public static bool AreLineAndSquareIntersecting(
+            Line line, Square square)
+        {
+            foreach (Line item in square.Lines)
+            {
+                if (line.IsIntersecting(item))
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -149,6 +172,20 @@ namespace Assets.Code.Maths
             else
                 intersections = newIntersections.ToArray();
             return isIntersecting;
+        }
+
+        public static bool AreSquaresIntersecting(
+            Square first, Square second)
+        {
+            foreach (var itemA in first.Lines)
+            {
+                foreach (var itemB in second.Lines)
+                {
+                    if (itemA.IsIntersecting(itemB))
+                        return true;
+                }
+            }
+            return false;
         }
 
         #endregion Public

@@ -11,18 +11,10 @@ namespace Assets.Code.Ships
     /// <summary>
     /// Ma swój odpowiednik w Data.WallData.
     /// </summary>
-    public class Wall : MonoBehaviour, IBlock
+    public class Wall : Block
     {
         [SerializeField]
         private WallData _wallData;
-
-        public Transform Transform => transform;
-
-        public Transform Parent
-        {
-            get => transform.parent;
-            set => transform.parent = value;
-        }
 
         public WallData WallData { get => _wallData; set => _wallData = value; }
     }

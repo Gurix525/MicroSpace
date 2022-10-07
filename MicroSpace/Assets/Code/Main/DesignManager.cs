@@ -57,6 +57,12 @@ namespace Assets.Code.Main
             IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Destroy(designation);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
                 var mousePos = GetMousePosition();
                 closestBlock = FindClosestBlock(designation, mousePos);
                 MoveBlockDesignation(designation, closestBlock, mousePos);
@@ -73,17 +79,26 @@ namespace Assets.Code.Main
             Destroy(designation);
             yield return null;
             Vector3 localMousePos = new();
+            Vector3 oldLocalMousePos = Vector3.positiveInfinity;
             List<GameObject> designations = new();
-            while (!Input.GetKeyDown(KeyCode.Mouse0))
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || !AreAllDesignationsUnobstructed(designations))
             {
-                if (Input.GetKeyUp(KeyCode.Mouse1))
+                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
+                    DestroyDesignations(designations);
                     _cockpit.SwitchSetup();
                     yield break;
                 }
-                DestroyDesignations(designations);
-                CreateDesignations(
-                    closestBlock, originalPos, designations, ref localMousePos);
+                localMousePos = closestBlock.Parent
+                        .InverseTransformPoint(GetMousePosition());
+                localMousePos = localMousePos.Round();
+                if (localMousePos != oldLocalMousePos)
+                {
+                    DestroyDesignations(designations);
+                    CreateDesignations(
+                        closestBlock, originalPos, designations, ref localMousePos);
+                }
+                oldLocalMousePos = localMousePos;
                 yield return null;
             }
             for (int i = 0; i < designations.Count; i++)
@@ -91,8 +106,7 @@ namespace Assets.Code.Main
                 var block = Instantiate(prefab, closestBlock.Parent);
                 block.transform.localPosition = designations[i].transform.localPosition;
             }
-            for (int i = 0; i < designations.Count; i++)
-                Destroy(designations[i]);
+            DestroyDesignations(designations);
             UpdateShipData(closestBlock.Parent.gameObject);
             _cockpit.SwitchSetup();
         }
@@ -100,6 +114,14 @@ namespace Assets.Code.Main
         #endregion Public
 
         #region Private
+
+        private static bool AreAllDesignationsUnobstructed(List<GameObject> designations)
+        {
+            foreach (var item in designations)
+                if (item.GetComponent<BlockDesignation>().IsObstructed)
+                    return false;
+            return true;
+        }
 
         private static void DestroyDesignations(List<GameObject> designations)
         {
@@ -124,6 +146,9 @@ namespace Assets.Code.Main
         {
             var num = FindObjectsOfType<MonoBehaviour>()
                 .OfType<IBlock>()
+#pragma warning disable CS0252
+                .Where(x => x != designation.GetComponent<BlockDesignation>())
+#pragma warning restore
                 .Where(x => x.Parent.GetComponent<Ship>() != null);
             var closestWall = num.Count() > 0 ?
                 num.Aggregate((closest, next) =>
@@ -145,7 +170,7 @@ namespace Assets.Code.Main
             GameObject designation, IBlock closestBlock, Vector3 v3)
         {
             if (closestBlock != null ?
-                    Vector2.Distance(closestBlock.Transform.position, v3) < 2 :
+                    Vector2.Distance(closestBlock.Transform.position, v3) < 1.5F :
                     false)
             {
                 var v3relative = closestBlock.Transform.InverseTransformPoint(v3);
@@ -153,7 +178,6 @@ namespace Assets.Code.Main
                 designation.transform.localPosition =
                     closestBlock.Transform.localPosition +
                     v3relative
-                    .normalized
                     .Round();
                 designation.transform.localEulerAngles = Vector3.zero;
             }

@@ -9,7 +9,7 @@ using Assets.Code.Data.PartDataImplementations;
 
 namespace Assets.Code.Ships
 {
-    public class Floor : MonoBehaviour, IBlock
+    public class Floor : Block
     {
         //public string Name;
         //public float Resilience; // Minimum energy to do damage
@@ -18,14 +18,6 @@ namespace Assets.Code.Ships
 
         [SerializeField]
         private FloorData _floorData = null;
-
-        public Transform Transform => transform;
-
-        public Transform Parent
-        {
-            get => transform.parent;
-            set => transform.parent = value;
-        }
 
         public FloorData FloorData { get => _floorData; set => _floorData = value; }
 

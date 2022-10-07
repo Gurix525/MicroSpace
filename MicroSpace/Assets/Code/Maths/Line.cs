@@ -9,10 +9,16 @@ namespace Assets.Code.Maths
 {
     public struct Line : IEquatable<Line>
     {
+        #region Properties
+
         public static Line Zero => new Line(Vector2.zero, Vector2.zero);
 
         public Vector2 A { get; }
         public Vector2 B { get; }
+
+        #endregion Properties
+
+        #region Constructors
 
         public Line(Vector2 a, Vector2 b)
         {
@@ -20,14 +26,28 @@ namespace Assets.Code.Maths
             B = b;
         }
 
+        #endregion Constructors
+
+        #region Public
+
         public bool IsIntersecting(Line other, out Vector2 intersection)
         {
             return Geometry.AreLinesIntersecting(this, other, out intersection);
         }
 
+        public bool IsIntersecting(Line other)
+        {
+            return Geometry.AreLinesIntersecting(this, other);
+        }
+
         public bool IsIntersecting(Square other, out Vector2[] intersection)
         {
             return Geometry.AreLineAndSquareIntersecting(this, other, out intersection);
+        }
+
+        public bool IsIntersecting(Square other)
+        {
+            return Geometry.AreLineAndSquareIntersecting(this, other);
         }
 
         public override bool Equals(object other)
@@ -62,5 +82,7 @@ namespace Assets.Code.Maths
         {
             return !l.Equals(r);
         }
+
+        #endregion Public
     }
 }
