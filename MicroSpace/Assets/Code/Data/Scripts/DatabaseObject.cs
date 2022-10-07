@@ -79,13 +79,7 @@ namespace Assets.Code.Data
                 UnityEngine.Object.Destroy(GameObject);
         }
 
-        public void InstantiateCloseShip()
-        {
-            if (!IsShipDistant())
-                Cockpit.InstantiateShipFromDB(this);
-        }
-
-        private bool IsShipDistant()
+        public bool IsShipDistant()
         {
             double x = Position.X - Database.FocusedShip.Position.X;
             double y = Position.Y - Database.FocusedShip.Position.Y;

@@ -49,7 +49,6 @@ namespace Assets.Code.Data
             {
                 UpdateDBObjectVelocity();
                 DestroyDistantShips();
-                InstantiateCloseShips();
             }
         }
 
@@ -83,11 +82,14 @@ namespace Assets.Code.Data
                 }
         }
 
-        private void InstantiateCloseShips()
+        public static IEnumerable GetShipsToInstantiate()
         {
+            List<DBObject> shipsToInstantiate = new();
             foreach (DBObject item in DBObjects)
                 if (item.GameObject == null)
-                    item.InstantiateCloseShip();
+                    if (!item.IsShipDistant())
+                        shipsToInstantiate.Add(item);
+            return shipsToInstantiate;
         }
     }
 }

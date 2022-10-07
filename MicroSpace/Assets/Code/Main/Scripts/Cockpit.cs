@@ -101,6 +101,13 @@ namespace Assets.Code.Main
 
         #region Private
 
+        private void InstantiateCloseShips()
+        {
+            var shipsToInstantiate = Database.GetShipsToInstantiate();
+            foreach (var item in shipsToInstantiate)
+                InstantiateShipFromDB((DBObject)item);
+        }
+
         private void AlignCamera()
         {
             Camera.main.transform.rotation =
@@ -282,6 +289,7 @@ namespace Assets.Code.Main
                 AlignScenePosition();
                 AlignCamera();
                 UpdateSpeedometer();
+                InstantiateCloseShips();
             }
         }
 
