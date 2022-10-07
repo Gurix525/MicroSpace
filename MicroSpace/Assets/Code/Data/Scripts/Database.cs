@@ -1,5 +1,3 @@
-using Assets.Code.Data.Saves;
-using Assets.Code.Ships;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +45,6 @@ namespace Assets.Code.Data
             CalculateDBObjectsPositions();
             if (FocusedShip != null)
             {
-                UpdateDBObjectVelocity();
                 DestroyDistantShips();
             }
         }
@@ -68,18 +65,6 @@ namespace Assets.Code.Data
             foreach (DBObject item in DBObjects)
                 Gizmos.DrawSphere((Vector2)MapPosition(item.Position) +
                     (Vector2)transform.position, 0.2f);
-        }
-
-        private void UpdateDBObjectVelocity()
-        {
-            foreach (Transform item in _world.transform)
-                if (item.gameObject.GetComponent<Ship>() != null)
-                {
-                    var a = DBObjects.Count;
-                    DBObjects
-                        ?.Find(x => x.GameObject == item.gameObject)
-                        ?.UpdateRigidbodyData();
-                }
         }
 
         public static IEnumerable GetShipsToInstantiate()

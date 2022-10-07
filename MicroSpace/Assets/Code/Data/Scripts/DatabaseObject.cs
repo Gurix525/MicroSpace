@@ -1,4 +1,3 @@
-using Assets.Code.Main;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,9 +68,6 @@ namespace Assets.Code.Data
                     AngularVelocity = rb.angularVelocity;
                 }
         }
-
-        public void UpdateShipData() =>
-            ShipData.Update(GameObject);
 
         public void DestroyDistantShip()
         {

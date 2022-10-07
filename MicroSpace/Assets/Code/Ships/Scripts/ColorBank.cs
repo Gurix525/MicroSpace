@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Code.Main
+namespace Assets.Code.Ships
 {
     public static class ColorBank
     {

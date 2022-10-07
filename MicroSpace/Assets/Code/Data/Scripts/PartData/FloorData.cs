@@ -1,11 +1,10 @@
-﻿using Assets.Code.Ships;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Code.Data.PartDataImplementations
+namespace Assets.Code.Data
 {
     [Serializable]
     public class FloorData : PartData
@@ -18,22 +17,5 @@ namespace Assets.Code.Data.PartDataImplementations
         public FloorData RightFloor = null;
 
         public RoomData Room = null;
-
-        public static implicit operator FloorData(Floor floor)
-        {
-            var floorData = floor.FloorData ?? new();
-            //wallData.Name = wall.Name;
-            //wallData.Resilience = wall.Resilience;
-            //wallData.MaxEndurance = wall.MaxEndurance;
-            //wallData.CurrentEndurance = wall.CurrentEndurance;
-            floorData.LocalPosition = new int[]
-            {
-                (int) Math.Round(floor.gameObject.transform.localPosition.x),
-                (int) Math.Round(floor.gameObject.transform.localPosition.y)
-            };
-            floorData.LocalRotation = floor.gameObject.transform.localEulerAngles.z;
-            floor.FloorData = floorData;
-            return floorData;
-        }
     }
 }

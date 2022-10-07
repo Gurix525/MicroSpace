@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Assets.Code.Data;
-using Assets.Code.Data.PartDataImplementations;
 
 namespace Assets.Code.Ships
 {
@@ -33,6 +32,23 @@ namespace Assets.Code.Ships
                 else
                     GetComponent<SpriteRenderer>().color = new Color32(63, 63, 127, 255);
             }
+        }
+
+        public static implicit operator FloorData(Floor floor)
+        {
+            var floorData = floor.FloorData ?? new();
+            //wallData.Name = wall.Name;
+            //wallData.Resilience = wall.Resilience;
+            //wallData.MaxEndurance = wall.MaxEndurance;
+            //wallData.CurrentEndurance = wall.CurrentEndurance;
+            floorData.LocalPosition = new int[]
+            {
+                (int) Math.Round(floor.gameObject.transform.localPosition.x),
+                (int) Math.Round(floor.gameObject.transform.localPosition.y)
+            };
+            floorData.LocalRotation = floor.gameObject.transform.localEulerAngles.z;
+            floor.FloorData = floorData;
+            return floorData;
         }
     }
 }

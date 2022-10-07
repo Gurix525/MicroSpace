@@ -1,9 +1,7 @@
 {
     "name": "Code.Data",
     "rootNamespace": "",
-    "references": [
-        "GUID:827ee02e56dbdba4190656dfd7b3cefa"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

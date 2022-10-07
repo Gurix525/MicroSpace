@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Code.Data.Saves
+namespace Assets.Code.Data
 {
     public static class SaveManager
     {

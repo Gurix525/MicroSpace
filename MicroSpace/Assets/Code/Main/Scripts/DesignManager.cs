@@ -161,9 +161,7 @@ namespace Assets.Code.Main
 
         private void UpdateShipData(GameObject ship)
         {
-            var db = Database.DBObjects;
-            db.Find(x => x.GameObject == ship)
-                .UpdateShipData();
+            ship.GetComponent<Ship>().UpdateShipData(ship);
         }
 
         private void MoveBlockDesignation(
