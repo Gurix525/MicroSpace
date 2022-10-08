@@ -1,6 +1,7 @@
 using Assets.Code.Data;
 using Assets.Code.ExtensionMethods;
 using Assets.Code.Ships;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,9 @@ namespace Assets.Code.Main
         [SerializeField]
         private Transform _worldTransform;
 
+        [SerializeField]
+        private int _maxDesignDistance = 10;
+
         private Cockpit _cockpit;
 
         #endregion Fields
@@ -55,9 +59,9 @@ namespace Assets.Code.Main
             GameObject designation = Instantiate(_designationPrefab, _worldTransform);
             // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
             IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
-            while (!Input.GetKeyDown(KeyCode.Mouse0))
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || IsDesignationObstructed(designation))
             {
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     Destroy(designation);
                     _cockpit.SwitchSetup();
@@ -81,7 +85,7 @@ namespace Assets.Code.Main
             Vector3 localMousePos = new();
             Vector3 oldLocalMousePos = Vector3.positiveInfinity;
             List<GameObject> designations = new();
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || !AreAllDesignationsUnobstructed(designations))
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || AreDesignationsObstructed(designations))
             {
                 if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
@@ -115,12 +119,17 @@ namespace Assets.Code.Main
 
         #region Private
 
-        private static bool AreAllDesignationsUnobstructed(List<GameObject> designations)
+        private static bool AreDesignationsObstructed(List<GameObject> designations)
         {
             foreach (var item in designations)
                 if (item.GetComponent<BlockDesignation>().IsObstructed)
-                    return false;
-            return true;
+                    return true;
+            return false;
+        }
+
+        private static bool IsDesignationObstructed(GameObject designation)
+        {
+            return designation.GetComponent<BlockDesignation>().IsObstructed;
         }
 
         private static void DestroyDesignations(List<GameObject> designations)
@@ -193,6 +202,7 @@ namespace Assets.Code.Main
             localMousePos = closestBlock.Parent
                 .InverseTransformPoint(GetMousePosition());
             localMousePos = localMousePos.Round();
+            ClampDistance(originalPos, ref localMousePos, _maxDesignDistance);
             int lesserX = 0;
             int lesserY = 0;
             int greaterX = 0;
@@ -225,6 +235,21 @@ namespace Assets.Code.Main
                         closestBlock.Parent));
                     designations[^1].transform.localPosition = new Vector3(x, y, 0);
                 }
+        }
+
+        private void ClampDistance(Vector3 originalPos, ref Vector3 localMousePos, float maxDistance)
+        {
+            float x = localMousePos.x - originalPos.x > maxDistance ?
+                originalPos.x + maxDistance :
+                originalPos.x - localMousePos.x > maxDistance ?
+                originalPos.x - maxDistance :
+                localMousePos.x;
+            float y = localMousePos.y - originalPos.y > maxDistance ?
+                originalPos.y + maxDistance :
+                originalPos.y - localMousePos.y > maxDistance ?
+                originalPos.y - maxDistance :
+                localMousePos.y;
+            localMousePos = new(x, y);
         }
 
         #endregion Private

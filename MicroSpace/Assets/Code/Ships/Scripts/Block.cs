@@ -21,8 +21,9 @@ namespace Assets.Code.Ships
         protected bool IsCollidingWithAnotherBlock()
         {
             var blocks = FindObjectsOfType<Block>()
-                .Where(x => Vector2.Distance(transform.position, x.transform.position) < 2)
-                .Where(x => x != this);
+                .Where(x => Vector2.Distance(transform.position, x.transform.position) < 1.42F)
+                .Where(x => x != this)
+                .Where(x => x is not TemporalDesignation);
             foreach (var block in blocks)
             {
                 if (Square.IsIntersecting(block.Square))
@@ -31,6 +32,6 @@ namespace Assets.Code.Ships
             return false;
         }
 
-        public Square Square => new(transform.position, 0.49F, transform.eulerAngles);
+        public Square Square => new(transform.position, 0.4999F, transform.eulerAngles);
     }
 }
