@@ -241,13 +241,13 @@ namespace Assets.Code.Main
 
             if (Input.GetKeyDown(KeyCode.V))
             {
-                StartCoroutine(_designManager.DesignateBlock(BlockType.Floor));
+                _designManager.StartDesignateBlock(BlockType.Floor);
                 return;
             }
 
             if (Input.GetKeyDown(KeyCode.B))
             {
-                StartCoroutine(_designManager.DesignateBlock(BlockType.Wall));
+                _designManager.StartDesignateBlock(BlockType.Wall);
                 return;
             }
 

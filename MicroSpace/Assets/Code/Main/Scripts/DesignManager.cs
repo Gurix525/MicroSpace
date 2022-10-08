@@ -48,99 +48,14 @@ namespace Assets.Code.Main
 
         #region Public
 
-        public IEnumerator DesignateBlock(BlockType blockType)
+        public void StartDesignateBlock(BlockType blockType)
         {
-            var prefab = blockType switch
-            {
-                BlockType.Floor => _floorDesignationPrefab,
-                _ => _wallDesignationPrefab
-            };
-            _cockpit.SwitchSetup();
-            GameObject designation = Instantiate(_designationPrefab, _worldTransform);
-            // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
-            IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || IsDesignationObstructed(designation))
-            {
-                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
-                {
-                    Destroy(designation);
-                    _cockpit.SwitchSetup();
-                    yield break;
-                }
-                var mousePos = GetMousePosition();
-                closestBlock = FindClosestBlock(designation, mousePos);
-                MoveBlockDesignation(designation, closestBlock, mousePos);
-                yield return null;
-            }
-            if (designation.transform.parent == null)
-            {
-                Destroy(designation);
-                _cockpit.SwitchSetup();
-                yield break;
-            }
-            Vector3 originalPos = designation.transform.localPosition;
-            originalPos = originalPos.Round();
-            Destroy(designation);
-            yield return null;
-            Vector3 localMousePos = new();
-            Vector3 oldLocalMousePos = Vector3.positiveInfinity;
-            List<GameObject> designations = new();
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || AreDesignationsObstructed(designations))
-            {
-                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
-                {
-                    DestroyDesignations(designations);
-                    _cockpit.SwitchSetup();
-                    yield break;
-                }
-                localMousePos = closestBlock.Parent
-                        .InverseTransformPoint(GetMousePosition());
-                localMousePos = localMousePos.Round();
-                if (localMousePos != oldLocalMousePos)
-                {
-                    DestroyDesignations(designations);
-                    CreateDesignations(
-                        closestBlock, originalPos, designations, ref localMousePos);
-                }
-                oldLocalMousePos = localMousePos;
-                yield return null;
-            }
-            for (int i = 0; i < designations.Count; i++)
-            {
-                var block = Instantiate(prefab, closestBlock.Parent);
-                block.transform.localPosition = designations[i].transform.localPosition;
-            }
-            DestroyDesignations(designations);
-            UpdateShipData(closestBlock.Parent.gameObject);
-            _cockpit.SwitchSetup();
+            StartCoroutine(DesignateBlock(blockType));
         }
 
         #endregion Public
 
         #region Private
-
-        private static bool AreDesignationsObstructed(List<GameObject> designations)
-        {
-            foreach (var item in designations)
-                if (item.GetComponent<BlockDesignation>().IsObstructed)
-                    return true;
-            return false;
-        }
-
-        private static bool IsDesignationObstructed(GameObject designation)
-        {
-            return designation.GetComponent<BlockDesignation>().IsObstructed;
-        }
-
-        private static void DestroyDesignations(List<GameObject> designations)
-        {
-            for (int i = 0; i < designations.Count; i++)
-            {
-                Destroy(designations[0]);
-                designations.RemoveAt(0);
-                i--;
-            }
-        }
 
         private Vector3 GetMousePosition()
         {
@@ -168,7 +83,7 @@ namespace Assets.Code.Main
             return closestWall;
         }
 
-        private void UpdateShipData(GameObject ship)
+        private static void UpdateShipData(GameObject ship)
         {
             ship.GetComponent<Ship>().UpdateShipData(ship);
         }
@@ -250,6 +165,96 @@ namespace Assets.Code.Main
                 originalPos.y - maxDistance :
                 localMousePos.y;
             localMousePos = new(x, y);
+        }
+
+        private IEnumerator DesignateBlock(BlockType blockType)
+        {
+            var prefab = blockType switch
+            {
+                BlockType.Floor => _floorDesignationPrefab,
+                _ => _wallDesignationPrefab
+            };
+            _cockpit.SwitchSetup();
+            GameObject designation = Instantiate(_designationPrefab, _worldTransform);
+            // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
+            IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || IsDesignationObstructed(designation))
+            {
+                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Destroy(designation);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
+                var mousePos = GetMousePosition();
+                closestBlock = FindClosestBlock(designation, mousePos);
+                MoveBlockDesignation(designation, closestBlock, mousePos);
+                yield return null;
+            }
+            if (designation.transform.parent == null)
+            {
+                Destroy(designation);
+                _cockpit.SwitchSetup();
+                yield break;
+            }
+            Vector3 originalPos = designation.transform.localPosition;
+            originalPos = originalPos.Round();
+            Destroy(designation);
+            yield return null;
+            Vector3 localMousePos = new();
+            Vector3 oldLocalMousePos = Vector3.positiveInfinity;
+            List<GameObject> designations = new();
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || AreDesignationsObstructed(designations))
+            {
+                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                {
+                    DestroyDesignations(designations);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
+                localMousePos = closestBlock.Parent
+                        .InverseTransformPoint(GetMousePosition());
+                localMousePos = localMousePos.Round();
+                if (localMousePos != oldLocalMousePos)
+                {
+                    DestroyDesignations(designations);
+                    CreateDesignations(
+                        closestBlock, originalPos, designations, ref localMousePos);
+                }
+                oldLocalMousePos = localMousePos;
+                yield return null;
+            }
+            for (int i = 0; i < designations.Count; i++)
+            {
+                var block = Instantiate(prefab, closestBlock.Parent);
+                block.transform.localPosition = designations[i].transform.localPosition;
+            }
+            DestroyDesignations(designations);
+            UpdateShipData(closestBlock.Parent.gameObject);
+            _cockpit.SwitchSetup();
+        }
+
+        private static bool AreDesignationsObstructed(List<GameObject> designations)
+        {
+            foreach (var item in designations)
+                if (item.GetComponent<BlockDesignation>().IsObstructed)
+                    return true;
+            return false;
+        }
+
+        private static bool IsDesignationObstructed(GameObject designation)
+        {
+            return designation.GetComponent<BlockDesignation>().IsObstructed;
+        }
+
+        private static void DestroyDesignations(List<GameObject> designations)
+        {
+            for (int i = 0; i < designations.Count; i++)
+            {
+                Destroy(designations[0]);
+                designations.RemoveAt(0);
+                i--;
+            }
         }
 
         #endregion Private
