@@ -53,6 +53,11 @@ namespace Assets.Code.Main
             StartCoroutine(DesignateBlock(blockType));
         }
 
+        public void StartCancelDesignation()
+        {
+            StartCoroutine(CancelDesignation());
+        }
+
         #endregion Public
 
         #region Private
@@ -231,6 +236,13 @@ namespace Assets.Code.Main
             }
             DestroyDesignations(designations);
             UpdateShipData(closestBlock.Parent.gameObject);
+            _cockpit.SwitchSetup();
+        }
+
+        private IEnumerator CancelDesignation()
+        {
+            _cockpit.SwitchSetup();
+            yield return null;
             _cockpit.SwitchSetup();
         }
 
