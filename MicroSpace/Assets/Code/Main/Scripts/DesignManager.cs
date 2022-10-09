@@ -229,10 +229,12 @@ namespace Assets.Code.Main
                 oldLocalMousePos = localMousePos;
                 yield return null;
             }
+            var shipRigidbody = closestBlock.Parent.GetComponent<Rigidbody2D>();
             for (int i = 0; i < designations.Count; i++)
             {
                 var block = Instantiate(prefab, closestBlock.Parent);
                 block.transform.localPosition = designations[i].transform.localPosition;
+                block.GetComponent<FixedJoint2D>().connectedBody = shipRigidbody;
             }
             DestroyDesignations(designations);
             UpdateShipData(closestBlock.Parent.gameObject);

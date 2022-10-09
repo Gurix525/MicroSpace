@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -264670189872627432}
   - component: {fileID: 5268658532383212623}
   m_Layer: 0
-  m_Name: Designation
+  m_Name: TemporalDesignation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
