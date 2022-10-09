@@ -9,12 +9,12 @@ namespace Assets.Code.Data
 {
     public static class ColorBank
     {
-        public static Color TemporalDesignationNormal => GetColor("#99CC99");
-        public static Color TemporalDesignationObstructed => GetColor("#CF7E7E");
-        public static Color WallDesignationNormal => GetColor("#CCCCCC");
-        public static Color WallDesignationObstructed => GetColor("#E05959");
-        public static Color FloorDesignationNormal => GetColor("#666666");
-        public static Color FloorDesignationObstructed => GetColor("#7D2424");
+        public static Color TemporalDesignationNormal => GetColor("#99CC9999");
+        public static Color TemporalDesignationObstructed => GetColor("#CF7E7E99");
+        public static Color WallDesignationNormal => GetColor("#CCCCCC88");
+        public static Color WallDesignationObstructed => GetColor("#E0595988");
+        public static Color FloorDesignationNormal => GetColor("#66666688");
+        public static Color FloorDesignationObstructed => GetColor("#7D242488");
 
         private static Color GetColor(string hex)
         {

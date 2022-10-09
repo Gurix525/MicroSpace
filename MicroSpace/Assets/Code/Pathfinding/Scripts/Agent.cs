@@ -152,8 +152,8 @@ namespace Assets.Code.Pathfinding
                 hit = Physics2D.Linecast(transform.position, _targetPosition);
             if (hit.collider != null)
             {
-                transform.parent = hit.transform.GetChild(1);
-                var newNavMesh = hit.transform.GetChild(0).GetComponent<NavMesh>();
+                transform.parent = hit.transform.parent.GetChild(1);
+                var newNavMesh = hit.transform.parent.GetChild(0).GetComponent<NavMesh>();
                 if (newNavMesh != _navMesh)
                 {
                     _hasNavMeshChanged = true;
