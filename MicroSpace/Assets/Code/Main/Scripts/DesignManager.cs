@@ -285,6 +285,7 @@ namespace Assets.Code.Main
             Vector3 localMousePos = new();
             Vector3 oldLocalMousePos = Vector3.positiveInfinity;
             List<GameObject> designations = new();
+            List<Block> blocks = new();
             while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
@@ -302,11 +303,32 @@ namespace Assets.Code.Main
                     CreateDesignations(
                         hit.collider.GetComponent<Block>(), originalPos,
                         designations, _cancelDesignationPrefab, ref localMousePos);
+                    foreach (Transform item in hit.transform)
+                    {
+                        var block = item.GetComponent<Block>();
+                        if (block != null)
+                            blocks.Add(block);
+                    }
+                    foreach (var item in designations)
+                    {
+                        var block = blocks
+                            .Where(x => x.GetComponent<CancelDesignation>() == null)
+                            .ToList()
+                            .Find(x => x.transform.localPosition.Round() ==
+                            item.transform.localPosition.Round());
+                        if (block != null)
+                        {
+                            if (block is BlockDesignation || block.IsMarkedForMining)
+                                item.GetComponent<CancelDesignation>().IsActive = true;
+                            else
+                                item.GetComponent<CancelDesignation>().IsActive = false;
+                        }
+                    }
+                    blocks.Clear();
                 }
                 oldLocalMousePos = localMousePos;
                 yield return null;
             }
-            List<Block> blocks = new();
             foreach (Transform item in hit.transform)
             {
                 var block = item.GetComponent<Block>();
@@ -325,6 +347,7 @@ namespace Assets.Code.Main
                 }
             }
             DestroyDesignations(designations);
+            UpdateShipData(hit.transform.gameObject);
             _cockpit.SwitchSetup();
         }
 

@@ -9,18 +9,17 @@ namespace Assets.Code.Ships
 {
     public class CancelDesignation : BlockDesignation
     {
-        private void Update()
+        private bool _isActive = false;
+
+        public bool IsActive
         {
-            if (IsCollidingWithAnotherBlock(out Block collidingBlock) ?
-                collidingBlock is BlockDesignation : false)
+            get => _isActive;
+            set
             {
-                IsObstructed = true;
-                _spriteRenderer.color = ColorBank.CancelDesignationActive;
-            }
-            else
-            {
-                IsObstructed = false;
-                _spriteRenderer.color = ColorBank.CancelDesignationInactive;
+                if (value == true)
+                    _spriteRenderer.color = ColorBank.CancelDesignationActive;
+                else
+                    _spriteRenderer.color = ColorBank.CancelDesignationInactive;
             }
         }
     }
