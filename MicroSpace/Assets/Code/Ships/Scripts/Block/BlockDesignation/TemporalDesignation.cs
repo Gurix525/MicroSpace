@@ -11,15 +11,18 @@ namespace Assets.Code.Ships
     {
         private void Update()
         {
-            if (IsCollidingWithAnotherBlock())
+            if (transform.parent != null)
             {
-                IsObstructed = true;
-                _spriteRenderer.color = ColorBank.TemporalDesignationObstructed;
-            }
-            else
-            {
-                IsObstructed = false;
-                _spriteRenderer.color = ColorBank.TemporalDesignationNormal;
+                if (IsCollidingWithAnotherBlock())
+                {
+                    IsObstructed = true;
+                    _spriteRenderer.color = ColorBank.TemporalDesignationObstructed;
+                }
+                else
+                {
+                    IsObstructed = false;
+                    _spriteRenderer.color = ColorBank.TemporalDesignationNormal;
+                }
             }
         }
     }

@@ -206,6 +206,9 @@ namespace Assets.Code.Main
                 var mousePos = GetMousePosition();
                 closestBlock = FindClosestBlock(designation, mousePos);
                 MoveBlockDesignation(designation, closestBlock, mousePos);
+                if (designation.transform.parent == null)
+                    designation.GetComponent<SpriteRenderer>().color =
+                        ColorBank.TemporalDesignationObstructed;
                 yield return null;
             }
             if (designation.transform.parent == null)
