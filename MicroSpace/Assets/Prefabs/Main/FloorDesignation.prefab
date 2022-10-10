@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 757203670803077904}
   - component: {fileID: 7851312921077627140}
   - component: {fileID: -1726151193655652073}
-  - component: {fileID: -2340818340612839982}
   - component: {fileID: 8468010359055013147}
-  - component: {fileID: -1696912666646511706}
   m_Layer: 0
   m_Name: FloorDesignation
   m_TagString: Untagged
@@ -100,27 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff59df7a38e1e14a8a5376f7b762dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &-2340818340612839982
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6571155050859523946}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!61 &8468010359055013147
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -147,21 +124,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
---- !u!255 &-1696912666646511706
-FixedJoint2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6571155050859523946}
-  m_Enabled: 1
-  serializedVersion: 4
-  m_EnableCollision: 0
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: 0}
-  m_DampingRatio: 0
-  m_Frequency: 0

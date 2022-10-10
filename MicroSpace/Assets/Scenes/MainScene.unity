@@ -186,12 +186,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e743ea3ae8463643a29eb3e6e26d71d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _designationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
+  _temporalDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
+  _cancelDesignationPrefab: {fileID: 2505317657868975611, guid: 2b67422fca0a67c49b9d1ff427c679d6, type: 3}
   _wallPrefab: {fileID: 7440152704112946889, guid: e288380be1584ea4189ffa8e1fc7d7ca, type: 3}
   _floorPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
   _wallDesignationPrefab: {fileID: 7440152704112946889, guid: 4eb40b092d3fd63488ed563fe7030af1, type: 3}
   _floorDesignationPrefab: {fileID: 6571155050859523946, guid: 74ff299408fddd649a093c564deebb24, type: 3}
   _worldTransform: {fileID: 445740361}
+  _maxDesignDistance: 9
 --- !u!1 &292762465
 GameObject:
   m_ObjectHideFlags: 0

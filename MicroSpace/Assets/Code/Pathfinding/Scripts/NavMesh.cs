@@ -82,7 +82,8 @@ namespace Assets.Code.Pathfinding
         /// </summary>
         public void UpdateMesh()
         {
-            _colliders = FindObjectsOfType<BoxCollider2D>();
+            _colliders = FindObjectsOfType<BoxCollider2D>()
+                .Where(x => !x.isTrigger).ToArray();
             FindVertices();
 
             foreach (Transform item in transform)

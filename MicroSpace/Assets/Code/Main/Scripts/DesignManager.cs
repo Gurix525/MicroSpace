@@ -14,7 +14,10 @@ namespace Assets.Code.Main
         #region Fields
 
         [SerializeField]
-        private GameObject _designationPrefab;
+        private GameObject _temporalDesignationPrefab;
+
+        [SerializeField]
+        private GameObject _cancelDesignationPrefab;
 
         [SerializeField]
         private GameObject _wallPrefab;
@@ -32,7 +35,7 @@ namespace Assets.Code.Main
         private Transform _worldTransform;
 
         [SerializeField]
-        private int _maxDesignDistance = 10;
+        private int _maxDesignDistance = 9;
 
         private Cockpit _cockpit;
 
@@ -116,8 +119,8 @@ namespace Assets.Code.Main
             }
         }
 
-        private void CreateDesignations(IBlock closestBlock,
-            Vector3 originalPos, List<GameObject> designations, ref Vector3 localMousePos)
+        private void CreateDesignations(IBlock closestBlock, Vector3 originalPos,
+            List<GameObject> designations, GameObject prefab, ref Vector3 localMousePos)
         {
             localMousePos = closestBlock.Parent
                 .InverseTransformPoint(GetMousePosition());
@@ -151,22 +154,23 @@ namespace Assets.Code.Main
                 for (int y = lesserY; y <= greaterY; y++)
                 {
                     designations.Add(Instantiate(
-                        _designationPrefab,
+                        prefab,
                         closestBlock.Parent));
                     designations[^1].transform.localPosition = new Vector3(x, y, 0);
                 }
         }
 
-        private void ClampDistance(Vector3 originalPos, ref Vector3 localMousePos, float maxDistance)
+        private void ClampDistance(Vector3 originalPos,
+            ref Vector3 localMousePos, float maxDistance)
         {
-            float x = localMousePos.x - originalPos.x > maxDistance ?
+            float x = localMousePos.x - originalPos.x >= maxDistance ?
                 originalPos.x + maxDistance :
-                originalPos.x - localMousePos.x > maxDistance ?
+                originalPos.x - localMousePos.x >= maxDistance ?
                 originalPos.x - maxDistance :
                 localMousePos.x;
-            float y = localMousePos.y - originalPos.y > maxDistance ?
+            float y = localMousePos.y - originalPos.y >= maxDistance ?
                 originalPos.y + maxDistance :
-                originalPos.y - localMousePos.y > maxDistance ?
+                originalPos.y - localMousePos.y >= maxDistance ?
                 originalPos.y - maxDistance :
                 localMousePos.y;
             localMousePos = new(x, y);
@@ -180,12 +184,12 @@ namespace Assets.Code.Main
                 _ => _wallDesignationPrefab
             };
             _cockpit.SwitchSetup();
-            GameObject designation = Instantiate(_designationPrefab, _worldTransform);
+            GameObject designation = Instantiate(_temporalDesignationPrefab, _worldTransform);
             // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
             IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
             while (!Input.GetKeyDown(KeyCode.Mouse0) || IsDesignationObstructed(designation))
             {
-                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     Destroy(designation);
                     _cockpit.SwitchSetup();
@@ -211,7 +215,7 @@ namespace Assets.Code.Main
             List<GameObject> designations = new();
             while (!Input.GetKeyDown(KeyCode.Mouse0) || AreDesignationsObstructed(designations))
             {
-                if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     DestroyDesignations(designations);
                     _cockpit.SwitchSetup();
@@ -224,17 +228,16 @@ namespace Assets.Code.Main
                 {
                     DestroyDesignations(designations);
                     CreateDesignations(
-                        closestBlock, originalPos, designations, ref localMousePos);
+                        closestBlock, originalPos, designations,
+                        _temporalDesignationPrefab, ref localMousePos);
                 }
                 oldLocalMousePos = localMousePos;
                 yield return null;
             }
-            var shipRigidbody = closestBlock.Parent.GetComponent<Rigidbody2D>();
             for (int i = 0; i < designations.Count; i++)
             {
                 var block = Instantiate(prefab, closestBlock.Parent);
                 block.transform.localPosition = designations[i].transform.localPosition;
-                block.GetComponent<FixedJoint2D>().connectedBody = shipRigidbody;
             }
             DestroyDesignations(designations);
             UpdateShipData(closestBlock.Parent.gameObject);
@@ -244,7 +247,84 @@ namespace Assets.Code.Main
         private IEnumerator CancelDesignation()
         {
             _cockpit.SwitchSetup();
+            RaycastHit2D hit = new();
+            GameObject designation = Instantiate(_cancelDesignationPrefab);
+            SpriteRenderer designationSpriteRenderer = designation
+                .GetComponent<SpriteRenderer>();
+            designationSpriteRenderer.color = ColorBank.Invisible;
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Destroy(designation);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
+                hit = Physics2D.GetRayIntersection(
+                    Camera.main.ScreenPointToRay(Input.mousePosition));
+                if (hit.collider != null)
+                {
+                    designation.transform.parent = hit.collider.transform.parent;
+                    designation.transform.localPosition =
+                        hit.collider.transform.localPosition;
+                    designation.transform.localEulerAngles =
+                        hit.collider.transform.localEulerAngles;
+                    designationSpriteRenderer.color = ColorBank.CancelDesignationInactive;
+                }
+                else
+                {
+                    designation.transform.parent = null;
+                    designationSpriteRenderer.color = ColorBank.Invisible;
+                }
+                yield return null;
+            }
+            Vector2 originalPos = new();
+            originalPos = hit.collider.transform.localPosition.Round();
+            Destroy(designation);
             yield return null;
+            Vector3 localMousePos = new();
+            Vector3 oldLocalMousePos = Vector3.positiveInfinity;
+            List<GameObject> designations = new();
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                {
+                    DestroyDesignations(designations);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
+                localMousePos = hit.collider.transform.parent
+                        .InverseTransformPoint(GetMousePosition());
+                localMousePos = localMousePos.Round();
+                if (localMousePos != oldLocalMousePos)
+                {
+                    DestroyDesignations(designations);
+                    CreateDesignations(
+                        hit.collider.GetComponent<Block>(), originalPos,
+                        designations, _cancelDesignationPrefab, ref localMousePos);
+                }
+                oldLocalMousePos = localMousePos;
+                yield return null;
+            }
+            List<Block> blocks = new();
+            foreach (Transform item in hit.transform)
+            {
+                var block = item.GetComponent<Block>();
+                if (block != null)
+                    blocks.Add(block);
+            }
+            foreach (var item in designations)
+            {
+                var block = blocks.Find(x => x.transform.localPosition.Round() ==
+                    item.transform.localPosition.Round());
+                if (block != null)
+                {
+                    if (block is BlockDesignation)
+                        Destroy(block.gameObject);
+                    else block.IsMarkedForMining = false;
+                }
+            }
+            DestroyDesignations(designations);
             _cockpit.SwitchSetup();
         }
 

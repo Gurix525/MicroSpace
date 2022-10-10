@@ -79,7 +79,6 @@ namespace Assets.Code.Main
                 wall.name = wallData.Name;
                 var wallComponent = wall.GetComponent<Wall>();
                 wallComponent.WallData = wallData;
-                wall.GetComponent<FixedJoint2D>().connectedBody = rb;
             }
 
             foreach (FloorData floorData in dbo.ShipData.Floors)
@@ -93,7 +92,6 @@ namespace Assets.Code.Main
                 floorComponent.FloorData = floorData;
                 floorData.Room = dbo.ShipData.Rooms
                     .Find(x => x.Id == floorData.Room.Id);
-                floor.GetComponent<FixedJoint2D>().connectedBody = rb;
             }
         }
 
@@ -234,6 +232,12 @@ namespace Assets.Code.Main
 
             if (_isSetupRunnning)
                 return;
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                _designManager.StartCancelDesignation();
+                return;
+            }
 
             if (Input.GetKeyDown(KeyCode.N))
             {

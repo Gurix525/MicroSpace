@@ -18,7 +18,14 @@ namespace Assets.Code.Ships
             set => transform.parent = value;
         }
 
+        public bool IsMarkedForMining { get; set; }
+
         protected bool IsCollidingWithAnotherBlock()
+        {
+            return IsCollidingWithAnotherBlock(out _);
+        }
+
+        protected bool IsCollidingWithAnotherBlock(out Block collidingBlock)
         {
             var blocks = FindObjectsOfType<Block>()
                 .Where(x => Vector2.Distance(transform.position, x.transform.position) < 1.42F)
@@ -27,8 +34,12 @@ namespace Assets.Code.Ships
             foreach (var block in blocks)
             {
                 if (Square.IsIntersecting(block.Square))
+                {
+                    collidingBlock = block;
                     return true;
+                }
             }
+            collidingBlock = null;
             return false;
         }
 
