@@ -20,6 +20,9 @@ namespace Assets.Code.Main
         private GameObject _cancelDesignationPrefab;
 
         [SerializeField]
+        private GameObject _miningDesignationPrefab;
+
+        [SerializeField]
         private GameObject _wallPrefab;
 
         [SerializeField]
@@ -59,6 +62,11 @@ namespace Assets.Code.Main
         public void StartCancelDesignation()
         {
             StartCoroutine(CancelDesignation());
+        }
+
+        public void StartDesignateMining()
+        {
+            StartCoroutine(DesignateMining());
         }
 
         #endregion Public
@@ -344,6 +352,120 @@ namespace Assets.Code.Main
                     if (block is BlockDesignation)
                         Destroy(block.gameObject);
                     else block.IsMarkedForMining = false;
+                }
+            }
+            DestroyDesignations(designations);
+            UpdateShipData(hit.transform.gameObject);
+            _cockpit.SwitchSetup();
+        }
+
+        private IEnumerator DesignateMining()
+        {
+            _cockpit.SwitchSetup();
+            RaycastHit2D hit = new();
+            GameObject designation = Instantiate(_miningDesignationPrefab);
+            SpriteRenderer designationSpriteRenderer = designation
+                .GetComponent<SpriteRenderer>();
+            designationSpriteRenderer.color = ColorBank.Invisible;
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Destroy(designation);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
+                hit = Physics2D.GetRayIntersection(
+                    Camera.main.ScreenPointToRay(Input.mousePosition));
+                if (hit.collider != null)
+                {
+                    if (hit.collider.GetComponent<Block>() is not BlockDesignation)
+                    {
+                        designation.transform.parent = hit.collider.transform.parent;
+                        designation.transform.localPosition =
+                            hit.collider.transform.localPosition;
+                        designation.transform.localEulerAngles =
+                            hit.collider.transform.localEulerAngles;
+                        designationSpriteRenderer.color = ColorBank.MiningDesignationInactive;
+                    }
+                    else
+                    {
+                        designation.transform.parent = null;
+                        designationSpriteRenderer.color = ColorBank.Invisible;
+                    }
+                }
+                else
+                {
+                    designation.transform.parent = null;
+                    designationSpriteRenderer.color = ColorBank.Invisible;
+                }
+                yield return null;
+            }
+            Vector2 originalPos = new();
+            originalPos = hit.collider.transform.localPosition.Round();
+            Destroy(designation);
+            yield return null;
+            Vector3 localMousePos = new();
+            Vector3 oldLocalMousePos = Vector3.positiveInfinity;
+            List<GameObject> designations = new();
+            List<Block> blocks = new();
+            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                {
+                    DestroyDesignations(designations);
+                    _cockpit.SwitchSetup();
+                    yield break;
+                }
+                localMousePos = hit.collider.transform.parent
+                        .InverseTransformPoint(GetMousePosition());
+                localMousePos = localMousePos.Round();
+                if (localMousePos != oldLocalMousePos)
+                {
+                    DestroyDesignations(designations);
+                    CreateDesignations(
+                        hit.collider.GetComponent<Block>(), originalPos,
+                        designations, _miningDesignationPrefab, ref localMousePos);
+                    foreach (Transform item in hit.transform)
+                    {
+                        var block = item.GetComponent<Block>();
+                        if (block != null)
+                            blocks.Add(block);
+                    }
+                    foreach (var item in designations)
+                    {
+                        var block = blocks
+                            .Where(x => x.GetComponent<MiningDesignation>() == null)
+                            .ToList()
+                            .Find(x => x.transform.localPosition.Round() ==
+                            item.transform.localPosition.Round());
+                        if (block != null)
+                        {
+                            if (block is not BlockDesignation)
+                                item.GetComponent<MiningDesignation>().IsActive = true;
+                            else
+                                item.GetComponent<MiningDesignation>().IsActive = false;
+                        }
+                    }
+                    blocks.Clear();
+                }
+                oldLocalMousePos = localMousePos;
+                yield return null;
+            }
+            foreach (Transform item in hit.transform)
+            {
+                var block = item.GetComponent<Block>();
+                if (block != null)
+                    blocks.Add(block);
+            }
+            foreach (var item in designations)
+            {
+                var block = blocks.Find(x => x.transform.localPosition.Round() ==
+                    item.transform.localPosition.Round());
+                if (block != null)
+                {
+                    if (block is not BlockDesignation)
+                        block.IsMarkedForMining = true;
                 }
             }
             DestroyDesignations(designations);

@@ -239,6 +239,12 @@ namespace Assets.Code.Main
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                _designManager.StartDesignateMining();
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.N))
             {
                 StartCoroutine(BuildShipCoroutine());
