@@ -53,6 +53,12 @@ namespace Assets.Code.Main
             SetShipParameters(ship, shipToLoad);
             LoadWalls(ship, shipToLoad);
             LoadFloors(ship, shipToLoad);
+            UpdateShip(ship);
+        }
+
+        private static void UpdateShip(GameObject ship)
+        {
+            ship.GetComponent<Ship>().UpdateShip();
         }
 
         private static void LoadFloors(GameObject ship, SerializableShip shipToLoad)
@@ -117,7 +123,8 @@ namespace Assets.Code.Main
 
         private static void InstantiateShip(out GameObject ship)
         {
-            ship = GameObject.Instantiate(GameManager.Instance.ShipPrefab);
+            ship = GameObject.Instantiate(
+                GameManager.Instance.ShipPrefab, GameManager.Instance.World);
         }
 
         private static Save GetSaveFromJson(string saveJson)
