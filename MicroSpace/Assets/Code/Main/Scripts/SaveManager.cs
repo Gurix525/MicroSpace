@@ -41,33 +41,33 @@ namespace Assets.Code.Main
             LoadShips(save.Ships);
         }
 
-        private static void LoadShips(List<Ship> ships)
+        private static void LoadShips(List<SerializableShip> ships)
         {
             foreach (var shipToLoad in ships)
                 LoadShip(shipToLoad);
         }
 
-        private static void LoadShip(Ship shipToLoad)
+        private static void LoadShip(SerializableShip shipToLoad)
         {
             InstantiateShip(out GameObject ship);
             SetShipParameters(ship, shipToLoad);
-            LoadWalls(ship);
-            LoadFloors(ship);
+            LoadWalls(ship, shipToLoad);
+            LoadFloors(ship, shipToLoad);
         }
 
-        private static void LoadFloors(GameObject ship)
+        private static void LoadFloors(GameObject ship, SerializableShip shipToLoad)
         {
-            foreach (Floor floor in ship.GetComponent<Ship>().Floors)
+            foreach (SerializableFloor floor in shipToLoad.Floors)
                 LoadFloor(ship, floor);
         }
 
-        private static void LoadFloor(GameObject ship, Floor floorToLoad)
+        private static void LoadFloor(GameObject ship, SerializableFloor floorToLoad)
         {
             InstantiateFloor(out GameObject floor, ship);
             SetFloorParameters(floor, floorToLoad);
         }
 
-        private static void SetFloorParameters(GameObject floor, Floor floorToLoad)
+        private static void SetFloorParameters(GameObject floor, SerializableFloor floorToLoad)
         {
             Floor floorComponent = floor.GetComponent<Floor>();
             floorComponent.Id = floorToLoad.Id;
@@ -80,19 +80,19 @@ namespace Assets.Code.Main
                 DesignManager.Instance.FloorPrefab, ship.transform);
         }
 
-        private static void LoadWalls(GameObject ship)
+        private static void LoadWalls(GameObject ship, SerializableShip shipToLoad)
         {
-            foreach (Wall wall in ship.GetComponent<Ship>().Walls)
+            foreach (SerializableWall wall in shipToLoad.Walls)
                 LoadWall(ship, wall);
         }
 
-        private static void LoadWall(GameObject ship, Wall wallToLoad)
+        private static void LoadWall(GameObject ship, SerializableWall wallToLoad)
         {
             InstantiateWall(out GameObject wall, ship);
             SetWallParameters(wall, wallToLoad);
         }
 
-        private static void SetWallParameters(GameObject wall, Wall wallToLoad)
+        private static void SetWallParameters(GameObject wall, SerializableWall wallToLoad)
         {
             Wall wallComponent = wall.GetComponent<Wall>();
             wallComponent.Id = wallToLoad.Id;
@@ -105,12 +105,10 @@ namespace Assets.Code.Main
                 DesignManager.Instance.WallPrefab, ship.transform);
         }
 
-        private static void SetShipParameters(GameObject ship, Ship shipToLoad)
+        private static void SetShipParameters(GameObject ship, SerializableShip shipToLoad)
         {
             Ship shipComponent = ship.GetComponent<Ship>();
             shipComponent.Id = shipToLoad.Id;
-            shipComponent.Floors = shipToLoad.Floors;
-            shipComponent.Walls = shipToLoad.Walls;
             shipComponent.Rooms = shipToLoad.Rooms;
             ship.transform.position = shipToLoad.Position;
             ship.transform.eulerAngles = new Vector3(0, 0, shipToLoad.Rotation);

@@ -8,9 +8,6 @@ using UnityEngine;
 
 namespace Assets.Code.Ships
 {
-    /// <summary>
-    /// Ma swój odpowiednik w Data.WallData.
-    /// </summary>
     public class Wall : Block
     {
     }

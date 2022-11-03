@@ -12,13 +12,14 @@ namespace Assets.Code.Main
     public class Save
     {
         [SerializeField]
-        private List<Ship> _ships;
+        private List<SerializableShip> _ships = new();
 
-        public List<Ship> Ships => _ships;
+        public List<SerializableShip> Ships => _ships;
 
         public Save(List<Ship> ships)
         {
-            _ships = ships;
+            foreach (var ship in ships)
+                _ships.Add(new(ship));
         }
     }
 }
