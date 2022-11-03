@@ -51,8 +51,7 @@ namespace Assets.Code.Main
         {
             InstantiateShip(out GameObject ship);
             SetShipParameters(ship, shipToLoad);
-            LoadWalls(ship, shipToLoad);
-            LoadFloors(ship, shipToLoad);
+            LoadBlocks(ship, shipToLoad);
             UpdateShip(ship);
         }
 
@@ -61,54 +60,49 @@ namespace Assets.Code.Main
             ship.GetComponent<Ship>().UpdateShip();
         }
 
-        private static void LoadFloors(GameObject ship, SerializableShip shipToLoad)
+        private static void LoadBlocks(GameObject ship, SerializableShip shipToLoad)
         {
-            foreach (SerializableFloor floor in shipToLoad.Floors)
-                LoadFloor(ship, floor);
+            foreach (SerializableBlock block in shipToLoad.Blocks)
+                LoadBlock(ship, block);
         }
 
-        private static void LoadFloor(GameObject ship, SerializableFloor floorToLoad)
+        private static void LoadBlock(GameObject ship, SerializableBlock blockToLoad)
         {
-            InstantiateFloor(out GameObject floor, ship);
-            SetFloorParameters(floor, floorToLoad);
+            InstantiateBlock(out GameObject block, ship, blockToLoad);
+            SetBlockParameters(block, blockToLoad);
         }
 
-        private static void SetFloorParameters(GameObject floor, SerializableFloor floorToLoad)
-        {
-            Floor floorComponent = floor.GetComponent<Floor>();
-            floorComponent.Id = floorToLoad.Id;
-            floor.transform.localPosition = floorToLoad.LocalPosition;
-        }
-
-        private static void InstantiateFloor(out GameObject floor, GameObject ship)
-        {
-            floor = GameObject.Instantiate(
-                DesignManager.Instance.FloorPrefab, ship.transform);
-        }
-
-        private static void LoadWalls(GameObject ship, SerializableShip shipToLoad)
-        {
-            foreach (SerializableWall wall in shipToLoad.Walls)
-                LoadWall(ship, wall);
-        }
-
-        private static void LoadWall(GameObject ship, SerializableWall wallToLoad)
-        {
-            InstantiateWall(out GameObject wall, ship);
-            SetWallParameters(wall, wallToLoad);
-        }
-
-        private static void SetWallParameters(GameObject wall, SerializableWall wallToLoad)
+        private static void SetBlockParameters(GameObject wall, SerializableBlock blockToLoad)
         {
             Wall wallComponent = wall.GetComponent<Wall>();
-            wallComponent.Id = wallToLoad.Id;
-            wall.transform.localPosition = wallToLoad.LocalPosition;
+            wallComponent.Id = blockToLoad.Id;
+            wall.transform.localPosition = blockToLoad.LocalPosition;
         }
 
-        private static void InstantiateWall(out GameObject wall, GameObject ship)
+        private static void InstantiateBlock(out GameObject block,
+            GameObject ship, SerializableBlock blockToLoad)
         {
-            wall = GameObject.Instantiate(
-                DesignManager.Instance.WallPrefab, ship.transform);
+            var designManager = DesignManager.Instance;
+            GetBlockPrefab(blockToLoad, designManager, out GameObject blockPrefab);
+            block = InstantiateBlockFromPrefab(blockPrefab, ship);
+        }
+
+        private static void GetBlockPrefab(SerializableBlock blockToLoad,
+            DesignManager designManager, out GameObject blockPrefab)
+        {
+            blockPrefab = blockToLoad switch
+            {
+                SerializableFloor => designManager.FloorPrefab,
+                SerializableWallDesignation => designManager.WallDesignationPrefab,
+                SerializableFloorDesignation => designManager.FloorDesignationPrefab,
+                _ => designManager.WallPrefab
+            };
+        }
+
+        private static GameObject InstantiateBlockFromPrefab(
+            GameObject blockPrefab, GameObject ship)
+        {
+            return GameObject.Instantiate(blockPrefab, ship.transform);
         }
 
         private static void SetShipParameters(GameObject ship, SerializableShip shipToLoad)

@@ -50,6 +50,9 @@ namespace Assets.Code.Main
 
         public GameObject FloorPrefab => _floorPrefab;
 
+        public GameObject WallDesignationPrefab => _wallDesignationPrefab;
+        public GameObject FloorDesignationPrefab => _floorDesignationPrefab;
+
         #endregion Properties
 
         #region Public

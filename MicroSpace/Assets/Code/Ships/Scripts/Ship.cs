@@ -12,10 +12,7 @@ namespace Assets.Code.Ships
         #region Fields
 
         [SerializeField]
-        private List<Wall> _walls = new();
-
-        [SerializeField]
-        private List<Floor> _floors = new();
+        private List<Block> _blocks = new();
 
         [SerializeField]
         private List<Room> _rooms = new();
@@ -41,10 +38,20 @@ namespace Assets.Code.Ships
 
         #region Properties
 
-        public List<Wall> Walls { get => _walls; set => _walls = value; }
-        public List<Floor> Floors { get => _floors; set => _floors = value; }
+        public List<Block> Blocks { get => _blocks; set => _blocks = value; }
+
+        public List<Wall> Walls => _blocks
+            .Where(block => block is Wall)
+            .Select(block => block as Wall)
+            .ToList();
+
+        public List<Floor> Floors => _blocks
+            .Where(block => block is Floor)
+            .Select(block => block as Floor)
+            .ToList();
+
         public List<Room> Rooms { get => _rooms; set => _rooms = value; }
-        public int ElementsCount { get => Floors.Count + Walls.Count; }
+        public int ElementsCount { get => Blocks.Count; }
         public int Id { get => _id; set => _id = value; }
         public Vector2 Position { get => _position; set => _position = value; }
         public float Rotation { get => _rotation; set => _rotation = value; }
@@ -56,8 +63,7 @@ namespace Assets.Code.Ships
 
         public void UpdateShip()
         {
-            UpdateWalls();
-            UpdateFloors();
+            UpdateBlocks();
             UpdateRooms();
             UpdateProperties();
         }
@@ -99,30 +105,16 @@ namespace Assets.Code.Ships
                 _shipUnloadDistance;
         }
 
-        private void UpdateWalls()
+        private void UpdateBlocks()
         {
-            Walls.Clear();
-            foreach (Transform item in transform)
+            Blocks.Clear();
+            foreach (Transform child in transform)
             {
-                var wall = item.gameObject.GetComponent<Wall>();
-                if (wall != null)
+                var block = child.gameObject.GetComponent<Block>();
+                if (block != null)
                 {
-                    wall.UpdateBlock();
-                    Walls.Add(wall);
-                }
-            }
-        }
-
-        private void UpdateFloors()
-        {
-            Floors.Clear();
-            foreach (Transform item in transform)
-            {
-                var floor = item.gameObject.GetComponent<Floor>();
-                if (floor != null)
-                {
-                    floor.UpdateBlock();
-                    Floors.Add(floor);
+                    block.UpdateBlock();
+                    Blocks.Add(block);
                 }
             }
         }
@@ -130,9 +122,7 @@ namespace Assets.Code.Ships
         private void UpdateRooms()
         {
             List<Block> blocks = new();
-            foreach (var item in Walls)
-                blocks.Add(item);
-            foreach (var item in Floors)
+            foreach (var item in Blocks)
                 blocks.Add(item);
 
             foreach (Block block in blocks)
