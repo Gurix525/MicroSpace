@@ -8,8 +8,26 @@ using UnityEngine;
 
 namespace Assets.Code.Ships
 {
+    [Serializable]
     public abstract class Block : MonoBehaviour, IBlock
     {
+        #region Fields
+
+        [SerializeField]
+        private int _id;
+
+        [SerializeField]
+        private Vector2 _localPosition;
+
+        [SerializeField]
+        private bool _isMarkedForMining;
+
+        #endregion Fields
+
+        #region Properties
+
+        public int Id { get => _id; set => _id = value; }
+
         public Transform Transform => transform;
 
         public Transform Parent
@@ -18,7 +36,13 @@ namespace Assets.Code.Ships
             set => transform.parent = value;
         }
 
-        public bool IsMarkedForMining { get; set; }
+        public bool IsMarkedForMining { get => _isMarkedForMining; set => _isMarkedForMining = value; }
+
+        public Square Square => new(transform.position, 0.4999F, transform.eulerAngles);
+
+        public Vector2 LocalPosition { get => _localPosition; set => _localPosition = value; }
+
+        #endregion Properties
 
         protected bool IsCollidingWithAnotherBlock()
         {
@@ -42,7 +66,5 @@ namespace Assets.Code.Ships
             collidingBlock = null;
             return false;
         }
-
-        public Square Square => new(transform.position, 0.4999F, transform.eulerAngles);
     }
 }

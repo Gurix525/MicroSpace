@@ -40,11 +40,11 @@ namespace Assets.Code.Main
         [SerializeField]
         private int _maxDesignDistance = 9;
 
-        private Cockpit _cockpit;
-
         #endregion Fields
 
         #region Properties
+
+        public static DesignManager Instance { get; private set; }
 
         public GameObject WallPrefab => _wallPrefab;
 
@@ -73,35 +73,37 @@ namespace Assets.Code.Main
 
         #region Private
 
-        private Vector3 GetMousePosition()
+        private Vector3 GetMouseWorldPosition()
         {
-            Vector3 v3 = Input.mousePosition;
-            v3.z = 10;
-            v3 = Camera.main.ScreenToWorldPoint(v3);
-            return v3;
+            Vector3 position = Input.mousePosition;
+            position.z = 10;
+            position = Camera.main.ScreenToWorldPoint(position);
+            return position;
         }
 
+#pragma warning disable CS0252
+
         private IBlock FindClosestBlock(
-            GameObject designation, Vector3 v3)
+            GameObject designation, Vector3 searchStartPosition)
         {
             var num = FindObjectsOfType<MonoBehaviour>()
                 .OfType<IBlock>()
-#pragma warning disable CS0252
                 .Where(x => x != designation.GetComponent<BlockDesignation>())
-#pragma warning restore
                 .Where(x => x.Parent.GetComponent<Ship>() != null);
             var closestWall = num.Count() > 0 ?
                 num.Aggregate((closest, next) =>
-                Vector2.Distance(closest.Transform.position, v3) <
-                Vector2.Distance(next.Transform.position, v3) ?
+                Vector2.Distance(closest.Transform.position, searchStartPosition) <
+                Vector2.Distance(next.Transform.position, searchStartPosition) ?
                 closest : next) :
                 null;
             return closestWall;
         }
 
-        private static void UpdateShipData(GameObject ship)
+#pragma warning restore
+
+        private static void UpdateShip(GameObject ship)
         {
-            ship.GetComponent<Ship>().UpdateShipData(ship);
+            ship.GetComponent<Ship>().UpdateShip();
         }
 
         private void MoveBlockDesignation(
@@ -131,7 +133,7 @@ namespace Assets.Code.Main
             List<GameObject> designations, GameObject prefab, ref Vector3 localMousePos)
         {
             localMousePos = closestBlock.Parent
-                .InverseTransformPoint(GetMousePosition());
+                .InverseTransformPoint(GetMouseWorldPosition());
             localMousePos = localMousePos.Round();
             ClampDistance(originalPos, ref localMousePos, _maxDesignDistance);
             int lesserX = 0;
@@ -191,7 +193,7 @@ namespace Assets.Code.Main
                 BlockType.Floor => _floorDesignationPrefab,
                 _ => _wallDesignationPrefab
             };
-            _cockpit.SwitchSetup();
+            GameManager.SwitchSetup();
             GameObject designation = Instantiate(_temporalDesignationPrefab, _worldTransform);
             // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
             IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
@@ -200,10 +202,10 @@ namespace Assets.Code.Main
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     Destroy(designation);
-                    _cockpit.SwitchSetup();
+                    GameManager.SwitchSetup();
                     yield break;
                 }
-                var mousePos = GetMousePosition();
+                var mousePos = GetMouseWorldPosition();
                 closestBlock = FindClosestBlock(designation, mousePos);
                 MoveBlockDesignation(designation, closestBlock, mousePos);
                 if (designation.transform.parent == null)
@@ -214,7 +216,7 @@ namespace Assets.Code.Main
             if (designation.transform.parent == null)
             {
                 Destroy(designation);
-                _cockpit.SwitchSetup();
+                GameManager.SwitchSetup();
                 yield break;
             }
             Vector3 originalPos = designation.transform.localPosition;
@@ -229,11 +231,11 @@ namespace Assets.Code.Main
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     DestroyDesignations(designations);
-                    _cockpit.SwitchSetup();
+                    GameManager.SwitchSetup();
                     yield break;
                 }
                 localMousePos = closestBlock.Parent
-                        .InverseTransformPoint(GetMousePosition());
+                        .InverseTransformPoint(GetMouseWorldPosition());
                 localMousePos = localMousePos.Round();
                 if (localMousePos != oldLocalMousePos)
                 {
@@ -251,13 +253,13 @@ namespace Assets.Code.Main
                 block.transform.localPosition = designations[i].transform.localPosition;
             }
             DestroyDesignations(designations);
-            UpdateShipData(closestBlock.Parent.gameObject);
-            _cockpit.SwitchSetup();
+            UpdateShip(closestBlock.Parent.gameObject);
+            GameManager.SwitchSetup();
         }
 
         private IEnumerator CancelDesignation()
         {
-            _cockpit.SwitchSetup();
+            GameManager.SwitchSetup();
             RaycastHit2D hit = new();
             GameObject designation = Instantiate(_cancelDesignationPrefab);
             SpriteRenderer designationSpriteRenderer = designation
@@ -268,7 +270,7 @@ namespace Assets.Code.Main
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     Destroy(designation);
-                    _cockpit.SwitchSetup();
+                    GameManager.SwitchSetup();
                     yield break;
                 }
                 hit = Physics2D.GetRayIntersection(
@@ -302,11 +304,11 @@ namespace Assets.Code.Main
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     DestroyDesignations(designations);
-                    _cockpit.SwitchSetup();
+                    GameManager.SwitchSetup();
                     yield break;
                 }
                 localMousePos = hit.collider.transform.parent
-                        .InverseTransformPoint(GetMousePosition());
+                        .InverseTransformPoint(GetMouseWorldPosition());
                 localMousePos = localMousePos.Round();
                 if (localMousePos != oldLocalMousePos)
                 {
@@ -358,13 +360,13 @@ namespace Assets.Code.Main
                 }
             }
             DestroyDesignations(designations);
-            UpdateShipData(hit.transform.gameObject);
-            _cockpit.SwitchSetup();
+            UpdateShip(hit.transform.gameObject);
+            GameManager.SwitchSetup();
         }
 
         private IEnumerator DesignateMining()
         {
-            _cockpit.SwitchSetup();
+            GameManager.SwitchSetup();
             RaycastHit2D hit = new();
             GameObject designation = Instantiate(_miningDesignationPrefab);
             SpriteRenderer designationSpriteRenderer = designation
@@ -375,7 +377,7 @@ namespace Assets.Code.Main
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     Destroy(designation);
-                    _cockpit.SwitchSetup();
+                    GameManager.SwitchSetup();
                     yield break;
                 }
                 hit = Physics2D.GetRayIntersection(
@@ -417,11 +419,11 @@ namespace Assets.Code.Main
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     DestroyDesignations(designations);
-                    _cockpit.SwitchSetup();
+                    GameManager.SwitchSetup();
                     yield break;
                 }
                 localMousePos = hit.collider.transform.parent
-                        .InverseTransformPoint(GetMousePosition());
+                        .InverseTransformPoint(GetMouseWorldPosition());
                 localMousePos = localMousePos.Round();
                 if (localMousePos != oldLocalMousePos)
                 {
@@ -472,8 +474,8 @@ namespace Assets.Code.Main
                 }
             }
             DestroyDesignations(designations);
-            UpdateShipData(hit.transform.gameObject);
-            _cockpit.SwitchSetup();
+            UpdateShip(hit.transform.gameObject);
+            GameManager.SwitchSetup();
         }
 
         private static bool AreDesignationsObstructed(List<GameObject> designations)
@@ -505,7 +507,7 @@ namespace Assets.Code.Main
 
         private void Awake()
         {
-            _cockpit = GetComponent<Cockpit>();
+            Instance = this;
         }
 
         #endregion Unity

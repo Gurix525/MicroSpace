@@ -9,7 +9,6 @@ namespace Assets.Code.Main
     {
         [SerializeField] private UIDocument _contextualMenu;
         [SerializeField] private UIDocument _speedometer;
-        [SerializeField] private Cockpit _cockpit;
 
         private Label _speedometerLabel;
 
@@ -52,13 +51,13 @@ namespace Assets.Code.Main
 
         private void SelectFocusedShip()
         {
-            _cockpit.SelectFocusedShip(_context);
+            GameManager.SelectFocusedShip(_context);
             CloseContextualMenu();
         }
 
         private void SelectTarget()
         {
-            _cockpit.SelectTarget(_context);
+            GameManager.SelectTarget(_context);
             CloseContextualMenu();
         }
 
@@ -69,7 +68,7 @@ namespace Assets.Code.Main
 
         private void UpdateSpeedometer()
         {
-            _speedometerLabel.text = $"{_cockpit.Speedometer:0.000} m/s";
+            _speedometerLabel.text = $"{GameManager.Speedometer:0.000} m/s";
         }
 
         private void FixedUpdate()

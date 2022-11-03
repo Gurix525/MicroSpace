@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 98350692}
   - component: {fileID: 98350694}
   m_Layer: 0
-  m_Name: Cockpit
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

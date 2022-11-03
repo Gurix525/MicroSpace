@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8310065123803728136}
   - component: {fileID: 8310065123803728151}
   - component: {fileID: 4542050502911274631}
+  - component: {fileID: -301835369475060196}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -79,18 +80,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120e8bc0890221840b27d581f25eca50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DBObject:
-    Name: 
-    Position:
-      X: 0
-      Y: 0
-    Velocity: {x: 0, y: 0}
-    Rotation: 0
-    AngularVelocity: 0
-    ShipData:
-      Walls: []
-      Floors: []
-      Rooms: []
+  _walls: []
+  _floors: []
+  _rooms: []
+  _id: 0
+  _position: {x: 0, y: 0}
+  _rotation: 0
+  _velocity: {x: 0, y: 0}
+  _shipUnloadDistance: 100
 --- !u!50 &4542050502911274631
 Rigidbody2D:
   serializedVersion: 4
@@ -112,6 +109,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-301835369475060196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8310065123803728149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9149c136a943a104b8432b597108fd82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4167638346928956608
 PrefabInstance:
   m_ObjectHideFlags: 0

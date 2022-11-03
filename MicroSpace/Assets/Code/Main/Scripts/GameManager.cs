@@ -8,103 +8,84 @@ using UnityEngine;
 
 namespace Assets.Code.Main
 {
-    public class Cockpit : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         #region Fields
 
-        private Rigidbody2D SelectedShipRigidbody = null;
-        public GameObject ShipDesignationPrefab;
-        public GameObject ShipPrefab;
+        [SerializeField]
+        private GameObject ShipDesignationPrefab;
+
+        [SerializeField]
+        private GameObject _shipPrefab;
+
+        [SerializeField]
+        private Rigidbody2D _target;
+
+        [SerializeField]
+        private Transform _world;
+
+        [SerializeField]
+        private static float _speedometer;
+
+        private static Rigidbody2D SelectedShipRigidbody = null;
         public UIController UIController;
-        public float Speedometer; // For UI speedometer purposes
 
-        [SerializeField] private Rigidbody2D _target;
-        [SerializeField] private Transform _world;
-
-        private bool _isSetupRunnning = false;
-
-        // Singletons
-        private static Cockpit _cockpit;
+        private static bool _isSetupRunnning = false;
 
         private static DesignManager _designManager;
 
         #endregion Fields
 
+        #region Properties
+
+        public static GameManager Instance { get; private set; }
+
+        public static float Speedometer
+        {
+            get => _speedometer;
+            private set => _speedometer = value;
+        }
+
+        public GameObject ShipPrefab => _shipPrefab;
+
+        public Transform World { get => _world; set => _world = value; }
+
+        #endregion Properties
+
         #region Public
 
-        public void SwitchSetup() => // Used to switch setup on/off
+        public static void SwitchSetup() =>
                     _isSetupRunnning ^= true;
 
-        public void SelectFocusedShip(GameObject ship)
+        public static void SelectFocusedShip(GameObject ship)
         {
             if (ship != null)
             {
                 //Debug.Log(ship);
                 SelectedShipRigidbody = ship.GetComponent<Rigidbody2D>();
-                Database.FocusedShip = Database.DBObjects
-                    .Find(x => x.GameObject == ship);
+                //Database.FocusedShip = Database.DBObjects
+                //    .Find(x => x.GameObject == ship);
             }
         }
 
-        public void SelectTarget(GameObject target)
+        public static void SelectTarget(GameObject target)
         {
             if (target != null)
-                _target = target.GetComponent<Rigidbody2D>();
+                Instance._target = target.GetComponent<Rigidbody2D>();
             else
-                _target = null;
-        }
-
-        public static void InstantiateShipFromDB(DBObject dbo)
-        {
-            GameObject ship = Instantiate(
-                _cockpit.ShipPrefab, GameObject.Find("World").transform);
-            dbo.GameObject = ship;
-            ship.transform.position = (Vector3)(
-                dbo.Position - Database.FocusedShip.Position);
-            ship.name = dbo.Name;
-            ship.GetComponent<Ship>().DBObject = dbo;
-            var rb = ship.GetComponent<Rigidbody2D>();
-            rb.velocity = dbo.Velocity;
-            rb.rotation = dbo.Rotation;
-            rb.angularVelocity = dbo.AngularVelocity;
-
-            foreach (WallData wallData in dbo.ShipData.Walls)
-            {
-                if (wallData.Name == "Core")
-                    continue;
-                GameObject wall = Instantiate(
-                    _designManager.WallPrefab, ship.transform);
-                wall.transform.localPosition = new Vector2(
-                     wallData.LocalPosition[0], wallData.LocalPosition[1]);
-                wall.name = wallData.Name;
-                var wallComponent = wall.GetComponent<Wall>();
-                wallComponent.WallData = wallData;
-            }
-
-            foreach (FloorData floorData in dbo.ShipData.Floors)
-            {
-                GameObject floor = Instantiate(
-                    _designManager.FloorPrefab, ship.transform);
-                floor.transform.localPosition = new Vector2(
-                    floorData.LocalPosition[0], floorData.LocalPosition[1]);
-                floor.name = floorData.Name;
-                var floorComponent = floor.GetComponent<Floor>();
-                floorComponent.FloorData = floorData;
-                floorData.Room = dbo.ShipData.Rooms
-                    .Find(x => x.Id == floorData.Room.Id);
-            }
+                Instance._target = null;
         }
 
         #endregion Public
 
         #region Private
 
-        private void InstantiateCloseShips()
-        {
-            var shipsToInstantiate = Database.GetShipsToInstantiate();
-            foreach (var item in shipsToInstantiate)
-                InstantiateShipFromDB((DBObject)item);
-        }
+        //private void InstantiateCloseShips()
+        //{
+        //    var shipsToInstantiate = Database.GetShipsToInstantiate();
+        //    foreach (var item in shipsToInstantiate)
+        //        InstantiateShipFromDB((DatabaseObject)item);
+        //}
 
         private void AlignCamera()
         {
@@ -116,21 +97,20 @@ namespace Assets.Code.Main
         {
             Vector3 change = SelectedShipRigidbody.transform.localPosition +
                 (Vector3)SelectedShipRigidbody.velocity * Time.fixedDeltaTime;
-            foreach (Transform child in _world)
+            foreach (Transform child in World)
                 child.localPosition -= change;
         }
 
         private IEnumerator BuildShipCoroutine()
         {
             SwitchSetup();
-            //SwitchPause();
-            GameObject designation = Instantiate(ShipDesignationPrefab, _world);
+            GameObject designation = Instantiate(ShipDesignationPrefab, World);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
                 MoveShipDesignation(designation);
                 yield return null;
             }
-            GameObject ship = Instantiate(ShipPrefab, _world);
+            GameObject ship = Instantiate(ShipPrefab, World);
             ship.transform.localPosition = designation.transform.localPosition;
             ship.GetComponent<Rigidbody2D>().velocity =
                 SelectedShipRigidbody != null ?
@@ -138,7 +118,7 @@ namespace Assets.Code.Main
             Destroy(designation);
             yield return null;
             SelectFocusedShip(ship);
-            //SwitchPause();
+            ship.GetComponent<Ship>().UpdateShip();
             SwitchSetup();
         }
 
@@ -152,7 +132,7 @@ namespace Assets.Code.Main
 
         private void SteerTheShip()
         {
-            int speed = 5 * Database.FocusedShip.ShipData.ElementsCount;
+            int speed = 5 * SelectedShipRigidbody.GetComponent<Ship>().ElementsCount;
             float rotationSpeed = speed / 5;
 
             if (Input.GetKey(KeyCode.W))
@@ -218,7 +198,7 @@ namespace Assets.Code.Main
 
         private void Awake()
         {
-            _cockpit = this;
+            Instance = this;
             _designManager = GetComponent<DesignManager>();
         }
 
@@ -299,7 +279,7 @@ namespace Assets.Code.Main
                 AlignScenePosition();
                 AlignCamera();
                 UpdateSpeedometer();
-                InstantiateCloseShips();
+                //InstantiateCloseShips();
             }
         }
 
