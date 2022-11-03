@@ -228,7 +228,7 @@ namespace Assets.Code.Main
         private static List<Ship> GetShipsList()
         {
             List<Ship> ships = new();
-            foreach (Transform child in GameManager.Instance.World.transform)
+            foreach (Transform child in GameManager.Instance.World)
                 if (child.gameObject.TryGetComponent(out Ship ship))
                     ships.Add(ship);
             UpdateShips(ships);

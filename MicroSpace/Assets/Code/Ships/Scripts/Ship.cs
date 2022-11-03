@@ -12,13 +12,13 @@ namespace Assets.Code.Ships
         #region Fields
 
         [SerializeField]
+        private int _id;
+
+        [SerializeField]
         private List<Block> _blocks = new();
 
         [SerializeField]
         private List<Room> _rooms = new();
-
-        [SerializeField]
-        private int _id;
 
         [SerializeField]
         private Vector2 _position;
@@ -51,10 +51,15 @@ namespace Assets.Code.Ships
             .ToList();
 
         public List<Room> Rooms { get => _rooms; set => _rooms = value; }
+
         public int ElementsCount { get => Blocks.Count; }
+
         public int Id { get => _id; set => _id = value; }
+
         public Vector2 Position { get => _position; set => _position = value; }
+
         public float Rotation { get => _rotation; set => _rotation = value; }
+
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
         #endregion Properties
@@ -111,12 +116,17 @@ namespace Assets.Code.Ships
             foreach (Transform child in transform)
             {
                 var block = child.gameObject.GetComponent<Block>();
-                if (block != null)
+                if (block != null && !IsTemporalDesignation(block))
                 {
                     block.UpdateBlock();
                     Blocks.Add(block);
                 }
             }
+        }
+
+        private bool IsTemporalDesignation(Block block)
+        {
+            return block is TemporalDesignation;
         }
 
         private void UpdateRooms()

@@ -132,7 +132,7 @@ namespace Assets.Code.Main
 
         private void SteerTheShip()
         {
-            int speed = 5 * SelectedShipRigidbody.GetComponent<Ship>().ElementsCount;
+            float speed = 5 * SelectedShipRigidbody.mass;
             float rotationSpeed = speed / 5;
 
             if (Input.GetKey(KeyCode.W))
@@ -188,8 +188,8 @@ namespace Assets.Code.Main
         {
             Speedometer = _target == null ?
                 SelectedShipRigidbody.velocity.magnitude :
-                Math.Abs(SelectedShipRigidbody.velocity.magnitude -
-                _target.velocity.magnitude);
+                Math.Abs((SelectedShipRigidbody.velocity -
+                _target.velocity).magnitude);
         }
 
         #endregion Private

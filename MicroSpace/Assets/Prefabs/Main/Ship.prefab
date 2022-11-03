@@ -79,8 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120e8bc0890221840b27d581f25eca50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walls: []
-  _floors: []
+  _blocks: []
   _rooms: []
   _id: 0
   _position: {x: 0, y: 0}

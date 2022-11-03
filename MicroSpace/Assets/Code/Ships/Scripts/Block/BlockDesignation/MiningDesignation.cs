@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Code.Ships
 {
-    public class MiningDesignation : BlockDesignation
+    public class MiningDesignation : TemporalDesignation
     {
         private bool _isActive = false;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Code.Ships
 {
-    public class CancelDesignation : BlockDesignation
+    public class CancelDesignation : TemporalDesignation
     {
         private bool _isActive = false;
 

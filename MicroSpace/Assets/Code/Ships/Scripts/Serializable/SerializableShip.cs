@@ -35,16 +35,6 @@ namespace Assets.Code.Ships
 
         public List<SerializableBlock> Blocks => _blocks;
 
-        public List<SerializableWall> Walls => _blocks
-            .Where(block => block is SerializableWall)
-            .Select(block => block as SerializableWall)
-            .ToList();
-
-        public List<SerializableFloor> Floors => _blocks
-            .Where(block => block is SerializableFloor)
-            .Select(block => block as SerializableFloor)
-            .ToList();
-
         public List<Room> Rooms => _rooms;
 
         public int Id => _id;
@@ -60,16 +50,7 @@ namespace Assets.Code.Ships
         public SerializableShip(Ship ship)
         {
             foreach (var block in ship.Blocks)
-            {
-                if (block is Floor)
-                    _blocks.Add(new SerializableFloor(block));
-                else if (block is WallDesignation)
-                    _blocks.Add(new SerializableWallDesignation(block));
-                else if (block is FloorDesignation)
-                    _blocks.Add(new SerializableFloorDesignation(block));
-                else
-                    _blocks.Add(new SerializableWall(block));
-            }
+                _blocks.Add(new(block));
             _rooms = ship.Rooms;
             _id = ship.Id;
             _position = ship.Position;
