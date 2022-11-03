@@ -72,11 +72,11 @@ namespace Assets.Code.Main
             SetBlockParameters(block, blockToLoad);
         }
 
-        private static void SetBlockParameters(GameObject wall, SerializableBlock blockToLoad)
+        private static void SetBlockParameters(GameObject block, SerializableBlock blockToLoad)
         {
-            Wall wallComponent = wall.GetComponent<Wall>();
-            wallComponent.Id = blockToLoad.Id;
-            wall.transform.localPosition = blockToLoad.LocalPosition;
+            Block blockComponent = block.GetComponent<Block>();
+            blockComponent.Id = blockToLoad.Id;
+            block.transform.localPosition = blockToLoad.LocalPosition;
         }
 
         private static void InstantiateBlock(out GameObject block,
@@ -90,11 +90,11 @@ namespace Assets.Code.Main
         private static void GetBlockPrefab(SerializableBlock blockToLoad,
             DesignManager designManager, out GameObject blockPrefab)
         {
-            blockPrefab = blockToLoad switch
+            blockPrefab = blockToLoad.BlockType switch
             {
-                SerializableFloor => designManager.FloorPrefab,
-                SerializableWallDesignation => designManager.WallDesignationPrefab,
-                SerializableFloorDesignation => designManager.FloorDesignationPrefab,
+                BlockType.Floor => designManager.FloorPrefab,
+                BlockType.WallDesignation => designManager.WallDesignationPrefab,
+                BlockType.FloorDesignation => designManager.FloorDesignationPrefab,
                 _ => designManager.WallPrefab
             };
         }
