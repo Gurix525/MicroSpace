@@ -44,6 +44,11 @@ namespace Assets.Code.Ships
 
         #endregion Properties
 
+        public void UpdateBlock()
+        {
+            LocalPosition = transform.localPosition;
+        }
+
         protected bool IsCollidingWithAnotherBlock()
         {
             return IsCollidingWithAnotherBlock(out _);

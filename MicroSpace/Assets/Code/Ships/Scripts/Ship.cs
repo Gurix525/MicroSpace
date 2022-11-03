@@ -59,6 +59,14 @@ namespace Assets.Code.Ships
             UpdateWalls();
             UpdateFloors();
             UpdateRooms();
+            UpdateProperties();
+        }
+
+        private void UpdateProperties()
+        {
+            Position = transform.position;
+            Rotation = transform.eulerAngles.z;
+            Velocity = GetComponent<Rigidbody2D>().velocity;
         }
 
         #endregion Public
@@ -98,7 +106,10 @@ namespace Assets.Code.Ships
             {
                 var wall = item.gameObject.GetComponent<Wall>();
                 if (wall != null)
+                {
+                    wall.UpdateBlock();
                     Walls.Add(wall);
+                }
             }
         }
 
@@ -109,7 +120,10 @@ namespace Assets.Code.Ships
             {
                 var floor = item.gameObject.GetComponent<Floor>();
                 if (floor != null)
+                {
+                    floor.UpdateBlock();
                     Floors.Add(floor);
+                }
             }
         }
 
