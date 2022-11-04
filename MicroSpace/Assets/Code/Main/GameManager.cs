@@ -4,12 +4,16 @@ using Ships;
 using System;
 using System.Collections;
 using UnityEngine;
+using ScriptableObjects;
 
 namespace Main
 {
     public class GameManager : MonoBehaviour
     {
         #region Fields
+
+        [SerializeField]
+        private IdManagerScriptableObject _idManager;
 
         [SerializeField]
         private GameObject ShipDesignationPrefab;
@@ -48,6 +52,8 @@ namespace Main
         public GameObject ShipPrefab => _shipPrefab;
 
         public Transform World { get => _world; set => _world = value; }
+
+        public IdManagerScriptableObject IdManager => _idManager;
 
         #endregion Properties
 

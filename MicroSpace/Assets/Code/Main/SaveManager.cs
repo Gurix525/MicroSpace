@@ -37,6 +37,12 @@ namespace Main
         private static void LoadFromSave(Save save)
         {
             LoadShips(save.Ships);
+            LoadIdManager(save.NextId);
+        }
+
+        private static void LoadIdManager(int nextId)
+        {
+            GameManager.Instance.IdManager.NextId = nextId;
         }
 
         private static void LoadShips(List<SerializableShip> ships)
