@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2935974ef58fb419440ef65c034ad6, type: 3}
   m_Name: IdManager
   m_EditorClassIdentifier: 
-  _nextId: 0
+  _nextId: 1

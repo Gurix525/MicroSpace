@@ -98,18 +98,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daa4b5353f8d14e85d8cf629d8b8a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _floorData:
-    CurrentEndurance: 0
-    LocalPosition: 0000000000000000
-    LocalRotation: 0
-    MaxEndurance: 0
-    Name: 
-    Resilience: 0
-    IsExposed: 0
-    Room:
-      Id: 0
-      MaxPressure: 0
-      Pressure: 0
+  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
+  _id: 0
+  _localPosition: {x: 0, y: 0}
+  _isMarkedForMining: 0
+  _isExposed: 0
+  _upFloor: {fileID: 0}
+  _downFloor: {fileID: 0}
+  _leftFloor: {fileID: 0}
+  _rightFloor: {fileID: 0}
+  _room:
+    Id: 0
 --- !u!61 &-9095421040194025846
 BoxCollider2D:
   m_ObjectHideFlags: 0

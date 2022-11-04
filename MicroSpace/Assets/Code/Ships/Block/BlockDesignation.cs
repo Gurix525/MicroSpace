@@ -8,8 +8,9 @@ namespace Ships
 
         public bool IsObstructed { get; protected set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
     }

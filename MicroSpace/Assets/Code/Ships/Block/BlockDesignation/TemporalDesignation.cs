@@ -1,4 +1,5 @@
 ﻿using Data;
+using UnityEngine;
 
 namespace Ships
 {
@@ -19,6 +20,11 @@ namespace Ships
                     _spriteRenderer.color = ColorBank.TemporalDesignationNormal;
                 }
             }
+        }
+
+        protected override void Awake()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
     }
 }

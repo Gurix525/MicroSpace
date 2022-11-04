@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8882777948300292929}
   - component: {fileID: 4748244672076001164}
-  - component: {fileID: -6499946297091166757}
   - component: {fileID: 7513117422599746819}
+  - component: {fileID: -6499946297091166757}
   m_Layer: 0
   m_Name: Core
   m_TagString: Untagged
@@ -86,6 +86,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7513117422599746819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7440152704112946889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb286c1fa93bb6b44af4fdeb386bec9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
+  _id: 0
+  _localPosition: {x: 0, y: 0}
+  _isMarkedForMining: 0
 --- !u!61 &-6499946297091166757
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -112,22 +128,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7513117422599746819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7440152704112946889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb286c1fa93bb6b44af4fdeb386bec9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _wallData:
-    CurrentEndurance: 0
-    LocalPosition: 0000000000000000
-    LocalRotation: 0
-    MaxEndurance: 0
-    Name: 
-    Resilience: 0

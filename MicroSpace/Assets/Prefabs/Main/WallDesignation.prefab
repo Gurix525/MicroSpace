@@ -98,6 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf402ef0b73d9dd4b99df6eca9758086, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
+  _id: 0
+  _localPosition: {x: 0, y: 0}
+  _isMarkedForMining: 0
 --- !u!61 &589271343126821892
 BoxCollider2D:
   m_ObjectHideFlags: 0

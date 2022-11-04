@@ -1,4 +1,6 @@
-﻿using Maths;
+﻿using Attributes;
+using Maths;
+using ScriptableObjects;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -11,12 +13,18 @@ namespace Ships
         #region Fields
 
         [SerializeField]
+        protected IdManagerScriptableObject _idManager;
+
+        [SerializeField]
+        [ReadonlyInspector]
         private int _id;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Vector2 _localPosition;
 
         [SerializeField]
+        [ReadonlyInspector]
         private bool _isMarkedForMining;
 
         #endregion Fields
@@ -41,10 +49,16 @@ namespace Ships
 
         #endregion Properties
 
+        #region Public
+
         public void UpdateBlock()
         {
             LocalPosition = transform.localPosition;
         }
+
+        #endregion Public
+
+        #region Protected
 
         protected bool IsCollidingWithAnotherBlock()
         {
@@ -68,5 +82,22 @@ namespace Ships
             collidingBlock = null;
             return false;
         }
+
+        protected virtual void SetId()
+        {
+            if (Id == 0)
+                Id = _idManager.NextId;
+        }
+
+        #endregion Protected
+
+        #region Unity
+
+        protected virtual void Awake()
+        {
+            SetId();
+        }
+
+        #endregion Unity
     }
 }

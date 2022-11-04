@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Attributes;
+using ScriptableObjects;
 
 namespace Ships
 {
@@ -11,21 +13,30 @@ namespace Ships
         #region Fields
 
         [SerializeField]
+        private IdManagerScriptableObject _idManager;
+
+        [SerializeField]
+        [ReadonlyInspector]
         private int _id;
 
         [SerializeField]
+        [ReadonlyInspector]
         private List<Block> _blocks = new();
 
         [SerializeField]
+        [ReadonlyInspector]
         private List<Room> _rooms = new();
 
         [SerializeField]
+        [ReadonlyInspector]
         private Vector2 _position;
 
         [SerializeField]
+        [ReadonlyInspector]
         private float _rotation;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Vector2 _velocity;
 
         [SerializeField]
@@ -231,5 +242,15 @@ namespace Ships
         }
 
         #endregion Private
+
+        #region Unity
+
+        private void Awake()
+        {
+            if (Id == 0)
+                Id = _idManager.NextId;
+        }
+
+        #endregion Unity
     }
 }

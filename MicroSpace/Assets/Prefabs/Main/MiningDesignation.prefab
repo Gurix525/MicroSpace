@@ -97,3 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b712e0c2ab2724fa9c83e9bac1ba5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
+  _id: 0
+  _localPosition: {x: 0, y: 0}
+  _isMarkedForMining: 0

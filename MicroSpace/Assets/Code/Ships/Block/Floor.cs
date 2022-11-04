@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Data;
+using Attributes;
 
 namespace Ships
 {
@@ -8,21 +9,27 @@ namespace Ships
     public class Floor : Block
     {
         [SerializeField]
+        [ReadonlyInspector]
         private bool _isExposed = false;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Floor _upFloor = null;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Floor _downFloor = null;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Floor _leftFloor = null;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Floor _rightFloor = null;
 
         [SerializeField]
+        [ReadonlyInspector]
         private Room _room = null;
 
         public bool IsExposed { get => _isExposed; set => _isExposed = value; }
