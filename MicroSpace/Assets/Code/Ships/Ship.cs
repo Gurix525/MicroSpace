@@ -94,9 +94,10 @@ namespace Ships
 
         #region Private
 
-        private void FixedUpdate()
+        private void SetId()
         {
-            SetChildrenActiveOrInactive();
+            if (Id == 0)
+                Id = _idManager.NextId;
         }
 
         private void SetChildrenActiveOrInactive()
@@ -247,8 +248,12 @@ namespace Ships
 
         private void Awake()
         {
-            if (Id == 0)
-                Id = _idManager.NextId;
+            SetId();
+        }
+
+        private void FixedUpdate()
+        {
+            SetChildrenActiveOrInactive();
         }
 
         #endregion Unity
