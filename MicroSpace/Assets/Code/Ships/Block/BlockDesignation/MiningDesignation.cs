@@ -1,6 +1,4 @@
-﻿using Data;
-
-namespace Ships
+﻿namespace Ships
 {
     public class MiningDesignation : TemporalDesignation
     {
@@ -12,9 +10,9 @@ namespace Ships
             set
             {
                 if (value == true)
-                    _spriteRenderer.color = ColorBank.MiningDesignationActive;
+                    _spriteRenderer.color = _colors.MiningDesignationActive;
                 else
-                    _spriteRenderer.color = ColorBank.MiningDesignationInactive;
+                    _spriteRenderer.color = _colors.MiningDesignationInactive;
             }
         }
     }

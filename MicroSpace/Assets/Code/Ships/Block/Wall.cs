@@ -1,6 +1,4 @@
-﻿using Data;
-
-namespace Ships
+﻿namespace Ships
 {
     public class Wall : Block
     {

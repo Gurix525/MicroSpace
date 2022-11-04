@@ -1,4 +1,3 @@
-using Data;
 using ExtensionMethods;
 using Ships;
 using System;
@@ -16,7 +15,10 @@ namespace Main
         private IdManagerScriptableObject _idManager;
 
         [SerializeField]
-        private GameObject ShipDesignationPrefab;
+        private GameObject _shipDesignationPrefab;
+
+        [SerializeField]
+        private GameObject _wallPrefab;
 
         [SerializeField]
         private GameObject _shipPrefab;
@@ -109,7 +111,7 @@ namespace Main
         private IEnumerator BuildShipCoroutine()
         {
             SwitchSetup();
-            GameObject designation = Instantiate(ShipDesignationPrefab, World);
+            GameObject designation = Instantiate(_shipDesignationPrefab, World);
             while (!Input.GetKeyDown(KeyCode.Mouse0))
             {
                 MoveShipDesignation(designation);
@@ -123,6 +125,7 @@ namespace Main
             Destroy(designation);
             yield return null;
             SelectFocusedShip(ship);
+            Instantiate(_wallPrefab, ship.transform);
             ship.GetComponent<Ship>().UpdateShip();
             SwitchSetup();
         }

@@ -1,5 +1,4 @@
-﻿using Data;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Ships
 {
@@ -12,12 +11,12 @@ namespace Ships
                 if (IsCollidingWithAnotherBlock())
                 {
                     IsObstructed = true;
-                    _spriteRenderer.color = ColorBank.TemporalDesignationObstructed;
+                    _spriteRenderer.color = _colors.TemporalDesignationObstructed;
                 }
                 else
                 {
                     IsObstructed = false;
-                    _spriteRenderer.color = ColorBank.TemporalDesignationNormal;
+                    _spriteRenderer.color = _colors.TemporalDesignationNormal;
                 }
             }
         }

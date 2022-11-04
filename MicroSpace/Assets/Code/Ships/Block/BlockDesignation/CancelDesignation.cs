@@ -1,6 +1,4 @@
-﻿using Data;
-
-namespace Ships
+﻿namespace Ships
 {
     public class CancelDesignation : TemporalDesignation
     {
@@ -12,9 +10,9 @@ namespace Ships
             set
             {
                 if (value == true)
-                    _spriteRenderer.color = ColorBank.CancelDesignationActive;
+                    _spriteRenderer.color = _colors.CancelDesignationActive;
                 else
-                    _spriteRenderer.color = ColorBank.CancelDesignationInactive;
+                    _spriteRenderer.color = _colors.CancelDesignationInactive;
             }
         }
     }

@@ -16,6 +16,9 @@ namespace Ships
         protected IdManagerScriptableObject _idManager;
 
         [SerializeField]
+        protected ColorsScriptableObject _colors;
+
+        [SerializeField]
         [ReadonlyInspector]
         private int _id;
 

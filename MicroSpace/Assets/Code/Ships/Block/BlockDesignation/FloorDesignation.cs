@@ -1,4 +1,3 @@
-using Data;
 using UnityEngine;
 
 namespace Ships
@@ -10,23 +9,23 @@ namespace Ships
         //    if (IsCollidingWithAnotherBlock())
         //    {
         //        IsObstructed = true;
-        //        _spriteRenderer.color = ColorBank.FloorDesignationObstructed;
+        //        _spriteRenderer.color = _colors.FloorDesignationObstructed;
         //    }
         //    else
         //    {
         //        IsObstructed = false;
-        //        _spriteRenderer.color = ColorBank.FloorDesignationNormal;
+        //        _spriteRenderer.color = _colors.FloorDesignationNormal;
         //    }
         //}
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            _spriteRenderer.color = ColorBank.FloorDesignationObstructed;
+            _spriteRenderer.color = _colors.FloorDesignationObstructed;
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _spriteRenderer.color = ColorBank.FloorDesignationNormal;
+            _spriteRenderer.color = _colors.FloorDesignationNormal;
         }
     }
 }

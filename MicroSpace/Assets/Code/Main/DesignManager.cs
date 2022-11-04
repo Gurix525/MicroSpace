@@ -1,4 +1,3 @@
-using Data;
 using ExtensionMethods;
 using Ships;
 using System.Collections;
@@ -11,6 +10,9 @@ namespace Main
     public class DesignManager : MonoBehaviour
     {
         #region Fields
+
+        [SerializeField]
+        private ColorsScriptableObject _colors;
 
         [SerializeField]
         private GameObject _temporalDesignationPrefab;
@@ -212,7 +214,7 @@ namespace Main
                 MoveBlockDesignation(designation, closestBlock, mousePos);
                 if (designation.transform.parent == null)
                     designation.GetComponent<SpriteRenderer>().color =
-                        ColorBank.TemporalDesignationObstructed;
+                        _colors.TemporalDesignationObstructed;
                 yield return null;
             }
             if (designation.transform.parent == null)
@@ -266,7 +268,7 @@ namespace Main
             GameObject designation = Instantiate(_cancelDesignationPrefab);
             SpriteRenderer designationSpriteRenderer = designation
                 .GetComponent<SpriteRenderer>();
-            designationSpriteRenderer.color = ColorBank.Invisible;
+            designationSpriteRenderer.color = _colors.Invisible;
             while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
@@ -284,12 +286,12 @@ namespace Main
                         hit.collider.transform.localPosition;
                     designation.transform.localEulerAngles =
                         hit.collider.transform.localEulerAngles;
-                    designationSpriteRenderer.color = ColorBank.CancelDesignationInactive;
+                    designationSpriteRenderer.color = _colors.CancelDesignationInactive;
                 }
                 else
                 {
                     designation.transform.parent = null;
-                    designationSpriteRenderer.color = ColorBank.Invisible;
+                    designationSpriteRenderer.color = _colors.Invisible;
                 }
                 yield return null;
             }
@@ -373,7 +375,7 @@ namespace Main
             GameObject designation = Instantiate(_miningDesignationPrefab);
             SpriteRenderer designationSpriteRenderer = designation
                 .GetComponent<SpriteRenderer>();
-            designationSpriteRenderer.color = ColorBank.Invisible;
+            designationSpriteRenderer.color = _colors.Invisible;
             while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
@@ -393,18 +395,18 @@ namespace Main
                             hit.collider.transform.localPosition;
                         designation.transform.localEulerAngles =
                             hit.collider.transform.localEulerAngles;
-                        designationSpriteRenderer.color = ColorBank.MiningDesignationInactive;
+                        designationSpriteRenderer.color = _colors.MiningDesignationInactive;
                     }
                     else
                     {
                         designation.transform.parent = null;
-                        designationSpriteRenderer.color = ColorBank.Invisible;
+                        designationSpriteRenderer.color = _colors.Invisible;
                     }
                 }
                 else
                 {
                     designation.transform.parent = null;
-                    designationSpriteRenderer.color = ColorBank.Invisible;
+                    designationSpriteRenderer.color = _colors.Invisible;
                 }
                 yield return null;
             }
