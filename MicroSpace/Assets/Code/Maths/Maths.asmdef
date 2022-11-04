@@ -1,7 +1,9 @@
 {
-    "name": "Code.Data",
+    "name": "Maths",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:cdc90491ff91ecc41bd3738443842ffa"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

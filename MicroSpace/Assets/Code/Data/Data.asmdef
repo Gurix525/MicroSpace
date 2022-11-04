@@ -1,10 +1,7 @@
 {
-    "name": "Code.Ships",
+    "name": "Data",
     "rootNamespace": "",
-    "references": [
-        "GUID:4db8d9708de15ba49a0388e69221f1c6",
-        "GUID:c9ca9174da4289d4e82625f7e6ee88fb"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

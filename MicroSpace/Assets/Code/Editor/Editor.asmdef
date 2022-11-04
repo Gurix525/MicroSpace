@@ -1,10 +1,8 @@
 {
-    "name": "Code.Main",
+    "name": "Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:c9ca9174da4289d4e82625f7e6ee88fb",
-        "GUID:cdc90491ff91ecc41bd3738443842ffa",
-        "GUID:827ee02e56dbdba4190656dfd7b3cefa"
+        "GUID:f728def38c0934d4a8222621ae614276"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

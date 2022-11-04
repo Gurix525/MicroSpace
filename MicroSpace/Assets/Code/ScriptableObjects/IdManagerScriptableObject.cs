@@ -1,16 +1,21 @@
 using UnityEngine;
+using Assets.Code.Attributes;
 
-[CreateAssetMenu(
-    fileName = "IdManager",
-    menuName = "ScriptableObjects/IdManagerScriptableObject")]
-public class IdManagerScriptableObject : ScriptableObject
+namespace Assets.Code.ScriptableObjects
 {
-    [SerializeField]
-    private int _nextId = 0;
-
-    public int NextId
+    [CreateAssetMenu(
+        fileName = "IdManager",
+        menuName = "ScriptableObjects/IdManagerScriptableObject")]
+    public class IdManagerScriptableObject : ScriptableObject
     {
-        get => _nextId++;
-        set => _nextId = value;
+        [SerializeField]
+        [ReadonlyInspector]
+        private int _nextId = 0;
+
+        public int NextId
+        {
+            get => _nextId++;
+            set => _nextId = value;
+        }
     }
 }

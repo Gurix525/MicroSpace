@@ -1,9 +1,7 @@
 {
-    "name": "Code.Maths",
+    "name": "ExtensionMethods",
     "rootNamespace": "",
-    "references": [
-        "GUID:cdc90491ff91ecc41bd3738443842ffa"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -1,5 +1,5 @@
 {
-    "name": "Code.Pathfinding",
+    "name": "Pathfinding",
     "rootNamespace": "",
     "references": [
         "GUID:cdc90491ff91ecc41bd3738443842ffa",
