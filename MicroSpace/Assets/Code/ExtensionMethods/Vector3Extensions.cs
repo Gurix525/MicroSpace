@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using UnityEngine;
 
-namespace Assets.Code.ExtensionMethods
+namespace ExtensionMethods
 {
     public static class Vector3Extensions
     {

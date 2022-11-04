@@ -1,13 +1,12 @@
-using Assets.Code.Data;
-using Assets.Code.ExtensionMethods;
-using Assets.Code.Ships;
-using System;
+using Data;
+using ExtensionMethods;
+using Ships;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Code.Main
+namespace Main
 {
     public class DesignManager : MonoBehaviour
     {

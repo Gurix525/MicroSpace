@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using Assets.Code.Data;
+using Data;
 
-namespace Assets.Code.Ships
+namespace Ships
 {
     [Serializable]
     public class Floor : Block

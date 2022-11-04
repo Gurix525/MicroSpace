@@ -1,13 +1,11 @@
-﻿using Assets.Code.Ships;
+﻿using Ships;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Code.Main
+namespace Main
 {
     public static class SaveManager
     {

@@ -1,9 +1,7 @@
-using Assets.Code.Data;
-using System.Collections;
-using System.Collections.Generic;
+using Data;
 using UnityEngine;
 
-namespace Assets.Code.Ships
+namespace Ships
 {
     public class WallDesignation : BlockDesignation
     {

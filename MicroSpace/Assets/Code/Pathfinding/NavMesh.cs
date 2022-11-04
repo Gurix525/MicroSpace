@@ -1,13 +1,12 @@
-using Assets.Code.ExtensionMethods;
+using ExtensionMethods;
 using DelaunatorSharp;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
-using Assets.Code.Maths;
+using Maths;
 
-namespace Assets.Code.Pathfinding
+namespace Pathfinding
 {
     public class NavMesh : MonoBehaviour
     {

@@ -1,5 +1,5 @@
 using UnityEditor;
-using Assets.Code.Attributes;
+using Attributes;
 using UnityEngine;
 
 namespace Editor

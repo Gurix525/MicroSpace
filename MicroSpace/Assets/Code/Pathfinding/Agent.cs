@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-
 using DelaunatorSharp;
-using Assets.Code.ExtensionMethods;
+using ExtensionMethods;
 
-namespace Assets.Code.Pathfinding
+namespace Pathfinding
 {
     public class Agent : MonoBehaviour
     {

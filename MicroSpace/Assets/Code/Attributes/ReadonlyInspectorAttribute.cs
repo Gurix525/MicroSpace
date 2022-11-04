@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Code.Attributes
+namespace Attributes
 {
     public class ReadonlyInspectorAttribute : PropertyAttribute
     {

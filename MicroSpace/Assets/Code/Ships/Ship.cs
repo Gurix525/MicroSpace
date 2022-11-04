@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Assets.Code.Data;
 using System.Linq;
 using System;
 
-namespace Assets.Code.Ships
+namespace Ships
 {
     [Serializable]
     public class Ship : MonoBehaviour

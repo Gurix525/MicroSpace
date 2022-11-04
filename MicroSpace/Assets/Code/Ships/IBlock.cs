@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Code.Ships
+namespace Ships
 {
     public interface IBlock
     {

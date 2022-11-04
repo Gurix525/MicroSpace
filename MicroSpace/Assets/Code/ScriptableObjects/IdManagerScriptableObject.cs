@@ -1,7 +1,7 @@
 using UnityEngine;
-using Assets.Code.Attributes;
+using Attributes;
 
-namespace Assets.Code.ScriptableObjects
+namespace ScriptableObjects
 {
     [CreateAssetMenu(
         fileName = "IdManager",

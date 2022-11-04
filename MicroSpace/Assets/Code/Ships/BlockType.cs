@@ -1,4 +1,4 @@
-﻿namespace Assets.Code.Ships
+﻿namespace Ships
 {
     public enum BlockType
     {

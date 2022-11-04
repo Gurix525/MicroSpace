@@ -1,11 +1,6 @@
-﻿using Assets.Code.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data;
 
-namespace Assets.Code.Ships
+namespace Ships
 {
     public class TemporalDesignation : BlockDesignation
     {

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Code.Main
+namespace Main
 {
     public class UIController : MonoBehaviour
     {
