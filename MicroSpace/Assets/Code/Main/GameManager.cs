@@ -98,6 +98,8 @@ namespace Main
         {
             Camera.main.transform.rotation =
                 SelectedShipRigidbody.transform.rotation;
+            var shipPos = SelectedShipRigidbody.position;
+            Camera.main.transform.position = new Vector3(shipPos.x, shipPos.y, -10);
         }
 
         private void AlignScenePosition()

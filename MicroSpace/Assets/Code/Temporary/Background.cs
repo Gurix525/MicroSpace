@@ -17,5 +17,6 @@ public class Background : MonoBehaviour
     {
         transform.localScale = _originalScale *
             (Camera.main.orthographicSize / _originalCameraSize);
+        transform.eulerAngles = Vector3.zero;
     }
 }
