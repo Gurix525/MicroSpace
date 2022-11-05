@@ -247,10 +247,12 @@ namespace Main
 
         private static void ClearWorld()
         {
-            var world = GameObject.Find("World");
+            var world = GameManager.Instance.World;
             for (int i = 0; i < world.transform.childCount; i++)
             {
-                GameObject.Destroy(world.transform.GetChild(i).gameObject);
+                Transform child = world.GetChild(i);
+                if (child.GetComponent<Ship>())
+                    GameObject.Destroy(child.gameObject);
             }
         }
 
