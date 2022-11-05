@@ -36,8 +36,19 @@ namespace Main
 
         private static void LoadFromSave(Save save)
         {
-            LoadShips(save.Ships);
+            List<Ship> ships = LoadShips(save.Ships);
             LoadIdManager(save.NextId);
+            LoadFocusedShip(save.FocusedShipId, ships);
+        }
+
+        private static void LoadFocusedShip(int focusedShipId, List<Ship> ships)
+        {
+            GameManager.SelectFocusedShip(FindShipById(focusedShipId, ships));
+        }
+
+        private static GameObject FindShipById(int focusedShipId, List<Ship> ships)
+        {
+            return ships.Find(ship => ship.Id == focusedShipId).gameObject;
         }
 
         private static void LoadIdManager(int nextId)
@@ -45,18 +56,21 @@ namespace Main
             GameManager.Instance.IdManager.NextId = nextId;
         }
 
-        private static void LoadShips(List<SerializableShip> ships)
+        private static List<Ship> LoadShips(List<SerializableShip> shipsToLoad)
         {
-            foreach (var shipToLoad in ships)
-                LoadShip(shipToLoad);
+            List<Ship> ships = new();
+            foreach (SerializableShip shipToLoad in shipsToLoad)
+                ships.Add(LoadShip(shipToLoad));
+            return ships;
         }
 
-        private static void LoadShip(SerializableShip shipToLoad)
+        private static Ship LoadShip(SerializableShip shipToLoad)
         {
             InstantiateShip(out GameObject ship);
             SetShipParameters(ship, shipToLoad);
             LoadBlocks(ship, shipToLoad);
             UpdateShip(ship);
+            return ship.GetComponent<Ship>();
         }
 
         private static void UpdateShip(GameObject ship)
@@ -232,9 +246,7 @@ namespace Main
         private static List<Ship> GetShipsList()
         {
             List<Ship> ships = new();
-            foreach (Transform child in GameManager.Instance.World)
-                if (child.gameObject.TryGetComponent(out Ship ship))
-                    ships.Add(ship);
+            GameManager.ForEachShip(ship => ships.Add(ship));
             UpdateShips(ships);
             return ships;
         }

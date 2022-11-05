@@ -72,6 +72,8 @@ namespace Ships
 
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
+        public Rigidbody2D Rigidbody2D { get; private set; }
+
         #endregion Properties
 
         #region Public
@@ -242,6 +244,11 @@ namespace Ships
             // walle sie kopiują z pustymi roomami na WallData
         }
 
+        private void GetRigidbody2D()
+        {
+            Rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
         #endregion Private
 
         #region Unity
@@ -249,6 +256,7 @@ namespace Ships
         private void Awake()
         {
             SetId();
+            GetRigidbody2D();
         }
 
         #endregion Unity

@@ -59,6 +59,9 @@ namespace Main
 
         public IdManagerScriptableObject IdManager => _idManager;
 
+        public static int FocusedShipId =>
+            _focusedShipRigidbody.GetComponent<Ship>().Id;
+
         #endregion Properties
 
         #region Public
@@ -85,16 +88,16 @@ namespace Main
                 Instance._target = null;
         }
 
+        public static void ForEachShip(Action<Ship> action)
+        {
+            foreach (Transform child in Instance.World)
+                if (child.TryGetComponent(out Ship ship))
+                    action(ship);
+        }
+
         #endregion Public
 
         #region Private
-
-        //private void InstantiateCloseShips()
-        //{
-        //    var shipsToInstantiate = Database.GetShipsToInstantiate();
-        //    foreach (var item in shipsToInstantiate)
-        //        InstantiateShipFromDB((DatabaseObject)item);
-        //}
 
         private void AlignCameraToFocusedShip()
         {
@@ -103,14 +106,6 @@ namespace Main
             var shipPos = _focusedShipRigidbody.position;
             Camera.main.transform.position = new Vector3(shipPos.x, shipPos.y, -10);
         }
-
-        //private void AlignScenePosition()
-        //{
-        //    Vector3 change = SelectedShipRigidbody.transform.localPosition +
-        //        (Vector3)SelectedShipRigidbody.velocity * Time.fixedDeltaTime;
-        //    foreach (Transform child in World)
-        //        child.localPosition -= change;
-        //}
 
         private IEnumerator BuildShipCoroutine()
         {
@@ -297,10 +292,8 @@ namespace Main
 
         private void ActivateOrDeactivateShips()
         {
-            foreach (Transform child in World)
-                if (child.TryGetComponent(out Ship ship))
-                    ship.ActivateOrDeactivateChildren(
-                        _focusedShipRigidbody.transform);
+            ForEachShip(ship => ship.ActivateOrDeactivateChildren(
+                _focusedShipRigidbody.transform));
         }
 
         #endregion Unity
