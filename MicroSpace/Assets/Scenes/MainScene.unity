@@ -159,7 +159,7 @@ MonoBehaviour:
   _shipPrefab: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
   _target: {fileID: 0}
   _world: {fileID: 445740361}
-  UIController: {fileID: 472914255}
+  _uiController: {fileID: 472914255}
 --- !u!4 &98350693
 Transform:
   m_ObjectHideFlags: 0
@@ -171,7 +171,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 472914254}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -392,7 +393,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &445740360
 GameObject:
@@ -450,15 +451,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472914253}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 347703819}
   - {fileID: 292762466}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 98350693}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &472914255
 MonoBehaviour:

@@ -90,6 +90,14 @@ namespace Ships
             Velocity = GetComponent<Rigidbody2D>().velocity;
         }
 
+        public void ActivateOrDeactivateChildren(Transform focusedShip)
+        {
+            if (IsShipDistantFromGivenShip(focusedShip) && _isShipLoaded)
+                SetShipChildrenActive(false);
+            else if (!IsShipDistantFromGivenShip(focusedShip) && !_isShipLoaded)
+                SetShipChildrenActive(true);
+        }
+
         #endregion Public
 
         #region Private
@@ -100,14 +108,6 @@ namespace Ships
                 Id = _idManager.NextId;
         }
 
-        private void SetChildrenActiveOrInactive()
-        {
-            if (IsShipDistantFromOrigin() && _isShipLoaded)
-                SetShipChildrenActive(false);
-            else if (!IsShipDistantFromOrigin() && !_isShipLoaded)
-                SetShipChildrenActive(true);
-        }
-
         private void SetShipChildrenActive(bool state)
         {
             foreach (Transform child in transform)
@@ -115,9 +115,9 @@ namespace Ships
             _isShipLoaded = state;
         }
 
-        private bool IsShipDistantFromOrigin()
+        private bool IsShipDistantFromGivenShip(Transform ship)
         {
-            return Vector2.Distance(transform.position, Vector2.zero) >
+            return Vector2.Distance(transform.position, ship.position) >
                 _shipUnloadDistance;
         }
 
@@ -249,11 +249,6 @@ namespace Ships
         private void Awake()
         {
             SetId();
-        }
-
-        private void FixedUpdate()
-        {
-            SetChildrenActiveOrInactive();
         }
 
         #endregion Unity

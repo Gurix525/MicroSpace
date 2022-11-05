@@ -32,8 +32,10 @@ namespace Main
         [SerializeField]
         private static float _speedometer;
 
-        private static Rigidbody2D SelectedShipRigidbody = null;
-        public UIController UIController;
+        [SerializeField]
+        private UIController _uiController;
+
+        private static Rigidbody2D _focusedShipRigidbody = null;
 
         private static bool _isSetupRunnning = false;
 
@@ -69,7 +71,7 @@ namespace Main
             if (ship != null)
             {
                 //Debug.Log(ship);
-                SelectedShipRigidbody = ship.GetComponent<Rigidbody2D>();
+                _focusedShipRigidbody = ship.GetComponent<Rigidbody2D>();
                 //Database.FocusedShip = Database.DBObjects
                 //    .Find(x => x.GameObject == ship);
             }
@@ -94,21 +96,21 @@ namespace Main
         //        InstantiateShipFromDB((DatabaseObject)item);
         //}
 
-        private void AlignCamera()
+        private void AlignCameraToFocusedShip()
         {
             Camera.main.transform.rotation =
-                SelectedShipRigidbody.transform.rotation;
-            var shipPos = SelectedShipRigidbody.position;
+                _focusedShipRigidbody.transform.rotation;
+            var shipPos = _focusedShipRigidbody.position;
             Camera.main.transform.position = new Vector3(shipPos.x, shipPos.y, -10);
         }
 
-        private void AlignScenePosition()
-        {
-            Vector3 change = SelectedShipRigidbody.transform.localPosition +
-                (Vector3)SelectedShipRigidbody.velocity * Time.fixedDeltaTime;
-            foreach (Transform child in World)
-                child.localPosition -= change;
-        }
+        //private void AlignScenePosition()
+        //{
+        //    Vector3 change = SelectedShipRigidbody.transform.localPosition +
+        //        (Vector3)SelectedShipRigidbody.velocity * Time.fixedDeltaTime;
+        //    foreach (Transform child in World)
+        //        child.localPosition -= change;
+        //}
 
         private IEnumerator BuildShipCoroutine()
         {
@@ -122,8 +124,8 @@ namespace Main
             GameObject ship = Instantiate(ShipPrefab, World);
             ship.transform.localPosition = designation.transform.localPosition;
             ship.GetComponent<Rigidbody2D>().velocity =
-                SelectedShipRigidbody != null ?
-                SelectedShipRigidbody.velocity : Vector2.zero;
+                _focusedShipRigidbody != null ?
+                _focusedShipRigidbody.velocity : Vector2.zero;
             Destroy(designation);
             yield return null;
             SelectFocusedShip(ship);
@@ -142,34 +144,34 @@ namespace Main
 
         private void SteerTheShip()
         {
-            float speed = 5 * SelectedShipRigidbody.mass;
+            float speed = 5 * _focusedShipRigidbody.mass;
             float rotationSpeed = speed / 5;
 
             if (Input.GetKey(KeyCode.W))
-                SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.up * speed);
+                _focusedShipRigidbody.AddForce(
+                    _focusedShipRigidbody.transform.up * speed);
             if (Input.GetKey(KeyCode.S))
-                SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.up * -speed);
+                _focusedShipRigidbody.AddForce(
+                    _focusedShipRigidbody.transform.up * -speed);
             if (Input.GetKey(KeyCode.D))
-                SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.right * speed);
+                _focusedShipRigidbody.AddForce(
+                    _focusedShipRigidbody.transform.right * speed);
             if (Input.GetKey(KeyCode.A))
-                SelectedShipRigidbody.AddForce(
-                    SelectedShipRigidbody.transform.right * -speed);
+                _focusedShipRigidbody.AddForce(
+                    _focusedShipRigidbody.transform.right * -speed);
             if (Input.GetKey(KeyCode.E))
-                SelectedShipRigidbody.AddTorque(-rotationSpeed);
+                _focusedShipRigidbody.AddTorque(-rotationSpeed);
             if (Input.GetKey(KeyCode.Q))
-                SelectedShipRigidbody.AddTorque(rotationSpeed);
+                _focusedShipRigidbody.AddTorque(rotationSpeed);
             if (Input.GetKey(KeyCode.Space))
-                AdjustSpeed(speed * Time.fixedDeltaTime);
+                AdjustFocusedShipSpeed(speed * Time.fixedDeltaTime);
         }
 
-        private void AdjustSpeed(float speed)
+        private void AdjustFocusedShipSpeed(float speed)
         {
             Vector2 desiredVelocity = _target != null ?
                 _target.velocity : Vector2.zero;
-            var currentVelocity = SelectedShipRigidbody.velocity;
+            var currentVelocity = _focusedShipRigidbody.velocity;
             float x = 0;
             float y = 0;
 
@@ -186,7 +188,7 @@ namespace Main
             else
                 y = desiredVelocity.y - currentVelocity.y;
 
-            SelectedShipRigidbody.velocity += new Vector2(x, y);
+            _focusedShipRigidbody.velocity += new Vector2(x, y);
         }
 
         private void SwitchPause()
@@ -197,8 +199,8 @@ namespace Main
         private void UpdateSpeedometer()
         {
             Speedometer = _target == null ?
-                SelectedShipRigidbody.velocity.magnitude :
-                Math.Abs((SelectedShipRigidbody.velocity -
+                _focusedShipRigidbody.velocity.magnitude :
+                Math.Abs((_focusedShipRigidbody.velocity -
                 _target.velocity).magnitude);
         }
 
@@ -255,7 +257,7 @@ namespace Main
 
             if (Input.GetMouseButtonDown(1))
             {
-                UIController.OpenContextualMenu();
+                _uiController.OpenContextualMenu();
                 //SelectFocusedShip(null, true);
                 return;
             }
@@ -282,14 +284,23 @@ namespace Main
 
         private void FixedUpdate()
         {
-            if (SelectedShipRigidbody != null)
+            if (_focusedShipRigidbody != null)
             {
                 if (!_isSetupRunnning)
                     SteerTheShip();
                 //AlignScenePosition();
-                AlignCamera();
+                AlignCameraToFocusedShip();
                 UpdateSpeedometer();
+                ActivateOrDeactivateShips();
             }
+        }
+
+        private void ActivateOrDeactivateShips()
+        {
+            foreach (Transform child in World)
+                if (child.TryGetComponent(out Ship ship))
+                    ship.ActivateOrDeactivateChildren(
+                        _focusedShipRigidbody.transform);
         }
 
         #endregion Unity
