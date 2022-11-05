@@ -284,10 +284,9 @@ namespace Main
             {
                 if (!_isSetupRunnning)
                     SteerTheShip();
-                AlignScenePosition();
+                //AlignScenePosition();
                 AlignCamera();
                 UpdateSpeedometer();
-                //InstantiateCloseShips();
             }
         }
 
