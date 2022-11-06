@@ -186,11 +186,6 @@ namespace Main
             _focusedShipRigidbody.velocity += new Vector2(x, y);
         }
 
-        private void SwitchPause()
-        {
-            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-        }
-
         private void UpdateSpeedometer()
         {
             Speedometer = _target == null ?
@@ -211,12 +206,6 @@ namespace Main
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                SwitchPause();
-                return;
-            }
-
             if (_isSetupRunnning)
                 return;
 
