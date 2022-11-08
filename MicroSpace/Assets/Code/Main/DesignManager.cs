@@ -1,3 +1,4 @@
+using Attributes;
 using ExtensionMethods;
 using Ships;
 using System;
@@ -5,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Main
 {
@@ -41,6 +43,16 @@ namespace Main
 
         [SerializeField]
         private int _maxDesignDistance = 9;
+
+        [SerializeField]
+        [ReadonlyInspector]
+        private BuildingMode _buildingMode = BuildingMode.Mining;
+
+        [SerializeField]
+        [Range(0F, 359F)]
+        private float _prefabRotation;
+
+        private GameObject _currentDesignation;
 
         #endregion Fields
 
@@ -514,12 +526,69 @@ namespace Main
             }
         }
 
+        // tu sie zaczynaja nowe
+
+        private void StartBlockDesignation()
+        {
+            _currentDesignation = Instantiate(
+                _temporalDesignationPrefab,
+                GetMouseWorldPosition(),
+                Quaternion.Euler(0, 0, _prefabRotation),
+                _worldTransform);
+        }
+
+        private void SetBuildingModeWall(CallbackContext context)
+        {
+            _buildingMode = BuildingMode.Wall;
+            StartBlockDesignation();
+        }
+
+        private void SetBuildingModeFloor(CallbackContext context)
+        {
+            _buildingMode = BuildingMode.Floor;
+            StartBlockDesignation();
+        }
+
+        private void SetBuildingModeEquipment(CallbackContext context)
+        {
+            _buildingMode = BuildingMode.Equipment;
+        }
+
+        private void SetBuildingModeMining(CallbackContext context)
+        {
+            _buildingMode = BuildingMode.Mining;
+        }
+
+        private void SetBuildingModeCancel(CallbackContext context)
+        {
+            _buildingMode = BuildingMode.Cancel;
+        }
+
+        private void ChangePrefabRotation(CallbackContext context)
+        {
+            _prefabRotation += 90F;
+            if (_prefabRotation >= 360F)
+                _prefabRotation = 0F;
+        }
+
         private void SubscribeToInputEvents()
         {
+            PlayerController.BuildingWall.performed += SetBuildingModeWall;
+            PlayerController.BuildingFloor.performed += SetBuildingModeFloor;
+            PlayerController.BuildingEquipment.performed += SetBuildingModeEquipment;
+            PlayerController.BuildingMining.performed += SetBuildingModeMining;
+            PlayerController.BuildingCancel.performed += SetBuildingModeCancel;
+            PlayerController.BuildingChangeRotation.performed += ChangePrefabRotation;
         }
 
         private void UnsubscribeFromInputEvents()
         {
+            PlayerController.BuildingWall.performed -= SetBuildingModeWall;
+            PlayerController.BuildingFloor.performed -= SetBuildingModeFloor;
+            PlayerController.BuildingEquipment.performed -= SetBuildingModeEquipment;
+            PlayerController.BuildingMining.performed -= SetBuildingModeMining;
+            PlayerController.BuildingCancel.performed -= SetBuildingModeCancel;
+            PlayerController.BuildingChangeRotation.performed -= ChangePrefabRotation;
         }
 
         #endregion Private
@@ -533,6 +602,7 @@ namespace Main
 
         private void OnEnable()
         {
+            _buildingMode = BuildingMode.Mining;
             SubscribeToInputEvents();
         }
 

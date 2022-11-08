@@ -6,7 +6,7 @@ namespace Ships
     {
         protected SpriteRenderer _spriteRenderer;
 
-        public bool IsObstructed { get; protected set; }
+        public bool IsObstructed { get; protected set; } = true;
 
         protected override void Awake()
         {

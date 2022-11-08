@@ -48,9 +48,16 @@ namespace Main
         public static InputAction SteeringRightClick { get; set; }
 
         public static InputAction BuildingDisableBuilding { get; set; }
+        public static InputAction BuildingPause { get; set; }
         public static InputAction BuildingPoint { get; set; }
         public static InputAction BuildingClick { get; set; }
         public static InputAction BuildingRightClick { get; set; }
+        public static InputAction BuildingWall { get; set; }
+        public static InputAction BuildingFloor { get; set; }
+        public static InputAction BuildingEquipment { get; set; }
+        public static InputAction BuildingMining { get; set; }
+        public static InputAction BuildingCancel { get; set; }
+        public static InputAction BuildingChangeRotation { get; set; }
 
         #endregion Properties
 
@@ -91,9 +98,16 @@ namespace Main
             SteeringRightClick = ActionMapSteering.FindAction("RightClick");
 
             BuildingDisableBuilding = ActionMapBuilding.FindAction("DisableBuilding");
+            BuildingPause = ActionMapBuilding.FindAction("Pause");
             BuildingPoint = ActionMapBuilding.FindAction("Point");
             BuildingClick = ActionMapBuilding.FindAction("Click");
             BuildingRightClick = ActionMapBuilding.FindAction("RightClick");
+            BuildingWall = ActionMapBuilding.FindAction("Wall");
+            BuildingFloor = ActionMapBuilding.FindAction("Floor");
+            BuildingEquipment = ActionMapBuilding.FindAction("Equipment");
+            BuildingMining = ActionMapBuilding.FindAction("Mining");
+            BuildingCancel = ActionMapBuilding.FindAction("Cancel");
+            BuildingChangeRotation = ActionMapBuilding.FindAction("ChangeRotation");
         }
 
         #endregion Unity

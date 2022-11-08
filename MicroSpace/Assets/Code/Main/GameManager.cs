@@ -268,6 +268,7 @@ namespace Main
             PlayerController.SteeringDisableSteering.performed += DisableSteering;
 
             PlayerController.BuildingDisableBuilding.performed += DisableBuilding;
+            PlayerController.BuildingPause.performed += SwitchPause;
         }
 
         //private void UnsubscribeFromInputEvents()

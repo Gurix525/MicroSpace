@@ -532,6 +532,15 @@ namespace Main
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""8312b67d-3214-45ae-8943-23a8fa36beb9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Click"",
                     ""type"": ""Button"",
                     ""id"": ""8775bb73-51c9-460e-b05a-e05de0e5036c"",
@@ -557,6 +566,60 @@ namespace Main
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Wall"",
+                    ""type"": ""Button"",
+                    ""id"": ""a78cc46f-878d-4561-b3fa-29df2a88ff67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Floor"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba87e3c1-6795-47ae-af3c-b6191491f3b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Equipment"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee6630c3-bcdc-45d2-b783-42bd4f9ed37c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mining"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c3b7be5-00f1-4c3c-9d53-754c5d3b4f6e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""5622701c-8b6c-4fdb-8a31-7e3851e3c7e4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeRotation"",
+                    ""type"": ""Button"",
+                    ""id"": ""61c16f4b-c175-4782-9665-2ed9ba3ffce6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -603,6 +666,105 @@ namespace Main
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9a369a3-e6ad-4456-a849-7d04b9c692ba"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce0f3b5d-b36e-4e21-bc52-3dddfa2072f1"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Wall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6ac4457-3f58-468d-bce2-090914df1e86"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Floor"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37ad82ae-d461-4454-8e8a-e8d4297f8914"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Equipment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d07ae38-d7a1-4f07-9e1d-cc1ce7b33753"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mining"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23aac427-4e01-472f-818c-f6e9ed45142a"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mining"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a27a6e1c-3bed-4c57-9fc1-829b72f53560"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""20ca022d-4693-415d-b686-4988ac323c8c"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9a5e77b-0d20-4043-b4c8-fb9c62a4dcf5"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -636,9 +798,16 @@ namespace Main
             // Building
             m_Building = asset.FindActionMap("Building", throwIfNotFound: true);
             m_Building_DisableBuilding = m_Building.FindAction("DisableBuilding", throwIfNotFound: true);
+            m_Building_Pause = m_Building.FindAction("Pause", throwIfNotFound: true);
             m_Building_Click = m_Building.FindAction("Click", throwIfNotFound: true);
             m_Building_RightClick = m_Building.FindAction("RightClick", throwIfNotFound: true);
             m_Building_Point = m_Building.FindAction("Point", throwIfNotFound: true);
+            m_Building_Wall = m_Building.FindAction("Wall", throwIfNotFound: true);
+            m_Building_Floor = m_Building.FindAction("Floor", throwIfNotFound: true);
+            m_Building_Equipment = m_Building.FindAction("Equipment", throwIfNotFound: true);
+            m_Building_Mining = m_Building.FindAction("Mining", throwIfNotFound: true);
+            m_Building_Cancel = m_Building.FindAction("Cancel", throwIfNotFound: true);
+            m_Building_ChangeRotation = m_Building.FindAction("ChangeRotation", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -909,17 +1078,31 @@ namespace Main
         private readonly InputActionMap m_Building;
         private IBuildingActions m_BuildingActionsCallbackInterface;
         private readonly InputAction m_Building_DisableBuilding;
+        private readonly InputAction m_Building_Pause;
         private readonly InputAction m_Building_Click;
         private readonly InputAction m_Building_RightClick;
         private readonly InputAction m_Building_Point;
+        private readonly InputAction m_Building_Wall;
+        private readonly InputAction m_Building_Floor;
+        private readonly InputAction m_Building_Equipment;
+        private readonly InputAction m_Building_Mining;
+        private readonly InputAction m_Building_Cancel;
+        private readonly InputAction m_Building_ChangeRotation;
         public struct BuildingActions
         {
             private @PlayerControls m_Wrapper;
             public BuildingActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @DisableBuilding => m_Wrapper.m_Building_DisableBuilding;
+            public InputAction @Pause => m_Wrapper.m_Building_Pause;
             public InputAction @Click => m_Wrapper.m_Building_Click;
             public InputAction @RightClick => m_Wrapper.m_Building_RightClick;
             public InputAction @Point => m_Wrapper.m_Building_Point;
+            public InputAction @Wall => m_Wrapper.m_Building_Wall;
+            public InputAction @Floor => m_Wrapper.m_Building_Floor;
+            public InputAction @Equipment => m_Wrapper.m_Building_Equipment;
+            public InputAction @Mining => m_Wrapper.m_Building_Mining;
+            public InputAction @Cancel => m_Wrapper.m_Building_Cancel;
+            public InputAction @ChangeRotation => m_Wrapper.m_Building_ChangeRotation;
             public InputActionMap Get() { return m_Wrapper.m_Building; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -932,6 +1115,9 @@ namespace Main
                     @DisableBuilding.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
                     @DisableBuilding.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
                     @DisableBuilding.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
+                    @Pause.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPause;
+                    @Pause.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPause;
+                    @Pause.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPause;
                     @Click.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnClick;
                     @Click.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnClick;
                     @Click.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnClick;
@@ -941,6 +1127,24 @@ namespace Main
                     @Point.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPoint;
                     @Point.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPoint;
                     @Point.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPoint;
+                    @Wall.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnWall;
+                    @Wall.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnWall;
+                    @Wall.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnWall;
+                    @Floor.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnFloor;
+                    @Floor.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnFloor;
+                    @Floor.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnFloor;
+                    @Equipment.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnEquipment;
+                    @Equipment.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnEquipment;
+                    @Equipment.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnEquipment;
+                    @Mining.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnMining;
+                    @Mining.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnMining;
+                    @Mining.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnMining;
+                    @Cancel.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnCancel;
+                    @Cancel.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnCancel;
+                    @Cancel.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnCancel;
+                    @ChangeRotation.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnChangeRotation;
+                    @ChangeRotation.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnChangeRotation;
+                    @ChangeRotation.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnChangeRotation;
                 }
                 m_Wrapper.m_BuildingActionsCallbackInterface = instance;
                 if (instance != null)
@@ -948,6 +1152,9 @@ namespace Main
                     @DisableBuilding.started += instance.OnDisableBuilding;
                     @DisableBuilding.performed += instance.OnDisableBuilding;
                     @DisableBuilding.canceled += instance.OnDisableBuilding;
+                    @Pause.started += instance.OnPause;
+                    @Pause.performed += instance.OnPause;
+                    @Pause.canceled += instance.OnPause;
                     @Click.started += instance.OnClick;
                     @Click.performed += instance.OnClick;
                     @Click.canceled += instance.OnClick;
@@ -957,6 +1164,24 @@ namespace Main
                     @Point.started += instance.OnPoint;
                     @Point.performed += instance.OnPoint;
                     @Point.canceled += instance.OnPoint;
+                    @Wall.started += instance.OnWall;
+                    @Wall.performed += instance.OnWall;
+                    @Wall.canceled += instance.OnWall;
+                    @Floor.started += instance.OnFloor;
+                    @Floor.performed += instance.OnFloor;
+                    @Floor.canceled += instance.OnFloor;
+                    @Equipment.started += instance.OnEquipment;
+                    @Equipment.performed += instance.OnEquipment;
+                    @Equipment.canceled += instance.OnEquipment;
+                    @Mining.started += instance.OnMining;
+                    @Mining.performed += instance.OnMining;
+                    @Mining.canceled += instance.OnMining;
+                    @Cancel.started += instance.OnCancel;
+                    @Cancel.performed += instance.OnCancel;
+                    @Cancel.canceled += instance.OnCancel;
+                    @ChangeRotation.started += instance.OnChangeRotation;
+                    @ChangeRotation.performed += instance.OnChangeRotation;
+                    @ChangeRotation.canceled += instance.OnChangeRotation;
                 }
             }
         }
@@ -990,9 +1215,16 @@ namespace Main
         public interface IBuildingActions
         {
             void OnDisableBuilding(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
             void OnRightClick(InputAction.CallbackContext context);
             void OnPoint(InputAction.CallbackContext context);
+            void OnWall(InputAction.CallbackContext context);
+            void OnFloor(InputAction.CallbackContext context);
+            void OnEquipment(InputAction.CallbackContext context);
+            void OnMining(InputAction.CallbackContext context);
+            void OnCancel(InputAction.CallbackContext context);
+            void OnChangeRotation(InputAction.CallbackContext context);
         }
     }
 }
