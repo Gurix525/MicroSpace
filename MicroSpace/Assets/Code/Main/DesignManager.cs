@@ -1,5 +1,6 @@
 using ExtensionMethods;
 using Ships;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace Main
 
         private Vector3 GetMouseWorldPosition()
         {
-            Vector3 position = Input.mousePosition;
+            Vector3 position = PlayerController.BuildingPoint.ReadValue<Vector2>();
             position.z = 10;
             position = Camera.main.ScreenToWorldPoint(position);
             return position;
@@ -201,9 +202,10 @@ namespace Main
             GameObject designation = Instantiate(_temporalDesignationPrefab, _worldTransform);
             // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
             IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || IsDesignationObstructed(designation))
+            while (!PlayerController.BuildingClick.IsPressed() || IsDesignationObstructed(designation))
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (PlayerController.BuildingRightClick.IsPressed() ||
+                        PlayerController.BuildingDisableBuilding.IsPressed())
                 {
                     Destroy(designation);
                     GameManager.SwitchSetup();
@@ -230,9 +232,10 @@ namespace Main
             Vector3 localMousePos = new();
             Vector3 oldLocalMousePos = Vector3.positiveInfinity;
             List<GameObject> designations = new();
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || AreDesignationsObstructed(designations))
+            while (!PlayerController.BuildingClick.IsPressed() || AreDesignationsObstructed(designations))
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (PlayerController.BuildingRightClick.IsPressed() ||
+                    PlayerController.BuildingDisableBuilding.IsPressed())
                 {
                     DestroyDesignations(designations);
                     GameManager.SwitchSetup();
@@ -269,16 +272,18 @@ namespace Main
             SpriteRenderer designationSpriteRenderer = designation
                 .GetComponent<SpriteRenderer>();
             designationSpriteRenderer.color = _colors.Invisible;
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (PlayerController.BuildingRightClick.IsPressed() ||
+                    PlayerController.BuildingDisableBuilding.IsPressed())
                 {
                     Destroy(designation);
                     GameManager.SwitchSetup();
                     yield break;
                 }
                 hit = Physics2D.GetRayIntersection(
-                    Camera.main.ScreenPointToRay(Input.mousePosition));
+                    Camera.main.ScreenPointToRay(
+                        PlayerController.BuildingPoint.ReadValue<Vector2>()));
                 if (hit.collider != null)
                 {
                     designation.transform.parent = hit.collider.transform.parent;
@@ -303,9 +308,10 @@ namespace Main
             Vector3 oldLocalMousePos = Vector3.positiveInfinity;
             List<GameObject> designations = new();
             List<Block> blocks = new();
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (PlayerController.BuildingRightClick.IsPressed() ||
+                    PlayerController.BuildingDisableBuilding.IsPressed())
                 {
                     DestroyDesignations(designations);
                     GameManager.SwitchSetup();
@@ -376,16 +382,18 @@ namespace Main
             SpriteRenderer designationSpriteRenderer = designation
                 .GetComponent<SpriteRenderer>();
             designationSpriteRenderer.color = _colors.Invisible;
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (PlayerController.BuildingRightClick.IsPressed() ||
+                    PlayerController.BuildingDisableBuilding.IsPressed())
                 {
                     Destroy(designation);
                     GameManager.SwitchSetup();
                     yield break;
                 }
                 hit = Physics2D.GetRayIntersection(
-                    Camera.main.ScreenPointToRay(Input.mousePosition));
+                    Camera.main.ScreenPointToRay(
+                        PlayerController.BuildingPoint.ReadValue<Vector2>()));
                 if (hit.collider != null)
                 {
                     if (hit.collider.GetComponent<Block>() is not BlockDesignation)
@@ -418,9 +426,10 @@ namespace Main
             Vector3 oldLocalMousePos = Vector3.positiveInfinity;
             List<GameObject> designations = new();
             List<Block> blocks = new();
-            while (!Input.GetKeyDown(KeyCode.Mouse0) || hit.collider == null)
+            while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+                if (PlayerController.BuildingClick.IsPressed() ||
+                    PlayerController.BuildingDisableBuilding.IsPressed())
                 {
                     DestroyDesignations(designations);
                     GameManager.SwitchSetup();
@@ -505,6 +514,14 @@ namespace Main
             }
         }
 
+        private void SubscribeToInputEvents()
+        {
+        }
+
+        private void UnsubscribeFromInputEvents()
+        {
+        }
+
         #endregion Private
 
         #region Unity
@@ -516,10 +533,12 @@ namespace Main
 
         private void OnEnable()
         {
+            SubscribeToInputEvents();
         }
 
         private void OnDisable()
         {
+            UnsubscribeFromInputEvents();
         }
 
         #endregion Unity

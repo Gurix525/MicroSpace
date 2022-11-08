@@ -118,7 +118,7 @@ namespace Main
         {
             SwitchSetup();
             GameObject designation = Instantiate(_shipDesignationPrefab, World);
-            while (!Input.GetKeyDown(KeyCode.Mouse0))
+            while (!PlayerController.DefaultClick.IsPressed())
             {
                 MoveShipDesignation(designation);
                 yield return null;
@@ -138,7 +138,7 @@ namespace Main
 
         private void MoveShipDesignation(GameObject designation)
         {
-            var v3 = Input.mousePosition;
+            Vector3 v3 = PlayerController.DefaultPoint.ReadValue<Vector2>();
             v3.z = 10;
             v3 = Camera.main.ScreenToWorldPoint(v3);
             designation.transform.position = v3;
@@ -327,13 +327,6 @@ namespace Main
             //if (Input.GetKeyDown(KeyCode.B))
             //{
             //    _designManager.StartDesignateBlock(BlockType.Wall);
-            //    return;
-            //}
-
-            //if (Input.GetMouseButtonDown(1))
-            //{
-            //    _uiController.OpenContextualMenu();
-            //    //SelectFocusedShip(null, true);
             //    return;
             //}
         }

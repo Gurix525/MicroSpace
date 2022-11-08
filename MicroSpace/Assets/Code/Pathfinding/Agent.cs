@@ -85,24 +85,24 @@ namespace Pathfinding
         /// Zwraca pozycję myszki w świecie
         /// </summary>
         /// <returns></returns>
-        private Vector3 GetMousePosition()
-        {
-            Vector3 v3 = Input.mousePosition;
-            v3.z = 10;
-            v3 = Camera.main.ScreenToWorldPoint(v3);
-            return v3;
-        }
+        //private Vector3 GetMousePosition()
+        //{
+        //    Vector3 v3 = PlayerController;
+        //    v3.z = 10;
+        //    v3 = Camera.main.ScreenToWorldPoint(v3);
+        //    return v3;
+        //}
 
         /// <summary>
         /// Ustawia cel na podstawie wskazanego punktu
         /// </summary>
-        private void SetTarget()
-        {
-            _deltaTimeSincePathUpdate = 1F;
-            _colliders = FindObjectsOfType<BoxCollider2D>().ToList();
-            float closestColliderDistance = _colliders.Min(x => Vector2.Distance(x.transform.position, GetMousePosition()));
-            _targetCollider = _colliders.Find(x => Vector2.Distance(x.transform.position, GetMousePosition()) == closestColliderDistance);
-        }
+        //private void SetTarget()
+        //{
+        //    _deltaTimeSincePathUpdate = 1F;
+        //    _colliders = FindObjectsOfType<BoxCollider2D>().ToList();
+        //    float closestColliderDistance = _colliders.Min(x => Vector2.Distance(x.transform.position, GetMousePosition()));
+        //    _targetCollider = _colliders.Find(x => Vector2.Distance(x.transform.position, GetMousePosition()) == closestColliderDistance);
+        //}
 
         /// <summary>
         /// Porusza agentem
