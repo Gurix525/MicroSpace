@@ -4,6 +4,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using ScriptableObjects;
+using static UnityEngine.InputSystem.InputAction;
+using Attributes;
 
 namespace Main
 {
@@ -35,11 +37,16 @@ namespace Main
         [SerializeField]
         private UIController _uiController;
 
-        private static Rigidbody2D _focusedShipRigidbody = null;
+        [SerializeField]
+        private DesignManager _designManager;
+
+        [SerializeField]
+        [ReadonlyInspector]
+        private Rigidbody2D _focusedShipRigidbody = null;
+
+        private static bool _isSteeringEnabled = false;
 
         private static bool _isSetupRunnning = false;
-
-        private static DesignManager _designManager;
 
         #endregion Fields
 
@@ -60,7 +67,7 @@ namespace Main
         public IdManagerScriptableObject IdManager => _idManager;
 
         public static int FocusedShipId =>
-            _focusedShipRigidbody.GetComponent<Ship>().Id;
+            Instance._focusedShipRigidbody.GetComponent<Ship>().Id;
 
         #endregion Properties
 
@@ -74,7 +81,7 @@ namespace Main
             if (ship != null)
             {
                 //Debug.Log(ship);
-                _focusedShipRigidbody = ship.GetComponent<Rigidbody2D>();
+                Instance._focusedShipRigidbody = ship.GetComponent<Rigidbody2D>();
                 //Database.FocusedShip = Database.DBObjects
                 //    .Find(x => x.GameObject == ship);
             }
@@ -139,26 +146,21 @@ namespace Main
 
         private void SteerTheShip()
         {
+            Vector3 direction = ((Vector3)PlayerController.SteeringDirection
+                .ReadValue<Vector2>())
+                .RotateAroundPivot(
+                    Vector3.zero,
+                    _focusedShipRigidbody.transform.localEulerAngles);
             float speed = 5 * _focusedShipRigidbody.mass;
-            float rotationSpeed = speed / 5;
+            float rotationSpeed = _focusedShipRigidbody.mass;
 
-            if (Input.GetKey(KeyCode.W))
-                _focusedShipRigidbody.AddForce(
-                    _focusedShipRigidbody.transform.up * speed);
-            if (Input.GetKey(KeyCode.S))
-                _focusedShipRigidbody.AddForce(
-                    _focusedShipRigidbody.transform.up * -speed);
-            if (Input.GetKey(KeyCode.D))
-                _focusedShipRigidbody.AddForce(
-                    _focusedShipRigidbody.transform.right * speed);
-            if (Input.GetKey(KeyCode.A))
-                _focusedShipRigidbody.AddForce(
-                    _focusedShipRigidbody.transform.right * -speed);
-            if (Input.GetKey(KeyCode.E))
-                _focusedShipRigidbody.AddTorque(-rotationSpeed);
-            if (Input.GetKey(KeyCode.Q))
-                _focusedShipRigidbody.AddTorque(rotationSpeed);
-            if (Input.GetKey(KeyCode.Space))
+            _focusedShipRigidbody.AddForce(
+                direction * speed);
+
+            _focusedShipRigidbody.AddTorque(PlayerController.SteeringRotation
+                .ReadValue<float>());
+
+            if (PlayerController.SteeringAdjustSpeed.IsPressed())
                 AdjustFocusedShipSpeed(speed * Time.fixedDeltaTime);
         }
 
@@ -194,89 +196,30 @@ namespace Main
                 _target.velocity).magnitude);
         }
 
-        #endregion Private
-
-        #region Unity
-
-        private void Awake()
+        private void SwitchPause(CallbackContext context)
         {
-            Instance = this;
-            _designManager = GetComponent<DesignManager>();
+            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         }
 
-        private void Update()
+        private void Zoom(CallbackContext context)
         {
-            if (_isSetupRunnning)
-                return;
-
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                _designManager.StartCancelDesignation();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                _designManager.StartDesignateMining();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                StartCoroutine(BuildShipCoroutine());
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                _designManager.StartDesignateBlock(BlockType.Floor);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                _designManager.StartDesignateBlock(BlockType.Wall);
-                return;
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                _uiController.OpenContextualMenu();
-                //SelectFocusedShip(null, true);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                SaveManager.SaveGame();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                SaveManager.LoadGame();
-                return;
-            }
-
-            if (Input.GetAxis("Mouse ScrollWheel") > 0 &&
+            Vector2 scrollValue = context.ReadValue<Vector2>();
+            if (scrollValue.y > 0 &&
                 Camera.main.orthographicSize > 5)
                 Camera.main.orthographicSize -= 5;
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0 &&
+            else if (scrollValue.y < 0 &&
                 Camera.main.orthographicSize < 100)
                 Camera.main.orthographicSize += 5;
         }
 
-        private void FixedUpdate()
+        private void QuickSave(CallbackContext context)
         {
-            if (_focusedShipRigidbody != null)
-            {
-                if (!_isSetupRunnning)
-                    SteerTheShip();
-                //AlignScenePosition();
-                AlignCameraToFocusedShip();
-                UpdateSpeedometer();
-                ActivateOrDeactivateShips();
-            }
+            SaveManager.SaveGame();
+        }
+
+        private void QuickLoad(CallbackContext context)
+        {
+            SaveManager.LoadGame();
         }
 
         private void ActivateOrDeactivateShips()
@@ -284,6 +227,143 @@ namespace Main
             ForEachShip(ship => ship.ActivateOrDeactivateChildren(
                 _focusedShipRigidbody.transform));
         }
+
+        private void EnableSteering(CallbackContext context)
+        {
+            PlayerController.PlayerInput.SwitchCurrentActionMap("Steering");
+            _isSteeringEnabled = true;
+        }
+
+        private void DisableSteering(CallbackContext context)
+        {
+            PlayerController.PlayerInput.SwitchCurrentActionMap("Default");
+            _isSteeringEnabled = false;
+        }
+
+        private void EnableBuilding(CallbackContext context)
+        {
+            PlayerController.PlayerInput.SwitchCurrentActionMap("Building");
+            _designManager.enabled = true;
+        }
+
+        private void DisableBuilding(CallbackContext context)
+        {
+            _designManager.enabled = false;
+            PlayerController.PlayerInput.SwitchCurrentActionMap("Default");
+        }
+
+        private void SubscribeToInputEvents()
+        {
+            PlayerController.DefaultPause.performed += SwitchPause;
+            PlayerController.DefaultZoom.performed += Zoom;
+            PlayerController.DefaultQuickLoad.performed += QuickLoad;
+            PlayerController.DefaultQuickSave.performed += QuickSave;
+            PlayerController.DefaultEnableSteering.performed += EnableSteering;
+            PlayerController.DefaultEnableBuilding.performed += EnableBuilding;
+
+            PlayerController.SteeringPause.performed += SwitchPause;
+            PlayerController.SteeringZoom.performed += Zoom;
+            PlayerController.SteeringQuickSave.performed += QuickSave;
+            PlayerController.SteeringQuickLoad.performed += QuickLoad;
+            PlayerController.SteeringDisableSteering.performed += DisableSteering;
+
+            PlayerController.BuildingDisableBuilding.performed += DisableBuilding;
+        }
+
+        //private void UnsubscribeFromInputEvents()
+        //{
+        //    PlayerController.DefaultPause.performed -= SwitchPause;
+        //    PlayerController.DefaultZoom.started -= Zoom;
+        //    PlayerController.DefaultQuickLoad.performed -= QuickLoad;
+        //    PlayerController.DefaultQuickSave.performed -= QuickSave;
+        //    PlayerController.DefaultEnableSteering.performed -= EnableSteering;
+
+        //    PlayerController.SteeringPause.performed -= SwitchPause;
+        //    PlayerController.SteeringZoom.performed -= Zoom;
+        //    PlayerController.SteeringQuickSave.performed -= QuickSave;
+        //    PlayerController.SteeringQuickLoad.performed -= QuickLoad;
+        //    PlayerController.SteeringDisableSteering.performed -= DisableSteering;
+        //}
+
+        #endregion Private
+
+        #region Unity
+
+        private void Awake()
+        {
+            Instance = this;
+            //_designManager = GetComponent<DesignManager>();
+        }
+
+        private void Update()
+        {
+            if (_isSetupRunnning)
+                return;
+
+            //if (Input.GetKeyDown(KeyCode.C))
+            //{
+            //    _designManager.StartCancelDesignation();
+            //    return;
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.X))
+            //{
+            //    _designManager.StartDesignateMining();
+            //    return;
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.N))
+            //{
+            //    StartCoroutine(BuildShipCoroutine());
+            //    return;
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.V))
+            //{
+            //    _designManager.StartDesignateBlock(BlockType.Floor);
+            //    return;
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.B))
+            //{
+            //    _designManager.StartDesignateBlock(BlockType.Wall);
+            //    return;
+            //}
+
+            //if (Input.GetMouseButtonDown(1))
+            //{
+            //    _uiController.OpenContextualMenu();
+            //    //SelectFocusedShip(null, true);
+            //    return;
+            //}
+        }
+
+        private void FixedUpdate()
+        {
+            if (_focusedShipRigidbody != null)
+            {
+                if (_isSteeringEnabled)
+                    SteerTheShip();
+                AlignCameraToFocusedShip();
+                UpdateSpeedometer();
+                ActivateOrDeactivateShips();
+            }
+        }
+
+        //private void OnEnable()
+        //{
+        //    SubscribeToInputEvents();
+        //}
+
+        private void Start()
+        {
+            SubscribeToInputEvents();
+        }
+
+        //private void OnDisable()
+        //{
+        //    UnsubscribeFromInputEvents();
+        //}
 
         #endregion Unity
     }

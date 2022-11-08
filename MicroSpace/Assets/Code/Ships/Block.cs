@@ -28,6 +28,10 @@ namespace Ships
 
         [SerializeField]
         [ReadonlyInspector]
+        private float _localRotation;
+
+        [SerializeField]
+        [ReadonlyInspector]
         private bool _isMarkedForMining;
 
         #endregion Fields
@@ -50,6 +54,16 @@ namespace Ships
 
         public Vector2 LocalPosition { get => _localPosition; set => _localPosition = value; }
 
+        public float LocalRotation { get => _localRotation; set => _localRotation = value; }
+
+        public BlockType BlockType => this switch
+        {
+            Floor => BlockType.Floor,
+            FloorDesignation => BlockType.FloorDesignation,
+            WallDesignation => BlockType.WallDesignation,
+            _ => BlockType.Wall
+        };
+
         #endregion Properties
 
         #region Public
@@ -57,6 +71,7 @@ namespace Ships
         public void UpdateBlock()
         {
             LocalPosition = transform.localPosition;
+            LocalRotation = transform.localEulerAngles.z;
         }
 
         #endregion Public

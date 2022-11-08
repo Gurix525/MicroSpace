@@ -162,6 +162,8 @@ MonoBehaviour:
   _target: {fileID: 0}
   _world: {fileID: 445740361}
   _uiController: {fileID: 472914255}
+  _designManager: {fileID: 98350694}
+  _focusedShipRigidbody: {fileID: 0}
 --- !u!4 &98350693
 Transform:
   m_ObjectHideFlags: 0
@@ -185,7 +187,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98350691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e743ea3ae8463643a29eb3e6e26d71d, type: 3}
   m_Name: 
@@ -226,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 0887d8160d0c2374b882e7d066710738, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -237,7 +239,103 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4c871651-1d2e-40ff-9404-2de5dbea339a
+    m_ActionName: Default/Pause[/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 08163af9-c4f9-49f7-b038-817708e6650d
+    m_ActionName: Default/Zoom[/Mouse/scroll/y,/Mouse/scroll/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: edc3bbf7-f45c-4af7-87c9-a7a2b0f25225
+    m_ActionName: Default/QuickSave[/Keyboard/f5]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 07d30c13-bfc7-4c08-a33d-7ac0ce4b5709
+    m_ActionName: Default/QuickLoad[/Keyboard/f9]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2096a8be-701c-4623-a45f-03ddcb549166
+    m_ActionName: Default/EnableSteering[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 173105ab-f201-4351-9b66-cd75586a9829
+    m_ActionName: Steering/SteeringDirection[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5cbeb0ad-529e-41d2-88b6-bff416d0da03
+    m_ActionName: Steering/DisableSteering[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c3a21b41-0069-401a-9228-d9159247502e
+    m_ActionName: Steering/Pause[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 157d5c89-ac76-4ab8-a0d8-369902b58fea
+    m_ActionName: Steering/Zoom[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eb050ffb-d8c2-426a-bf11-03378d858f9d
+    m_ActionName: Steering/QuickSave[/Keyboard/f5]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 20d9cc4d-2610-43d5-ba8e-9eedd9df85cf
+    m_ActionName: Steering/QuickLoad[/Keyboard/f9]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3adcaca2-7835-4485-85b8-05c48a0cac33
+    m_ActionName: Default/EnableBuilding[/Keyboard/b]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 72270dd7-97a9-4fcf-8df9-d7033b80d4eb
+    m_ActionName: Building/DisableBuilding[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 37504135-d4c5-4be6-a5cf-8bad37f828cf
+    m_ActionName: Steering/Rotation[/Keyboard/e,/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 22f39af7-3803-49ff-81b9-700f0cf42bd3
+    m_ActionName: Steering/AdjustSpeed[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0dc10936-b7f4-4215-ae2e-ea63f808d363
+    m_ActionName: Default/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c0e33841-9994-47eb-9c23-026933d012fc
+    m_ActionName: Default/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: af9c3a51-6807-466d-afcc-4475e2d153af
+    m_ActionName: Default/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e463fcad-d8f5-43b0-b292-fef2c2ced0a3
+    m_ActionName: Steering/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b884e849-db6d-47de-ad24-8f299ec6c379
+    m_ActionName: Steering/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ac840c18-a72b-4ba3-9280-584653d8a416
+    m_ActionName: Steering/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8775bb73-51c9-460e-b05a-e05de0e5036c
+    m_ActionName: Building/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c85ad811-bb15-4a58-ad33-500037f36c6c
+    m_ActionName: Building/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5c24e5a8-0a10-417f-ace3-c9ea45ca5b9f
+    m_ActionName: Building/Point[/Mouse/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Default
@@ -433,7 +531,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 392410840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.98, y: 10000, z: 0}
+  m_LocalPosition: {x: 2.44, y: 9998.81, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -482,6 +580,8 @@ GameObject:
   m_Component:
   - component: {fileID: 472914254}
   - component: {fileID: 472914255}
+  - component: {fileID: 472914257}
+  - component: {fileID: 472914256}
   m_Layer: 0
   m_Name: UIController
   m_TagString: Untagged
@@ -520,6 +620,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _contextualMenu: {fileID: 347703820}
   _speedometer: {fileID: 292762467}
+  _inputAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+--- !u!114 &472914256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472914253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+--- !u!114 &472914257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472914253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

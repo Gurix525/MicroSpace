@@ -95,6 +95,7 @@ namespace Main
             Block blockComponent = block.GetComponent<Block>();
             blockComponent.Id = blockToLoad.Id;
             block.transform.localPosition = blockToLoad.LocalPosition;
+            block.transform.localEulerAngles = new(0, 0, blockToLoad.LocalRotation);
         }
 
         private static void InstantiateBlock(out GameObject block,

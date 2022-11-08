@@ -37,17 +37,570 @@ namespace Main
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""08163af9-c4f9-49f7-b038-817708e6650d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""QuickSave"",
+                    ""type"": ""Button"",
+                    ""id"": ""edc3bbf7-f45c-4af7-87c9-a7a2b0f25225"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QuickLoad"",
+                    ""type"": ""Button"",
+                    ""id"": ""07d30c13-bfc7-4c08-a33d-7ac0ce4b5709"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnableSteering"",
+                    ""type"": ""Button"",
+                    ""id"": ""2096a8be-701c-4623-a45f-03ddcb549166"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnableBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""3adcaca2-7835-4485-85b8-05c48a0cac33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""0dc10936-b7f4-4215-ae2e-ea63f808d363"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0e33841-9994-47eb-9c23-026933d012fc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""Value"",
+                    ""id"": ""af9c3a51-6807-466d-afcc-4475e2d153af"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""645b5b7e-278d-418b-acde-67d8c92ba66d"",
-                    ""path"": ""<Keyboard>/p"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ddd52a0-e64b-4d81-ae51-7789d4e8ae06"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""960ab858-7aa9-4ff2-b8a4-228c561820ad"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74d7ce81-d91e-4441-ad39-e9e51294e140"",
+                    ""path"": ""<Keyboard>/f9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickLoad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2cb80cfb-09a2-4e6d-a21d-4922edbb23f9"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableSteering"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e15ccadc-752e-453d-8e83-297074c079c2"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0912ec9d-5724-49f6-8057-f7cab0042c1d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f94ed870-31c0-494b-b50b-d17c49558719"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ada6df27-0607-46e4-af04-8adc535d823f"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Steering"",
+            ""id"": ""e4faefcb-a14f-48a5-8587-74a4d4060ecf"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3a21b41-0069-401a-9228-d9159247502e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""157d5c89-ac76-4ab8-a0d8-369902b58fea"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""QuickSave"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb050ffb-d8c2-426a-bf11-03378d858f9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QuickLoad"",
+                    ""type"": ""Button"",
+                    ""id"": ""20d9cc4d-2610-43d5-ba8e-9eedd9df85cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Direction"",
+                    ""type"": ""Value"",
+                    ""id"": ""173105ab-f201-4351-9b66-cd75586a9829"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DisableSteering"",
+                    ""type"": ""Button"",
+                    ""id"": ""5cbeb0ad-529e-41d2-88b6-bff416d0da03"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""37504135-d4c5-4be6-a5cf-8bad37f828cf"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AdjustSpeed"",
+                    ""type"": ""Button"",
+                    ""id"": ""22f39af7-3803-49ff-81b9-700f0cf42bd3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""Value"",
+                    ""id"": ""e463fcad-d8f5-43b0-b292-fef2c2ced0a3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""b884e849-db6d-47de-ad24-8f299ec6c379"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac840c18-a72b-4ba3-9280-584653d8a416"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1fbd540d-0e4d-4b24-8b78-a73f908a54c9"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DisableSteering"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7918a49-6b61-4b85-b0ac-77a6fe4f0751"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DisableSteering"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aeb2fc6c-37e3-4a23-a73e-df29b2409ee6"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""cfc82619-a1a6-4ecd-bcf3-41479e4b1967"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f39728a2-882f-48b5-8b44-b96a9b8e801d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e9e39d28-92ac-41cc-8798-df269f5b5e59"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ec583cb5-074c-4cbb-976c-90b0308a72c8"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0fdbc263-6ad6-4e8d-ac2d-59de37e63e05"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0f21748-8a08-447d-b318-4a7b9bd3d326"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c11779f-5367-46a1-bc8b-4fb44f0f9d10"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickSave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""effac52a-ec47-4bec-b71e-1e56ab0568e5"",
+                    ""path"": ""<Keyboard>/f9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickLoad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""534f63ec-ad19-43c6-a31e-28425b5ec7fb"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""4854a66d-00cd-4edd-b281-50fd90501ff3"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""d7f39819-5ab3-4253-a8af-45f04c02cd4c"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a26744af-7765-4547-a892-0c93bc26da3e"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AdjustSpeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79bf50d2-e711-4234-a4e9-bea84e48f0e3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d1571c02-af1f-471f-8f69-353c7cde92a7"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80292124-c45e-4a15-8a08-dc020c9fef49"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Building"",
+            ""id"": ""f7c148df-8607-4810-9b03-f7375c102099"",
+            ""actions"": [
+                {
+                    ""name"": ""DisableBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""72270dd7-97a9-4fcf-8df9-d7033b80d4eb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""8775bb73-51c9-460e-b05a-e05de0e5036c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""c85ad811-bb15-4a58-ad33-500037f36c6c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""Value"",
+                    ""id"": ""5c24e5a8-0a10-417f-ace3-c9ea45ca5b9f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2e1cc72d-1e6a-420c-8952-61f99d5641dc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DisableBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba66e00b-3482-4a27-8953-8f5fdae1e918"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""55a09ec0-cd78-4a36-87cd-54d2f2597b9b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41dfded2-9c66-4017-a182-e7b47cecdcd3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -59,6 +612,33 @@ namespace Main
             // Default
             m_Default = asset.FindActionMap("Default", throwIfNotFound: true);
             m_Default_Pause = m_Default.FindAction("Pause", throwIfNotFound: true);
+            m_Default_Zoom = m_Default.FindAction("Zoom", throwIfNotFound: true);
+            m_Default_QuickSave = m_Default.FindAction("QuickSave", throwIfNotFound: true);
+            m_Default_QuickLoad = m_Default.FindAction("QuickLoad", throwIfNotFound: true);
+            m_Default_EnableSteering = m_Default.FindAction("EnableSteering", throwIfNotFound: true);
+            m_Default_EnableBuilding = m_Default.FindAction("EnableBuilding", throwIfNotFound: true);
+            m_Default_Click = m_Default.FindAction("Click", throwIfNotFound: true);
+            m_Default_RightClick = m_Default.FindAction("RightClick", throwIfNotFound: true);
+            m_Default_Point = m_Default.FindAction("Point", throwIfNotFound: true);
+            // Steering
+            m_Steering = asset.FindActionMap("Steering", throwIfNotFound: true);
+            m_Steering_Pause = m_Steering.FindAction("Pause", throwIfNotFound: true);
+            m_Steering_Zoom = m_Steering.FindAction("Zoom", throwIfNotFound: true);
+            m_Steering_QuickSave = m_Steering.FindAction("QuickSave", throwIfNotFound: true);
+            m_Steering_QuickLoad = m_Steering.FindAction("QuickLoad", throwIfNotFound: true);
+            m_Steering_Direction = m_Steering.FindAction("Direction", throwIfNotFound: true);
+            m_Steering_DisableSteering = m_Steering.FindAction("DisableSteering", throwIfNotFound: true);
+            m_Steering_Rotation = m_Steering.FindAction("Rotation", throwIfNotFound: true);
+            m_Steering_AdjustSpeed = m_Steering.FindAction("AdjustSpeed", throwIfNotFound: true);
+            m_Steering_Point = m_Steering.FindAction("Point", throwIfNotFound: true);
+            m_Steering_RightClick = m_Steering.FindAction("RightClick", throwIfNotFound: true);
+            m_Steering_Click = m_Steering.FindAction("Click", throwIfNotFound: true);
+            // Building
+            m_Building = asset.FindActionMap("Building", throwIfNotFound: true);
+            m_Building_DisableBuilding = m_Building.FindAction("DisableBuilding", throwIfNotFound: true);
+            m_Building_Click = m_Building.FindAction("Click", throwIfNotFound: true);
+            m_Building_RightClick = m_Building.FindAction("RightClick", throwIfNotFound: true);
+            m_Building_Point = m_Building.FindAction("Point", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -119,11 +699,27 @@ namespace Main
         private readonly InputActionMap m_Default;
         private IDefaultActions m_DefaultActionsCallbackInterface;
         private readonly InputAction m_Default_Pause;
+        private readonly InputAction m_Default_Zoom;
+        private readonly InputAction m_Default_QuickSave;
+        private readonly InputAction m_Default_QuickLoad;
+        private readonly InputAction m_Default_EnableSteering;
+        private readonly InputAction m_Default_EnableBuilding;
+        private readonly InputAction m_Default_Click;
+        private readonly InputAction m_Default_RightClick;
+        private readonly InputAction m_Default_Point;
         public struct DefaultActions
         {
             private @PlayerControls m_Wrapper;
             public DefaultActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Pause => m_Wrapper.m_Default_Pause;
+            public InputAction @Zoom => m_Wrapper.m_Default_Zoom;
+            public InputAction @QuickSave => m_Wrapper.m_Default_QuickSave;
+            public InputAction @QuickLoad => m_Wrapper.m_Default_QuickLoad;
+            public InputAction @EnableSteering => m_Wrapper.m_Default_EnableSteering;
+            public InputAction @EnableBuilding => m_Wrapper.m_Default_EnableBuilding;
+            public InputAction @Click => m_Wrapper.m_Default_Click;
+            public InputAction @RightClick => m_Wrapper.m_Default_RightClick;
+            public InputAction @Point => m_Wrapper.m_Default_Point;
             public InputActionMap Get() { return m_Wrapper.m_Default; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -136,6 +732,30 @@ namespace Main
                     @Pause.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPause;
                     @Pause.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPause;
                     @Pause.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPause;
+                    @Zoom.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnZoom;
+                    @Zoom.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnZoom;
+                    @Zoom.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnZoom;
+                    @QuickSave.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnQuickSave;
+                    @QuickSave.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnQuickSave;
+                    @QuickSave.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnQuickSave;
+                    @QuickLoad.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnQuickLoad;
+                    @QuickLoad.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnQuickLoad;
+                    @QuickLoad.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnQuickLoad;
+                    @EnableSteering.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnEnableSteering;
+                    @EnableSteering.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnEnableSteering;
+                    @EnableSteering.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnEnableSteering;
+                    @EnableBuilding.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnEnableBuilding;
+                    @EnableBuilding.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnEnableBuilding;
+                    @EnableBuilding.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnEnableBuilding;
+                    @Click.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnClick;
+                    @Click.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnClick;
+                    @Click.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnClick;
+                    @RightClick.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnRightClick;
+                    @RightClick.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnRightClick;
+                    @RightClick.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnRightClick;
+                    @Point.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPoint;
+                    @Point.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPoint;
+                    @Point.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPoint;
                 }
                 m_Wrapper.m_DefaultActionsCallbackInterface = instance;
                 if (instance != null)
@@ -143,13 +763,236 @@ namespace Main
                     @Pause.started += instance.OnPause;
                     @Pause.performed += instance.OnPause;
                     @Pause.canceled += instance.OnPause;
+                    @Zoom.started += instance.OnZoom;
+                    @Zoom.performed += instance.OnZoom;
+                    @Zoom.canceled += instance.OnZoom;
+                    @QuickSave.started += instance.OnQuickSave;
+                    @QuickSave.performed += instance.OnQuickSave;
+                    @QuickSave.canceled += instance.OnQuickSave;
+                    @QuickLoad.started += instance.OnQuickLoad;
+                    @QuickLoad.performed += instance.OnQuickLoad;
+                    @QuickLoad.canceled += instance.OnQuickLoad;
+                    @EnableSteering.started += instance.OnEnableSteering;
+                    @EnableSteering.performed += instance.OnEnableSteering;
+                    @EnableSteering.canceled += instance.OnEnableSteering;
+                    @EnableBuilding.started += instance.OnEnableBuilding;
+                    @EnableBuilding.performed += instance.OnEnableBuilding;
+                    @EnableBuilding.canceled += instance.OnEnableBuilding;
+                    @Click.started += instance.OnClick;
+                    @Click.performed += instance.OnClick;
+                    @Click.canceled += instance.OnClick;
+                    @RightClick.started += instance.OnRightClick;
+                    @RightClick.performed += instance.OnRightClick;
+                    @RightClick.canceled += instance.OnRightClick;
+                    @Point.started += instance.OnPoint;
+                    @Point.performed += instance.OnPoint;
+                    @Point.canceled += instance.OnPoint;
                 }
             }
         }
         public DefaultActions @Default => new DefaultActions(this);
+
+        // Steering
+        private readonly InputActionMap m_Steering;
+        private ISteeringActions m_SteeringActionsCallbackInterface;
+        private readonly InputAction m_Steering_Pause;
+        private readonly InputAction m_Steering_Zoom;
+        private readonly InputAction m_Steering_QuickSave;
+        private readonly InputAction m_Steering_QuickLoad;
+        private readonly InputAction m_Steering_Direction;
+        private readonly InputAction m_Steering_DisableSteering;
+        private readonly InputAction m_Steering_Rotation;
+        private readonly InputAction m_Steering_AdjustSpeed;
+        private readonly InputAction m_Steering_Point;
+        private readonly InputAction m_Steering_RightClick;
+        private readonly InputAction m_Steering_Click;
+        public struct SteeringActions
+        {
+            private @PlayerControls m_Wrapper;
+            public SteeringActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Pause => m_Wrapper.m_Steering_Pause;
+            public InputAction @Zoom => m_Wrapper.m_Steering_Zoom;
+            public InputAction @QuickSave => m_Wrapper.m_Steering_QuickSave;
+            public InputAction @QuickLoad => m_Wrapper.m_Steering_QuickLoad;
+            public InputAction @Direction => m_Wrapper.m_Steering_Direction;
+            public InputAction @DisableSteering => m_Wrapper.m_Steering_DisableSteering;
+            public InputAction @Rotation => m_Wrapper.m_Steering_Rotation;
+            public InputAction @AdjustSpeed => m_Wrapper.m_Steering_AdjustSpeed;
+            public InputAction @Point => m_Wrapper.m_Steering_Point;
+            public InputAction @RightClick => m_Wrapper.m_Steering_RightClick;
+            public InputAction @Click => m_Wrapper.m_Steering_Click;
+            public InputActionMap Get() { return m_Wrapper.m_Steering; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(SteeringActions set) { return set.Get(); }
+            public void SetCallbacks(ISteeringActions instance)
+            {
+                if (m_Wrapper.m_SteeringActionsCallbackInterface != null)
+                {
+                    @Pause.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPause;
+                    @Pause.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPause;
+                    @Pause.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPause;
+                    @Zoom.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnZoom;
+                    @Zoom.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnZoom;
+                    @Zoom.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnZoom;
+                    @QuickSave.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnQuickSave;
+                    @QuickSave.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnQuickSave;
+                    @QuickSave.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnQuickSave;
+                    @QuickLoad.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnQuickLoad;
+                    @QuickLoad.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnQuickLoad;
+                    @QuickLoad.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnQuickLoad;
+                    @Direction.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnDirection;
+                    @Direction.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnDirection;
+                    @Direction.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnDirection;
+                    @DisableSteering.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnDisableSteering;
+                    @DisableSteering.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnDisableSteering;
+                    @DisableSteering.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnDisableSteering;
+                    @Rotation.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnRotation;
+                    @Rotation.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnRotation;
+                    @Rotation.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnRotation;
+                    @AdjustSpeed.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnAdjustSpeed;
+                    @AdjustSpeed.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnAdjustSpeed;
+                    @AdjustSpeed.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnAdjustSpeed;
+                    @Point.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPoint;
+                    @Point.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPoint;
+                    @Point.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPoint;
+                    @RightClick.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnRightClick;
+                    @RightClick.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnRightClick;
+                    @RightClick.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnRightClick;
+                    @Click.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnClick;
+                    @Click.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnClick;
+                    @Click.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnClick;
+                }
+                m_Wrapper.m_SteeringActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Pause.started += instance.OnPause;
+                    @Pause.performed += instance.OnPause;
+                    @Pause.canceled += instance.OnPause;
+                    @Zoom.started += instance.OnZoom;
+                    @Zoom.performed += instance.OnZoom;
+                    @Zoom.canceled += instance.OnZoom;
+                    @QuickSave.started += instance.OnQuickSave;
+                    @QuickSave.performed += instance.OnQuickSave;
+                    @QuickSave.canceled += instance.OnQuickSave;
+                    @QuickLoad.started += instance.OnQuickLoad;
+                    @QuickLoad.performed += instance.OnQuickLoad;
+                    @QuickLoad.canceled += instance.OnQuickLoad;
+                    @Direction.started += instance.OnDirection;
+                    @Direction.performed += instance.OnDirection;
+                    @Direction.canceled += instance.OnDirection;
+                    @DisableSteering.started += instance.OnDisableSteering;
+                    @DisableSteering.performed += instance.OnDisableSteering;
+                    @DisableSteering.canceled += instance.OnDisableSteering;
+                    @Rotation.started += instance.OnRotation;
+                    @Rotation.performed += instance.OnRotation;
+                    @Rotation.canceled += instance.OnRotation;
+                    @AdjustSpeed.started += instance.OnAdjustSpeed;
+                    @AdjustSpeed.performed += instance.OnAdjustSpeed;
+                    @AdjustSpeed.canceled += instance.OnAdjustSpeed;
+                    @Point.started += instance.OnPoint;
+                    @Point.performed += instance.OnPoint;
+                    @Point.canceled += instance.OnPoint;
+                    @RightClick.started += instance.OnRightClick;
+                    @RightClick.performed += instance.OnRightClick;
+                    @RightClick.canceled += instance.OnRightClick;
+                    @Click.started += instance.OnClick;
+                    @Click.performed += instance.OnClick;
+                    @Click.canceled += instance.OnClick;
+                }
+            }
+        }
+        public SteeringActions @Steering => new SteeringActions(this);
+
+        // Building
+        private readonly InputActionMap m_Building;
+        private IBuildingActions m_BuildingActionsCallbackInterface;
+        private readonly InputAction m_Building_DisableBuilding;
+        private readonly InputAction m_Building_Click;
+        private readonly InputAction m_Building_RightClick;
+        private readonly InputAction m_Building_Point;
+        public struct BuildingActions
+        {
+            private @PlayerControls m_Wrapper;
+            public BuildingActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @DisableBuilding => m_Wrapper.m_Building_DisableBuilding;
+            public InputAction @Click => m_Wrapper.m_Building_Click;
+            public InputAction @RightClick => m_Wrapper.m_Building_RightClick;
+            public InputAction @Point => m_Wrapper.m_Building_Point;
+            public InputActionMap Get() { return m_Wrapper.m_Building; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(BuildingActions set) { return set.Get(); }
+            public void SetCallbacks(IBuildingActions instance)
+            {
+                if (m_Wrapper.m_BuildingActionsCallbackInterface != null)
+                {
+                    @DisableBuilding.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
+                    @DisableBuilding.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
+                    @DisableBuilding.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
+                    @Click.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnClick;
+                    @Click.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnClick;
+                    @Click.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnClick;
+                    @RightClick.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnRightClick;
+                    @RightClick.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnRightClick;
+                    @RightClick.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnRightClick;
+                    @Point.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPoint;
+                    @Point.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPoint;
+                    @Point.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPoint;
+                }
+                m_Wrapper.m_BuildingActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @DisableBuilding.started += instance.OnDisableBuilding;
+                    @DisableBuilding.performed += instance.OnDisableBuilding;
+                    @DisableBuilding.canceled += instance.OnDisableBuilding;
+                    @Click.started += instance.OnClick;
+                    @Click.performed += instance.OnClick;
+                    @Click.canceled += instance.OnClick;
+                    @RightClick.started += instance.OnRightClick;
+                    @RightClick.performed += instance.OnRightClick;
+                    @RightClick.canceled += instance.OnRightClick;
+                    @Point.started += instance.OnPoint;
+                    @Point.performed += instance.OnPoint;
+                    @Point.canceled += instance.OnPoint;
+                }
+            }
+        }
+        public BuildingActions @Building => new BuildingActions(this);
         public interface IDefaultActions
         {
             void OnPause(InputAction.CallbackContext context);
+            void OnZoom(InputAction.CallbackContext context);
+            void OnQuickSave(InputAction.CallbackContext context);
+            void OnQuickLoad(InputAction.CallbackContext context);
+            void OnEnableSteering(InputAction.CallbackContext context);
+            void OnEnableBuilding(InputAction.CallbackContext context);
+            void OnClick(InputAction.CallbackContext context);
+            void OnRightClick(InputAction.CallbackContext context);
+            void OnPoint(InputAction.CallbackContext context);
+        }
+        public interface ISteeringActions
+        {
+            void OnPause(InputAction.CallbackContext context);
+            void OnZoom(InputAction.CallbackContext context);
+            void OnQuickSave(InputAction.CallbackContext context);
+            void OnQuickLoad(InputAction.CallbackContext context);
+            void OnDirection(InputAction.CallbackContext context);
+            void OnDisableSteering(InputAction.CallbackContext context);
+            void OnRotation(InputAction.CallbackContext context);
+            void OnAdjustSpeed(InputAction.CallbackContext context);
+            void OnPoint(InputAction.CallbackContext context);
+            void OnRightClick(InputAction.CallbackContext context);
+            void OnClick(InputAction.CallbackContext context);
+        }
+        public interface IBuildingActions
+        {
+            void OnDisableBuilding(InputAction.CallbackContext context);
+            void OnClick(InputAction.CallbackContext context);
+            void OnRightClick(InputAction.CallbackContext context);
+            void OnPoint(InputAction.CallbackContext context);
         }
     }
 }

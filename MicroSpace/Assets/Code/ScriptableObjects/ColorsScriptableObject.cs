@@ -11,6 +11,9 @@ public class ColorsScriptableObject : ScriptableObject
     [SerializeField]
     private Color _invisible;
 
+    [SerializeField]
+    private Color _highlighted;
+
     [Header("Designations")]
     [SerializeField]
     private Color _temporalDesignationNormal;
@@ -47,6 +50,8 @@ public class ColorsScriptableObject : ScriptableObject
     #region Properties
 
     public Color Invisible => _invisible;
+    public Color Highlighted => _highlighted;
+
     public Color TemporalDesignationNormal => _temporalDesignationNormal;
     public Color TemporalDesignationObstructed => _temporalDesignationObstructed;
     public Color WallDesignationNormal => _wallDesignationNormal;
@@ -59,4 +64,13 @@ public class ColorsScriptableObject : ScriptableObject
     public Color MiningDesignationInactive => _miningDesignationInactive;
 
     #endregion Properties
+
+    #region Public
+
+    public Color MixColors(Color a, Color b)
+    {
+        return new Color((a.r + b.r) / 2, (a.g + b.g) / 2, (a.b + b.b) / 2);
+    }
+
+    #endregion Public
 }

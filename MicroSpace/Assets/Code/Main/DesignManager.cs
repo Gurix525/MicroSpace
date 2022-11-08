@@ -514,6 +514,14 @@ namespace Main
             Instance = this;
         }
 
+        private void OnEnable()
+        {
+        }
+
+        private void OnDisable()
+        {
+        }
+
         #endregion Unity
     }
 }

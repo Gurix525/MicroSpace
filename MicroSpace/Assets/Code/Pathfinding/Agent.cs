@@ -188,10 +188,10 @@ namespace Pathfinding
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SetTarget();
-            }
+            //if (Input.GetKeyDown(KeyCode.F))
+            //{
+            //    SetTarget();
+            //}
 
             // Debug
             if (_path.Count > 0)
