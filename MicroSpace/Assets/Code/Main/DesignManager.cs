@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Main
@@ -101,52 +102,9 @@ namespace Main
             return position;
         }
 
-#pragma warning disable CS0252
-
-        //private IBlock FindClosestBlock(
-        //    GameObject designation, Vector3 searchStartPosition)
-        //{
-        //    var num = FindObjectsOfType<MonoBehaviour>()
-        //        .OfType<IBlock>()
-        //        .Where(x => x != designation.GetComponent<BlockDesignation>())
-        //        .Where(x => x.Parent.GetComponent<Ship>() != null);
-        //    var closestWall = num.Count() > 0 ?
-        //        num.Aggregate((closest, next) =>
-        //        Vector2.Distance(closest.Transform.position, searchStartPosition) <
-        //        Vector2.Distance(next.Transform.position, searchStartPosition) ?
-        //        closest : next) :
-        //        null;
-        //    return closestWall;
-        //}
-
-#pragma warning restore
-
         //private static void UpdateShip(GameObject ship)
         //{
         //    ship.GetComponent<Ship>().UpdateShip();
-        //}
-
-        //private void MoveBlockDesignation(
-        //    GameObject designation, IBlock closestBlock, Vector3 v3)
-        //{
-        //    if (closestBlock != null ?
-        //            Vector2.Distance(closestBlock.Transform.position, v3) < 1.5F :
-        //            false)
-        //    {
-        //        var v3relative = closestBlock.Transform.InverseTransformPoint(v3);
-        //        designation.transform.parent = closestBlock.Parent;
-        //        designation.transform.localPosition =
-        //            closestBlock.Transform.localPosition +
-        //            v3relative
-        //            .Round();
-        //        designation.transform.localEulerAngles = Vector3.zero;
-        //    }
-        //    else
-        //    {
-        //        designation.transform.parent = null;
-        //        designation.transform.position = v3;
-        //        designation.transform.rotation = Quaternion.identity;
-        //    }
         //}
 
         //private void CreateDesignations(IBlock closestBlock, Vector3 originalPos,
@@ -529,12 +487,52 @@ namespace Main
         //        i--;
         //    }
         //}
-
+        /// <summary>
+        ///
+        /// </summary>
         // tu sie zaczynaja nowe
+
+        private Block FindClosestBlock(
+            GameObject designation, Vector3 searchStartPosition)
+        {
+            var num = FindObjectsOfType<Block>()
+                .Where(x => x != designation.GetComponent<BlockDesignation>())
+                .Where(x => x.Parent.GetComponent<Ship>() != null);
+            var closestWall = num.Count() > 0 ?
+                num.Aggregate((closest, next) =>
+                Vector2.Distance(closest.Transform.position, searchStartPosition) <
+                Vector2.Distance(next.Transform.position, searchStartPosition) ?
+                closest : next) :
+                null;
+            return closestWall;
+        }
 
         private void MoveCurrentDesignationToMouse()
         {
-            _currentDesignation.transform.position = GetMouseWorldPosition();
+            MoveDesignation(_currentDesignation, GetMouseWorldPosition());
+        }
+
+        private void MoveDesignation(GameObject designation, Vector3 targetPosition)
+        {
+            Block closestBlock = FindClosestBlock(_currentDesignation, targetPosition);
+            if (closestBlock != null ?
+                    Vector2.Distance(closestBlock.Transform.position, targetPosition) < 1.5F :
+                    false)
+            {
+                var v3relative = closestBlock.Transform.InverseTransformPoint(targetPosition);
+                designation.transform.parent = closestBlock.Parent;
+                designation.transform.localPosition =
+                    closestBlock.Transform.localPosition +
+                    v3relative
+                    .Round();
+                designation.transform.localEulerAngles = Vector3.zero;
+            }
+            else
+            {
+                designation.transform.parent = null;
+                designation.transform.position = targetPosition;
+                designation.transform.rotation = Quaternion.identity;
+            }
         }
 
         private void StartBlockDesignation()
@@ -600,7 +598,8 @@ namespace Main
 
         private void PlaceDesignation(CallbackContext context)
         {
-            Debug.Log("KURAS");
+            if (!EventSystem.current.IsPointerOverGameObject())
+                Debug.Log("KURAS");
             ClearInputActionsListeners();
         }
 

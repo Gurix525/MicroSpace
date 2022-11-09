@@ -26,39 +26,39 @@ namespace Main
         public static InputActionMap ActionMapSteering { get; private set; }
         public static InputActionMap ActionMapBuilding { get; private set; }
 
-        public static ModifiableInputAction DefaultPause { get; set; }
-        public static ModifiableInputAction DefaultZoom { get; set; }
-        public static ModifiableInputAction DefaultQuickSave { get; set; }
-        public static ModifiableInputAction DefaultQuickLoad { get; set; }
-        public static ModifiableInputAction DefaultEnableSteering { get; set; }
-        public static ModifiableInputAction DefaultEnableBuilding { get; set; }
-        public static ModifiableInputAction DefaultPoint { get; set; }
-        public static ModifiableInputAction DefaultClick { get; set; }
-        public static ModifiableInputAction DefaultRightClick { get; set; }
+        public static ModifiableInputAction DefaultPause { get; set; } = new();
+        public static ModifiableInputAction DefaultZoom { get; set; } = new();
+        public static ModifiableInputAction DefaultQuickSave { get; set; } = new();
+        public static ModifiableInputAction DefaultQuickLoad { get; set; } = new();
+        public static ModifiableInputAction DefaultEnableSteering { get; set; } = new();
+        public static ModifiableInputAction DefaultEnableBuilding { get; set; } = new();
+        public static ModifiableInputAction DefaultPoint { get; set; } = new();
+        public static ModifiableInputAction DefaultClick { get; set; } = new();
+        public static ModifiableInputAction DefaultRightClick { get; set; } = new();
 
-        public static ModifiableInputAction SteeringPause { get; set; }
-        public static ModifiableInputAction SteeringZoom { get; set; }
-        public static ModifiableInputAction SteeringQuickSave { get; set; }
-        public static ModifiableInputAction SteeringQuickLoad { get; set; }
-        public static ModifiableInputAction SteeringDirection { get; set; }
-        public static ModifiableInputAction SteeringDisableSteering { get; set; }
-        public static ModifiableInputAction SteeringRotation { get; set; }
-        public static ModifiableInputAction SteeringAdjustSpeed { get; set; }
-        public static ModifiableInputAction SteeringPoint { get; set; }
-        public static ModifiableInputAction SteeringClick { get; set; }
-        public static ModifiableInputAction SteeringRightClick { get; set; }
+        public static ModifiableInputAction SteeringPause { get; set; } = new();
+        public static ModifiableInputAction SteeringZoom { get; set; } = new();
+        public static ModifiableInputAction SteeringQuickSave { get; set; } = new();
+        public static ModifiableInputAction SteeringQuickLoad { get; set; } = new();
+        public static ModifiableInputAction SteeringDirection { get; set; } = new();
+        public static ModifiableInputAction SteeringDisableSteering { get; set; } = new();
+        public static ModifiableInputAction SteeringRotation { get; set; } = new();
+        public static ModifiableInputAction SteeringAdjustSpeed { get; set; } = new();
+        public static ModifiableInputAction SteeringPoint { get; set; } = new();
+        public static ModifiableInputAction SteeringClick { get; set; } = new();
+        public static ModifiableInputAction SteeringRightClick { get; set; } = new();
 
-        public static ModifiableInputAction BuildingDisableBuilding { get; set; }
-        public static ModifiableInputAction BuildingPause { get; set; }
-        public static ModifiableInputAction BuildingPoint { get; set; }
-        public static ModifiableInputAction BuildingClick { get; set; }
-        public static ModifiableInputAction BuildingRightClick { get; set; }
-        public static ModifiableInputAction BuildingWall { get; set; }
-        public static ModifiableInputAction BuildingFloor { get; set; }
-        public static ModifiableInputAction BuildingEquipment { get; set; }
-        public static ModifiableInputAction BuildingMining { get; set; }
-        public static ModifiableInputAction BuildingCancel { get; set; }
-        public static ModifiableInputAction BuildingChangeRotation { get; set; }
+        public static ModifiableInputAction BuildingDisableBuilding { get; set; } = new();
+        public static ModifiableInputAction BuildingPause { get; set; } = new();
+        public static ModifiableInputAction BuildingPoint { get; set; } = new();
+        public static ModifiableInputAction BuildingClick { get; set; } = new();
+        public static ModifiableInputAction BuildingRightClick { get; set; } = new();
+        public static ModifiableInputAction BuildingWall { get; set; } = new();
+        public static ModifiableInputAction BuildingFloor { get; set; } = new();
+        public static ModifiableInputAction BuildingEquipment { get; set; } = new();
+        public static ModifiableInputAction BuildingMining { get; set; } = new();
+        public static ModifiableInputAction BuildingCancel { get; set; } = new();
+        public static ModifiableInputAction BuildingChangeRotation { get; set; } = new();
 
         #endregion Properties
 
