@@ -545,12 +545,12 @@ namespace Main
                 Quaternion.Euler(0, 0, _prefabRotation),
                 _worldTransform);
             _updateCalled.AddListener(MoveCurrentDesignationToMouse);
-            PlayerController.BuildingClick.performed += PlaceDesignation;
+            PlayerController.BuildingClick.AddListener(ActionType.Performed, PlaceDesignation);
         }
 
         private void ClearInputActionsListeners()
         {
-            PlayerController.ClearInputActionListeners(nameof(PlayerController.BuildingClick));
+            PlayerController.BuildingClick.ClearAllEvents();
         }
 
         private void StartFromPreviousMode()
@@ -640,22 +640,28 @@ namespace Main
 
         private void SubscribeToInputEvents()
         {
-            PlayerController.BuildingWall.performed += SetBuildingModeWall;
-            PlayerController.BuildingFloor.performed += SetBuildingModeFloor;
-            PlayerController.BuildingEquipment.performed += SetBuildingModeEquipment;
-            PlayerController.BuildingMining.performed += SetBuildingModeMining;
-            PlayerController.BuildingCancel.performed += SetBuildingModeCancel;
-            PlayerController.BuildingChangeRotation.performed += ChangePrefabRotation;
+            PlayerController.BuildingWall
+                .AddListener(ActionType.Performed, SetBuildingModeWall);
+            PlayerController.BuildingFloor
+                .AddListener(ActionType.Performed, SetBuildingModeFloor);
+            PlayerController.BuildingEquipment
+                .AddListener(ActionType.Performed, SetBuildingModeEquipment);
+            PlayerController.BuildingMining
+                .AddListener(ActionType.Performed, SetBuildingModeMining);
+            PlayerController.BuildingCancel
+                .AddListener(ActionType.Performed, SetBuildingModeCancel);
+            PlayerController.BuildingChangeRotation
+                .AddListener(ActionType.Performed, ChangePrefabRotation);
         }
 
         private void UnsubscribeFromInputEvents()
         {
-            PlayerController.BuildingWall.performed -= SetBuildingModeWall;
-            PlayerController.BuildingFloor.performed -= SetBuildingModeFloor;
-            PlayerController.BuildingEquipment.performed -= SetBuildingModeEquipment;
-            PlayerController.BuildingMining.performed -= SetBuildingModeMining;
-            PlayerController.BuildingCancel.performed -= SetBuildingModeCancel;
-            PlayerController.BuildingChangeRotation.performed -= ChangePrefabRotation;
+            PlayerController.BuildingWall.ClearAllEvents();
+            PlayerController.BuildingFloor.ClearAllEvents();
+            PlayerController.BuildingEquipment.ClearAllEvents();
+            PlayerController.BuildingMining.ClearAllEvents();
+            PlayerController.BuildingCancel.ClearAllEvents();
+            PlayerController.BuildingChangeRotation.ClearAllEvents();
         }
 
         #endregion Private

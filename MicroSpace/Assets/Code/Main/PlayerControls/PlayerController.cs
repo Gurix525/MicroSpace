@@ -26,57 +26,41 @@ namespace Main
         public static InputActionMap ActionMapSteering { get; private set; }
         public static InputActionMap ActionMapBuilding { get; private set; }
 
-        public static InputAction DefaultPause { get; set; }
-        public static InputAction DefaultZoom { get; set; }
-        public static InputAction DefaultQuickSave { get; set; }
-        public static InputAction DefaultQuickLoad { get; set; }
-        public static InputAction DefaultEnableSteering { get; set; }
-        public static InputAction DefaultEnableBuilding { get; set; }
-        public static InputAction DefaultPoint { get; set; }
-        public static InputAction DefaultClick { get; set; }
-        public static InputAction DefaultRightClick { get; set; }
+        public static ModifiableInputAction DefaultPause { get; set; }
+        public static ModifiableInputAction DefaultZoom { get; set; }
+        public static ModifiableInputAction DefaultQuickSave { get; set; }
+        public static ModifiableInputAction DefaultQuickLoad { get; set; }
+        public static ModifiableInputAction DefaultEnableSteering { get; set; }
+        public static ModifiableInputAction DefaultEnableBuilding { get; set; }
+        public static ModifiableInputAction DefaultPoint { get; set; }
+        public static ModifiableInputAction DefaultClick { get; set; }
+        public static ModifiableInputAction DefaultRightClick { get; set; }
 
-        public static InputAction SteeringPause { get; set; }
-        public static InputAction SteeringZoom { get; set; }
-        public static InputAction SteeringQuickSave { get; set; }
-        public static InputAction SteeringQuickLoad { get; set; }
-        public static InputAction SteeringDirection { get; set; }
-        public static InputAction SteeringDisableSteering { get; set; }
-        public static InputAction SteeringRotation { get; set; }
-        public static InputAction SteeringAdjustSpeed { get; set; }
-        public static InputAction SteeringPoint { get; set; }
-        public static InputAction SteeringClick { get; set; }
-        public static InputAction SteeringRightClick { get; set; }
+        public static ModifiableInputAction SteeringPause { get; set; }
+        public static ModifiableInputAction SteeringZoom { get; set; }
+        public static ModifiableInputAction SteeringQuickSave { get; set; }
+        public static ModifiableInputAction SteeringQuickLoad { get; set; }
+        public static ModifiableInputAction SteeringDirection { get; set; }
+        public static ModifiableInputAction SteeringDisableSteering { get; set; }
+        public static ModifiableInputAction SteeringRotation { get; set; }
+        public static ModifiableInputAction SteeringAdjustSpeed { get; set; }
+        public static ModifiableInputAction SteeringPoint { get; set; }
+        public static ModifiableInputAction SteeringClick { get; set; }
+        public static ModifiableInputAction SteeringRightClick { get; set; }
 
-        public static InputAction BuildingDisableBuilding { get; set; }
-        public static InputAction BuildingPause { get; set; }
-        public static InputAction BuildingPoint { get; set; }
-        public static InputAction BuildingClick { get; set; }
-        public static InputAction BuildingRightClick { get; set; }
-        public static InputAction BuildingWall { get; set; }
-        public static InputAction BuildingFloor { get; set; }
-        public static InputAction BuildingEquipment { get; set; }
-        public static InputAction BuildingMining { get; set; }
-        public static InputAction BuildingCancel { get; set; }
-        public static InputAction BuildingChangeRotation { get; set; }
+        public static ModifiableInputAction BuildingDisableBuilding { get; set; }
+        public static ModifiableInputAction BuildingPause { get; set; }
+        public static ModifiableInputAction BuildingPoint { get; set; }
+        public static ModifiableInputAction BuildingClick { get; set; }
+        public static ModifiableInputAction BuildingRightClick { get; set; }
+        public static ModifiableInputAction BuildingWall { get; set; }
+        public static ModifiableInputAction BuildingFloor { get; set; }
+        public static ModifiableInputAction BuildingEquipment { get; set; }
+        public static ModifiableInputAction BuildingMining { get; set; }
+        public static ModifiableInputAction BuildingCancel { get; set; }
+        public static ModifiableInputAction BuildingChangeRotation { get; set; }
 
         #endregion Properties
-
-        #region Public
-
-        public static void ClearInputActionListeners(string propertyName)
-        {
-            Type thisType = typeof(PlayerController);
-            PropertyInfo property = thisType.GetProperty(propertyName);
-            InputAction action = (InputAction)property.GetValue(null, null);
-            InputAction newAction = action.Clone();
-            action.Disable();
-            newAction.Enable();
-
-            property.SetValue(null, newAction);
-        }
-
-        #endregion Public
 
         #region Unity
 
@@ -92,39 +76,39 @@ namespace Main
             PlayerInput.SwitchCurrentActionMap("Default");
             ActionMapDefault = PlayerInput.currentActionMap;
 
-            DefaultPause = ActionMapDefault.FindAction("Pause");
-            DefaultZoom = ActionMapDefault.FindAction("Zoom");
-            DefaultQuickSave = ActionMapDefault.FindAction("QuickSave");
-            DefaultQuickLoad = ActionMapDefault.FindAction("QuickLoad");
-            DefaultEnableSteering = ActionMapDefault.FindAction("EnableSteering");
-            DefaultEnableBuilding = ActionMapDefault.FindAction("EnableBuilding");
-            DefaultPoint = ActionMapDefault.FindAction("Point");
-            DefaultClick = ActionMapDefault.FindAction("Click");
-            DefaultRightClick = ActionMapDefault.FindAction("RightClick");
+            DefaultPause.Action = ActionMapDefault.FindAction("Pause");
+            DefaultZoom.Action = ActionMapDefault.FindAction("Zoom");
+            DefaultQuickSave.Action = ActionMapDefault.FindAction("QuickSave");
+            DefaultQuickLoad.Action = ActionMapDefault.FindAction("QuickLoad");
+            DefaultEnableSteering.Action = ActionMapDefault.FindAction("EnableSteering");
+            DefaultEnableBuilding.Action = ActionMapDefault.FindAction("EnableBuilding");
+            DefaultPoint.Action = ActionMapDefault.FindAction("Point");
+            DefaultClick.Action = ActionMapDefault.FindAction("Click");
+            DefaultRightClick.Action = ActionMapDefault.FindAction("RightClick");
 
-            SteeringPause = ActionMapSteering.FindAction("Pause");
-            SteeringZoom = ActionMapSteering.FindAction("Zoom");
-            SteeringQuickSave = ActionMapSteering.FindAction("QuickSave");
-            SteeringQuickLoad = ActionMapSteering.FindAction("QuickLoad");
-            SteeringDirection = ActionMapSteering.FindAction("Direction");
-            SteeringDisableSteering = ActionMapSteering.FindAction("DisableSteering");
-            SteeringRotation = ActionMapSteering.FindAction("Rotation");
-            SteeringAdjustSpeed = ActionMapSteering.FindAction("AdjustSpeed");
-            SteeringPoint = ActionMapSteering.FindAction("Point");
-            SteeringClick = ActionMapSteering.FindAction("Click");
-            SteeringRightClick = ActionMapSteering.FindAction("RightClick");
+            SteeringPause.Action = ActionMapSteering.FindAction("Pause");
+            SteeringZoom.Action = ActionMapSteering.FindAction("Zoom");
+            SteeringQuickSave.Action = ActionMapSteering.FindAction("QuickSave");
+            SteeringQuickLoad.Action = ActionMapSteering.FindAction("QuickLoad");
+            SteeringDirection.Action = ActionMapSteering.FindAction("Direction");
+            SteeringDisableSteering.Action = ActionMapSteering.FindAction("DisableSteering");
+            SteeringRotation.Action = ActionMapSteering.FindAction("Rotation");
+            SteeringAdjustSpeed.Action = ActionMapSteering.FindAction("AdjustSpeed");
+            SteeringPoint.Action = ActionMapSteering.FindAction("Point");
+            SteeringClick.Action = ActionMapSteering.FindAction("Click");
+            SteeringRightClick.Action = ActionMapSteering.FindAction("RightClick");
 
-            BuildingDisableBuilding = ActionMapBuilding.FindAction("DisableBuilding");
-            BuildingPause = ActionMapBuilding.FindAction("Pause");
-            BuildingPoint = ActionMapBuilding.FindAction("Point");
-            BuildingClick = ActionMapBuilding.FindAction("Click");
-            BuildingRightClick = ActionMapBuilding.FindAction("RightClick");
-            BuildingWall = ActionMapBuilding.FindAction("Wall");
-            BuildingFloor = ActionMapBuilding.FindAction("Floor");
-            BuildingEquipment = ActionMapBuilding.FindAction("Equipment");
-            BuildingMining = ActionMapBuilding.FindAction("Mining");
-            BuildingCancel = ActionMapBuilding.FindAction("Cancel");
-            BuildingChangeRotation = ActionMapBuilding.FindAction("ChangeRotation");
+            BuildingDisableBuilding.Action = ActionMapBuilding.FindAction("DisableBuilding");
+            BuildingPause.Action = ActionMapBuilding.FindAction("Pause");
+            BuildingPoint.Action = ActionMapBuilding.FindAction("Point");
+            BuildingClick.Action = ActionMapBuilding.FindAction("Click");
+            BuildingRightClick.Action = ActionMapBuilding.FindAction("RightClick");
+            BuildingWall.Action = ActionMapBuilding.FindAction("Wall");
+            BuildingFloor.Action = ActionMapBuilding.FindAction("Floor");
+            BuildingEquipment.Action = ActionMapBuilding.FindAction("Equipment");
+            BuildingMining.Action = ActionMapBuilding.FindAction("Mining");
+            BuildingCancel.Action = ActionMapBuilding.FindAction("Cancel");
+            BuildingChangeRotation.Action = ActionMapBuilding.FindAction("ChangeRotation");
         }
 
         #endregion Unity

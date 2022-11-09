@@ -254,21 +254,34 @@ namespace Main
 
         private void SubscribeToInputEvents()
         {
-            PlayerController.DefaultPause.performed += SwitchPause;
-            PlayerController.DefaultZoom.performed += Zoom;
-            PlayerController.DefaultQuickLoad.performed += QuickLoad;
-            PlayerController.DefaultQuickSave.performed += QuickSave;
-            PlayerController.DefaultEnableSteering.performed += EnableSteering;
-            PlayerController.DefaultEnableBuilding.performed += EnableBuilding;
+            PlayerController.DefaultPause
+                .AddListener(ActionType.Performed, SwitchPause);
+            PlayerController.DefaultZoom
+                .AddListener(ActionType.Performed, Zoom);
+            PlayerController.DefaultQuickLoad
+                .AddListener(ActionType.Performed, QuickLoad);
+            PlayerController.DefaultQuickSave
+                .AddListener(ActionType.Performed, QuickSave);
+            PlayerController.DefaultEnableSteering
+                .AddListener(ActionType.Performed, EnableSteering);
+            PlayerController.DefaultEnableBuilding
+                .AddListener(ActionType.Performed, EnableBuilding);
 
-            PlayerController.SteeringPause.performed += SwitchPause;
-            PlayerController.SteeringZoom.performed += Zoom;
-            PlayerController.SteeringQuickSave.performed += QuickSave;
-            PlayerController.SteeringQuickLoad.performed += QuickLoad;
-            PlayerController.SteeringDisableSteering.performed += DisableSteering;
+            PlayerController.SteeringPause
+                .AddListener(ActionType.Performed, SwitchPause);
+            PlayerController.SteeringZoom
+                .AddListener(ActionType.Performed, Zoom);
+            PlayerController.SteeringQuickSave
+                .AddListener(ActionType.Performed, QuickSave);
+            PlayerController.SteeringQuickLoad
+                .AddListener(ActionType.Performed, QuickLoad);
+            PlayerController.SteeringDisableSteering
+                .AddListener(ActionType.Performed, DisableSteering);
 
-            PlayerController.BuildingDisableBuilding.performed += DisableBuilding;
-            PlayerController.BuildingPause.performed += SwitchPause;
+            PlayerController.BuildingDisableBuilding
+                .AddListener(ActionType.Performed, DisableBuilding);
+            PlayerController.BuildingPause
+                .AddListener(ActionType.Performed, SwitchPause);
         }
 
         //private void UnsubscribeFromInputEvents()

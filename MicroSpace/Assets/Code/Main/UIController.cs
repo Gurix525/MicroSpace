@@ -43,7 +43,8 @@ namespace Main
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                Vector2 mousePosition = PlayerController.DefaultPoint.ReadValue<Vector2>();
+                Vector2 mousePosition = PlayerController.DefaultPoint
+                    .ReadValue<Vector2>();
                 _contextualMenu.enabled = true;
                 var root = _contextualMenu.rootVisualElement.Q("root");
                 root.style.top = Screen.height - mousePosition.y;
@@ -83,7 +84,8 @@ namespace Main
 
         private void SubscribeToInputEvents()
         {
-            PlayerController.DefaultRightClick.performed += OpenContextualMenu;
+            PlayerController.DefaultRightClick
+                .AddListener(ActionType.Performed, OpenContextualMenu);
         }
 
         //private void UnsubscribeFromInputEvents()
