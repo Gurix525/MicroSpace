@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -60,6 +61,22 @@ namespace Main
         public static InputAction BuildingChangeRotation { get; set; }
 
         #endregion Properties
+
+        #region Public
+
+        public static void ClearInputActionListeners(string propertyName)
+        {
+            Type thisType = typeof(PlayerController);
+            PropertyInfo property = thisType.GetProperty(propertyName);
+            InputAction action = (InputAction)property.GetValue(null, null);
+            InputAction newAction = action.Clone();
+            action.Disable();
+            newAction.Enable();
+
+            property.SetValue(null, newAction);
+        }
+
+        #endregion Public
 
         #region Unity
 
