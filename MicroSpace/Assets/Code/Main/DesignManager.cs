@@ -588,6 +588,7 @@ namespace Main
         {
             ClearUpdateEventListeners();
             ClearCurentDesignation();
+            ClearInputActionsListeners();
             _buildingMode = mode;
         }
 
