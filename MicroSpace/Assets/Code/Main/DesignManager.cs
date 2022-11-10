@@ -56,6 +56,10 @@ namespace Main
 
         private GameObject _currentDesignation;
 
+        private GameObject _temporalParent;
+
+        private List<GameObject> _temporalDesignations = new();
+
         private UnityEvent _updateCalled = new();
 
         #endregion Fields
@@ -94,10 +98,9 @@ namespace Main
 
         #region Private
 
-        private Vector3 GetMouseWorldPosition()
+        private Vector2 GetMouseWorldPosition()
         {
-            Vector3 position = PlayerController.BuildingPoint.ReadValue<Vector2>();
-            position.z = 10;
+            Vector2 position = PlayerController.BuildingPoint.ReadValue<Vector2>();
             position = Camera.main.ScreenToWorldPoint(position);
             return position;
         }
@@ -105,63 +108,6 @@ namespace Main
         //private static void UpdateShip(GameObject ship)
         //{
         //    ship.GetComponent<Ship>().UpdateShip();
-        //}
-
-        //private void CreateDesignations(IBlock closestBlock, Vector3 originalPos,
-        //    List<GameObject> designations, GameObject prefab, ref Vector3 localMousePos)
-        //{
-        //    localMousePos = closestBlock.Parent
-        //        .InverseTransformPoint(GetMouseWorldPosition());
-        //    localMousePos = localMousePos.Round();
-        //    ClampDistance(originalPos, ref localMousePos, _maxDesignDistance);
-        //    int lesserX = 0;
-        //    int lesserY = 0;
-        //    int greaterX = 0;
-        //    int greaterY = 0;
-        //    if (localMousePos.x < originalPos.x)
-        //    {
-        //        lesserX = (int)localMousePos.x;
-        //        greaterX = (int)originalPos.x;
-        //    }
-        //    else
-        //    {
-        //        greaterX = (int)localMousePos.x;
-        //        lesserX = (int)originalPos.x;
-        //    }
-        //    if (localMousePos.y < originalPos.y)
-        //    {
-        //        lesserY = (int)localMousePos.y;
-        //        greaterY = (int)originalPos.y;
-        //    }
-        //    else
-        //    {
-        //        greaterY = (int)localMousePos.y;
-        //        lesserY = (int)originalPos.y;
-        //    }
-        //    for (int x = lesserX; x <= greaterX; x++)
-        //        for (int y = lesserY; y <= greaterY; y++)
-        //        {
-        //            designations.Add(Instantiate(
-        //                prefab,
-        //                closestBlock.Parent));
-        //            designations[^1].transform.localPosition = new Vector3(x, y, 0);
-        //        }
-        //}
-
-        //private void ClampDistance(Vector3 originalPos,
-        //    ref Vector3 localMousePos, float maxDistance)
-        //{
-        //    float x = localMousePos.x - originalPos.x >= maxDistance ?
-        //        originalPos.x + maxDistance :
-        //        originalPos.x - localMousePos.x >= maxDistance ?
-        //        originalPos.x - maxDistance :
-        //        localMousePos.x;
-        //    float y = localMousePos.y - originalPos.y >= maxDistance ?
-        //        originalPos.y + maxDistance :
-        //        originalPos.y - localMousePos.y >= maxDistance ?
-        //        originalPos.y - maxDistance :
-        //        localMousePos.y;
-        //    localMousePos = new(x, y);
         //}
 
         //private IEnumerator DesignateBlock(BlockType blockType)
@@ -477,25 +423,84 @@ namespace Main
         //    return designation.GetComponent<BlockDesignation>().IsObstructed;
         //}
 
-        //private static void DestroyDesignations(List<GameObject> designations)
-        //{
-        //    for (int i = 0; i<designations.Count; i++)
-        //    {
-        //        private Destroy(designations[0]);
-
-        //designations.RemoveAt(0);
-        //        i--;
-        //    }
-        //}
         /// <summary>
         ///
         /// </summary>
         // tu sie zaczynaja nowe
 
+        private void DestroyDesignations()
+        {
+            for (int i = 0; i < _temporalDesignations.Count; i++)
+            {
+                Destroy(_temporalDesignations[0]);
+                _temporalDesignations.RemoveAt(0);
+                i--;
+            }
+        }
+
+        private void CreateDesignations(Vector3 originalPos,
+            List<GameObject> designations)
+        {
+            DestroyDesignations();
+            Vector3 localMousePos = _temporalParent.transform
+                .InverseTransformPoint(GetMouseWorldPosition());
+            localMousePos = localMousePos.Round();
+            ClampDistance(originalPos, ref localMousePos, _maxDesignDistance);
+            int lesserX = 0;
+            int lesserY = 0;
+            int greaterX = 0;
+            int greaterY = 0;
+            if (localMousePos.x < originalPos.x)
+            {
+                lesserX = (int)localMousePos.x;
+                greaterX = (int)originalPos.x;
+            }
+            else
+            {
+                greaterX = (int)localMousePos.x;
+                lesserX = (int)originalPos.x;
+            }
+            if (localMousePos.y < originalPos.y)
+            {
+                lesserY = (int)localMousePos.y;
+                greaterY = (int)originalPos.y;
+            }
+            else
+            {
+                greaterY = (int)localMousePos.y;
+                lesserY = (int)originalPos.y;
+            }
+            for (int x = lesserX; x <= greaterX; x++)
+                for (int y = lesserY; y <= greaterY; y++)
+                {
+                    designations.Add(Instantiate(
+
+                        _temporalDesignationPrefab,
+                        _temporalParent.transform));
+                    designations[^1].transform.localPosition = new Vector3(x, y, _prefabRotation);
+                }
+        }
+
+        private void ClampDistance(Vector3 originalPos,
+            ref Vector3 localMousePos, float maxDistance)
+        {
+            float x = localMousePos.x - originalPos.x >= maxDistance ?
+                originalPos.x + maxDistance :
+                originalPos.x - localMousePos.x >= maxDistance ?
+                originalPos.x - maxDistance :
+                localMousePos.x;
+            float y = localMousePos.y - originalPos.y >= maxDistance ?
+                originalPos.y + maxDistance :
+                originalPos.y - localMousePos.y >= maxDistance ?
+                originalPos.y - maxDistance :
+                localMousePos.y;
+            localMousePos = new(x, y);
+        }
+
         private Block FindClosestBlock(
             GameObject designation, Vector3 searchStartPosition)
         {
-            var num = FindObjectsOfType<Block>()
+            var num = _worldTransform.GetComponentsInChildren<Block>(false)
                 .Where(x => x != designation.GetComponent<BlockDesignation>())
                 .Where(x => x.Parent.GetComponent<Ship>() != null);
             var closestWall = num.Count() > 0 ?
@@ -525,7 +530,7 @@ namespace Main
                     closestBlock.Transform.localPosition +
                     v3relative
                     .Round();
-                designation.transform.localEulerAngles = Vector3.zero;
+                designation.transform.localEulerAngles = new Vector3(0, 0, _prefabRotation);
             }
             else
             {
@@ -549,9 +554,34 @@ namespace Main
         private void ClearInputActionsListeners()
         {
             PlayerController.BuildingClick.ClearAllEvents();
+            PlayerController.BuildingPoint.ClearAllEvents();
         }
 
-        private void StartFromPreviousMode()
+        private void ClearUpdateEventListeners()
+        {
+            _updateCalled.RemoveAllListeners();
+        }
+
+        private void SetBuildingMode(BuildingMode mode)
+        {
+            ClearUpdateEventListeners();
+            ClearCurentDesignation();
+            ClearInputActionsListeners();
+            _buildingMode = mode;
+        }
+
+        private void ClearCurentDesignation()
+        {
+            Destroy(_currentDesignation);
+            _currentDesignation = null;
+        }
+
+        private void CreateDesignationGrid(CallbackContext context)
+        {
+            CreateDesignations(_currentDesignation.transform.localPosition, _temporalDesignations);
+        }
+
+        private void StartFromPreviousMode(CallbackContext context)
         {
             switch (_buildingMode)
             {
@@ -577,30 +607,38 @@ namespace Main
             }
         }
 
-        private void ClearUpdateEventListeners()
-        {
-            _updateCalled.RemoveAllListeners();
-        }
-
-        private void SetBuildingMode(BuildingMode mode)
-        {
-            ClearUpdateEventListeners();
-            ClearCurentDesignation();
-            ClearInputActionsListeners();
-            _buildingMode = mode;
-        }
-
-        private void ClearCurentDesignation()
-        {
-            Destroy(_currentDesignation);
-            _currentDesignation = null;
-        }
-
         private void PlaceDesignation(CallbackContext context)
         {
             if (!EventSystem.current.IsPointerOverGameObject())
-                Debug.Log("KURAS");
-            ClearInputActionsListeners();
+            {
+                SetTemporalParent();
+                ClearInputActionsListeners();
+                ClearUpdateEventListeners();
+                PlayerController.BuildingRightClick.AddListener(
+                    ActionType.Performed, StartFromPreviousMode);
+                PlayerController.BuildingPoint.AddListener(
+                    ActionType.Performed, CreateDesignationGrid);
+                PlayerController.BuildingClick.AddListener(
+                    ActionType.Performed, FinalizeDesignationGrid);
+            }
+        }
+
+        private void SetTemporalParent()
+        {
+            if (_currentDesignation.transform.parent == null)
+            {
+                _temporalParent = new();
+                _temporalParent.transform.position = _currentDesignation.transform.position;
+                _currentDesignation.transform.parent = _temporalParent.transform;
+            }
+            else
+                _temporalParent = _currentDesignation.transform.parent.gameObject;
+        }
+
+        private void FinalizeDesignationGrid(CallbackContext obj)
+        {
+            DestroyDesignations();
+            StartFromPreviousMode(new());
         }
 
         private void SetBuildingModeWall(CallbackContext context)
@@ -680,7 +718,7 @@ namespace Main
         private void OnEnable()
         {
             SubscribeToInputEvents();
-            StartFromPreviousMode();
+            StartFromPreviousMode(new());
         }
 
         private void OnDisable()
