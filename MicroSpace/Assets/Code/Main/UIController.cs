@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -23,6 +24,8 @@ namespace Main
 
         private GameObject _context = null;
 
+        private bool _isPointerOverUI = false;
+
         #endregion Fields
 
         #region Private
@@ -41,34 +44,33 @@ namespace Main
 
         private void OpenContextualMenu(CallbackContext context)
         {
-            if (!EventSystem.current.IsPointerOverGameObject())
+            if (_isPointerOverUI)
+                return;
+            Vector2 mousePosition = PlayerController.DefaultPoint
+                .ReadValue<Vector2>();
+            _contextualMenu.enabled = true;
+            var root = _contextualMenu.rootVisualElement.Q("root");
+            root.style.top = Screen.height - mousePosition.y;
+            root.style.left = mousePosition.x;
+            root.Clear();
+
+            _context = findContext(); // Casting ray to find clicked object
+
+            Button button = new(SelectFocusedShip);
+            button.text = "Przejmij statek";
+            button.style.fontSize = 40;
+            root.Add(button);
+
+            Button button2 = new(SelectTarget);
+            button2.text = "Obierz jako cel";
+            button2.style.fontSize = 40;
+            root.Add(button2);
+
+            GameObject findContext()
             {
-                Vector2 mousePosition = PlayerController.DefaultPoint
-                    .ReadValue<Vector2>();
-                _contextualMenu.enabled = true;
-                var root = _contextualMenu.rootVisualElement.Q("root");
-                root.style.top = Screen.height - mousePosition.y;
-                root.style.left = mousePosition.x;
-                root.Clear();
-
-                _context = findContext(); // Casting ray to find clicked object
-
-                Button button = new(SelectFocusedShip);
-                button.text = "Przejmij statek";
-                button.style.fontSize = 40;
-                root.Add(button);
-
-                Button button2 = new(SelectTarget);
-                button2.text = "Obierz jako cel";
-                button2.style.fontSize = 40;
-                root.Add(button2);
-
-                GameObject findContext()
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                    RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
-                    return hit.collider?.transform.parent.gameObject;// zwraca statek, nie collider (w przyszłości prawdopodobnie do zmiany);
-                }
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
+                return hit.collider?.transform.parent.gameObject;// zwraca statek, nie collider (w przyszłości prawdopodobnie do zmiany);
             }
         }
 
@@ -112,6 +114,16 @@ namespace Main
             _speedometerLabel = _speedometer.rootVisualElement
                 .Q("background")
                 .Q("speed") as Label;
+        }
+
+        private void Update()
+        {
+            CheckIfPointerIsOverUI();
+        }
+
+        private void CheckIfPointerIsOverUI()
+        {
+            _isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
         }
 
         private void FixedUpdate()

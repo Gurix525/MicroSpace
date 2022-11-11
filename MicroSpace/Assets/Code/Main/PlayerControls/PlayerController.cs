@@ -47,6 +47,7 @@ namespace Main
         public static ModifiableInputAction SteeringPoint { get; set; } = new();
         public static ModifiableInputAction SteeringClick { get; set; } = new();
         public static ModifiableInputAction SteeringRightClick { get; set; } = new();
+        public static ModifiableInputAction SteeringSwitchToBuilding { get; set; } = new();
 
         public static ModifiableInputAction BuildingDisableBuilding { get; set; } = new();
         public static ModifiableInputAction BuildingPause { get; set; } = new();
@@ -97,6 +98,7 @@ namespace Main
             SteeringPoint.Action = ActionMapSteering.FindAction("Point");
             SteeringClick.Action = ActionMapSteering.FindAction("Click");
             SteeringRightClick.Action = ActionMapSteering.FindAction("RightClick");
+            SteeringSwitchToBuilding.Action = ActionMapSteering.FindAction("SwitchToBuilding");
 
             BuildingDisableBuilding.Action = ActionMapBuilding.FindAction("DisableBuilding");
             BuildingPause.Action = ActionMapBuilding.FindAction("Pause");

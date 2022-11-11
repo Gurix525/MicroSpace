@@ -164,6 +164,7 @@ MonoBehaviour:
   _uiController: {fileID: 472914255}
   _designManager: {fileID: 98350694}
   _focusedShipRigidbody: {fileID: 0}
+  _currentActionMapName: 
 --- !u!4 &98350693
 Transform:
   m_ObjectHideFlags: 0
@@ -196,12 +197,15 @@ MonoBehaviour:
   _temporalDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
   _cancelDesignationPrefab: {fileID: 2505317657868975611, guid: 2b67422fca0a67c49b9d1ff427c679d6, type: 3}
   _miningDesignationPrefab: {fileID: 2505317657868975611, guid: a51bf7d682bc7834897db0254d0b5a00, type: 3}
+  _shipPrefab: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
   _wallPrefab: {fileID: 7440152704112946889, guid: 8b2411273005b114d8032424950d9c9b, type: 3}
   _floorPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
   _wallDesignationPrefab: {fileID: 7440152704112946889, guid: 4eb40b092d3fd63488ed563fe7030af1, type: 3}
   _floorDesignationPrefab: {fileID: 6571155050859523946, guid: 74ff299408fddd649a093c564deebb24, type: 3}
   _worldTransform: {fileID: 445740361}
   _maxDesignDistance: 9
+  _buildingMode: 0
+  _prefabRotation: 0
 --- !u!114 &98350695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +340,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 5c24e5a8-0a10-417f-ace3-c9ea45ca5b9f
     m_ActionName: Building/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8312b67d-3214-45ae-8943-23a8fa36beb9
+    m_ActionName: Building/Pause[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a78cc46f-878d-4561-b3fa-29df2a88ff67
+    m_ActionName: Building/Wall[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ba87e3c1-6795-47ae-af3c-b6191491f3b2
+    m_ActionName: Building/Floor[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ee6630c3-bcdc-45d2-b783-42bd4f9ed37c
+    m_ActionName: Building/Equipment[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3c3b7be5-00f1-4c3c-9d53-754c5d3b4f6e
+    m_ActionName: Building/Mining[/Keyboard/x,/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5622701c-8b6c-4fdb-8a31-7e3851e3c7e4
+    m_ActionName: Building/Cancel[/Keyboard/c,/Keyboard/5]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 61c16f4b-c175-4782-9665-2ed9ba3ffce6
+    m_ActionName: Building/ChangeRotation[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 71782a84-1b3e-499d-ab04-5ea846a79705
+    m_ActionName: Steering/SwitchToBuilding[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Default

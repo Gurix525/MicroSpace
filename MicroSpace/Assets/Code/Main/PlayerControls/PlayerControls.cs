@@ -315,20 +315,18 @@ namespace Main
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchToBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""71782a84-1b3e-499d-ab04-5ea846a79705"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""1fbd540d-0e4d-4b24-8b78-a73f908a54c9"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DisableSteering"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""b7918a49-6b61-4b85-b0ac-77a6fe4f0751"",
@@ -515,6 +513,28 @@ namespace Main
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d67a688-2ba0-453f-84a9-3cac8b9fa7ed"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchToBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72588206-b281-4b8c-b82b-690d6b316a92"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchToBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -627,6 +647,28 @@ namespace Main
                     ""name"": """",
                     ""id"": ""2e1cc72d-1e6a-420c-8952-61f99d5641dc"",
                     ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DisableBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""231ecf9b-b220-4b69-b172-5b6ade7a7448"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DisableBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c37e078d-84b0-46f2-a62e-b5c3d0cb627f"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -795,6 +837,7 @@ namespace Main
             m_Steering_Point = m_Steering.FindAction("Point", throwIfNotFound: true);
             m_Steering_RightClick = m_Steering.FindAction("RightClick", throwIfNotFound: true);
             m_Steering_Click = m_Steering.FindAction("Click", throwIfNotFound: true);
+            m_Steering_SwitchToBuilding = m_Steering.FindAction("SwitchToBuilding", throwIfNotFound: true);
             // Building
             m_Building = asset.FindActionMap("Building", throwIfNotFound: true);
             m_Building_DisableBuilding = m_Building.FindAction("DisableBuilding", throwIfNotFound: true);
@@ -975,6 +1018,7 @@ namespace Main
         private readonly InputAction m_Steering_Point;
         private readonly InputAction m_Steering_RightClick;
         private readonly InputAction m_Steering_Click;
+        private readonly InputAction m_Steering_SwitchToBuilding;
         public struct SteeringActions
         {
             private @PlayerControls m_Wrapper;
@@ -990,6 +1034,7 @@ namespace Main
             public InputAction @Point => m_Wrapper.m_Steering_Point;
             public InputAction @RightClick => m_Wrapper.m_Steering_RightClick;
             public InputAction @Click => m_Wrapper.m_Steering_Click;
+            public InputAction @SwitchToBuilding => m_Wrapper.m_Steering_SwitchToBuilding;
             public InputActionMap Get() { return m_Wrapper.m_Steering; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1032,6 +1077,9 @@ namespace Main
                     @Click.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnClick;
                     @Click.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnClick;
                     @Click.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnClick;
+                    @SwitchToBuilding.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnSwitchToBuilding;
+                    @SwitchToBuilding.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnSwitchToBuilding;
+                    @SwitchToBuilding.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnSwitchToBuilding;
                 }
                 m_Wrapper.m_SteeringActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1069,6 +1117,9 @@ namespace Main
                     @Click.started += instance.OnClick;
                     @Click.performed += instance.OnClick;
                     @Click.canceled += instance.OnClick;
+                    @SwitchToBuilding.started += instance.OnSwitchToBuilding;
+                    @SwitchToBuilding.performed += instance.OnSwitchToBuilding;
+                    @SwitchToBuilding.canceled += instance.OnSwitchToBuilding;
                 }
             }
         }
@@ -1211,6 +1262,7 @@ namespace Main
             void OnPoint(InputAction.CallbackContext context);
             void OnRightClick(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
+            void OnSwitchToBuilding(InputAction.CallbackContext context);
         }
         public interface IBuildingActions
         {

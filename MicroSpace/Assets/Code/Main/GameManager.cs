@@ -44,6 +44,10 @@ namespace Main
         [ReadonlyInspector]
         private Rigidbody2D _focusedShipRigidbody = null;
 
+        [SerializeField]
+        [ReadonlyInspector]
+        private string _currentActionMapName = "";
+
         private static bool _isSteeringEnabled = false;
 
         private static bool _isSetupRunnning = false;
@@ -69,6 +73,16 @@ namespace Main
         public static int FocusedShipId =>
             Instance._focusedShipRigidbody.GetComponent<Ship>().Id;
 
+        public static Vector2 FocusedShipVelocity =>
+            Instance._focusedShipRigidbody != null ?
+            Instance._focusedShipRigidbody.velocity :
+            Vector2.zero;
+
+        public static Quaternion FocusedShipRotation =>
+            Instance._focusedShipRigidbody != null ?
+            Instance._focusedShipRigidbody.transform.rotation :
+            Quaternion.identity;
+
         #endregion Properties
 
         #region Public
@@ -80,10 +94,8 @@ namespace Main
         {
             if (ship != null)
             {
-                //Debug.Log(ship);
                 Instance._focusedShipRigidbody = ship.GetComponent<Rigidbody2D>();
-                //Database.FocusedShip = Database.DBObjects
-                //    .Find(x => x.GameObject == ship);
+                AlignCameraToFocusedShip();
             }
         }
 
@@ -102,17 +114,18 @@ namespace Main
                     action(ship);
         }
 
+        public static void AlignCameraToFocusedShip()
+        {
+            Camera.main.transform.parent = Instance._focusedShipRigidbody?.transform;
+            Camera.main.transform.rotation =
+                Instance._focusedShipRigidbody.transform.rotation;
+            var shipPos = Instance._focusedShipRigidbody.position;
+            Camera.main.transform.localPosition = new Vector3(0, 0, -10);
+        }
+
         #endregion Public
 
         #region Private
-
-        private void AlignCameraToFocusedShip()
-        {
-            Camera.main.transform.rotation =
-                _focusedShipRigidbody.transform.rotation;
-            var shipPos = _focusedShipRigidbody.position;
-            Camera.main.transform.position = new Vector3(shipPos.x, shipPos.y, -10);
-        }
 
         private IEnumerator BuildShipCoroutine()
         {
@@ -252,6 +265,12 @@ namespace Main
             PlayerController.PlayerInput.SwitchCurrentActionMap("Default");
         }
 
+        private void SwitchSteeringToBuilding(CallbackContext context)
+        {
+            DisableSteering(context);
+            EnableBuilding(context);
+        }
+
         private void SubscribeToInputEvents()
         {
             PlayerController.DefaultPause
@@ -277,6 +296,8 @@ namespace Main
                 .AddListener(ActionType.Performed, QuickLoad);
             PlayerController.SteeringDisableSteering
                 .AddListener(ActionType.Performed, DisableSteering);
+            PlayerController.SteeringSwitchToBuilding
+                .AddListener(ActionType.Performed, SwitchSteeringToBuilding);
 
             PlayerController.BuildingDisableBuilding
                 .AddListener(ActionType.Performed, DisableBuilding);
@@ -311,6 +332,8 @@ namespace Main
 
         private void Update()
         {
+            _currentActionMapName = PlayerController.PlayerInput.currentActionMap.name;
+
             if (_isSetupRunnning)
                 return;
 
@@ -351,7 +374,6 @@ namespace Main
             {
                 if (_isSteeringEnabled)
                     SteerTheShip();
-                AlignCameraToFocusedShip();
                 UpdateSpeedometer();
                 ActivateOrDeactivateShips();
             }
