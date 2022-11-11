@@ -39,10 +39,9 @@ namespace Ships
         [ReadonlyInspector]
         private Vector2 _velocity;
 
-        [SerializeField]
-        private float _shipUnloadDistance = 100F;
-
         private bool _isShipLoaded = true;
+
+        private static readonly float _shipUnloadDistance = 200F;
 
         #endregion Fields
 
