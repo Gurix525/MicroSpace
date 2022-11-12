@@ -106,316 +106,6 @@ namespace Main
 
         #region Private
 
-        //private static void UpdateShip(GameObject ship)
-        //{
-        //    ship.GetComponent<Ship>().UpdateShip();
-        //}
-
-        //private IEnumerator DesignateBlock(BlockType blockType)
-        //{
-        //    var prefab = blockType switch
-        //    {
-        //        BlockType.Floor => _floorDesignationPrefab,
-        //        _ => _wallDesignationPrefab
-        //    };
-        //    GameManager.SwitchSetup();
-        //    GameObject designation = Instantiate(_temporalDesignationPrefab, _worldTransform);
-        //    // FindClosestBlock jest potrzebne żeby nie krzyczało że pusty obiekt
-        //    IBlock closestBlock = FindClosestBlock(designation, Vector3.zero);
-        //    while (!PlayerController.BuildingClick.IsPressed() || IsDesignationObstructed(designation))
-        //    {
-        //        if (PlayerController.BuildingRightClick.IsPressed() ||
-        //                PlayerController.BuildingDisableBuilding.IsPressed())
-        //        {
-        //            Destroy(designation);
-        //            GameManager.SwitchSetup();
-        //            yield break;
-        //        }
-        //        var mousePos = GetMouseWorldPosition();
-        //        closestBlock = FindClosestBlock(designation, mousePos);
-        //        MoveBlockDesignation(designation, closestBlock, mousePos);
-        //        if (designation.transform.parent == null)
-        //            designation.GetComponent<SpriteRenderer>().color =
-        //                _colors.TemporalDesignationObstructed;
-        //        yield return null;
-        //    }
-        //    if (designation.transform.parent == null)
-        //    {
-        //        Destroy(designation);
-        //        GameManager.SwitchSetup();
-        //        yield break;
-        //    }
-        //    Vector3 originalPos = designation.transform.localPosition;
-        //    originalPos = originalPos.Round();
-        //    Destroy(designation);
-        //    yield return null;
-        //    Vector3 localMousePos = new();
-        //    Vector3 oldLocalMousePos = Vector3.positiveInfinity;
-        //    List<GameObject> designations = new();
-        //    while (!PlayerController.BuildingClick.IsPressed() || AreDesignationsObstructed(designations))
-        //    {
-        //        if (PlayerController.BuildingRightClick.IsPressed() ||
-        //            PlayerController.BuildingDisableBuilding.IsPressed())
-        //        {
-        //            DestroyDesignations(designations);
-        //            GameManager.SwitchSetup();
-        //            yield break;
-        //        }
-        //        localMousePos = closestBlock.Parent
-        //                .InverseTransformPoint(GetMouseWorldPosition());
-        //        localMousePos = localMousePos.Round();
-        //        if (localMousePos != oldLocalMousePos)
-        //        {
-        //            DestroyDesignations(designations);
-        //            CreateDesignations(
-        //                closestBlock, originalPos, designations,
-        //                _temporalDesignationPrefab, ref localMousePos);
-        //        }
-        //        oldLocalMousePos = localMousePos;
-        //        yield return null;
-        //    }
-        //    for (int i = 0; i < designations.Count; i++)
-        //    {
-        //        var block = Instantiate(prefab, closestBlock.Parent);
-        //        block.transform.localPosition = designations[i].transform.localPosition;
-        //    }
-        //    DestroyDesignations(designations);
-        //    UpdateShip(closestBlock.Parent.gameObject);
-        //    GameManager.SwitchSetup();
-        //}
-
-        //private IEnumerator CancelDesignation()
-        //{
-        //    GameManager.SwitchSetup();
-        //    RaycastHit2D hit = new();
-        //    GameObject designation = Instantiate(_cancelDesignationPrefab);
-        //    SpriteRenderer designationSpriteRenderer = designation
-        //        .GetComponent<SpriteRenderer>();
-        //    designationSpriteRenderer.color = _colors.Invisible;
-        //    while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
-        //    {
-        //        if (PlayerController.BuildingRightClick.IsPressed() ||
-        //            PlayerController.BuildingDisableBuilding.IsPressed())
-        //        {
-        //            Destroy(designation);
-        //            GameManager.SwitchSetup();
-        //            yield break;
-        //        }
-        //        hit = Physics2D.GetRayIntersection(
-        //            Camera.main.ScreenPointToRay(
-        //                PlayerController.BuildingPoint.ReadValue<Vector2>()));
-        //        if (hit.collider != null)
-        //        {
-        //            designation.transform.parent = hit.collider.transform.parent;
-        //            designation.transform.localPosition =
-        //                hit.collider.transform.localPosition;
-        //            designation.transform.localEulerAngles =
-        //                hit.collider.transform.localEulerAngles;
-        //            designationSpriteRenderer.color = _colors.CancelDesignationInactive;
-        //        }
-        //        else
-        //        {
-        //            designation.transform.parent = null;
-        //            designationSpriteRenderer.color = _colors.Invisible;
-        //        }
-        //        yield return null;
-        //    }
-        //    Vector2 originalPos = new();
-        //    originalPos = hit.collider.transform.localPosition.Round();
-        //    Destroy(designation);
-        //    yield return null;
-        //    Vector3 localMousePos = new();
-        //    Vector3 oldLocalMousePos = Vector3.positiveInfinity;
-        //    List<GameObject> designations = new();
-        //    List<Block> blocks = new();
-        //    while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
-        //    {
-        //        if (PlayerController.BuildingRightClick.IsPressed() ||
-        //            PlayerController.BuildingDisableBuilding.IsPressed())
-        //        {
-        //            DestroyDesignations(designations);
-        //            GameManager.SwitchSetup();
-        //            yield break;
-        //        }
-        //        localMousePos = hit.collider.transform.parent
-        //                .InverseTransformPoint(GetMouseWorldPosition());
-        //        localMousePos = localMousePos.Round();
-        //        if (localMousePos != oldLocalMousePos)
-        //        {
-        //            DestroyDesignations(designations);
-        //            CreateDesignations(
-        //                hit.collider.GetComponent<Block>(), originalPos,
-        //                designations, _cancelDesignationPrefab, ref localMousePos);
-        //            foreach (Transform item in hit.transform)
-        //            {
-        //                var block = item.GetComponent<Block>();
-        //                if (block != null)
-        //                    blocks.Add(block);
-        //            }
-        //            foreach (var item in designations)
-        //            {
-        //                var block = blocks
-        //                    .Where(x => x.GetComponent<CancelDesignation>() == null)
-        //                    .ToList()
-        //                    .Find(x => x.transform.localPosition.Round() ==
-        //                    item.transform.localPosition.Round());
-        //                if (block != null)
-        //                {
-        //                    if (block is BlockDesignation || block.IsMarkedForMining)
-        //                        item.GetComponent<CancelDesignation>().IsActive = true;
-        //                    else
-        //                        item.GetComponent<CancelDesignation>().IsActive = false;
-        //                }
-        //            }
-        //            blocks.Clear();
-        //        }
-        //        oldLocalMousePos = localMousePos;
-        //        yield return null;
-        //    }
-        //    foreach (Transform item in hit.transform)
-        //    {
-        //        var block = item.GetComponent<Block>();
-        //        if (block != null)
-        //            blocks.Add(block);
-        //    }
-        //    foreach (var item in designations)
-        //    {
-        //        var block = blocks.Find(x => x.transform.localPosition.Round() ==
-        //            item.transform.localPosition.Round());
-        //        if (block != null)
-        //        {
-        //            if (block is BlockDesignation)
-        //                Destroy(block.gameObject);
-        //            else block.IsMarkedForMining = false;
-        //        }
-        //    }
-        //    DestroyDesignations(designations);
-        //    UpdateShip(hit.transform.gameObject);
-        //    GameManager.SwitchSetup();
-        //}
-
-        //private IEnumerator DesignateMining()
-        //{
-        //    GameManager.SwitchSetup();
-        //    RaycastHit2D hit = new();
-        //    GameObject designation = Instantiate(_miningDesignationPrefab);
-        //    SpriteRenderer designationSpriteRenderer = designation
-        //        .GetComponent<SpriteRenderer>();
-        //    designationSpriteRenderer.color = _colors.Invisible;
-        //    while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
-        //    {
-        //        if (PlayerController.BuildingRightClick.IsPressed() ||
-        //            PlayerController.BuildingDisableBuilding.IsPressed())
-        //        {
-        //            Destroy(designation);
-        //            GameManager.SwitchSetup();
-        //            yield break;
-        //        }
-        //        hit = Physics2D.GetRayIntersection(
-        //            Camera.main.ScreenPointToRay(
-        //                PlayerController.BuildingPoint.ReadValue<Vector2>()));
-        //        if (hit.collider != null)
-        //        {
-        //            if (hit.collider.GetComponent<Block>() is not BlockDesignation)
-        //            {
-        //                designation.transform.parent = hit.collider.transform.parent;
-        //                designation.transform.localPosition =
-        //                    hit.collider.transform.localPosition;
-        //                designation.transform.localEulerAngles =
-        //                    hit.collider.transform.localEulerAngles;
-        //                designationSpriteRenderer.color = _colors.MiningDesignationInactive;
-        //            }
-        //            else
-        //            {
-        //                designation.transform.parent = null;
-        //                designationSpriteRenderer.color = _colors.Invisible;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            designation.transform.parent = null;
-        //            designationSpriteRenderer.color = _colors.Invisible;
-        //        }
-        //        yield return null;
-        //    }
-        //    Vector2 originalPos = new();
-        //    originalPos = hit.collider.transform.localPosition.Round();
-        //    Destroy(designation);
-        //    yield return null;
-        //    Vector3 localMousePos = new();
-        //    Vector3 oldLocalMousePos = Vector3.positiveInfinity;
-        //    List<GameObject> designations = new();
-        //    List<Block> blocks = new();
-        //    while (!PlayerController.BuildingClick.IsPressed() || hit.collider == null)
-        //    {
-        //        if (PlayerController.BuildingClick.IsPressed() ||
-        //            PlayerController.BuildingDisableBuilding.IsPressed())
-        //        {
-        //            DestroyDesignations(designations);
-        //            GameManager.SwitchSetup();
-        //            yield break;
-        //        }
-        //        localMousePos = hit.collider.transform.parent
-        //                .InverseTransformPoint(GetMouseWorldPosition());
-        //        localMousePos = localMousePos.Round();
-        //        if (localMousePos != oldLocalMousePos)
-        //        {
-        //            DestroyDesignations(designations);
-        //            CreateDesignations(
-        //                hit.collider.GetComponent<Block>(), originalPos,
-        //                designations, _miningDesignationPrefab, ref localMousePos);
-        //            foreach (Transform item in hit.transform)
-        //            {
-        //                var block = item.GetComponent<Block>();
-        //                if (block != null)
-        //                    blocks.Add(block);
-        //            }
-        ////////////////            foreach (var item in designations)
-        ////////////////            {
-        ////////////////                var block = blocks
-        ////////////////                    .Where(x => x.GetComponent<MiningDesignation>() == null)
-        ////////////////                    .ToList()
-        ////////////////                    .Find(x => x.transform.localPosition.Round() ==
-        ////////////////                    item.transform.localPosition.Round());
-        ////////////////                if (block != null)
-        ////////////////                {
-        ////////////////                    if (block is not BlockDesignation)
-        ////////////////                        item.GetComponent<MiningDesignation>().IsActive = true;
-        ////////////////                    else
-        ////////////////                        item.GetComponent<MiningDesignation>().IsActive = false;
-        ////////////////                }
-        ////////////////            }
-        //            blocks.Clear();
-        //        }
-        //        oldLocalMousePos = localMousePos;
-        //        yield return null;
-        //    }
-        //    foreach (Transform item in hit.transform)
-        //    {
-        //        var block = item.GetComponent<Block>();
-        //        if (block != null)
-        //            blocks.Add(block);
-        //    }
-        //    foreach (var item in designations)
-        //    {
-        //        var block = blocks.Find(x => x.transform.localPosition.Round() ==
-        //            item.transform.localPosition.Round());
-        //        if (block != null)
-        //        {
-        //            if (block is not BlockDesignation)
-        //                block.IsMarkedForMining = true;
-        //        }
-        //    }
-        //    DestroyDesignations(designations);
-        //    UpdateShip(hit.transform.gameObject);
-        //    GameManager.SwitchSetup();
-        //}
-
-        /// <summary>
-        ///
-        /// </summary>
-        // tu sie zaczynaja nowe
-
         private bool AreDesignationsObstructed()
         {
             foreach (var item in _temporalDesignations)
@@ -626,25 +316,6 @@ namespace Main
             }
         }
 
-        private void PlaceDesignation(CallbackContext context)
-        {
-            if (_isPointerOverUI)
-                return;
-            if (IsDesignationObstructed())
-                return;
-            SetTemporalParent();
-            SetOriginalDesignationPosition();
-            ClearCurentDesignation();
-            ClearInputActionsListeners();
-            ClearUpdateEventListeners();
-            PlayerController.BuildingRightClick.AddListener(
-                ActionType.Performed, BreakDesignationGrid);
-            PlayerController.BuildingPoint.AddListener(
-                ActionType.Performed, CreateDesignationGrid);
-            PlayerController.BuildingClick.AddListener(
-                ActionType.Performed, FinalizeDesignationGrid);
-        }
-
         private void SetOriginalDesignationPosition()
         {
             _originalDesignationPosition =
@@ -663,6 +334,59 @@ namespace Main
             }
             else
                 _temporalParent = _currentDesignation.transform.parent;
+        }
+
+        private void MarkBlocksDesignedToMining()
+        {
+            List<Wall> walls = _temporalParent.GetComponentsInChildren<Wall>().ToList();
+            List<Floor> floors = _temporalParent.GetComponentsInChildren<Floor>().ToList();
+            foreach (MiningDesignation designation in _temporalDesignations
+                .Select(designation => designation.GetComponent<MiningDesignation>()))
+            {
+                bool isSet = false;
+                foreach (Wall wall in walls)
+                    if (wall.transform.localPosition.Round() ==
+                        designation.transform.localPosition.Round())
+                    {
+                        wall.IsMarkedForMining = true;
+                        isSet = true;
+                        break;
+                    }
+                if (!isSet)
+                    foreach (Floor floor in floors)
+                        if (floor.transform.localPosition.Round() ==
+                            designation.transform.localPosition.Round())
+                        {
+                            floor.IsMarkedForMining = true;
+                            break;
+                        }
+            }
+        }
+
+        private void SetMiningDesignationsActive()
+        {
+            List<SolidBlock> blocks =
+                _temporalParent != null ?
+                _temporalParent.GetComponentsInChildren<SolidBlock>().ToList() :
+                new();
+            foreach (GameObject designation in _temporalDesignations)
+            {
+                foreach (SolidBlock block in blocks)
+                    if (block.LocalPosition ==
+                        (Vector2)designation.transform.localPosition.Round())
+                    {
+                        designation.GetComponent<MiningDesignation>().IsActive = true;
+                        break;
+                    }
+            }
+        }
+
+        private Block GetBlockUnderPointer()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(
+                PlayerController.BuildingPoint.ReadValue<Vector2>());
+            var hit = Physics2D.GetRayIntersection(ray);
+            return hit.collider?.GetComponent<Block>();
         }
 
         private void BreakDesignationGrid(CallbackContext context)
@@ -762,12 +486,151 @@ namespace Main
             StartMiningDesignation();
         }
 
+        private void SetBuildingModeCancel(CallbackContext context)
+        {
+            SetBuildingMode(BuildingMode.Cancel);
+            _selectedDesignationPrefab = _cancelDesignationPrefab;
+            StartCancelDesignation();
+        }
+
+        private void StartCancelDesignation()
+        {
+            CreateCancelDesignation(new());
+            PlayerController.BuildingPoint
+                .AddListener(ActionType.Performed, CreateCancelDesignation);
+            PlayerController.BuildingClick
+                .AddListener(ActionType.Performed, PlaceCancelDesignation);
+        }
+
+        private void PlaceCancelDesignation(CallbackContext obj)
+        {
+            if (_isPointerOverUI)
+                return;
+            if (_currentDesignation == null)
+                return;
+            ClearInputActionsListeners();
+            SetOriginalDesignationPosition();
+            ClearCurentDesignation();
+            CreateDesignationGrid(new());
+            _updateCalled.AddListener(SetCancelDesignationsActive);
+            PlayerController.BuildingPoint
+                .AddListener(ActionType.Performed, CreateDesignationGrid);
+            PlayerController.BuildingRightClick.AddListener(
+                ActionType.Performed, BreakDesignationGrid);
+            PlayerController.BuildingClick
+                .AddListener(ActionType.Performed, FinalizeCancelGrid);
+        }
+
+        private void FinalizeCancelGrid(CallbackContext obj)
+        {
+            if (_isPointerOverUI)
+                return;
+            CancelDesignations();
+            UpdateShip();
+            StartFromPreviousMode();
+        }
+
+        private void CancelDesignations()
+        {
+            List<Block> blocks = _temporalParent.GetComponentsInChildren<Block>().ToList();
+            List<Block> blocksToDestroy = new();
+            foreach (CancelDesignation designation in _temporalDesignations
+                .Select(designation => designation.GetComponent<CancelDesignation>()))
+            {
+                foreach (Block block in blocks)
+                {
+                    if (block is BlockDesignation)
+                    {
+                        if (block.transform.localPosition.Round() ==
+                            designation.transform.localPosition.Round())
+                        {
+                            blocksToDestroy.Add(block);
+                            break;
+                        }
+                        continue;
+                    }
+                    if (block.transform.localPosition.Round() ==
+                        designation.transform.localPosition.Round())
+                    {
+                        ((SolidBlock)block).IsMarkedForMining = false;
+                        break;
+                    }
+                }
+            }
+            for (int i = 0; i < blocksToDestroy.Count; i++)
+            {
+                Destroy(blocksToDestroy[i].gameObject);
+            }
+        }
+
+        private void SetCancelDesignationsActive()
+        {
+            List<Block> blocks =
+                _temporalParent != null ?
+                _temporalParent.GetComponentsInChildren<Block>().ToList() :
+                new();
+            foreach (GameObject designation in _temporalDesignations)
+            {
+                foreach (Block block in blocks)
+                {
+                    if (block is SolidBlock)
+                        if (!block.IsMarkedForMining)
+                            continue;
+                    if (block.LocalPosition ==
+                        (Vector2)designation.transform.localPosition.Round())
+                    {
+                        designation.GetComponent<CancelDesignation>().IsActive = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void CreateCancelDesignation(CallbackContext obj)
+        {
+            ClearCurentDesignation();
+            Block block = GetBlockUnderPointer();
+            if (_isPointerOverUI)
+                return;
+            if (block == null)
+                return;
+            if (block is SolidBlock)
+                if (!block.IsMarkedForMining)
+                    return;
+            _temporalParent = block.transform.parent;
+            _currentDesignation = Instantiate(_cancelDesignationPrefab, _temporalParent);
+            _currentDesignation.transform.localPosition = block.transform.localPosition;
+            _currentDesignation.transform.localRotation = block.transform.localRotation;
+            _currentDesignation.GetComponent<CancelDesignation>().IsActive = true;
+        }
+
         private void StartMiningDesignation()
         {
+            CreateMiningDesignation(new());
             PlayerController.BuildingPoint
                 .AddListener(ActionType.Performed, CreateMiningDesignation);
             PlayerController.BuildingClick
                 .AddListener(ActionType.Performed, PlaceMiningDesignation);
+        }
+
+        private void PlaceDesignation(CallbackContext context)
+        {
+            if (_isPointerOverUI)
+                return;
+            if (IsDesignationObstructed())
+                return;
+            SetTemporalParent();
+            SetOriginalDesignationPosition();
+            ClearCurentDesignation();
+            ClearInputActionsListeners();
+            ClearUpdateEventListeners();
+            CreateDesignationGrid(new());
+            PlayerController.BuildingRightClick.AddListener(
+                ActionType.Performed, BreakDesignationGrid);
+            PlayerController.BuildingPoint.AddListener(
+                ActionType.Performed, CreateDesignationGrid);
+            PlayerController.BuildingClick.AddListener(
+                ActionType.Performed, FinalizeDesignationGrid);
         }
 
         private void CreateMiningDesignation(CallbackContext context)
@@ -796,7 +659,8 @@ namespace Main
             ClearInputActionsListeners();
             SetOriginalDesignationPosition();
             ClearCurentDesignation();
-            _updateCalled.AddListener(SetDesignationsActive);
+            CreateDesignationGrid(new());
+            _updateCalled.AddListener(SetMiningDesignationsActive);
             PlayerController.BuildingPoint
                 .AddListener(ActionType.Performed, CreateDesignationGrid);
             PlayerController.BuildingRightClick.AddListener(
@@ -812,67 +676,6 @@ namespace Main
             MarkBlocksDesignedToMining();
             UpdateShip();
             StartFromPreviousMode();
-        }
-
-        private void MarkBlocksDesignedToMining()
-        {
-            List<Wall> walls = _temporalParent.GetComponentsInChildren<Wall>().ToList();
-            List<Floor> floors = _temporalParent.GetComponentsInChildren<Floor>().ToList();
-            foreach (MiningDesignation designation in _temporalDesignations
-                .Select(designation => designation.GetComponent<MiningDesignation>()))
-            {
-                bool isSet = false;
-                foreach (Wall wall in walls)
-                    if (wall.transform.localPosition.Round() ==
-                        designation.transform.localPosition.Round())
-                    {
-                        wall.IsMarkedForMining = true;
-                        isSet = true;
-                        break;
-                    }
-                if (!isSet)
-                    foreach (Floor floor in floors)
-                        if (floor.transform.localPosition.Round() ==
-                            designation.transform.localPosition.Round())
-                        {
-                            floor.IsMarkedForMining = true;
-                            break;
-                        }
-
-            }
-        }
-
-        private void SetDesignationsActive()
-        {
-            List<SolidBlock> blocks =
-                _temporalParent != null ?
-                _temporalParent.GetComponentsInChildren<SolidBlock>().ToList() :
-                new();
-            foreach (GameObject designation in _temporalDesignations)
-            {
-                foreach (SolidBlock block in blocks)
-                    if (block.LocalPosition ==
-                        (Vector2)designation.transform.localPosition.Round())
-                    {
-                        designation.GetComponent<MiningDesignation>().IsActive = true;
-                        break;
-                    }
-            }
-        }
-
-        private Block GetBlockUnderPointer()
-        {
-            Ray ray = Camera.main.ScreenPointToRay(
-                PlayerController.BuildingPoint.ReadValue<Vector2>());
-            var hit = Physics2D.GetRayIntersection(ray);
-            Debug.Log(hit.collider);
-            return hit.collider?.GetComponent<Block>();
-        }
-
-        private void SetBuildingModeCancel(CallbackContext context)
-        {
-            SetBuildingMode(BuildingMode.Cancel);
-            _selectedDesignationPrefab = _cancelDesignationPrefab;
         }
 
         private void ChangePrefabRotation(CallbackContext context)

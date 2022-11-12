@@ -15,5 +15,11 @@
                     _spriteRenderer.color = _colors.CancelDesignationInactive;
             }
         }
+
+        // To override temporal
+        private void Update()
+        {
+            
+        }
     }
 }
