@@ -127,36 +127,6 @@ namespace Main
 
         #region Private
 
-        private IEnumerator BuildShipCoroutine()
-        {
-            SwitchSetup();
-            GameObject designation = Instantiate(_shipDesignationPrefab, World);
-            while (!PlayerController.DefaultClick.IsPressed())
-            {
-                MoveShipDesignation(designation);
-                yield return null;
-            }
-            GameObject ship = Instantiate(ShipPrefab, World);
-            ship.transform.localPosition = designation.transform.localPosition;
-            ship.GetComponent<Rigidbody2D>().velocity =
-                _focusedShipRigidbody != null ?
-                _focusedShipRigidbody.velocity : Vector2.zero;
-            Destroy(designation);
-            yield return null;
-            SelectFocusedShip(ship);
-            Instantiate(_wallPrefab, ship.transform);
-            ship.GetComponent<Ship>().UpdateShip();
-            SwitchSetup();
-        }
-
-        private void MoveShipDesignation(GameObject designation)
-        {
-            Vector3 v3 = PlayerController.DefaultPoint.ReadValue<Vector2>();
-            v3.z = 10;
-            v3 = Camera.main.ScreenToWorldPoint(v3);
-            designation.transform.position = v3;
-        }
-
         private void SteerTheShip()
         {
             Vector3 direction = ((Vector3)PlayerController.SteeringDirection

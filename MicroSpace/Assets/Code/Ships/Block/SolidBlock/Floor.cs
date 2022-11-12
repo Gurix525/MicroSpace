@@ -5,7 +5,7 @@ using Attributes;
 namespace Ships
 {
     [Serializable]
-    public class Floor : Block
+    public class Floor : SolidBlock
     {
         [SerializeField]
         [ReadonlyInspector]

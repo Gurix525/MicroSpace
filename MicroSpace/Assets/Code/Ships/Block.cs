@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Ships
 {
     [Serializable]
-    public abstract class Block : MonoBehaviour, IBlock
+    public abstract class Block : MonoBehaviour
     {
         #region Fields
 

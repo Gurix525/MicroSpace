@@ -58,7 +58,7 @@ namespace Main
 
         private GameObject _currentDesignation;
 
-        private GameObject _temporalParent;
+        private Transform _temporalParent;
 
         private Vector2 _originalDesignationPosition;
 
@@ -67,6 +67,8 @@ namespace Main
         private UnityEvent _updateCalled = new();
 
         private bool _isPointerOverUI = false;
+
+        private GameObject _selectedDesignationPrefab;
 
         #endregion Fields
 
@@ -368,21 +370,21 @@ namespace Main
         //                if (block != null)
         //                    blocks.Add(block);
         //            }
-        //            foreach (var item in designations)
-        //            {
-        //                var block = blocks
-        //                    .Where(x => x.GetComponent<MiningDesignation>() == null)
-        //                    .ToList()
-        //                    .Find(x => x.transform.localPosition.Round() ==
-        //                    item.transform.localPosition.Round());
-        //                if (block != null)
-        //                {
-        //                    if (block is not BlockDesignation)
-        //                        item.GetComponent<MiningDesignation>().IsActive = true;
-        //                    else
-        //                        item.GetComponent<MiningDesignation>().IsActive = false;
-        //                }
-        //            }
+        ////////////////            foreach (var item in designations)
+        ////////////////            {
+        ////////////////                var block = blocks
+        ////////////////                    .Where(x => x.GetComponent<MiningDesignation>() == null)
+        ////////////////                    .ToList()
+        ////////////////                    .Find(x => x.transform.localPosition.Round() ==
+        ////////////////                    item.transform.localPosition.Round());
+        ////////////////                if (block != null)
+        ////////////////                {
+        ////////////////                    if (block is not BlockDesignation)
+        ////////////////                        item.GetComponent<MiningDesignation>().IsActive = true;
+        ////////////////                    else
+        ////////////////                        item.GetComponent<MiningDesignation>().IsActive = false;
+        ////////////////                }
+        ////////////////            }
         //            blocks.Clear();
         //        }
         //        oldLocalMousePos = localMousePos;
@@ -544,6 +546,8 @@ namespace Main
             ClearUpdateEventListeners();
             ClearCurentDesignation();
             ClearInputActionsListeners();
+            DestroyDesignations();
+            ClearTemporalParent();
             _buildingMode = mode;
         }
 
@@ -590,14 +594,13 @@ namespace Main
                 for (int y = lesserY; y <= greaterY; y++)
                 {
                     _temporalDesignations.Add(Instantiate(
-
-                        _temporalDesignationPrefab,
-                        _temporalParent.transform));
+                        _selectedDesignationPrefab,
+                        _temporalParent));
                     _temporalDesignations[^1].transform.localPosition = new Vector3(x, y, _prefabRotation);
                 }
         }
 
-        private void StartFromPreviousMode(CallbackContext context)
+        private void StartFromPreviousMode()
         {
             switch (_buildingMode)
             {
@@ -652,14 +655,14 @@ namespace Main
         {
             if (_currentDesignation.transform.parent?.GetComponent<Ship>() == null)
             {
-                _temporalParent = new("TemporalParent");
-                _temporalParent.transform.position = _currentDesignation.transform.position;
-                _temporalParent.transform.rotation = _currentDesignation.transform.rotation;
-                _temporalParent.transform.parent = Camera.main.transform;
-                _currentDesignation.transform.parent = _temporalParent.transform;
+                _temporalParent = new GameObject("TemporalParent").transform;
+                _temporalParent.position = _currentDesignation.transform.position;
+                _temporalParent.rotation = _currentDesignation.transform.rotation;
+                _temporalParent.parent = Camera.main.transform;
+                _currentDesignation.transform.parent = _temporalParent;
             }
             else
-                _temporalParent = _currentDesignation.transform.parent.gameObject;
+                _temporalParent = _currentDesignation.transform.parent;
         }
 
         private void BreakDesignationGrid(CallbackContext context)
@@ -668,7 +671,7 @@ namespace Main
                 return;
             ClearTemporalParent();
             DestroyDesignations();
-            StartFromPreviousMode(new());
+            StartFromPreviousMode();
         }
 
         private void FinalizeDesignationGrid(CallbackContext context)
@@ -680,9 +683,7 @@ namespace Main
             CreateShipIfTemporalParentIsNotAShip();
             CreateFinalDesignations();
             UpdateShip();
-            ClearTemporalParent();
-            DestroyDesignations();
-            StartFromPreviousMode(new());
+            StartFromPreviousMode();
         }
 
         private void UpdateShip()
@@ -698,7 +699,7 @@ namespace Main
                     _wallDesignationPrefab,
                     temporalDesignation.transform.position,
                     temporalDesignation.transform.rotation,
-                    _temporalParent.transform);
+                    _temporalParent);
             }
         }
 
@@ -708,14 +709,14 @@ namespace Main
             {
                 GameObject ship = Instantiate(
                     _shipPrefab,
-                    _temporalParent.transform.position,
-                    _temporalParent.transform.rotation,
+                    _temporalParent.position,
+                    _temporalParent.rotation,
                     _worldTransform);
                 ship.GetComponent<Rigidbody2D>().velocity =
                     GameManager.FocusedShipVelocity;
-                TransferChildren(_temporalParent.transform, ship.transform);
-                Destroy(_temporalParent);
-                _temporalParent = ship;
+                TransferChildren(_temporalParent, ship.transform);
+                Destroy(_temporalParent.gameObject);
+                _temporalParent = ship.transform;
             }
         }
 
@@ -727,22 +728,25 @@ namespace Main
 
         private void ClearTemporalParent()
         {
-            if (_temporalParent?.name == "TemporalParent")
-            {
-                Destroy(_temporalParent);
-                _temporalParent = null;
-            }
+            if (_temporalParent != null)
+                if (gameObject.name == "TemporalParent")
+                {
+                    Destroy(_temporalParent.gameObject);
+                    _temporalParent = null;
+                }
         }
 
         private void SetBuildingModeWall(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Wall);
+            _selectedDesignationPrefab = _temporalDesignationPrefab;
             StartBlockDesignation();
         }
 
         private void SetBuildingModeFloor(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Floor);
+            _selectedDesignationPrefab = _temporalDesignationPrefab;
             StartBlockDesignation();
         }
 
@@ -754,11 +758,121 @@ namespace Main
         private void SetBuildingModeMining(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Mining);
+            _selectedDesignationPrefab = _miningDesignationPrefab;
+            StartMiningDesignation();
+        }
+
+        private void StartMiningDesignation()
+        {
+            PlayerController.BuildingPoint
+                .AddListener(ActionType.Performed, CreateMiningDesignation);
+            PlayerController.BuildingClick
+                .AddListener(ActionType.Performed, PlaceMiningDesignation);
+        }
+
+        private void CreateMiningDesignation(CallbackContext context)
+        {
+            ClearCurentDesignation();
+            Block block = GetBlockUnderPointer();
+            if (_isPointerOverUI)
+                return;
+            if (block == null)
+                return;
+            if (block is not SolidBlock)
+                return;
+            _temporalParent = block.transform.parent;
+            _currentDesignation = Instantiate(_miningDesignationPrefab, _temporalParent);
+            _currentDesignation.transform.localPosition = block.transform.localPosition;
+            _currentDesignation.transform.localRotation = block.transform.localRotation;
+            _currentDesignation.GetComponent<MiningDesignation>().IsActive = true;
+        }
+
+        private void PlaceMiningDesignation(CallbackContext context)
+        {
+            if (_isPointerOverUI)
+                return;
+            if (_currentDesignation == null)
+                return;
+            ClearInputActionsListeners();
+            SetOriginalDesignationPosition();
+            ClearCurentDesignation();
+            _updateCalled.AddListener(SetDesignationsActive);
+            PlayerController.BuildingPoint
+                .AddListener(ActionType.Performed, CreateDesignationGrid);
+            PlayerController.BuildingRightClick.AddListener(
+                ActionType.Performed, BreakDesignationGrid);
+            PlayerController.BuildingClick
+                .AddListener(ActionType.Performed, FinalizeMiningGrid);
+        }
+
+        private void FinalizeMiningGrid(CallbackContext context)
+        {
+            if (_isPointerOverUI)
+                return;
+            MarkBlocksDesignedToMining();
+            UpdateShip();
+            StartFromPreviousMode();
+        }
+
+        private void MarkBlocksDesignedToMining()
+        {
+            List<Wall> walls = _temporalParent.GetComponentsInChildren<Wall>().ToList();
+            List<Floor> floors = _temporalParent.GetComponentsInChildren<Floor>().ToList();
+            foreach (MiningDesignation designation in _temporalDesignations
+                .Select(designation => designation.GetComponent<MiningDesignation>()))
+            {
+                bool isSet = false;
+                foreach (Wall wall in walls)
+                    if (wall.transform.localPosition.Round() ==
+                        designation.transform.localPosition.Round())
+                    {
+                        wall.IsMarkedForMining = true;
+                        isSet = true;
+                        break;
+                    }
+                if (!isSet)
+                    foreach (Floor floor in floors)
+                        if (floor.transform.localPosition.Round() ==
+                            designation.transform.localPosition.Round())
+                        {
+                            floor.IsMarkedForMining = true;
+                            break;
+                        }
+
+            }
+        }
+
+        private void SetDesignationsActive()
+        {
+            List<SolidBlock> blocks =
+                _temporalParent != null ?
+                _temporalParent.GetComponentsInChildren<SolidBlock>().ToList() :
+                new();
+            foreach (GameObject designation in _temporalDesignations)
+            {
+                foreach (SolidBlock block in blocks)
+                    if (block.LocalPosition ==
+                        (Vector2)designation.transform.localPosition.Round())
+                    {
+                        designation.GetComponent<MiningDesignation>().IsActive = true;
+                        break;
+                    }
+            }
+        }
+
+        private Block GetBlockUnderPointer()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(
+                PlayerController.BuildingPoint.ReadValue<Vector2>());
+            var hit = Physics2D.GetRayIntersection(ray);
+            Debug.Log(hit.collider);
+            return hit.collider?.GetComponent<Block>();
         }
 
         private void SetBuildingModeCancel(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Cancel);
+            _selectedDesignationPrefab = _cancelDesignationPrefab;
         }
 
         private void ChangePrefabRotation(CallbackContext context)
@@ -812,7 +926,7 @@ namespace Main
         private void OnEnable()
         {
             SubscribeToInputEvents();
-            StartFromPreviousMode(new());
+            StartFromPreviousMode();
         }
 
         private void OnDisable()

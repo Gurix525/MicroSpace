@@ -15,5 +15,10 @@
                     _spriteRenderer.color = _colors.MiningDesignationInactive;
             }
         }
+
+        // To override temporal
+        private void Update()
+        {
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Ships
 {
-    public class BlockDesignation : Block
+    public abstract class BlockDesignation : Block
     {
         protected SpriteRenderer _spriteRenderer;
 

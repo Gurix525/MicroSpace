@@ -260,6 +260,7 @@ namespace Main
 
         private static void ClearWorld()
         {
+            Camera.main.transform.parent = null;
             var world = GameManager.Instance.World;
             for (int i = 0; i < world.transform.childCount; i++)
             {
