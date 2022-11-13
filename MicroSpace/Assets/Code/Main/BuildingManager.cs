@@ -11,7 +11,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Main
 {
-    public class DesignManager : MonoBehaviour
+    public class BuildingManager : MonoBehaviour
     {
         #region Fields
 
@@ -74,7 +74,7 @@ namespace Main
 
         #region Properties
 
-        public static DesignManager Instance { get; private set; }
+        public static BuildingManager Instance { get; private set; }
 
         public GameObject WallPrefab => _wallPrefab;
 
@@ -177,13 +177,6 @@ namespace Main
             return closestWall;
         }
 
-        private void MoveCurrentDesignationToMouse()
-        {
-            if (_isPointerOverUI)
-                return;
-            MoveDesignation(_currentDesignation, GetMouseWorldPosition());
-        }
-
         private void MoveDesignation(GameObject designation, Vector3 targetPosition)
         {
             Block closestBlock = FindClosestBlock(_currentDesignation, targetPosition);
@@ -245,49 +238,6 @@ namespace Main
         {
             Destroy(_currentDesignation);
             _currentDesignation = null;
-        }
-
-        private void CreateDesignationGrid(CallbackContext context)
-        {
-            if (_isPointerOverUI)
-                return;
-            DestroyDesignations();
-            Vector3 localMousePos = _temporalParent.transform
-                .InverseTransformPoint(GetMouseWorldPosition());
-            localMousePos = localMousePos.Round();
-            ClampDistance(_originalDesignationPosition, ref localMousePos, _maxDesignDistance);
-            int lesserX = 0;
-            int lesserY = 0;
-            int greaterX = 0;
-            int greaterY = 0;
-            if (localMousePos.x < _originalDesignationPosition.x)
-            {
-                lesserX = (int)Math.Round(localMousePos.x);
-                greaterX = (int)Math.Round(_originalDesignationPosition.x);
-            }
-            else
-            {
-                greaterX = (int)Math.Round(localMousePos.x);
-                lesserX = (int)Math.Round(_originalDesignationPosition.x);
-            }
-            if (localMousePos.y < _originalDesignationPosition.y)
-            {
-                lesserY = (int)Math.Round(localMousePos.y);
-                greaterY = (int)Math.Round(_originalDesignationPosition.y);
-            }
-            else
-            {
-                greaterY = (int)Math.Round(localMousePos.y);
-                lesserY = (int)Math.Round(_originalDesignationPosition.y);
-            }
-            for (int x = lesserX; x <= greaterX; x++)
-                for (int y = lesserY; y <= greaterY; y++)
-                {
-                    _temporalDesignations.Add(Instantiate(
-                        _selectedDesignationPrefab,
-                        _temporalParent));
-                    _temporalDesignations[^1].transform.localPosition = new Vector3(x, y, _prefabRotation);
-                }
         }
 
         private void StartFromPreviousMode()
@@ -389,27 +339,6 @@ namespace Main
             return hit.collider?.GetComponent<Block>();
         }
 
-        private void BreakDesignationGrid(CallbackContext context)
-        {
-            if (_isPointerOverUI)
-                return;
-            ClearTemporalParent();
-            DestroyDesignations();
-            StartFromPreviousMode();
-        }
-
-        private void FinalizeDesignationGrid(CallbackContext context)
-        {
-            if (_isPointerOverUI)
-                return;
-            if (AreDesignationsObstructed())
-                return;
-            CreateShipIfTemporalParentIsNotAShip();
-            CreateFinalDesignations();
-            UpdateShip();
-            StartFromPreviousMode();
-        }
-
         private void UpdateShip()
         {
             _temporalParent?.GetComponent<Ship>()?.UpdateShip();
@@ -460,39 +389,6 @@ namespace Main
                 }
         }
 
-        private void SetBuildingModeWall(CallbackContext context)
-        {
-            SetBuildingMode(BuildingMode.Wall);
-            _selectedDesignationPrefab = _temporalDesignationPrefab;
-            StartBlockDesignation();
-        }
-
-        private void SetBuildingModeFloor(CallbackContext context)
-        {
-            SetBuildingMode(BuildingMode.Floor);
-            _selectedDesignationPrefab = _temporalDesignationPrefab;
-            StartBlockDesignation();
-        }
-
-        private void SetBuildingModeEquipment(CallbackContext context)
-        {
-            SetBuildingMode(BuildingMode.Equipment);
-        }
-
-        private void SetBuildingModeMining(CallbackContext context)
-        {
-            SetBuildingMode(BuildingMode.Mining);
-            _selectedDesignationPrefab = _miningDesignationPrefab;
-            StartMiningDesignation();
-        }
-
-        private void SetBuildingModeCancel(CallbackContext context)
-        {
-            SetBuildingMode(BuildingMode.Cancel);
-            _selectedDesignationPrefab = _cancelDesignationPrefab;
-            StartCancelDesignation();
-        }
-
         private void StartCancelDesignation()
         {
             CreateCancelDesignation(new());
@@ -500,34 +396,6 @@ namespace Main
                 .AddListener(ActionType.Performed, CreateCancelDesignation);
             PlayerController.BuildingClick
                 .AddListener(ActionType.Performed, PlaceCancelDesignation);
-        }
-
-        private void PlaceCancelDesignation(CallbackContext obj)
-        {
-            if (_isPointerOverUI)
-                return;
-            if (_currentDesignation == null)
-                return;
-            ClearInputActionsListeners();
-            SetOriginalDesignationPosition();
-            ClearCurentDesignation();
-            CreateDesignationGrid(new());
-            _updateCalled.AddListener(SetCancelDesignationsActive);
-            PlayerController.BuildingPoint
-                .AddListener(ActionType.Performed, CreateDesignationGrid);
-            PlayerController.BuildingRightClick.AddListener(
-                ActionType.Performed, BreakDesignationGrid);
-            PlayerController.BuildingClick
-                .AddListener(ActionType.Performed, FinalizeCancelGrid);
-        }
-
-        private void FinalizeCancelGrid(CallbackContext obj)
-        {
-            if (_isPointerOverUI)
-                return;
-            CancelDesignations();
-            UpdateShip();
-            StartFromPreviousMode();
         }
 
         private void CancelDesignations()
@@ -559,7 +427,9 @@ namespace Main
             }
             for (int i = 0; i < blocksToDestroy.Count; i++)
             {
-                Destroy(blocksToDestroy[i].gameObject);
+                var block = blocksToDestroy[i];
+                block.gameObject.SetActive(false);
+                Destroy(block.gameObject);
             }
         }
 
@@ -586,24 +456,6 @@ namespace Main
             }
         }
 
-        private void CreateCancelDesignation(CallbackContext obj)
-        {
-            ClearCurentDesignation();
-            Block block = GetBlockUnderPointer();
-            if (_isPointerOverUI)
-                return;
-            if (block == null)
-                return;
-            if (block is SolidBlock)
-                if (!block.IsMarkedForMining)
-                    return;
-            _temporalParent = block.transform.parent;
-            _currentDesignation = Instantiate(_cancelDesignationPrefab, _temporalParent);
-            _currentDesignation.transform.localPosition = block.transform.localPosition;
-            _currentDesignation.transform.localRotation = block.transform.localRotation;
-            _currentDesignation.GetComponent<CancelDesignation>().IsActive = true;
-        }
-
         private void StartMiningDesignation()
         {
             CreateMiningDesignation(new());
@@ -611,6 +463,86 @@ namespace Main
                 .AddListener(ActionType.Performed, CreateMiningDesignation);
             PlayerController.BuildingClick
                 .AddListener(ActionType.Performed, PlaceMiningDesignation);
+        }
+
+        private void SubscribeToInputEvents()
+        {
+            PlayerController.BuildingWall
+                .AddListener(ActionType.Performed, SetBuildingModeWall);
+            PlayerController.BuildingFloor
+                .AddListener(ActionType.Performed, SetBuildingModeFloor);
+            PlayerController.BuildingEquipment
+                .AddListener(ActionType.Performed, SetBuildingModeEquipment);
+            PlayerController.BuildingMining
+                .AddListener(ActionType.Performed, SetBuildingModeMining);
+            PlayerController.BuildingCancel
+                .AddListener(ActionType.Performed, SetBuildingModeCancel);
+            PlayerController.BuildingChangeRotation
+                .AddListener(ActionType.Performed, ChangePrefabRotation);
+        }
+
+        private void UnsubscribeFromInputEvents()
+        {
+            PlayerController.BuildingWall.ClearAllEvents();
+            PlayerController.BuildingFloor.ClearAllEvents();
+            PlayerController.BuildingEquipment.ClearAllEvents();
+            PlayerController.BuildingMining.ClearAllEvents();
+            PlayerController.BuildingCancel.ClearAllEvents();
+            PlayerController.BuildingChangeRotation.ClearAllEvents();
+        }
+
+        private void MoveCurrentDesignationToMouse()
+        {
+            if (_isPointerOverUI)
+                return;
+            MoveDesignation(_currentDesignation, GetMouseWorldPosition());
+        }
+
+        #endregion Private
+
+        #region Callbacks
+
+        private void CreateDesignationGrid(CallbackContext context)
+        {
+            if (_isPointerOverUI)
+                return;
+            DestroyDesignations();
+            Vector3 localMousePos = _temporalParent.transform
+                .InverseTransformPoint(GetMouseWorldPosition());
+            localMousePos = localMousePos.Round();
+            ClampDistance(_originalDesignationPosition, ref localMousePos, _maxDesignDistance);
+            int lesserX = 0;
+            int lesserY = 0;
+            int greaterX = 0;
+            int greaterY = 0;
+            if (localMousePos.x < _originalDesignationPosition.x)
+            {
+                lesserX = (int)Math.Round(localMousePos.x);
+                greaterX = (int)Math.Round(_originalDesignationPosition.x);
+            }
+            else
+            {
+                greaterX = (int)Math.Round(localMousePos.x);
+                lesserX = (int)Math.Round(_originalDesignationPosition.x);
+            }
+            if (localMousePos.y < _originalDesignationPosition.y)
+            {
+                lesserY = (int)Math.Round(localMousePos.y);
+                greaterY = (int)Math.Round(_originalDesignationPosition.y);
+            }
+            else
+            {
+                greaterY = (int)Math.Round(localMousePos.y);
+                lesserY = (int)Math.Round(_originalDesignationPosition.y);
+            }
+            for (int x = lesserX; x <= greaterX; x++)
+                for (int y = lesserY; y <= greaterY; y++)
+                {
+                    _temporalDesignations.Add(Instantiate(
+                        _selectedDesignationPrefab,
+                        _temporalParent));
+                    _temporalDesignations[^1].transform.localPosition = new Vector3(x, y, _prefabRotation);
+                }
         }
 
         private void PlaceDesignation(CallbackContext context)
@@ -685,33 +617,107 @@ namespace Main
                 _prefabRotation = 0F;
         }
 
-        private void SubscribeToInputEvents()
+        private void CreateCancelDesignation(CallbackContext obj)
         {
-            PlayerController.BuildingWall
-                .AddListener(ActionType.Performed, SetBuildingModeWall);
-            PlayerController.BuildingFloor
-                .AddListener(ActionType.Performed, SetBuildingModeFloor);
-            PlayerController.BuildingEquipment
-                .AddListener(ActionType.Performed, SetBuildingModeEquipment);
-            PlayerController.BuildingMining
-                .AddListener(ActionType.Performed, SetBuildingModeMining);
-            PlayerController.BuildingCancel
-                .AddListener(ActionType.Performed, SetBuildingModeCancel);
-            PlayerController.BuildingChangeRotation
-                .AddListener(ActionType.Performed, ChangePrefabRotation);
+            ClearCurentDesignation();
+            Block block = GetBlockUnderPointer();
+            if (_isPointerOverUI)
+                return;
+            if (block == null)
+                return;
+            if (block is SolidBlock)
+                if (!block.IsMarkedForMining)
+                    return;
+            _temporalParent = block.transform.parent;
+            _currentDesignation = Instantiate(_cancelDesignationPrefab, _temporalParent);
+            _currentDesignation.transform.localPosition = block.transform.localPosition;
+            _currentDesignation.transform.localRotation = block.transform.localRotation;
+            _currentDesignation.GetComponent<CancelDesignation>().IsActive = true;
         }
 
-        private void UnsubscribeFromInputEvents()
+        private void PlaceCancelDesignation(CallbackContext obj)
         {
-            PlayerController.BuildingWall.ClearAllEvents();
-            PlayerController.BuildingFloor.ClearAllEvents();
-            PlayerController.BuildingEquipment.ClearAllEvents();
-            PlayerController.BuildingMining.ClearAllEvents();
-            PlayerController.BuildingCancel.ClearAllEvents();
-            PlayerController.BuildingChangeRotation.ClearAllEvents();
+            if (_isPointerOverUI)
+                return;
+            if (_currentDesignation == null)
+                return;
+            ClearInputActionsListeners();
+            SetOriginalDesignationPosition();
+            ClearCurentDesignation();
+            CreateDesignationGrid(new());
+            _updateCalled.AddListener(SetCancelDesignationsActive);
+            PlayerController.BuildingPoint
+                .AddListener(ActionType.Performed, CreateDesignationGrid);
+            PlayerController.BuildingRightClick.AddListener(
+                ActionType.Performed, BreakDesignationGrid);
+            PlayerController.BuildingClick
+                .AddListener(ActionType.Performed, FinalizeCancelGrid);
         }
 
-        #endregion Private
+        private void FinalizeCancelGrid(CallbackContext obj)
+        {
+            if (_isPointerOverUI)
+                return;
+            CancelDesignations();
+            UpdateShip();
+            StartFromPreviousMode();
+        }
+
+        private void SetBuildingModeWall(CallbackContext context)
+        {
+            SetBuildingMode(BuildingMode.Wall);
+            _selectedDesignationPrefab = _temporalDesignationPrefab;
+            StartBlockDesignation();
+        }
+
+        private void SetBuildingModeFloor(CallbackContext context)
+        {
+            SetBuildingMode(BuildingMode.Floor);
+            _selectedDesignationPrefab = _temporalDesignationPrefab;
+            StartBlockDesignation();
+        }
+
+        private void SetBuildingModeEquipment(CallbackContext context)
+        {
+            SetBuildingMode(BuildingMode.Equipment);
+        }
+
+        private void SetBuildingModeMining(CallbackContext context)
+        {
+            SetBuildingMode(BuildingMode.Mining);
+            _selectedDesignationPrefab = _miningDesignationPrefab;
+            StartMiningDesignation();
+        }
+
+        private void SetBuildingModeCancel(CallbackContext context)
+        {
+            SetBuildingMode(BuildingMode.Cancel);
+            _selectedDesignationPrefab = _cancelDesignationPrefab;
+            StartCancelDesignation();
+        }
+
+        private void BreakDesignationGrid(CallbackContext context)
+        {
+            if (_isPointerOverUI)
+                return;
+            ClearTemporalParent();
+            DestroyDesignations();
+            StartFromPreviousMode();
+        }
+
+        private void FinalizeDesignationGrid(CallbackContext context)
+        {
+            if (_isPointerOverUI)
+                return;
+            if (AreDesignationsObstructed())
+                return;
+            CreateShipIfTemporalParentIsNotAShip();
+            CreateFinalDesignations();
+            UpdateShip();
+            StartFromPreviousMode();
+        }
+
+        #endregion
 
         #region Unity
 

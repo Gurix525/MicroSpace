@@ -42,6 +42,7 @@ namespace Ships
         private bool _isShipLoaded = true;
 
         private static readonly float _shipUnloadDistance = 200F;
+        private readonly int _minimumChildrenToExist = 3;
 
         #endregion Fields
 
@@ -82,6 +83,18 @@ namespace Ships
             UpdateBlocks();
             UpdateRooms();
             UpdateProperties();
+            if (IsShipEmpty())
+                DestroyShip();
+        }
+
+        private void DestroyShip()
+        {
+            Destroy(gameObject);
+        }
+
+        private bool IsShipEmpty()
+        {
+            return Blocks.Count <= 0;
         }
 
         private void UpdateProperties()

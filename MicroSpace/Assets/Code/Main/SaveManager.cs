@@ -101,20 +101,20 @@ namespace Main
         private static void InstantiateBlock(out GameObject block,
             GameObject ship, SerializableBlock blockToLoad)
         {
-            var designManager = DesignManager.Instance;
-            GetBlockPrefab(blockToLoad, designManager, out GameObject blockPrefab);
+            var buildingManager = BuildingManager.Instance;
+            GetBlockPrefab(blockToLoad, buildingManager, out GameObject blockPrefab);
             block = InstantiateBlockFromPrefab(blockPrefab, ship);
         }
 
         private static void GetBlockPrefab(SerializableBlock blockToLoad,
-            DesignManager designManager, out GameObject blockPrefab)
+            BuildingManager buildingManager, out GameObject blockPrefab)
         {
             blockPrefab = blockToLoad.BlockType switch
             {
-                BlockType.Floor => designManager.FloorPrefab,
-                BlockType.WallDesignation => designManager.WallDesignationPrefab,
-                BlockType.FloorDesignation => designManager.FloorDesignationPrefab,
-                _ => designManager.WallPrefab
+                BlockType.Floor => buildingManager.FloorPrefab,
+                BlockType.WallDesignation => buildingManager.WallDesignationPrefab,
+                BlockType.FloorDesignation => buildingManager.FloorDesignationPrefab,
+                _ => buildingManager.WallPrefab
             };
         }
 

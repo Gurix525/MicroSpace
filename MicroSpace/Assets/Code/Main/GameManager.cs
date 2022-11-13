@@ -38,7 +38,7 @@ namespace Main
         private UIController _uiController;
 
         [SerializeField]
-        private DesignManager _designManager;
+        private BuildingManager _buildingManager;
 
         [SerializeField]
         [ReadonlyInspector]
@@ -226,12 +226,12 @@ namespace Main
         private void EnableBuilding(CallbackContext context)
         {
             PlayerController.PlayerInput.SwitchCurrentActionMap("Building");
-            _designManager.enabled = true;
+            _buildingManager.enabled = true;
         }
 
         private void DisableBuilding(CallbackContext context)
         {
-            _designManager.enabled = false;
+            _buildingManager.enabled = false;
             PlayerController.PlayerInput.SwitchCurrentActionMap("Default");
         }
 
