@@ -341,7 +341,7 @@ namespace Main
 
         private void UpdateShip()
         {
-            _temporalParent?.GetComponent<Ship>()?.UpdateShip();
+            _temporalParent?.GetComponent<Ship>()?.StartUpdateShip();
         }
 
         private void CreateFinalDesignations()

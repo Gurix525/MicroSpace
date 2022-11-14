@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using Attributes;
 using ScriptableObjects;
+using System.Collections;
 
 namespace Ships
 {
@@ -42,7 +43,6 @@ namespace Ships
         private bool _isShipLoaded = true;
 
         private static readonly float _shipUnloadDistance = 200F;
-        private readonly int _minimumChildrenToExist = 3;
 
         #endregion Fields
 
@@ -78,13 +78,37 @@ namespace Ships
 
         #region Public
 
-        public void UpdateShip()
+        public void StartUpdateShip()
+        {
+            StartCoroutine(UpdateShipRepeatedly());
+        }
+
+        public void ActivateOrDeactivateChildren(Transform focusedShip)
+        {
+            if (IsShipDistantFromGivenShip(focusedShip) && _isShipLoaded)
+                SetShipChildrenActive(false);
+            else if (!IsShipDistantFromGivenShip(focusedShip) && !_isShipLoaded)
+                SetShipChildrenActive(true);
+        }
+
+        #endregion Public
+
+        #region Private
+
+        private void UpdateShip()
         {
             UpdateBlocks();
             UpdateRooms();
             UpdateProperties();
             if (IsShipEmpty())
                 DestroyShip();
+        }
+
+        private IEnumerator UpdateShipRepeatedly()
+        {
+            UpdateShip();
+            yield return null;
+            UpdateShip();
         }
 
         private void DestroyShip()
@@ -104,17 +128,6 @@ namespace Ships
             Velocity = GetComponent<Rigidbody2D>().velocity;
         }
 
-        public void ActivateOrDeactivateChildren(Transform focusedShip)
-        {
-            if (IsShipDistantFromGivenShip(focusedShip) && _isShipLoaded)
-                SetShipChildrenActive(false);
-            else if (!IsShipDistantFromGivenShip(focusedShip) && !_isShipLoaded)
-                SetShipChildrenActive(true);
-        }
-
-        #endregion Public
-
-        #region Private
 
         private void SetId()
         {

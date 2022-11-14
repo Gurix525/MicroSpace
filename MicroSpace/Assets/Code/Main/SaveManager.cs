@@ -75,7 +75,7 @@ namespace Main
 
         private static void UpdateShip(GameObject ship)
         {
-            ship.GetComponent<Ship>().UpdateShip();
+            ship.GetComponent<Ship>().StartUpdateShip();
         }
 
         private static void LoadBlocks(GameObject ship, SerializableShip shipToLoad)
@@ -255,7 +255,7 @@ namespace Main
         private static void UpdateShips(List<Ship> ships)
         {
             foreach (var ship in ships)
-                ship.UpdateShip();
+                ship.StartUpdateShip();
         }
 
         private static void ClearWorld()
