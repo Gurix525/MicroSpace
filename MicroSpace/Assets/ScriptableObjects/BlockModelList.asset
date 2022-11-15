@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 378be5c409c033e47bbdaf2309d92f8f, type: 3}
-  m_Name: BlockList
+  m_Script: {fileID: 11500000, guid: 99f272114bf3c6748a51e62a7543f742, type: 3}
+  m_Name: BlockModelList
   m_EditorClassIdentifier: 
-  _blocks:
+  _models:
   - {fileID: 11400000, guid: c4278b76a0b90004a90bcb6248fef2e0, type: 2}
   - {fileID: 11400000, guid: 22e58dbda4cd7274aa7066d355b06cf1, type: 2}

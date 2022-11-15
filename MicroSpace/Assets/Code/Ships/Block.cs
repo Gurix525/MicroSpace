@@ -24,6 +24,14 @@ namespace Ships
 
         [SerializeField]
         [ReadonlyInspector]
+        private int _modelId;
+
+        [SerializeField]
+        [ReadonlyInspector]
+        private int _shapeId;
+
+        [SerializeField]
+        [ReadonlyInspector]
         private Vector2 _localPosition;
 
         [SerializeField]
@@ -63,6 +71,9 @@ namespace Ships
             WallDesignation => BlockType.WallDesignation,
             _ => BlockType.Wall
         };
+
+        public int ModelId { get => _modelId; set => _modelId = value; }
+        public int ShapeId { get => _shapeId; set => _shapeId = value; }
 
         #endregion Properties
 

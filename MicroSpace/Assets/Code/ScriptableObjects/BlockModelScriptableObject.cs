@@ -3,9 +3,9 @@
 namespace ScriptableObjects
 {
     [CreateAssetMenu(
-        fileName = "Block",
-        menuName = "ScriptableObjects/Block")]
-    public class BlockScriptableObject : ScriptableObject
+        fileName = "BlockModel",
+        menuName = "ScriptableObjects/BlockModel")]
+    public class BlockModelScriptableObject : ScriptableObject
     {
         [SerializeField]
         private int _id;
@@ -24,8 +24,7 @@ namespace ScriptableObjects
 
         public bool IsNotFullyCreated()
         {
-            return _id == 0 ||
-                name == string.Empty ||
+            return name == string.Empty ||
                 name == null ||
                 _sprite == null ||
                 _sprite.name == "BlockDefault";

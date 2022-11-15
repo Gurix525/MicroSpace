@@ -20,7 +20,10 @@ namespace Main
         private ColorsScriptableObject _colors;
 
         [SerializeField]
-        private BlockListScriptableObject _blockList;
+        private BlockModelListScriptableObject _blockList;
+
+        [SerializeField]
+        private ShapeListScriptableObject _shapeList;
 
         [SerializeField]
         private GameObject _temporalDesignationPrefab;

@@ -1,4 +1,5 @@
-﻿using Ships;
+﻿using ScriptableObjects;
+using Ships;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,8 +8,24 @@ using UnityEngine;
 
 namespace Main
 {
-    public static class SaveManager
+    public class SaveManager : MonoBehaviour
     {
+        #region Fields
+
+        [SerializeField]
+        private BlockModelListScriptableObject _blockModels;
+
+        [SerializeField]
+        private ShapeListScriptableObject _blockShapes;
+
+        #endregion Fields
+
+        #region Properties
+
+        public static SaveManager Instance { get; set; }
+
+        #endregion Properties
+
         #region Public
 
         public static void SaveGame()
@@ -88,12 +105,43 @@ namespace Main
         {
             InstantiateBlock(out GameObject block, ship, blockToLoad);
             SetBlockParameters(block, blockToLoad);
+            LoadBlockModel(block);
+            LoadShape(block);
+        }
+
+        private static void LoadBlockModel(GameObject block)
+        {
+            var blockComponent = block.GetComponent<Block>();
+            var model = Instance._blockModels.GetModel(blockComponent.ModelId);
+            blockComponent.gameObject.name = model.name;
+            blockComponent.GetComponent<SpriteRenderer>().sprite = model.Sprite;
+        }
+
+        private static void LoadShape(GameObject block)
+        {
+            var blockComponent = block.GetComponent<Block>();
+            GameObject shape = Instance._blockShapes
+                .GetShape(blockComponent.ShapeId).Prefab;
+            if (blockComponent is Wall || blockComponent is WallDesignation)
+            {
+                block.GetComponent<SpriteMask>().sprite =
+                    shape.GetComponent<SpriteMask>().sprite;
+            }
+            if (blockComponent is Wall)
+            {
+                var blockCollider = block.GetComponent<PolygonCollider2D>();
+                var shapeCollider = shape.GetComponent<PolygonCollider2D>();
+                for (int i = 0; i < shapeCollider.pathCount; i++)
+                    blockCollider.SetPath(i, shapeCollider.GetPath(i));
+            }
         }
 
         private static void SetBlockParameters(GameObject block, SerializableBlock blockToLoad)
         {
             Block blockComponent = block.GetComponent<Block>();
             blockComponent.Id = blockToLoad.Id;
+            blockComponent.ModelId = blockToLoad.ModelId;
+            blockComponent.ShapeId = blockToLoad.ShapeId;
             block.transform.localPosition = blockToLoad.LocalPosition;
             block.transform.localEulerAngles = new(0, 0, blockToLoad.LocalRotation);
         }
@@ -271,5 +319,14 @@ namespace Main
         }
 
         #endregion Private
+
+        #region Unity
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        #endregion Unity
     }
 }

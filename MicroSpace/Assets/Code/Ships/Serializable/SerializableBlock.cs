@@ -13,6 +13,12 @@ namespace Ships
         private BlockType _blockType;
 
         [SerializeField]
+        private int _modelId;
+
+        [SerializeField]
+        private int _shapeId;
+
+        [SerializeField]
         private Vector2 _localPosition;
 
         [SerializeField]
@@ -22,6 +28,8 @@ namespace Ships
         private bool _isMarkedForMining;
 
         public int Id => _id;
+        public int ModelId => _modelId;
+        public int ShapeId => _shapeId;
         public bool IsMarkedForMining => _isMarkedForMining;
         public Vector2 LocalPosition => _localPosition;
         public float LocalRotation => _localRotation;
@@ -30,6 +38,8 @@ namespace Ships
         public SerializableBlock(Block block)
         {
             _id = block.Id;
+            _modelId = block.ModelId;
+            _shapeId = block.ShapeId;
             _localPosition = block.LocalPosition;
             _localRotation = block.LocalRotation;
             _isMarkedForMining = block.IsMarkedForMining;
