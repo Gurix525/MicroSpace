@@ -1,5 +1,6 @@
 using Attributes;
 using ExtensionMethods;
+using ScriptableObjects;
 using Ships;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace Main
 
         [SerializeField]
         private ColorsScriptableObject _colors;
+
+        [SerializeField]
+        private BlockListScriptableObject _blockList;
 
         [SerializeField]
         private GameObject _temporalDesignationPrefab;
@@ -717,7 +721,7 @@ namespace Main
             StartFromPreviousMode();
         }
 
-        #endregion
+        #endregion Callbacks
 
         #region Unity
 

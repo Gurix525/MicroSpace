@@ -194,6 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
+  _blockList: {fileID: 11400000, guid: 6fbef3c65248a894ba8b92bb3aeb08ee, type: 2}
   _temporalDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
   _cancelDesignationPrefab: {fileID: 2505317657868975611, guid: 2b67422fca0a67c49b9d1ff427c679d6, type: 3}
   _miningDesignationPrefab: {fileID: 2505317657868975611, guid: a51bf7d682bc7834897db0254d0b5a00, type: 3}
