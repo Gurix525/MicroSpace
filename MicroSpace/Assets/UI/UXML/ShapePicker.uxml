@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="background" style="width: 320px; height: 320px; flex-wrap: nowrap; flex-direction: column; flex-grow: 0; align-items: flex-start; justify-content: flex-start;">
+        <ui:Button display-tooltip-when-elided="true" name="shapeButton1" style="width: 50%; height: 50%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: none; -unity-background-scale-mode: stretch-to-fill; -unity-slice-left: 0; -unity-slice-top: 0; -unity-slice-right: 0; -unity-slice-bottom: 0;">
+            <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Sprites/SpriteMasks/FullRectangleMask.png?fileID=2800000&amp;guid=31c5f754792116b45bdb7633422ea238&amp;type=3#FullRectangleMask&apos;); width: 64px; height: 64px;" />
+        </ui:Button>
+        <ui:Button display-tooltip-when-elided="true" name="shapeButton2" style="width: 50%; height: 50%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: none;">
+            <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Sprites/SpriteMasks/HalfRectangleMask.png?fileID=2800000&amp;guid=e00e15e9a43ffbc4bb47bfc27153533d&amp;type=3#HalfRectangleMask&apos;); width: 64px; height: 64px;" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>
