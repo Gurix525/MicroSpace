@@ -127,6 +127,27 @@ namespace Ships
             SetId();
         }
 
+        protected virtual void Start()
+        {
+            SetSpriteOrderInLater();
+            TrySetSpriteMaskRange();
+        }
+
+        private void TrySetSpriteMaskRange()
+        {
+            if (TryGetComponent(out SpriteMask mask))
+            {
+                mask.isCustomRangeActive = true;
+                mask.backSortingOrder = Id;
+                mask.frontSortingOrder = Id;
+            }
+        }
+
+        protected void SetSpriteOrderInLater()
+        {
+            GetComponent<SpriteRenderer>().sortingOrder = Id;
+        }
+
         #endregion Unity
     }
 }

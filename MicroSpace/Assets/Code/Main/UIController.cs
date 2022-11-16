@@ -1,8 +1,10 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Main
@@ -12,15 +14,16 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private UIDocument _contextualMenu;
-
-        [SerializeField]
-        private UIDocument _speedometer;
-
-        [SerializeField]
         private InputActionAsset _inputAsset;
 
-        private Label _speedometerLabel;
+        [SerializeField]
+        private TextMeshProUGUI _velocityText;
+
+        [SerializeField]
+        private GameObject _buttonPrefab;
+
+        [SerializeField]
+        private GameObject _contextualMenu;
 
         private GameObject _context = null;
 
@@ -46,42 +49,46 @@ namespace Main
         {
             if (_isPointerOverUI)
                 return;
+            ClearContextualMenu();
             Vector2 mousePosition = PlayerController.DefaultPoint
                 .ReadValue<Vector2>();
-            _contextualMenu.enabled = true;
-            var root = _contextualMenu.rootVisualElement.Q("root");
-            root.style.top = Screen.height - mousePosition.y;
-            root.style.left = mousePosition.x;
-            root.Clear();
+            _contextualMenu.SetActive(true);
+            _contextualMenu.transform.position = mousePosition;
+            _context = FindContext(mousePosition);
+            CreateButton(SelectFocusedShip, "Steruj statkiem");
+            CreateButton(SelectTarget, "Obierz jako cel");
+        }
 
-            _context = findContext(); // Casting ray to find clicked object
+        private void ClearContextualMenu()
+        {
+            for (int i = 0; i < _contextualMenu.transform.childCount; i++)
+                Destroy(_contextualMenu.transform.GetChild(i).gameObject);
+        }
 
-            Button button = new(SelectFocusedShip);
-            button.text = "Przejmij statek";
-            button.style.fontSize = 40;
-            root.Add(button);
+        // Zwraca statek, nie collider (w przyszłości prawdopodobnie do zmiany);
+        private GameObject FindContext(Vector3 mousePosition)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
+            return hit.collider?.transform.parent.gameObject;
+        }
 
-            Button button2 = new(SelectTarget);
-            button2.text = "Obierz jako cel";
-            button2.style.fontSize = 40;
-            root.Add(button2);
-
-            GameObject findContext()
-            {
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
-                return hit.collider?.transform.parent.gameObject;// zwraca statek, nie collider (w przyszłości prawdopodobnie do zmiany);
-            }
+        private void CreateButton(UnityAction action, string displayText)
+        {
+            GameObject button = Instantiate(_buttonPrefab, _contextualMenu.transform);
+            button.GetComponent<Button>().onClick.AddListener(action);
+            button.transform.GetChild(0)
+                .GetComponent<TextMeshProUGUI>().text = displayText;
         }
 
         private void CloseContextualMenu()
         {
-            _contextualMenu.enabled = false;
+            _contextualMenu.SetActive(false);
         }
 
         private void UpdateSpeedometer()
         {
-            _speedometerLabel.text = $"{GameManager.Speedometer:0.000} m/s";
+            _velocityText.text = $"{GameManager.Speedometer:0.000} m/s";
         }
 
         private void SubscribeToInputEvents()
@@ -99,10 +106,6 @@ namespace Main
 
         #region Unity
 
-        private void Awake()
-        {
-        }
-
         private void OnEnable()
         {
             //SubscribeToInputEvents();
@@ -111,9 +114,6 @@ namespace Main
         private void Start()
         {
             SubscribeToInputEvents();
-            _speedometerLabel = _speedometer.rootVisualElement
-                .Q("background")
-                .Q("speed") as Label;
         }
 
         private void Update()

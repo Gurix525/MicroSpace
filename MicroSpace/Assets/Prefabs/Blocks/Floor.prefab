@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1624108849
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4a8abae0713d25242b794d541f809ba3, type: 3}
   m_Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
@@ -101,6 +101,8 @@ MonoBehaviour:
   _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
   _id: 0
+  _modelId: 0
+  _shapeId: 0
   _localPosition: {x: 0, y: 0}
   _localRotation: 0
   _isMarkedForMining: 0
