@@ -50,6 +50,9 @@ namespace Main
         private GameObject _floorDesignationPrefab;
 
         [SerializeField]
+        private GameObject _buildingUI;
+
+        [SerializeField]
         private Transform _worldTransform;
 
         [SerializeField]
@@ -58,6 +61,10 @@ namespace Main
         [SerializeField]
         [ReadonlyInspector]
         private BuildingMode _buildingMode = BuildingMode.Wall;
+
+        [SerializeField]
+        [ReadonlyInspector]
+        private ShapeScriptableObject _shape;
 
         [SerializeField]
         [Range(0F, 359F)]
@@ -92,26 +99,23 @@ namespace Main
 
         #endregion Properties
 
-        #region Public
-
-        //public void StartDesignateBlock(BlockType blockType)
-        //{
-        //    StartCoroutine(DesignateBlock(blockType));
-        //}
-
-        //public void StartCancelDesignation()
-        //{
-        //    StartCoroutine(CancelDesignation());
-        //}
-
-        //public void StartDesignateMining()
-        //{
-        //    StartCoroutine(DesignateMining());
-        //}
-
-        #endregion Public
-
         #region Private
+
+        private void SubscribeToShapeChangedEvent()
+        {
+            UIController.OnShapeChanged.AddListener(ChangeSelectedShape);
+        }
+
+        private void ChangeSelectedShape(int shapeId)
+        {
+            _shape = _shapeList.GetShape(shapeId);
+            StartFromPreviousMode();
+        }
+
+        private void SetBuildingMenuActive(bool state)
+        {
+            _buildingUI.SetActive(state);
+        }
 
         private bool AreDesignationsObstructed()
         {
@@ -191,10 +195,13 @@ namespace Main
                     Vector2.Distance(closestBlock.Transform.position, targetPosition) < 1.5F :
                     false)
             {
-                var v3relative = closestBlock.Transform.InverseTransformPoint(targetPosition);
+                var v3relative = closestBlock.Transform
+                    .InverseTransformPoint(targetPosition)
+                    .RotateAroundPivot(Vector3.zero,
+                    closestBlock.transform.localEulerAngles);
                 designation.transform.parent = closestBlock.Parent;
                 designation.transform.localPosition =
-                    closestBlock.Transform.localPosition +
+                    closestBlock.transform.localPosition +
                     v3relative
                     .Round();
                 designation.transform.localEulerAngles = new Vector3(0, 0, _prefabRotation);
@@ -216,8 +223,25 @@ namespace Main
                 GetMouseWorldPosition(),
                 GameManager.FocusedShipRotation,
                 _worldTransform);
+            SetBlockShape(_currentDesignation);
             _updateCalled.AddListener(MoveCurrentDesignationToMouse);
             PlayerController.BuildingClick.AddListener(ActionType.Performed, PlaceDesignation);
+        }
+
+        private void SetBlockShape(GameObject block)
+        {
+            block.GetComponent<Block>().ShapeId = _shape.Id;
+            if (block.TryGetComponent(out SpriteMask mask))
+            {
+                mask.sprite = _shape.Sprite;
+            }
+            if (block.TryGetComponent(out PolygonCollider2D collider))
+            {
+                PolygonCollider2D shapeCollider =
+                    _shape.Prefab.GetComponent<PolygonCollider2D>();
+                for (int i = 0; i < collider.pathCount; i++)
+                    collider.SetPath(i, shapeCollider.GetPath(i));
+            }
         }
 
         private void ClearInputActionsListeners()
@@ -285,7 +309,7 @@ namespace Main
             {
                 _temporalParent = new GameObject("TemporalParent").transform;
                 _temporalParent.position = _currentDesignation.transform.position;
-                _temporalParent.rotation = _currentDesignation.transform.rotation;
+                _temporalParent.rotation = Quaternion.identity;
                 _temporalParent.parent = Camera.main.transform;
                 _currentDesignation.transform.parent = _temporalParent;
             }
@@ -357,9 +381,12 @@ namespace Main
             {
                 GameObject newDesignation = Instantiate(
                     _wallDesignationPrefab,
-                    temporalDesignation.transform.position,
-                    temporalDesignation.transform.rotation,
                     _temporalParent);
+                newDesignation.transform.localPosition =
+                    temporalDesignation.transform.localPosition.Round();
+                newDesignation.transform.localEulerAngles =
+                    new Vector3(0, 0, _prefabRotation);
+                SetBlockShape(newDesignation);
             }
         }
 
@@ -370,7 +397,7 @@ namespace Main
                 GameObject ship = Instantiate(
                     _shipPrefab,
                     _temporalParent.position,
-                    _temporalParent.rotation,
+                    Quaternion.identity,
                     _worldTransform);
                 ship.GetComponent<Rigidbody2D>().velocity =
                     GameManager.FocusedShipVelocity;
@@ -389,7 +416,7 @@ namespace Main
         private void ClearTemporalParent()
         {
             if (_temporalParent != null)
-                if (gameObject.name == "TemporalParent")
+                if (_temporalParent.name == "TemporalParent")
                 {
                     Destroy(_temporalParent.gameObject);
                     _temporalParent = null;
@@ -505,6 +532,11 @@ namespace Main
             MoveDesignation(_currentDesignation, GetMouseWorldPosition());
         }
 
+        private void SetDefaultShape()
+        {
+            _shape = _shapeList.GetShape(0);
+        }
+
         #endregion Private
 
         #region Callbacks
@@ -548,7 +580,11 @@ namespace Main
                     _temporalDesignations.Add(Instantiate(
                         _selectedDesignationPrefab,
                         _temporalParent));
-                    _temporalDesignations[^1].transform.localPosition = new Vector3(x, y, _prefabRotation);
+                    _temporalDesignations[^1].transform.localPosition =
+                        new Vector3(x, y).Round();
+                    _temporalDesignations[^1].transform.localEulerAngles =
+                        new Vector3(0, 0, _prefabRotation);
+                    SetBlockShape(_temporalDesignations[^1]);
                 }
         }
 
@@ -622,6 +658,7 @@ namespace Main
             _prefabRotation += 90F;
             if (_prefabRotation >= 360F)
                 _prefabRotation = 0F;
+            StartFromPreviousMode();
         }
 
         private void CreateCancelDesignation(CallbackContext obj)
@@ -737,12 +774,19 @@ namespace Main
         private void Awake()
         {
             Instance = this;
+            SetDefaultShape();
+        }
+
+        private void Start()
+        {
+            SubscribeToShapeChangedEvent();
         }
 
         private void OnEnable()
         {
             SubscribeToInputEvents();
             StartFromPreviousMode();
+            SetBuildingMenuActive(true);
         }
 
         private void OnDisable()
@@ -752,6 +796,7 @@ namespace Main
             ClearCurentDesignation();
             ClearTemporalParent();
             DestroyDesignations();
+            SetBuildingMenuActive(false);
         }
 
         #endregion Unity

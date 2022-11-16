@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2461360850266893279}
   - component: {fileID: -264670189872627432}
   - component: {fileID: 5268658532383212623}
+  - component: {fileID: 5038026589769287469}
   m_Layer: 0
   m_Name: TemporalDesignation
   m_TagString: Untagged
@@ -71,10 +72,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 83034829
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4a8abae0713d25242b794d541f809ba3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2f337aac44c90a645911d3caccd097a8, type: 3}
   m_Color: {r: 0.6, g: 0.8, b: 0.6, a: 0.6}
   m_FlipX: 0
   m_FlipY: 0
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!114 &5268658532383212623
 MonoBehaviour:
@@ -100,5 +101,59 @@ MonoBehaviour:
   _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
   _id: 0
+  _modelId: 0
+  _shapeId: 0
   _localPosition: {x: 0, y: 0}
+  _localRotation: 0
   _isMarkedForMining: 0
+--- !u!331 &5038026589769287469
+SpriteMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2505317657868975611}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 15d0c3709176029428a0da2f8cecf0b5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: e00e15e9a43ffbc4bb47bfc27153533d, type: 3}
+  m_MaskAlphaCutoff: 1
+  m_FrontSortingLayerID: 83034829
+  m_BackSortingLayerID: 83034829
+  m_FrontSortingLayer: 3
+  m_BackSortingLayer: 3
+  m_FrontSortingOrder: 0
+  m_BackSortingOrder: 0
+  m_IsCustomRangeActive: 1
+  m_SpriteSortPoint: 0

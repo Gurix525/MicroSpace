@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
+using ScriptableObjects;
 
 namespace Main
 {
@@ -23,6 +24,15 @@ namespace Main
         private GameObject _buttonPrefab;
 
         [SerializeField]
+        private GameObject _shapePicker;
+
+        [SerializeField]
+        private ShapeListScriptableObject _shapeList;
+
+        [SerializeField]
+        private GameObject _shapeButtonPrefab;
+
+        [SerializeField]
         private GameObject _contextualMenu;
 
         private GameObject _context = null;
@@ -32,6 +42,28 @@ namespace Main
         #endregion Fields
 
         #region Private
+
+        private void InvokeShapeChangedEvent(int shapeId)
+        {
+            OnShapeChanged.Invoke(shapeId);
+        }
+
+        private void CheckIfPointerIsOverUI()
+        {
+            _isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+        }
+
+        private void CreateShapeButtons()
+        {
+            foreach (ShapeScriptableObject shape in _shapeList.Shapes)
+            {
+                GameObject button = Instantiate(
+                    _shapeButtonPrefab, _shapePicker.transform);
+                button.transform.GetChild(0).GetComponent<Image>().sprite = shape.Sprite;
+                button.GetComponent<Button>().onClick
+                    .AddListener(() => InvokeShapeChangedEvent(shape.Id));
+            }
+        }
 
         private void SelectFocusedShip()
         {
@@ -104,6 +136,12 @@ namespace Main
 
         #endregion Private
 
+        #region Public
+
+        public static UnityEvent<int> OnShapeChanged = new();
+
+        #endregion Public
+
         #region Unity
 
         private void OnEnable()
@@ -114,16 +152,12 @@ namespace Main
         private void Start()
         {
             SubscribeToInputEvents();
+            CreateShapeButtons();
         }
 
         private void Update()
         {
             CheckIfPointerIsOverUI();
-        }
-
-        private void CheckIfPointerIsOverUI()
-        {
-            _isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
         }
 
         private void FixedUpdate()

@@ -17,6 +17,8 @@ namespace ScriptableObjects
 
         public GameObject Prefab => _prefab;
 
+        public Sprite Sprite => _prefab.GetComponent<SpriteMask>().sprite;
+
         public bool IsNotFullyCreated()
         {
             return name == string.Empty ||

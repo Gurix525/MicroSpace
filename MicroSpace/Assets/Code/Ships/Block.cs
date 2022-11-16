@@ -94,6 +94,16 @@ namespace Ships
             return IsCollidingWithAnotherBlock(out _);
         }
 
+        protected void TrySetSpriteMaskRange()
+        {
+            if (TryGetComponent(out SpriteMask mask))
+            {
+                mask.isCustomRangeActive = true;
+                mask.backSortingOrder = Id - 1;
+                mask.frontSortingOrder = Id;
+            }
+        }
+
         protected bool IsCollidingWithAnotherBlock(out Block collidingBlock)
         {
             var blocks = FindObjectsOfType<Block>()
@@ -131,16 +141,6 @@ namespace Ships
         {
             SetSpriteOrderInLater();
             TrySetSpriteMaskRange();
-        }
-
-        private void TrySetSpriteMaskRange()
-        {
-            if (TryGetComponent(out SpriteMask mask))
-            {
-                mask.isCustomRangeActive = true;
-                mask.backSortingOrder = Id;
-                mask.frontSortingOrder = Id;
-            }
         }
 
         protected void SetSpriteOrderInLater()

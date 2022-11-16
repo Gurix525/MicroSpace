@@ -13,7 +13,7 @@ namespace ScriptableObjects
         [SerializeField]
         private List<ShapeScriptableObject> _shapes;
 
-        public IReadOnlyList<ShapeScriptableObject> Blocks => _shapes;
+        public IReadOnlyList<ShapeScriptableObject> Shapes => _shapes;
 
         public ShapeScriptableObject GetShape(int shapeId)
         {
