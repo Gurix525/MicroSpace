@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 599fbeb6c89260f4ba2b0c32d6427f4f, type: 3}
-  m_Name: HalfRectangle
+  m_Name: FreePeak
   m_EditorClassIdentifier: 
-  _id: 2
-  _prefab: {fileID: 625874179206347827, guid: 5e73340a926c4a7478a045b3ea07c908, type: 3}
+  _id: 11
+  _prefab: {fileID: 625874179206347827, guid: 8aaaeb5d7ded1bb44a2e8a0b3bd5c327, type: 3}
