@@ -20,7 +20,7 @@ namespace Main
         private ColorsScriptableObject _colors;
 
         [SerializeField]
-        private BlockModelListScriptableObject _blockList;
+        private BlockModelListScriptableObject _modelList;
 
         [SerializeField]
         private ShapeListScriptableObject _shapeList;
@@ -70,6 +70,10 @@ namespace Main
         private ShapeScriptableObject _shape;
 
         [SerializeField]
+        [ReadonlyInspector]
+        private BlockModelScriptableObject _model;
+
+        [SerializeField]
         [Range(0F, 359F)]
         private float _prefabRotation;
 
@@ -112,6 +116,12 @@ namespace Main
         private void ChangeSelectedShape(int shapeId)
         {
             _shape = _shapeList.GetShape(shapeId);
+            StartFromPreviousMode();
+        }
+
+        private void ChangeSelectedModel(int modelId)
+        {
+            _model = _modelList.GetModel(modelId);
             StartFromPreviousMode();
         }
 
@@ -237,6 +247,7 @@ namespace Main
                     BuildingMode.Floor => BlockType.FloorDesignation,
                     _ => BlockType.WallDesignation
                 };
+            SetBlockModel(_currentDesignation);
             SetBlockShape(_currentDesignation);
             _updateCalled.AddListener(MoveCurrentDesignationToMouse);
             PlayerController.BuildingClick.AddListener(ActionType.Performed, PlaceDesignation);
@@ -266,6 +277,15 @@ namespace Main
                 {
                     mask.sprite = _shapeList.GetShape(0).Sprite;
                 }
+            }
+        }
+
+        private void SetBlockModel(GameObject block)
+        {
+            block.GetComponent<Block>().ModelId = _model.Id;
+            if (block.TryGetComponent(out SpriteRenderer renderer))
+            {
+                renderer.sprite = _model.Sprite;
             }
         }
 
@@ -420,6 +440,7 @@ namespace Main
                     temporalDesignation.transform.localPosition.Round();
                 newDesignation.transform.localEulerAngles =
                     new Vector3(0, 0, _prefabRotation);
+                SetBlockModel(newDesignation);
                 SetBlockShape(newDesignation);
             }
         }
@@ -590,6 +611,11 @@ namespace Main
             _shape = _shapeList.GetShape(0);
         }
 
+        private void SetDefaultModel()
+        {
+            _model = _modelList.GetModel(0);
+        }
+
         #endregion Private
 
         #region Callbacks
@@ -643,6 +669,7 @@ namespace Main
                             BuildingMode.Floor => BlockType.FloorDesignation,
                             _ => BlockType.WallDesignation
                         };
+                    SetBlockModel(_temporalDesignations[^1]);
                     SetBlockShape(_temporalDesignations[^1]);
                 }
         }
@@ -834,6 +861,7 @@ namespace Main
         {
             Instance = this;
             SetDefaultShape();
+            SetDefaultModel();
         }
 
         private void Start()
