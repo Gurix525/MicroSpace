@@ -511,7 +511,6 @@ GameObject:
   m_Component:
   - component: {fileID: 392410843}
   - component: {fileID: 392410842}
-  - component: {fileID: 392410841}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -519,22 +518,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &392410841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392410840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc2db225728f6a46b8cf7e2002b2f42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _movingSpeed: 5
-  _minDistanceToMove: 1.5
-  _minDistanceToRemoveNode: 0.2
-  _minDistanceFromCloseShipToChangeShips: 1.5
 --- !u!212 &392410842
 SpriteRenderer:
   m_ObjectHideFlags: 0
