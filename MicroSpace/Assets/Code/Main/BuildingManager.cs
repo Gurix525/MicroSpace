@@ -135,12 +135,14 @@ namespace Main
 
         private void SetBuildingMenuActive(bool state)
         {
-            _buildingUI.SetActive(state);
+            if (_buildingUI != null)
+                _buildingUI.SetActive(state);
         }
 
         private void SetShapePickerActive(bool state)
         {
-            _shapePickerUI.SetActive(state);
+            if (_shapePickerUI != null)
+                _shapePickerUI.SetActive(state);
         }
 
         private void SetModelPickerActive(bool state)
