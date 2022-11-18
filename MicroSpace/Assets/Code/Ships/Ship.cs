@@ -113,6 +113,8 @@ namespace Ships
 
         private void DestroyShip()
         {
+            if (Camera.main.transform.parent == transform)
+                Camera.main.transform.parent = null;
             Destroy(gameObject);
         }
 
@@ -127,7 +129,6 @@ namespace Ships
             Rotation = transform.eulerAngles.z;
             Velocity = GetComponent<Rigidbody2D>().velocity;
         }
-
 
         private void SetId()
         {
