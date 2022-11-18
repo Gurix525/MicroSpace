@@ -35,6 +35,9 @@ namespace Main
         public static ModifiableInputAction DefaultPoint { get; set; } = new();
         public static ModifiableInputAction DefaultClick { get; set; } = new();
         public static ModifiableInputAction DefaultRightClick { get; set; } = new();
+        public static ModifiableInputAction DefaultDirection { get; set; } = new();
+        public static ModifiableInputAction DefaultRotation { get; set; } = new();
+        public static ModifiableInputAction DefaultAlignCamera { get; set; } = new();
 
         public static ModifiableInputAction SteeringPause { get; set; } = new();
         public static ModifiableInputAction SteeringZoom { get; set; } = new();
@@ -48,8 +51,10 @@ namespace Main
         public static ModifiableInputAction SteeringClick { get; set; } = new();
         public static ModifiableInputAction SteeringRightClick { get; set; } = new();
         public static ModifiableInputAction SteeringSwitchToBuilding { get; set; } = new();
+        public static ModifiableInputAction SteeringAlignCamera { get; set; } = new();
 
         public static ModifiableInputAction BuildingDisableBuilding { get; set; } = new();
+        public static ModifiableInputAction BuildingZoom { get; set; } = new();
         public static ModifiableInputAction BuildingPause { get; set; } = new();
         public static ModifiableInputAction BuildingPoint { get; set; } = new();
         public static ModifiableInputAction BuildingClick { get; set; } = new();
@@ -60,6 +65,9 @@ namespace Main
         public static ModifiableInputAction BuildingMining { get; set; } = new();
         public static ModifiableInputAction BuildingCancel { get; set; } = new();
         public static ModifiableInputAction BuildingChangeRotation { get; set; } = new();
+        public static ModifiableInputAction BuildingDirection { get; set; } = new();
+        public static ModifiableInputAction BuildingRotation { get; set; } = new();
+        public static ModifiableInputAction BuildingAlignCamera { get; set; } = new();
 
         #endregion Properties
 
@@ -86,6 +94,9 @@ namespace Main
             DefaultPoint.Action = ActionMapDefault.FindAction("Point");
             DefaultClick.Action = ActionMapDefault.FindAction("Click");
             DefaultRightClick.Action = ActionMapDefault.FindAction("RightClick");
+            DefaultDirection.Action = ActionMapDefault.FindAction("Direction");
+            DefaultRotation.Action = ActionMapDefault.FindAction("Rotation");
+            DefaultAlignCamera.Action = ActionMapDefault.FindAction("AlignCamera");
 
             SteeringPause.Action = ActionMapSteering.FindAction("Pause");
             SteeringZoom.Action = ActionMapSteering.FindAction("Zoom");
@@ -99,8 +110,10 @@ namespace Main
             SteeringClick.Action = ActionMapSteering.FindAction("Click");
             SteeringRightClick.Action = ActionMapSteering.FindAction("RightClick");
             SteeringSwitchToBuilding.Action = ActionMapSteering.FindAction("SwitchToBuilding");
+            SteeringAlignCamera.Action = ActionMapSteering.FindAction("AlignCamera");
 
             BuildingDisableBuilding.Action = ActionMapBuilding.FindAction("DisableBuilding");
+            BuildingZoom.Action = ActionMapBuilding.FindAction("Zoom");
             BuildingPause.Action = ActionMapBuilding.FindAction("Pause");
             BuildingPoint.Action = ActionMapBuilding.FindAction("Point");
             BuildingClick.Action = ActionMapBuilding.FindAction("Click");
@@ -111,6 +124,9 @@ namespace Main
             BuildingMining.Action = ActionMapBuilding.FindAction("Mining");
             BuildingCancel.Action = ActionMapBuilding.FindAction("Cancel");
             BuildingChangeRotation.Action = ActionMapBuilding.FindAction("ChangeRotation");
+            BuildingDirection.Action = ActionMapBuilding.FindAction("Direction");
+            BuildingRotation.Action = ActionMapBuilding.FindAction("Rotation");
+            BuildingAlignCamera.Action = ActionMapBuilding.FindAction("AlignCamera");
         }
 
         #endregion Unity

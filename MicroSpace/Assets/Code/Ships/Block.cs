@@ -2,6 +2,7 @@
 using Maths;
 using ScriptableObjects;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -99,17 +100,18 @@ namespace Ships
             if (TryGetComponent(out SpriteMask mask))
             {
                 mask.isCustomRangeActive = true;
-                mask.backSortingOrder = Id - 1;
                 mask.frontSortingOrder = Id;
+                mask.backSortingOrder = Id - 1;
             }
         }
 
         protected bool IsCollidingWithAnotherBlock(out Block collidingBlock)
         {
             var blocks = FindObjectsOfType<Block>()
-                .Where(x => Vector2.Distance(transform.position, x.transform.position) < 1.42F)
-                .Where(x => x != this)
-                .Where(x => x is not TemporalDesignation);
+                .Where(x =>
+                Vector2.Distance(transform.position, x.transform.position) < 1.42F &&
+                x != this &&
+                x is not TemporalDesignation);
             foreach (var block in blocks)
             {
                 if (Square.IsIntersecting(block.Square))
@@ -120,6 +122,25 @@ namespace Ships
             }
             collidingBlock = null;
             return false;
+        }
+
+        protected bool IsCollidingWithAnotherBlocks(out Block[] collidingBlocks)
+        {
+            List<Block> newCollidingBlocks = new();
+            var blocks = FindObjectsOfType<Block>()
+                .Where(x =>
+                Vector2.Distance(transform.position, x.transform.position) < 1.42F &&
+                x != this &&
+                x is not TemporalDesignation);
+            foreach (var block in blocks)
+            {
+                if (Square.IsIntersecting(block.Square))
+                {
+                    newCollidingBlocks.Add(block);
+                }
+            }
+            collidingBlocks = newCollidingBlocks.ToArray();
+            return collidingBlocks.Length > 0;
         }
 
         protected virtual void SetId()

@@ -53,6 +53,9 @@ namespace Main
         private GameObject _buildingUI;
 
         [SerializeField]
+        private GameObject _shapePickerUI;
+
+        [SerializeField]
         private Transform _worldTransform;
 
         [SerializeField]
@@ -115,6 +118,11 @@ namespace Main
         private void SetBuildingMenuActive(bool state)
         {
             _buildingUI.SetActive(state);
+        }
+
+        private void SetShapePickerActive(bool state)
+        {
+            _shapePickerUI.SetActive(state);
         }
 
         private bool AreDesignationsObstructed()
@@ -223,6 +231,12 @@ namespace Main
                 GetMouseWorldPosition(),
                 GameManager.FocusedShipRotation,
                 _worldTransform);
+            _currentDesignation.GetComponent<TemporalDesignation>()
+                .TemporalBlockType = _buildingMode switch
+                {
+                    BuildingMode.Floor => BlockType.FloorDesignation,
+                    _ => BlockType.WallDesignation
+                };
             SetBlockShape(_currentDesignation);
             _updateCalled.AddListener(MoveCurrentDesignationToMouse);
             PlayerController.BuildingClick.AddListener(ActionType.Performed, PlaceDesignation);
@@ -230,17 +244,28 @@ namespace Main
 
         private void SetBlockShape(GameObject block)
         {
-            block.GetComponent<Block>().ShapeId = _shape.Id;
-            if (block.TryGetComponent(out SpriteMask mask))
+            if (_buildingMode == BuildingMode.Wall)
             {
-                mask.sprite = _shape.Sprite;
+                block.GetComponent<Block>().ShapeId = _shape.Id;
+                if (block.TryGetComponent(out SpriteMask mask))
+                {
+                    mask.sprite = _shape.Sprite;
+                }
+                if (block.TryGetComponent(out PolygonCollider2D collider))
+                {
+                    PolygonCollider2D shapeCollider =
+                        _shape.Prefab.GetComponent<PolygonCollider2D>();
+                    for (int i = 0; i < collider.pathCount; i++)
+                        collider.SetPath(i, shapeCollider.GetPath(i));
+                }
             }
-            if (block.TryGetComponent(out PolygonCollider2D collider))
+            if (_buildingMode == BuildingMode.Floor)
             {
-                PolygonCollider2D shapeCollider =
-                    _shape.Prefab.GetComponent<PolygonCollider2D>();
-                for (int i = 0; i < collider.pathCount; i++)
-                    collider.SetPath(i, shapeCollider.GetPath(i));
+                block.GetComponent<Block>().ShapeId = 0;
+                if (block.TryGetComponent(out SpriteMask mask))
+                {
+                    mask.sprite = _shapeList.GetShape(0).Sprite;
+                }
             }
         }
 
@@ -263,6 +288,10 @@ namespace Main
             DestroyDesignations();
             ClearTemporalParent();
             _buildingMode = mode;
+            if (mode == BuildingMode.Wall)
+                SetShapePickerActive(true);
+            else
+                SetShapePickerActive(false);
         }
 
         private void ClearCurentDesignation()
@@ -377,10 +406,15 @@ namespace Main
 
         private void CreateFinalDesignations()
         {
+            GameObject prefab = _buildingMode switch
+            {
+                BuildingMode.Wall => _wallDesignationPrefab,
+                _ => _floorDesignationPrefab
+            };
             foreach (GameObject temporalDesignation in _temporalDesignations)
             {
                 GameObject newDesignation = Instantiate(
-                    _wallDesignationPrefab,
+                    prefab,
                     _temporalParent);
                 newDesignation.transform.localPosition =
                     temporalDesignation.transform.localPosition.Round();
@@ -439,22 +473,39 @@ namespace Main
             foreach (CancelDesignation designation in _temporalDesignations
                 .Select(designation => designation.GetComponent<CancelDesignation>()))
             {
+                bool isSet = false;
                 foreach (Block block in blocks)
                 {
-                    if (block is BlockDesignation)
+                    if (block is WallDesignation &&
+                        block.transform.localPosition.Round() ==
+                        designation.transform.localPosition.Round())
                     {
-                        if (block.transform.localPosition.Round() ==
-                            designation.transform.localPosition.Round())
-                        {
-                            blocksToDestroy.Add(block);
-                            break;
-                        }
-                        continue;
+                        blocksToDestroy.Add(block);
+                        isSet = true;
+                        break;
                     }
+                }
+                if (isSet)
+                    continue;
+                foreach (Block block in blocks)
+                {
+                    if (block is FloorDesignation &&
+                        block.transform.localPosition.Round() ==
+                        designation.transform.localPosition.Round())
+                    {
+                        blocksToDestroy.Add(block);
+                        isSet = true;
+                        break;
+                    }
+                }
+                if (isSet)
+                    continue;
+                foreach (Block block in blocks)
+                {
                     if (block.transform.localPosition.Round() ==
                         designation.transform.localPosition.Round())
                     {
-                        ((SolidBlock)block).IsMarkedForMining = false;
+                        block.IsMarkedForMining = false;
                         break;
                     }
                 }
@@ -462,7 +513,9 @@ namespace Main
             for (int i = 0; i < blocksToDestroy.Count; i++)
             {
                 var block = blocksToDestroy[i];
+
                 block.gameObject.SetActive(false);
+
                 Destroy(block.gameObject);
             }
         }
@@ -584,6 +637,12 @@ namespace Main
                         new Vector3(x, y).Round();
                     _temporalDesignations[^1].transform.localEulerAngles =
                         new Vector3(0, 0, _prefabRotation);
+                    _temporalDesignations[^1].GetComponent<TemporalDesignation>()
+                        .TemporalBlockType = _buildingMode switch
+                        {
+                            BuildingMode.Floor => BlockType.FloorDesignation,
+                            _ => BlockType.WallDesignation
+                        };
                     SetBlockShape(_temporalDesignations[^1]);
                 }
         }

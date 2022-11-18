@@ -4,20 +4,27 @@ namespace Ships
 {
     public class TemporalDesignation : BlockDesignation
     {
+        public BlockType TemporalBlockType { get; set; }
+
         private void Update()
         {
             if (transform.parent != null)
             {
-                if (IsCollidingWithAnotherBlock())
+                if (IsCollidingWithAnotherBlocks(out Block[] blocks))
                 {
-                    IsObstructed = true;
-                    _spriteRenderer.color = _colors.TemporalDesignationObstructed;
+                    foreach (var block in blocks)
+                    {
+                        if (block.BlockType == TemporalBlockType ||
+                        block.BlockType == TemporalBlockType - 2)
+                        {
+                            IsObstructed = true;
+                            _spriteRenderer.color = _colors.TemporalDesignationObstructed;
+                            return;
+                        }
+                    }
                 }
-                else
-                {
-                    IsObstructed = false;
-                    _spriteRenderer.color = _colors.TemporalDesignationNormal;
-                }
+                IsObstructed = false;
+                _spriteRenderer.color = _colors.TemporalDesignationNormal;
             }
         }
 

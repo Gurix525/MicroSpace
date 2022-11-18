@@ -39,6 +39,15 @@ namespace Main
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Direction"",
+                    ""type"": ""Value"",
+                    ""id"": ""de1f3647-52d2-4318-83b1-7131b8dee7e0"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Zoom"",
                     ""type"": ""Value"",
                     ""id"": ""08163af9-c4f9-49f7-b038-817708e6650d"",
@@ -109,6 +118,24 @@ namespace Main
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Rotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""97a72e63-eb90-4296-8145-2dd5c9a381c6"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AlignCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""15c8daac-4d47-4cdb-8e19-e178c9fbb182"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -210,6 +237,105 @@ namespace Main
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""7d9a2b33-a05f-41d3-a467-cd28592ab939"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f925f3d7-4f05-4e2a-beec-d969d1d3c10e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""13b9c9a6-28c5-43b5-be5b-0d94e078ceaf"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ead6e686-8dcc-4d09-979d-3ff21981d844"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4bd094bb-a373-469c-aee6-f0e47840c548"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""59eb0d39-0c92-4048-8b8c-3b827be264e6"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""28926b44-438a-405f-83ea-ca3815c2b52c"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""98e5a51f-429b-465f-978b-73d0af488689"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1beb58a8-9dc3-4c13-9f97-17adf976efdd"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlignCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -221,6 +347,15 @@ namespace Main
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""c3a21b41-0069-401a-9228-d9159247502e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlignCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""925bc20d-11a3-4d06-aaa8-edbb67db610b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -535,6 +670,17 @@ namespace Main
                     ""action"": ""SwitchToBuilding"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf6ca95c-e96b-4cd6-82e8-87689450ab0c"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlignCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -550,6 +696,24 @@ namespace Main
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Direction"",
+                    ""type"": ""Value"",
+                    ""id"": ""fdec19d7-ce01-454d-9e48-f9cc4abba5c8"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""b488ff3c-f2cc-4a69-8e60-b8da0496f531"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Pause"",
@@ -636,6 +800,24 @@ namespace Main
                     ""name"": ""ChangeRotation"",
                     ""type"": ""Button"",
                     ""id"": ""61c16f4b-c175-4782-9665-2ed9ba3ffce6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""cc971252-7ee7-4ae2-93f0-25546aa694f6"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AlignCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""62862a7c-71d9-46b0-b644-03964f902205"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -807,6 +989,116 @@ namespace Main
                     ""action"": ""ChangeRotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ff2aa94-f499-4456-afa5-22049e755b8b"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""f0248e7c-f665-4d6f-b062-7235ab5c2c59"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""4a9496d4-8ffb-4907-9e16-38abb139f905"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0f31cf00-7f85-40ca-9cf4-6cfa32612616"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""fedf0477-bf1e-4bd5-af0d-39953f9218ea"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e5ce67e3-c8a7-4e8a-bedf-ef9db9c60a86"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""9241e024-5d81-43c6-80f8-bba5a0423532"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""17c1cb21-94c1-44ac-86de-f5606e746af2"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""9f666a24-d437-45e3-8e88-c7fe61080ed5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f9a8a279-7379-4cb5-8b2b-4a4d3fa54faf"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlignCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -816,6 +1108,7 @@ namespace Main
             // Default
             m_Default = asset.FindActionMap("Default", throwIfNotFound: true);
             m_Default_Pause = m_Default.FindAction("Pause", throwIfNotFound: true);
+            m_Default_Direction = m_Default.FindAction("Direction", throwIfNotFound: true);
             m_Default_Zoom = m_Default.FindAction("Zoom", throwIfNotFound: true);
             m_Default_QuickSave = m_Default.FindAction("QuickSave", throwIfNotFound: true);
             m_Default_QuickLoad = m_Default.FindAction("QuickLoad", throwIfNotFound: true);
@@ -824,9 +1117,12 @@ namespace Main
             m_Default_Click = m_Default.FindAction("Click", throwIfNotFound: true);
             m_Default_RightClick = m_Default.FindAction("RightClick", throwIfNotFound: true);
             m_Default_Point = m_Default.FindAction("Point", throwIfNotFound: true);
+            m_Default_Rotation = m_Default.FindAction("Rotation", throwIfNotFound: true);
+            m_Default_AlignCamera = m_Default.FindAction("AlignCamera", throwIfNotFound: true);
             // Steering
             m_Steering = asset.FindActionMap("Steering", throwIfNotFound: true);
             m_Steering_Pause = m_Steering.FindAction("Pause", throwIfNotFound: true);
+            m_Steering_AlignCamera = m_Steering.FindAction("AlignCamera", throwIfNotFound: true);
             m_Steering_Zoom = m_Steering.FindAction("Zoom", throwIfNotFound: true);
             m_Steering_QuickSave = m_Steering.FindAction("QuickSave", throwIfNotFound: true);
             m_Steering_QuickLoad = m_Steering.FindAction("QuickLoad", throwIfNotFound: true);
@@ -841,6 +1137,8 @@ namespace Main
             // Building
             m_Building = asset.FindActionMap("Building", throwIfNotFound: true);
             m_Building_DisableBuilding = m_Building.FindAction("DisableBuilding", throwIfNotFound: true);
+            m_Building_Direction = m_Building.FindAction("Direction", throwIfNotFound: true);
+            m_Building_Zoom = m_Building.FindAction("Zoom", throwIfNotFound: true);
             m_Building_Pause = m_Building.FindAction("Pause", throwIfNotFound: true);
             m_Building_Click = m_Building.FindAction("Click", throwIfNotFound: true);
             m_Building_RightClick = m_Building.FindAction("RightClick", throwIfNotFound: true);
@@ -851,6 +1149,8 @@ namespace Main
             m_Building_Mining = m_Building.FindAction("Mining", throwIfNotFound: true);
             m_Building_Cancel = m_Building.FindAction("Cancel", throwIfNotFound: true);
             m_Building_ChangeRotation = m_Building.FindAction("ChangeRotation", throwIfNotFound: true);
+            m_Building_Rotation = m_Building.FindAction("Rotation", throwIfNotFound: true);
+            m_Building_AlignCamera = m_Building.FindAction("AlignCamera", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -911,6 +1211,7 @@ namespace Main
         private readonly InputActionMap m_Default;
         private IDefaultActions m_DefaultActionsCallbackInterface;
         private readonly InputAction m_Default_Pause;
+        private readonly InputAction m_Default_Direction;
         private readonly InputAction m_Default_Zoom;
         private readonly InputAction m_Default_QuickSave;
         private readonly InputAction m_Default_QuickLoad;
@@ -919,11 +1220,14 @@ namespace Main
         private readonly InputAction m_Default_Click;
         private readonly InputAction m_Default_RightClick;
         private readonly InputAction m_Default_Point;
+        private readonly InputAction m_Default_Rotation;
+        private readonly InputAction m_Default_AlignCamera;
         public struct DefaultActions
         {
             private @PlayerControls m_Wrapper;
             public DefaultActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Pause => m_Wrapper.m_Default_Pause;
+            public InputAction @Direction => m_Wrapper.m_Default_Direction;
             public InputAction @Zoom => m_Wrapper.m_Default_Zoom;
             public InputAction @QuickSave => m_Wrapper.m_Default_QuickSave;
             public InputAction @QuickLoad => m_Wrapper.m_Default_QuickLoad;
@@ -932,6 +1236,8 @@ namespace Main
             public InputAction @Click => m_Wrapper.m_Default_Click;
             public InputAction @RightClick => m_Wrapper.m_Default_RightClick;
             public InputAction @Point => m_Wrapper.m_Default_Point;
+            public InputAction @Rotation => m_Wrapper.m_Default_Rotation;
+            public InputAction @AlignCamera => m_Wrapper.m_Default_AlignCamera;
             public InputActionMap Get() { return m_Wrapper.m_Default; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -944,6 +1250,9 @@ namespace Main
                     @Pause.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPause;
                     @Pause.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPause;
                     @Pause.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPause;
+                    @Direction.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnDirection;
+                    @Direction.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnDirection;
+                    @Direction.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnDirection;
                     @Zoom.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnZoom;
                     @Zoom.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnZoom;
                     @Zoom.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnZoom;
@@ -968,6 +1277,12 @@ namespace Main
                     @Point.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPoint;
                     @Point.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPoint;
                     @Point.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnPoint;
+                    @Rotation.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnRotation;
+                    @Rotation.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnRotation;
+                    @Rotation.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnRotation;
+                    @AlignCamera.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnAlignCamera;
+                    @AlignCamera.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnAlignCamera;
+                    @AlignCamera.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnAlignCamera;
                 }
                 m_Wrapper.m_DefaultActionsCallbackInterface = instance;
                 if (instance != null)
@@ -975,6 +1290,9 @@ namespace Main
                     @Pause.started += instance.OnPause;
                     @Pause.performed += instance.OnPause;
                     @Pause.canceled += instance.OnPause;
+                    @Direction.started += instance.OnDirection;
+                    @Direction.performed += instance.OnDirection;
+                    @Direction.canceled += instance.OnDirection;
                     @Zoom.started += instance.OnZoom;
                     @Zoom.performed += instance.OnZoom;
                     @Zoom.canceled += instance.OnZoom;
@@ -999,6 +1317,12 @@ namespace Main
                     @Point.started += instance.OnPoint;
                     @Point.performed += instance.OnPoint;
                     @Point.canceled += instance.OnPoint;
+                    @Rotation.started += instance.OnRotation;
+                    @Rotation.performed += instance.OnRotation;
+                    @Rotation.canceled += instance.OnRotation;
+                    @AlignCamera.started += instance.OnAlignCamera;
+                    @AlignCamera.performed += instance.OnAlignCamera;
+                    @AlignCamera.canceled += instance.OnAlignCamera;
                 }
             }
         }
@@ -1008,6 +1332,7 @@ namespace Main
         private readonly InputActionMap m_Steering;
         private ISteeringActions m_SteeringActionsCallbackInterface;
         private readonly InputAction m_Steering_Pause;
+        private readonly InputAction m_Steering_AlignCamera;
         private readonly InputAction m_Steering_Zoom;
         private readonly InputAction m_Steering_QuickSave;
         private readonly InputAction m_Steering_QuickLoad;
@@ -1024,6 +1349,7 @@ namespace Main
             private @PlayerControls m_Wrapper;
             public SteeringActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Pause => m_Wrapper.m_Steering_Pause;
+            public InputAction @AlignCamera => m_Wrapper.m_Steering_AlignCamera;
             public InputAction @Zoom => m_Wrapper.m_Steering_Zoom;
             public InputAction @QuickSave => m_Wrapper.m_Steering_QuickSave;
             public InputAction @QuickLoad => m_Wrapper.m_Steering_QuickLoad;
@@ -1047,6 +1373,9 @@ namespace Main
                     @Pause.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPause;
                     @Pause.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPause;
                     @Pause.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnPause;
+                    @AlignCamera.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnAlignCamera;
+                    @AlignCamera.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnAlignCamera;
+                    @AlignCamera.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnAlignCamera;
                     @Zoom.started -= m_Wrapper.m_SteeringActionsCallbackInterface.OnZoom;
                     @Zoom.performed -= m_Wrapper.m_SteeringActionsCallbackInterface.OnZoom;
                     @Zoom.canceled -= m_Wrapper.m_SteeringActionsCallbackInterface.OnZoom;
@@ -1087,6 +1416,9 @@ namespace Main
                     @Pause.started += instance.OnPause;
                     @Pause.performed += instance.OnPause;
                     @Pause.canceled += instance.OnPause;
+                    @AlignCamera.started += instance.OnAlignCamera;
+                    @AlignCamera.performed += instance.OnAlignCamera;
+                    @AlignCamera.canceled += instance.OnAlignCamera;
                     @Zoom.started += instance.OnZoom;
                     @Zoom.performed += instance.OnZoom;
                     @Zoom.canceled += instance.OnZoom;
@@ -1129,6 +1461,8 @@ namespace Main
         private readonly InputActionMap m_Building;
         private IBuildingActions m_BuildingActionsCallbackInterface;
         private readonly InputAction m_Building_DisableBuilding;
+        private readonly InputAction m_Building_Direction;
+        private readonly InputAction m_Building_Zoom;
         private readonly InputAction m_Building_Pause;
         private readonly InputAction m_Building_Click;
         private readonly InputAction m_Building_RightClick;
@@ -1139,11 +1473,15 @@ namespace Main
         private readonly InputAction m_Building_Mining;
         private readonly InputAction m_Building_Cancel;
         private readonly InputAction m_Building_ChangeRotation;
+        private readonly InputAction m_Building_Rotation;
+        private readonly InputAction m_Building_AlignCamera;
         public struct BuildingActions
         {
             private @PlayerControls m_Wrapper;
             public BuildingActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @DisableBuilding => m_Wrapper.m_Building_DisableBuilding;
+            public InputAction @Direction => m_Wrapper.m_Building_Direction;
+            public InputAction @Zoom => m_Wrapper.m_Building_Zoom;
             public InputAction @Pause => m_Wrapper.m_Building_Pause;
             public InputAction @Click => m_Wrapper.m_Building_Click;
             public InputAction @RightClick => m_Wrapper.m_Building_RightClick;
@@ -1154,6 +1492,8 @@ namespace Main
             public InputAction @Mining => m_Wrapper.m_Building_Mining;
             public InputAction @Cancel => m_Wrapper.m_Building_Cancel;
             public InputAction @ChangeRotation => m_Wrapper.m_Building_ChangeRotation;
+            public InputAction @Rotation => m_Wrapper.m_Building_Rotation;
+            public InputAction @AlignCamera => m_Wrapper.m_Building_AlignCamera;
             public InputActionMap Get() { return m_Wrapper.m_Building; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1166,6 +1506,12 @@ namespace Main
                     @DisableBuilding.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
                     @DisableBuilding.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
                     @DisableBuilding.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDisableBuilding;
+                    @Direction.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDirection;
+                    @Direction.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDirection;
+                    @Direction.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnDirection;
+                    @Zoom.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnZoom;
+                    @Zoom.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnZoom;
+                    @Zoom.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnZoom;
                     @Pause.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPause;
                     @Pause.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPause;
                     @Pause.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPause;
@@ -1196,6 +1542,12 @@ namespace Main
                     @ChangeRotation.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnChangeRotation;
                     @ChangeRotation.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnChangeRotation;
                     @ChangeRotation.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnChangeRotation;
+                    @Rotation.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnRotation;
+                    @Rotation.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnRotation;
+                    @Rotation.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnRotation;
+                    @AlignCamera.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnAlignCamera;
+                    @AlignCamera.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnAlignCamera;
+                    @AlignCamera.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnAlignCamera;
                 }
                 m_Wrapper.m_BuildingActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1203,6 +1555,12 @@ namespace Main
                     @DisableBuilding.started += instance.OnDisableBuilding;
                     @DisableBuilding.performed += instance.OnDisableBuilding;
                     @DisableBuilding.canceled += instance.OnDisableBuilding;
+                    @Direction.started += instance.OnDirection;
+                    @Direction.performed += instance.OnDirection;
+                    @Direction.canceled += instance.OnDirection;
+                    @Zoom.started += instance.OnZoom;
+                    @Zoom.performed += instance.OnZoom;
+                    @Zoom.canceled += instance.OnZoom;
                     @Pause.started += instance.OnPause;
                     @Pause.performed += instance.OnPause;
                     @Pause.canceled += instance.OnPause;
@@ -1233,6 +1591,12 @@ namespace Main
                     @ChangeRotation.started += instance.OnChangeRotation;
                     @ChangeRotation.performed += instance.OnChangeRotation;
                     @ChangeRotation.canceled += instance.OnChangeRotation;
+                    @Rotation.started += instance.OnRotation;
+                    @Rotation.performed += instance.OnRotation;
+                    @Rotation.canceled += instance.OnRotation;
+                    @AlignCamera.started += instance.OnAlignCamera;
+                    @AlignCamera.performed += instance.OnAlignCamera;
+                    @AlignCamera.canceled += instance.OnAlignCamera;
                 }
             }
         }
@@ -1240,6 +1604,7 @@ namespace Main
         public interface IDefaultActions
         {
             void OnPause(InputAction.CallbackContext context);
+            void OnDirection(InputAction.CallbackContext context);
             void OnZoom(InputAction.CallbackContext context);
             void OnQuickSave(InputAction.CallbackContext context);
             void OnQuickLoad(InputAction.CallbackContext context);
@@ -1248,10 +1613,13 @@ namespace Main
             void OnClick(InputAction.CallbackContext context);
             void OnRightClick(InputAction.CallbackContext context);
             void OnPoint(InputAction.CallbackContext context);
+            void OnRotation(InputAction.CallbackContext context);
+            void OnAlignCamera(InputAction.CallbackContext context);
         }
         public interface ISteeringActions
         {
             void OnPause(InputAction.CallbackContext context);
+            void OnAlignCamera(InputAction.CallbackContext context);
             void OnZoom(InputAction.CallbackContext context);
             void OnQuickSave(InputAction.CallbackContext context);
             void OnQuickLoad(InputAction.CallbackContext context);
@@ -1267,6 +1635,8 @@ namespace Main
         public interface IBuildingActions
         {
             void OnDisableBuilding(InputAction.CallbackContext context);
+            void OnDirection(InputAction.CallbackContext context);
+            void OnZoom(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
             void OnRightClick(InputAction.CallbackContext context);
@@ -1277,6 +1647,8 @@ namespace Main
             void OnMining(InputAction.CallbackContext context);
             void OnCancel(InputAction.CallbackContext context);
             void OnChangeRotation(InputAction.CallbackContext context);
+            void OnRotation(InputAction.CallbackContext context);
+            void OnAlignCamera(InputAction.CallbackContext context);
         }
     }
 }
