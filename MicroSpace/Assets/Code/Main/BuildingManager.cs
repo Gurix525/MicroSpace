@@ -56,6 +56,9 @@ namespace Main
         private GameObject _shapePickerUI;
 
         [SerializeField]
+        private GameObject _modelPickerUI;
+
+        [SerializeField]
         private Transform _worldTransform;
 
         [SerializeField]
@@ -113,6 +116,11 @@ namespace Main
             UIController.OnShapeChanged.AddListener(ChangeSelectedShape);
         }
 
+        private void SubscribeToModelChangedEvent()
+        {
+            UIController.OnModelChanged.AddListener(ChangeSelectedModel);
+        }
+
         private void ChangeSelectedShape(int shapeId)
         {
             _shape = _shapeList.GetShape(shapeId);
@@ -133,6 +141,11 @@ namespace Main
         private void SetShapePickerActive(bool state)
         {
             _shapePickerUI.SetActive(state);
+        }
+
+        private void SetModelPickerActive(bool state)
+        {
+            _modelPickerUI.SetActive(state);
         }
 
         private bool AreDesignationsObstructed()
@@ -312,6 +325,11 @@ namespace Main
                 SetShapePickerActive(true);
             else
                 SetShapePickerActive(false);
+            if (mode == BuildingMode.Wall ||
+                mode == BuildingMode.Floor)
+                SetModelPickerActive(true);
+            else
+                SetModelPickerActive(false);
         }
 
         private void ClearCurentDesignation()
@@ -741,8 +759,8 @@ namespace Main
 
         private void ChangePrefabRotation(CallbackContext context)
         {
-            _prefabRotation += 90F;
-            if (_prefabRotation >= 360F)
+            _prefabRotation -= 90F;
+            if (_prefabRotation <= -360F)
                 _prefabRotation = 0F;
             StartFromPreviousMode();
         }
@@ -867,6 +885,7 @@ namespace Main
         private void Start()
         {
             SubscribeToShapeChangedEvent();
+            SubscribeToModelChangedEvent();
         }
 
         private void OnEnable()

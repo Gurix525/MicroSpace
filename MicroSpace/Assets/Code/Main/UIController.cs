@@ -27,10 +27,19 @@ namespace Main
         private GameObject _shapePicker;
 
         [SerializeField]
+        private GameObject _modelPicker;
+
+        [SerializeField]
         private ShapeListScriptableObject _shapeList;
 
         [SerializeField]
+        private BlockModelListScriptableObject _modelList;
+
+        [SerializeField]
         private GameObject _shapeButtonPrefab;
+
+        [SerializeField]
+        private GameObject _modelButtonPrefab;
 
         [SerializeField]
         private GameObject _contextualMenu;
@@ -48,6 +57,11 @@ namespace Main
             OnShapeChanged.Invoke(shapeId);
         }
 
+        private void InvokeModelChangedEvent(int modelId)
+        {
+            OnModelChanged.Invoke(modelId);
+        }
+
         private void CheckIfPointerIsOverUI()
         {
             _isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
@@ -62,6 +76,18 @@ namespace Main
                 button.transform.GetChild(0).GetComponent<Image>().sprite = shape.Sprite;
                 button.GetComponent<Button>().onClick
                     .AddListener(() => InvokeShapeChangedEvent(shape.Id));
+            }
+        }
+
+        private void CreateModelButtons()
+        {
+            foreach (BlockModelScriptableObject model in _modelList.Models)
+            {
+                GameObject button = Instantiate(
+                    _modelButtonPrefab, _modelPicker.transform);
+                button.transform.GetChild(0).GetComponent<Image>().sprite = model.Sprite;
+                button.GetComponent<Button>().onClick
+                    .AddListener(() => InvokeModelChangedEvent(model.Id));
             }
         }
 
@@ -140,6 +166,8 @@ namespace Main
 
         public static UnityEvent<int> OnShapeChanged = new();
 
+        public static UnityEvent<int> OnModelChanged = new();
+
         #endregion Public
 
         #region Unity
@@ -153,6 +181,7 @@ namespace Main
         {
             SubscribeToInputEvents();
             CreateShapeButtons();
+            CreateModelButtons();
         }
 
         private void Update()
