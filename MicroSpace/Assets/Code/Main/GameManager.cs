@@ -73,6 +73,11 @@ namespace Main
 
         public IdManagerScriptableObject IdManager => _idManager;
 
+        public static Transform FocusedShip =>
+            Instance._focusedShipRigidbody != null ?
+            Instance._focusedShipRigidbody.transform :
+            null;
+
         public static int FocusedShipId =>
             Instance._focusedShipRigidbody.GetComponent<Ship>().Id;
 
@@ -206,13 +211,14 @@ namespace Main
 
         private void Zoom(CallbackContext context)
         {
+            float newSize = Camera.main.orthographicSize;
             Vector2 scrollValue = context.ReadValue<Vector2>();
-            if (scrollValue.y > 0 &&
-                Camera.main.orthographicSize > 5)
-                Camera.main.orthographicSize -= 5;
-            else if (scrollValue.y < 0 &&
-                Camera.main.orthographicSize < 100)
-                Camera.main.orthographicSize += 5;
+            if (scrollValue.y > 0)
+                newSize -= 5;
+            else if (scrollValue.y < 0)
+                newSize += 5;
+            newSize = Math.Clamp(newSize, 5, 70);
+            Camera.main.orthographicSize = newSize;
         }
 
         private void QuickSave(CallbackContext context)

@@ -38,6 +38,7 @@ namespace Main
         public static ModifiableInputAction DefaultDirection { get; set; } = new();
         public static ModifiableInputAction DefaultRotation { get; set; } = new();
         public static ModifiableInputAction DefaultAlignCamera { get; set; } = new();
+        public static ModifiableInputAction DefaultSetNavTarget { get; set; } = new();
 
         public static ModifiableInputAction SteeringPause { get; set; } = new();
         public static ModifiableInputAction SteeringZoom { get; set; } = new();
@@ -97,6 +98,7 @@ namespace Main
             DefaultDirection.Action = ActionMapDefault.FindAction("Direction");
             DefaultRotation.Action = ActionMapDefault.FindAction("Rotation");
             DefaultAlignCamera.Action = ActionMapDefault.FindAction("AlignCamera");
+            DefaultSetNavTarget.Action = ActionMapDefault.FindAction("SetNavTarget");
 
             SteeringPause.Action = ActionMapSteering.FindAction("Pause");
             SteeringZoom.Action = ActionMapSteering.FindAction("Zoom");

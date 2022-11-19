@@ -136,6 +136,15 @@ namespace Main
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetNavTarget"",
+                    ""type"": ""Button"",
+                    ""id"": ""3b92e1b3-6c7a-4fe0-8ed1-b72626acc548"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -334,6 +343,17 @@ namespace Main
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AlignCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""deab08ad-cc09-4e02-8d94-23f88a763d53"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetNavTarget"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1119,6 +1139,7 @@ namespace Main
             m_Default_Point = m_Default.FindAction("Point", throwIfNotFound: true);
             m_Default_Rotation = m_Default.FindAction("Rotation", throwIfNotFound: true);
             m_Default_AlignCamera = m_Default.FindAction("AlignCamera", throwIfNotFound: true);
+            m_Default_SetNavTarget = m_Default.FindAction("SetNavTarget", throwIfNotFound: true);
             // Steering
             m_Steering = asset.FindActionMap("Steering", throwIfNotFound: true);
             m_Steering_Pause = m_Steering.FindAction("Pause", throwIfNotFound: true);
@@ -1222,6 +1243,7 @@ namespace Main
         private readonly InputAction m_Default_Point;
         private readonly InputAction m_Default_Rotation;
         private readonly InputAction m_Default_AlignCamera;
+        private readonly InputAction m_Default_SetNavTarget;
         public struct DefaultActions
         {
             private @PlayerControls m_Wrapper;
@@ -1238,6 +1260,7 @@ namespace Main
             public InputAction @Point => m_Wrapper.m_Default_Point;
             public InputAction @Rotation => m_Wrapper.m_Default_Rotation;
             public InputAction @AlignCamera => m_Wrapper.m_Default_AlignCamera;
+            public InputAction @SetNavTarget => m_Wrapper.m_Default_SetNavTarget;
             public InputActionMap Get() { return m_Wrapper.m_Default; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1283,6 +1306,9 @@ namespace Main
                     @AlignCamera.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnAlignCamera;
                     @AlignCamera.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnAlignCamera;
                     @AlignCamera.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnAlignCamera;
+                    @SetNavTarget.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnSetNavTarget;
+                    @SetNavTarget.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnSetNavTarget;
+                    @SetNavTarget.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnSetNavTarget;
                 }
                 m_Wrapper.m_DefaultActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1323,6 +1349,9 @@ namespace Main
                     @AlignCamera.started += instance.OnAlignCamera;
                     @AlignCamera.performed += instance.OnAlignCamera;
                     @AlignCamera.canceled += instance.OnAlignCamera;
+                    @SetNavTarget.started += instance.OnSetNavTarget;
+                    @SetNavTarget.performed += instance.OnSetNavTarget;
+                    @SetNavTarget.canceled += instance.OnSetNavTarget;
                 }
             }
         }
@@ -1615,6 +1644,7 @@ namespace Main
             void OnPoint(InputAction.CallbackContext context);
             void OnRotation(InputAction.CallbackContext context);
             void OnAlignCamera(InputAction.CallbackContext context);
+            void OnSetNavTarget(InputAction.CallbackContext context);
         }
         public interface ISteeringActions
         {
