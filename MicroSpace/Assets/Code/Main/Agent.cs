@@ -17,6 +17,8 @@ namespace Main
         private Rigidbody2D _obstacleRigidbody;
         private List<Vector3> _path = new();
         private Astronaut _astronaut;
+        private bool _isTargetClosestPositionValid;
+        private NavMeshHit _targetClosestPosition;
 
         public void SetObstacleRigidbody(Rigidbody2D rigidbody)
         {
@@ -38,21 +40,35 @@ namespace Main
             var hit = Physics2D.GetRayIntersection(ray);
             if (hit.collider != null)
                 _target = hit.collider.transform;
-            Debug.Log(_target);
         }
 
         private void SetDestination()
         {
-            NavMeshPath path = new();
-            NavMesh.CalculatePath(transform.position,
-                new Vector3(_target.position.x, _target.position.y, 0.3F),
-                NavMesh.AllAreas, path);
-            if (path.corners.Length != 0)
+            _isTargetClosestPositionValid = NavMesh.SamplePosition(
+                _target.position, out _targetClosestPosition, 2F, NavMesh.AllAreas);
+            if (_isTargetClosestPositionValid)
             {
-                _path = path.corners.ToList();
-                _navMeshAgent.SetPath(path);
+                NavMeshPath path = new();
+                NavMesh.CalculatePath(
+                    transform.position,
+                    _targetClosestPosition.position,
+                    NavMesh.AllAreas,
+                    path);
+                if (path.corners.Length != 0)
+                {
+                    _path = path.corners.ToList();
+                    _navMeshAgent.SetPath(path);
+                }
             }
-            //_navMeshAgent.SetPath(_path);
+        }
+
+        private void Update()
+        {
+            if (_target != null && _isTargetClosestPositionValid)
+                Debug.DrawLine(
+                    _target.position,
+                    _targetClosestPosition.position,
+                    Color.green);
         }
 
         private void FixedUpdate()

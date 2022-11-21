@@ -19,19 +19,19 @@ namespace Ships
         private int _parentId;
 
         [SerializeField]
-        private Vector2 _position;
+        private Vector2 _localPosition;
 
         public int Id => _id;
 
         public int ParentId => _parentId;
 
-        public Vector2 Position => _position;
+        public Vector2 LocalPosition => _localPosition;
 
         public SerializableAstronaut(Astronaut astronaut)
         {
             _id = astronaut.Id;
             _parentId = astronaut.ParentId;
-            _position = astronaut.transform.localPosition;
+            _localPosition = astronaut.transform.localPosition;
         }
 
         public static implicit operator SerializableAstronaut(Astronaut astronaut)
