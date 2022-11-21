@@ -12,6 +12,8 @@ namespace Main
 {
     public class Agent : MonoBehaviour
     {
+        #region Fields
+
         private NavMeshAgent _navMeshAgent;
         private Transform _target;
         private Rigidbody2D _obstacleRigidbody;
@@ -20,18 +22,18 @@ namespace Main
         private bool _isTargetClosestPositionValid;
         private NavMeshHit _targetClosestPosition;
 
+        #endregion Fields
+
+        #region Public
+
         public void SetObstacleRigidbody(Rigidbody2D rigidbody)
         {
             _obstacleRigidbody = rigidbody;
         }
 
-        private void Start()
-        {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
-            PlayerController.DefaultSetNavTarget
-                .AddListener(ActionType.Performed, SetTarget);
-            _astronaut = GetComponent<Astronaut>();
-        }
+        #endregion Public
+
+        #region Private
 
         private void SetTarget(CallbackContext context)
         {
@@ -60,6 +62,40 @@ namespace Main
                     _navMeshAgent.SetPath(path);
                 }
             }
+        }
+
+        private void AddRelativeDisplacement()
+        {
+            _navMeshAgent.Move(
+                _obstacleRigidbody.velocity * Time.fixedDeltaTime);
+        }
+
+        private void DetectObstacle()
+        {
+            RaycastHit2D hit = Physics2D.Linecast(
+                transform.position, _target.position);
+            if (hit.collider == null)
+                _target.TryGetComponentUpInHierarchy(out _obstacleRigidbody);
+            else
+            {
+                if (hit.collider
+                    .TryGetComponentUpInHierarchy(out Rigidbody2D rigidbody))
+                {
+                    _obstacleRigidbody = rigidbody;
+                }
+            }
+        }
+
+        #endregion Private
+
+        #region Unity
+
+        private void Start()
+        {
+            _navMeshAgent = GetComponent<NavMeshAgent>();
+            PlayerController.DefaultSetNavTarget
+                .AddListener(ActionType.Performed, SetTarget);
+            _astronaut = GetComponent<Astronaut>();
         }
 
         private void Update()
@@ -94,39 +130,6 @@ namespace Main
                 }
         }
 
-        //private void Move()
-        //{
-        //    if (_path.Count > 0)
-        //    {
-        //        var direction = ((Vector2)_path[0] - (Vector2)transform.position);
-        //        var normalizedDirection = direction.normalized;
-        //        direction = Vector2.ClampMagnitude(direction, normalizedDirection.magnitude);
-        //        _navMeshAgent.Move(direction * _speed * Time.fixedDeltaTime);
-        //        if (Vector3.Distance(transform.position, _path[0]) < 1)
-        //            _path.RemoveAt(0);
-        //    }
-        //}
-
-        private void AddRelativeDisplacement()
-        {
-            _navMeshAgent.Move(
-                _obstacleRigidbody.velocity * Time.fixedDeltaTime);
-        }
-
-        private void DetectObstacle()
-        {
-            RaycastHit2D hit = Physics2D.Linecast(
-                transform.position, _target.position);
-            if (hit.collider == null)
-                _target.TryGetComponentUpInHierarchy(out _obstacleRigidbody);
-            else
-            {
-                if (hit.collider
-                    .TryGetComponentUpInHierarchy(out Rigidbody2D rigidbody))
-                {
-                    _obstacleRigidbody = rigidbody;
-                }
-            }
-        }
+        #endregion Unity
     }
 }

@@ -7,6 +7,8 @@ using System;
 
 public class Astronaut : MonoBehaviour
 {
+    #region Fields
+
     [SerializeField]
     [ReadonlyInspector]
     private int _id;
@@ -15,26 +17,17 @@ public class Astronaut : MonoBehaviour
     [ReadonlyInspector]
     private int _parentId;
 
-    private void Awake()
-    {
-        SetId();
-        AddAstronautToList();
-    }
+    #endregion Fields
 
-    private void AddAstronautToList()
-    {
-        Astronauts.Add(this);
-    }
-
-    private void SetId()
-    {
-        if (_id == 0)
-            _id = IdManager.NextId;
-    }
+    #region Properties
 
     public int Id => _id;
     public int ParentId => _parentId;
     public static List<Astronaut> Astronauts = new();
+
+    #endregion Properties
+
+    #region Public
 
     public void SetParentId(int id)
     {
@@ -45,4 +38,41 @@ public class Astronaut : MonoBehaviour
     {
         _id = id;
     }
+
+    #endregion Public
+
+    #region Private
+
+    private void AddAstronautToList()
+    {
+        Astronauts.Add(this);
+    }
+
+    private void RemoveAstronautFromList()
+    {
+        Astronauts.Remove(this);
+    }
+
+    private void SetId()
+    {
+        if (_id == 0)
+            _id = IdManager.NextId;
+    }
+
+    #endregion Private
+
+    #region Unity
+
+    private void Awake()
+    {
+        SetId();
+        AddAstronautToList();
+    }
+
+    private void OnDestroy()
+    {
+        RemoveAstronautFromList();
+    }
+
+    #endregion Unity
 }
