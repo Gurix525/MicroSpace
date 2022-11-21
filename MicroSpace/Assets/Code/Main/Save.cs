@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Ships;
 using UnityEngine;
+using ScriptableObjects;
+using System.Linq;
 
 namespace Main
 {
@@ -17,13 +19,18 @@ namespace Main
         private int _focusedShipId;
 
         [SerializeField]
-        private List<SerializableShip> _ships = new();
+        private SerializableShip[] _ships;
+
+        [SerializeField]
+        private SerializableAstronaut[] _astronauts;
 
         #endregion Fields
 
         #region Properties
 
-        public List<SerializableShip> Ships => _ships;
+        public List<SerializableShip> Ships => _ships.ToList();
+
+        public List<SerializableAstronaut> Astronauts => _astronauts.ToList();
 
         public int NextId => _nextId;
 
@@ -33,9 +40,13 @@ namespace Main
 
         public Save(List<Ship> ships)
         {
-            foreach (var ship in ships)
-                _ships.Add(new(ship));
-            _nextId = GameManager.Instance.IdManager.NextId - 1;
+            _ships = ships
+                .Select(ship => (SerializableShip)ship)
+                .ToArray();
+            _astronauts = Astronaut.Astronauts
+                .Select(astronaut => (SerializableAstronaut)astronaut)
+                .ToArray();
+            _nextId = IdManager.NextId;
             _focusedShipId = GameManager.FocusedShipId;
         }
     }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using ExtensionMethods;
 
 namespace Main
 {
@@ -54,13 +55,61 @@ namespace Main
         private static void LoadFromSave(Save save)
         {
             List<Ship> ships = LoadShips(save.Ships);
+            LoadFocusedShip(save.FocusedShipId, ships, out GameObject focusedShip);
+            LoadNavMesh(focusedShip);
+            List<Astronaut> astronauts = LoadAstronauts(save.Astronauts, ships);
             LoadIdManager(save.NextId);
-            LoadFocusedShip(save.FocusedShipId, ships);
         }
 
-        private static void LoadFocusedShip(int focusedShipId, List<Ship> ships)
+        private static void LoadNavMesh(GameObject focusedShip)
         {
-            GameManager.SelectFocusedShip(FindShipById(focusedShipId, ships));
+            GameObject navMesh = Instantiate(GameManager.Instance.NavMeshPrefab);
+            navMesh.transform.parent = focusedShip.transform;
+            navMesh.transform.localPosition = Vector3.zero;
+        }
+
+        private static List<Astronaut> LoadAstronauts(
+            List<SerializableAstronaut> astronautsToLoad,
+            List<Ship> ships)
+        {
+            List<Astronaut> astronauts = new();
+            foreach (SerializableAstronaut astronautToLoad in astronautsToLoad)
+                astronauts.Add(LoadAstronaut(astronautToLoad, ships));
+            return astronauts;
+        }
+
+        private static Astronaut LoadAstronaut(SerializableAstronaut astronautToLoad,
+            List<Ship> ships)
+        {
+            InstantiateAstronaut(out GameObject astronaut);
+            SetAstronautParameters(astronaut, astronautToLoad, ships);
+            return astronaut.GetComponent<Astronaut>();
+        }
+
+        private static void SetAstronautParameters(GameObject astronaut, SerializableAstronaut astronautToLoad, List<Ship> ships)
+        {
+            var astronautComponent = astronaut.GetComponent<Astronaut>();
+            var agentComponent = astronaut.GetComponent<Agent>();
+            astronautComponent.SetId(astronautToLoad.Id);
+            astronautComponent.SetParentId(astronautToLoad.ParentId);
+            astronaut.transform.parent = ships
+                .Find(ship => ship.Id == astronautToLoad.ParentId)
+                .transform;
+            astronaut.transform.position = astronautToLoad.Position;
+            agentComponent.SetObstacleRigidbody(
+                astronaut.GetComponentUpInHierarchy<Rigidbody2D>());
+        }
+
+        private static void InstantiateAstronaut(out GameObject astronaut)
+        {
+            astronaut = Instantiate(GameManager.Instance.AstronautPrefab);
+        }
+
+        private static void LoadFocusedShip(int focusedShipId, List<Ship> ships,
+            out GameObject ship)
+        {
+            ship = FindShipById(focusedShipId, ships);
+            GameManager.SelectFocusedShip(ship);
         }
 
         private static GameObject FindShipById(int focusedShipId, List<Ship> ships)
@@ -70,7 +119,7 @@ namespace Main
 
         private static void LoadIdManager(int nextId)
         {
-            GameManager.Instance.IdManager.NextId = nextId;
+            IdManager.NextId = nextId;
         }
 
         private static List<Ship> LoadShips(List<SerializableShip> shipsToLoad)
@@ -316,6 +365,7 @@ namespace Main
                 if (child.GetComponent<Ship>())
                     GameObject.Destroy(child.gameObject);
             }
+            Astronaut.Astronauts.Clear();
         }
 
         #endregion Private

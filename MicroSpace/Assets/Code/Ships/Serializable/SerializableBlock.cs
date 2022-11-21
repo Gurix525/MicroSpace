@@ -6,6 +6,8 @@ namespace Ships
     [Serializable]
     public class SerializableBlock
     {
+        // Pola nie mogą być readonly bo serializacja nie zadziała
+
         [SerializeField]
         private int _id;
 

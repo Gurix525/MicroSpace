@@ -14,9 +14,6 @@ namespace Ships
         #region Fields
 
         [SerializeField]
-        protected IdManagerScriptableObject _idManager;
-
-        [SerializeField]
         protected ColorsScriptableObject _colors;
 
         [SerializeField]
@@ -146,7 +143,7 @@ namespace Ships
         protected virtual void SetId()
         {
             if (Id == 0)
-                Id = _idManager.NextId;
+                Id = IdManager.NextId;
         }
 
         #endregion Protected

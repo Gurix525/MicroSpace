@@ -9,6 +9,8 @@ namespace Ships
     {
         #region Fields
 
+        // Pola nie mogą być readonly bo serializacja nie zadziała
+
         [SerializeField]
         private int _id;
 
@@ -54,6 +56,11 @@ namespace Ships
             _position = ship.Position;
             _rotation = ship.Rotation;
             _velocity = ship.Velocity;
+        }
+
+        public static implicit operator SerializableShip(Ship ship)
+        {
+            return new SerializableShip(ship);
         }
     }
 }

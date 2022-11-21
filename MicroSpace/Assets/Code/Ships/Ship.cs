@@ -14,9 +14,6 @@ namespace Ships
         #region Fields
 
         [SerializeField]
-        private IdManagerScriptableObject _idManager;
-
-        [SerializeField]
         [ReadonlyInspector]
         private int _id;
 
@@ -133,7 +130,7 @@ namespace Ships
         private void SetId()
         {
             if (Id == 0)
-                Id = _idManager.NextId;
+                Id = IdManager.NextId;
         }
 
         private void SetShipChildrenActive(bool state)

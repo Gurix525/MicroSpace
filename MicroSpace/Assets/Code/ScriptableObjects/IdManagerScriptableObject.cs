@@ -3,24 +3,14 @@ using Attributes;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(
-        fileName = "IdManager",
-        menuName = "ScriptableObjects/IdManager")]
-    public class IdManagerScriptableObject : ScriptableObject
+    public static class IdManager
     {
-        [SerializeField]
-        [ReadonlyInspector]
-        private int _nextId = 1;
+        private static int _nextId = 1;
 
-        public int NextId
+        public static int NextId
         {
             get => _nextId++;
             set => _nextId = value;
-        }
-
-        private void OnEnable()
-        {
-            NextId = 1;
         }
     }
 }

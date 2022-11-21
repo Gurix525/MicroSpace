@@ -54,6 +54,9 @@ TagManager:
   - name: Walls
     uniqueID: 294175409
     locked: 0
+  - name: Astronauts
+    uniqueID: 1024399363
+    locked: 0
   - name: Temporal
     uniqueID: 83034829
     locked: 0

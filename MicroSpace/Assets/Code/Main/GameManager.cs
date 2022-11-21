@@ -6,15 +6,13 @@ using UnityEngine;
 using ScriptableObjects;
 using static UnityEngine.InputSystem.InputAction;
 using Attributes;
+using System.Collections.Generic;
 
 namespace Main
 {
     public class GameManager : MonoBehaviour
     {
         #region Fields
-
-        [SerializeField]
-        private IdManagerScriptableObject _idManager;
 
         [SerializeField]
         private GameObject _shipDesignationPrefab;
@@ -24,6 +22,12 @@ namespace Main
 
         [SerializeField]
         private GameObject _shipPrefab;
+
+        [SerializeField]
+        private GameObject _astronautPrefab;
+
+        [SerializeField]
+        private GameObject _navMeshPrefab;
 
         [SerializeField]
         private Rigidbody2D _target;
@@ -71,8 +75,6 @@ namespace Main
 
         public Transform World { get => _world; set => _world = value; }
 
-        public IdManagerScriptableObject IdManager => _idManager;
-
         public static Transform FocusedShip =>
             Instance._focusedShipRigidbody != null ?
             Instance._focusedShipRigidbody.transform :
@@ -90,6 +92,10 @@ namespace Main
             Instance._focusedShipRigidbody != null ?
             Instance._focusedShipRigidbody.transform.rotation :
             Quaternion.identity;
+
+        public GameObject AstronautPrefab => _astronautPrefab;
+
+        public GameObject NavMeshPrefab => _navMeshPrefab;
 
         #endregion Properties
 
