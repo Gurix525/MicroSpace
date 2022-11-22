@@ -441,7 +441,7 @@ namespace Main
 
         private void UpdateSatellite()
         {
-            _temporalParent?.GetComponent<Satellite>()?.StartUpdateSatellite();
+            _temporalParent?.GetComponent<Satellite>()?.UpdateSatellite();
         }
 
         private void CreateFinalDesignations()
@@ -554,9 +554,8 @@ namespace Main
             for (int i = 0; i < blocksToDestroy.Count; i++)
             {
                 var block = blocksToDestroy[i];
-
+                block.transform.parent = null;
                 block.gameObject.SetActive(false);
-
                 Destroy(block.gameObject);
             }
         }

@@ -26,6 +26,11 @@ namespace Maths
 
         #region Public
 
+        public Line TransformLine(Transform transform)
+        {
+            return new(transform.TransformPoint(A), transform.TransformPoint(B));
+        }
+
         public bool IsIntersecting(Line other, out Vector2 intersection)
         {
             return Geometry.AreLinesIntersecting(this, other, out intersection);

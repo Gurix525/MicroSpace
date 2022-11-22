@@ -56,9 +56,14 @@ namespace Main
         private static void LoadFromSave(Save save)
         {
             List<Satellite> satellites = LoadSatellites(save.Satellites);
-            LoadFocusedSatellite(save.FocusedSatelliteId, satellites, out GameObject focusedSatellite);
+            LoadFocusedSatellite(
+                save.FocusedSatelliteId,
+                satellites,
+                out GameObject focusedSatellite);
             LoadNavMesh(focusedSatellite);
-            List<Astronaut> astronauts = LoadAstronauts(save.Astronauts, satellites);
+            List<Astronaut> astronauts = LoadAstronauts(
+                save.Astronauts,
+                satellites);
             LoadIdManager(save.NextId);
         }
 
@@ -144,7 +149,7 @@ namespace Main
 
         private static void UpdateSatellite(GameObject satellite)
         {
-            satellite.GetComponent<Satellite>().StartUpdateSatellite();
+            satellite.GetComponent<Satellite>().UpdateSatellite();
         }
 
         private static void LoadBlocks(GameObject satellite, SerializableSatellite satelliteToLoad)
@@ -354,7 +359,7 @@ namespace Main
         private static void UpdateSatellites(List<Satellite> satellites)
         {
             foreach (var satellite in satellites)
-                satellite.StartUpdateSatellite();
+                satellite.UpdateSatellite();
         }
 
         private static void ClearWorld()
