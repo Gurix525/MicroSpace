@@ -91,9 +91,9 @@ namespace Main
             }
         }
 
-        private void SelectFocusedShip()
+        private void SelectFocusedSatellite()
         {
-            GameManager.SelectFocusedShip(_context);
+            GameManager.SelectFocusedSatellite(_context);
             CloseContextualMenu();
         }
 
@@ -113,7 +113,7 @@ namespace Main
             _contextualMenu.SetActive(true);
             _contextualMenu.transform.position = mousePosition;
             _context = FindContext(mousePosition);
-            CreateButton(SelectFocusedShip, "Steruj statkiem");
+            CreateButton(SelectFocusedSatellite, "Steruj statkiem");
             CreateButton(SelectTarget, "Obierz jako cel");
         }
 

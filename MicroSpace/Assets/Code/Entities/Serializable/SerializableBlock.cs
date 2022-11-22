@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Ships
+namespace Entities
 {
     [Serializable]
     public class SerializableBlock

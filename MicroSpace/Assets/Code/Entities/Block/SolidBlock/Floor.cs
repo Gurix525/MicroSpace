@@ -2,7 +2,7 @@
 using UnityEngine;
 using Attributes;
 
-namespace Ships
+namespace Entities
 {
     [Serializable]
     public class Floor : SolidBlock
@@ -41,7 +41,7 @@ namespace Ships
         private void Update()
         {
             // DEBUG
-            // Poniższego ifa trzeba przenieść do ShipData.UpdateRooms()
+            // Poniższego ifa trzeba przenieść do SatelliteData.UpdateRooms()
             // i uogólnić, żeby się wszystkie sprawdzały od razu po sprawdzaniu
             // czy są exposed
             if (IsExposed)

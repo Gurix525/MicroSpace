@@ -6,10 +6,9 @@ using Attributes;
 using ScriptableObjects;
 using System.Collections;
 
-namespace Ships
+namespace Entities
 {
-    [Serializable]
-    public class Ship : MonoBehaviour
+    public class Satellite : MonoBehaviour
     {
         #region Fields
 
@@ -37,9 +36,9 @@ namespace Ships
         [ReadonlyInspector]
         private Vector2 _velocity;
 
-        private bool _isShipLoaded = true;
+        private bool _isSatelliteLoaded = true;
 
-        private static readonly float _shipUnloadDistance = 200F;
+        private static readonly float _satelliteUnloadDistance = 200F;
 
         #endregion Fields
 
@@ -75,47 +74,47 @@ namespace Ships
 
         #region Public
 
-        public void StartUpdateShip()
+        public void StartUpdateSatellite()
         {
-            StartCoroutine(UpdateShipRepeatedly());
+            StartCoroutine(UpdateSatelliteRepeatedly());
         }
 
-        public void ActivateOrDeactivateChildren(Transform focusedShip)
+        public void ActivateOrDeactivateChildren(Transform focusedSatellite)
         {
-            if (IsShipDistantFromGivenShip(focusedShip) && _isShipLoaded)
-                SetShipChildrenActive(false);
-            else if (!IsShipDistantFromGivenShip(focusedShip) && !_isShipLoaded)
-                SetShipChildrenActive(true);
+            if (IsSatelliteDistantFromGivenSatellite(focusedSatellite) && _isSatelliteLoaded)
+                SetSatelliteChildrenActive(false);
+            else if (!IsSatelliteDistantFromGivenSatellite(focusedSatellite) && !_isSatelliteLoaded)
+                SetSatelliteChildrenActive(true);
         }
 
         #endregion Public
 
         #region Private
 
-        private void UpdateShip()
+        private void UpdateSatellite()
         {
             UpdateBlocks();
             UpdateRooms();
             UpdateProperties();
-            if (IsShipEmpty())
-                DestroyShip();
+            if (IsSatelliteEmpty())
+                DestroySatellite();
         }
 
-        private IEnumerator UpdateShipRepeatedly()
+        private IEnumerator UpdateSatelliteRepeatedly()
         {
-            UpdateShip();
+            UpdateSatellite();
             yield return null;
-            UpdateShip();
+            UpdateSatellite();
         }
 
-        private void DestroyShip()
+        private void DestroySatellite()
         {
             if (Camera.main.transform.parent == transform)
                 Camera.main.transform.parent = null;
             Destroy(gameObject);
         }
 
-        private bool IsShipEmpty()
+        private bool IsSatelliteEmpty()
         {
             return Blocks.Count <= 0;
         }
@@ -133,17 +132,17 @@ namespace Ships
                 Id = IdManager.NextId;
         }
 
-        private void SetShipChildrenActive(bool state)
+        private void SetSatelliteChildrenActive(bool state)
         {
             foreach (Transform child in transform)
                 child.gameObject.SetActive(state);
-            _isShipLoaded = state;
+            _isSatelliteLoaded = state;
         }
 
-        private bool IsShipDistantFromGivenShip(Transform ship)
+        private bool IsSatelliteDistantFromGivenSatellite(Transform satellite)
         {
-            return Vector2.Distance(transform.position, ship.position) >
-                _shipUnloadDistance;
+            return Vector2.Distance(transform.position, satellite.position) >
+                _satelliteUnloadDistance;
         }
 
         private void UpdateBlocks()

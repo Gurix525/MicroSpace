@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ships;
+using Entities;
 using UnityEngine;
 using ScriptableObjects;
 using System.Linq;
@@ -16,10 +16,10 @@ namespace Main
         private int _nextId;
 
         [SerializeField]
-        private int _focusedShipId;
+        private int _focusedSatelliteId;
 
         [SerializeField]
-        private SerializableShip[] _ships;
+        private SerializableSatellite[] _satellites;
 
         [SerializeField]
         private SerializableAstronaut[] _astronauts;
@@ -28,26 +28,26 @@ namespace Main
 
         #region Properties
 
-        public List<SerializableShip> Ships => _ships.ToList();
+        public List<SerializableSatellite> Satellites => _satellites.ToList();
 
         public List<SerializableAstronaut> Astronauts => _astronauts.ToList();
 
         public int NextId => _nextId;
 
-        public int FocusedShipId => _focusedShipId;
+        public int FocusedSatelliteId => _focusedSatelliteId;
 
         #endregion Properties
 
-        public Save(List<Ship> ships)
+        public Save(List<Satellite> satellites)
         {
-            _ships = ships
-                .Select(ship => (SerializableShip)ship)
+            _satellites = satellites
+                .Select(satellite => (SerializableSatellite)satellite)
                 .ToArray();
             _astronauts = Astronaut.Astronauts
                 .Select(astronaut => (SerializableAstronaut)astronaut)
                 .ToArray();
             _nextId = IdManager.NextId;
-            _focusedShipId = GameManager.FocusedShipId;
+            _focusedSatelliteId = GameManager.FocusedSatelliteId;
         }
     }
 }

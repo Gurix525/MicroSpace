@@ -1,5 +1,5 @@
 ﻿using ScriptableObjects;
-using Ships;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,47 +55,47 @@ namespace Main
 
         private static void LoadFromSave(Save save)
         {
-            List<Ship> ships = LoadShips(save.Ships);
-            LoadFocusedShip(save.FocusedShipId, ships, out GameObject focusedShip);
-            LoadNavMesh(focusedShip);
-            List<Astronaut> astronauts = LoadAstronauts(save.Astronauts, ships);
+            List<Satellite> satellites = LoadSatellites(save.Satellites);
+            LoadFocusedSatellite(save.FocusedSatelliteId, satellites, out GameObject focusedSatellite);
+            LoadNavMesh(focusedSatellite);
+            List<Astronaut> astronauts = LoadAstronauts(save.Astronauts, satellites);
             LoadIdManager(save.NextId);
         }
 
-        private static void LoadNavMesh(GameObject focusedShip)
+        private static void LoadNavMesh(GameObject focusedSatellite)
         {
             GameObject navMesh = Instantiate(GameManager.Instance.NavMeshPrefab);
-            navMesh.transform.parent = focusedShip.transform;
+            navMesh.transform.parent = focusedSatellite.transform;
             navMesh.transform.localPosition = Vector3.zero;
         }
 
         private static List<Astronaut> LoadAstronauts(
             List<SerializableAstronaut> astronautsToLoad,
-            List<Ship> ships)
+            List<Satellite> satellites)
         {
             List<Astronaut> astronauts = new();
             foreach (SerializableAstronaut astronautToLoad in astronautsToLoad)
-                astronauts.Add(LoadAstronaut(astronautToLoad, ships));
+                astronauts.Add(LoadAstronaut(astronautToLoad, satellites));
             return astronauts;
         }
 
         private static Astronaut LoadAstronaut(SerializableAstronaut astronautToLoad,
-            List<Ship> ships)
+            List<Satellite> satellites)
         {
             InstantiateAstronaut(out GameObject astronaut);
-            SetAstronautParameters(astronaut, astronautToLoad, ships);
+            SetAstronautParameters(astronaut, astronautToLoad, satellites);
             return astronaut.GetComponent<Astronaut>();
         }
 
-        private static void SetAstronautParameters(GameObject astronaut, SerializableAstronaut astronautToLoad, List<Ship> ships)
+        private static void SetAstronautParameters(GameObject astronaut, SerializableAstronaut astronautToLoad, List<Satellite> satellites)
         {
             var astronautComponent = astronaut.GetComponent<Astronaut>();
             var agentComponent = astronaut.GetComponent<Agent>();
             var navMeshAgentComponent = astronaut.GetComponent<NavMeshAgent>();
             astronautComponent.SetId(astronautToLoad.Id);
             astronautComponent.SetParentId(astronautToLoad.ParentId);
-            astronaut.transform.parent = ships
-                .Find(ship => ship.Id == astronautToLoad.ParentId)
+            astronaut.transform.parent = satellites
+                .Find(satellite => satellite.Id == astronautToLoad.ParentId)
                 .transform;
             astronaut.transform.localPosition = astronautToLoad.LocalPosition;
             agentComponent.SetObstacleRigidbody(
@@ -108,16 +108,16 @@ namespace Main
             astronaut = Instantiate(GameManager.Instance.AstronautPrefab);
         }
 
-        private static void LoadFocusedShip(int focusedShipId, List<Ship> ships,
-            out GameObject ship)
+        private static void LoadFocusedSatellite(int focusedSatelliteId, List<Satellite> satellites,
+            out GameObject satellite)
         {
-            ship = FindShipById(focusedShipId, ships);
-            GameManager.SelectFocusedShip(ship);
+            satellite = FindSatelliteById(focusedSatelliteId, satellites);
+            GameManager.SelectFocusedSatellite(satellite);
         }
 
-        private static GameObject FindShipById(int focusedShipId, List<Ship> ships)
+        private static GameObject FindSatelliteById(int focusedSatelliteId, List<Satellite> satellites)
         {
-            return ships.Find(ship => ship.Id == focusedShipId).gameObject;
+            return satellites.Find(satellite => satellite.Id == focusedSatelliteId).gameObject;
         }
 
         private static void LoadIdManager(int nextId)
@@ -125,37 +125,37 @@ namespace Main
             IdManager.NextId = nextId;
         }
 
-        private static List<Ship> LoadShips(List<SerializableShip> shipsToLoad)
+        private static List<Satellite> LoadSatellites(List<SerializableSatellite> satellitesToLoad)
         {
-            List<Ship> ships = new();
-            foreach (SerializableShip shipToLoad in shipsToLoad)
-                ships.Add(LoadShip(shipToLoad));
-            return ships;
+            List<Satellite> satellites = new();
+            foreach (SerializableSatellite satelliteToLoad in satellitesToLoad)
+                satellites.Add(LoadSatellite(satelliteToLoad));
+            return satellites;
         }
 
-        private static Ship LoadShip(SerializableShip shipToLoad)
+        private static Satellite LoadSatellite(SerializableSatellite satelliteToLoad)
         {
-            InstantiateShip(out GameObject ship);
-            SetShipParameters(ship, shipToLoad);
-            LoadBlocks(ship, shipToLoad);
-            UpdateShip(ship);
-            return ship.GetComponent<Ship>();
+            InstantiateSatellite(out GameObject satellite);
+            SetSatelliteParameters(satellite, satelliteToLoad);
+            LoadBlocks(satellite, satelliteToLoad);
+            UpdateSatellite(satellite);
+            return satellite.GetComponent<Satellite>();
         }
 
-        private static void UpdateShip(GameObject ship)
+        private static void UpdateSatellite(GameObject satellite)
         {
-            ship.GetComponent<Ship>().StartUpdateShip();
+            satellite.GetComponent<Satellite>().StartUpdateSatellite();
         }
 
-        private static void LoadBlocks(GameObject ship, SerializableShip shipToLoad)
+        private static void LoadBlocks(GameObject satellite, SerializableSatellite satelliteToLoad)
         {
-            foreach (SerializableBlock block in shipToLoad.Blocks)
-                LoadBlock(ship, block);
+            foreach (SerializableBlock block in satelliteToLoad.Blocks)
+                LoadBlock(satellite, block);
         }
 
-        private static void LoadBlock(GameObject ship, SerializableBlock blockToLoad)
+        private static void LoadBlock(GameObject satellite, SerializableBlock blockToLoad)
         {
-            InstantiateBlock(out GameObject block, ship, blockToLoad);
+            InstantiateBlock(out GameObject block, satellite, blockToLoad);
             SetBlockParameters(block, blockToLoad);
             LoadBlockModel(block);
             LoadShape(block);
@@ -199,11 +199,11 @@ namespace Main
         }
 
         private static void InstantiateBlock(out GameObject block,
-            GameObject ship, SerializableBlock blockToLoad)
+            GameObject satellite, SerializableBlock blockToLoad)
         {
             var buildingManager = BuildingManager.Instance;
             GetBlockPrefab(blockToLoad, buildingManager, out GameObject blockPrefab);
-            block = InstantiateBlockFromPrefab(blockPrefab, ship);
+            block = InstantiateBlockFromPrefab(blockPrefab, satellite);
         }
 
         private static void GetBlockPrefab(SerializableBlock blockToLoad,
@@ -219,25 +219,25 @@ namespace Main
         }
 
         private static GameObject InstantiateBlockFromPrefab(
-            GameObject blockPrefab, GameObject ship)
+            GameObject blockPrefab, GameObject satellite)
         {
-            return GameObject.Instantiate(blockPrefab, ship.transform);
+            return GameObject.Instantiate(blockPrefab, satellite.transform);
         }
 
-        private static void SetShipParameters(GameObject ship, SerializableShip shipToLoad)
+        private static void SetSatelliteParameters(GameObject satellite, SerializableSatellite satelliteToLoad)
         {
-            Ship shipComponent = ship.GetComponent<Ship>();
-            shipComponent.Id = shipToLoad.Id;
-            shipComponent.Rooms = shipToLoad.Rooms;
-            ship.transform.position = shipToLoad.Position;
-            ship.transform.eulerAngles = new Vector3(0, 0, shipToLoad.Rotation);
-            ship.GetComponent<Rigidbody2D>().velocity = shipToLoad.Velocity;
+            Satellite satelliteComponent = satellite.GetComponent<Satellite>();
+            satelliteComponent.Id = satelliteToLoad.Id;
+            satelliteComponent.Rooms = satelliteToLoad.Rooms;
+            satellite.transform.position = satelliteToLoad.Position;
+            satellite.transform.eulerAngles = new Vector3(0, 0, satelliteToLoad.Rotation);
+            satellite.GetComponent<Rigidbody2D>().velocity = satelliteToLoad.Velocity;
         }
 
-        private static void InstantiateShip(out GameObject ship)
+        private static void InstantiateSatellite(out GameObject satellite)
         {
-            ship = GameObject.Instantiate(
-                GameManager.Instance.ShipPrefab, GameManager.Instance.World);
+            satellite = GameObject.Instantiate(
+                GameManager.Instance.SatellitePrefab, GameManager.Instance.World);
         }
 
         private static Save GetSaveFromJson(string saveJson)
@@ -341,21 +341,21 @@ namespace Main
 
         private static Save CreateSave()
         {
-            return new(GetShipsList());
+            return new(GetSatellitesList());
         }
 
-        private static List<Ship> GetShipsList()
+        private static List<Satellite> GetSatellitesList()
         {
-            List<Ship> ships = new();
-            GameManager.ForEachShip(ship => ships.Add(ship));
-            UpdateShips(ships);
-            return ships;
+            List<Satellite> satellites = new();
+            GameManager.ForEachSatellite(satellite => satellites.Add(satellite));
+            UpdateSatellites(satellites);
+            return satellites;
         }
 
-        private static void UpdateShips(List<Ship> ships)
+        private static void UpdateSatellites(List<Satellite> satellites)
         {
-            foreach (var ship in ships)
-                ship.StartUpdateShip();
+            foreach (var satellite in satellites)
+                satellite.StartUpdateSatellite();
         }
 
         private static void ClearWorld()
@@ -365,7 +365,7 @@ namespace Main
             for (int i = 0; i < world.transform.childCount; i++)
             {
                 Transform child = world.GetChild(i);
-                if (child.GetComponent<Ship>())
+                if (child.GetComponent<Satellite>())
                     GameObject.Destroy(child.gameObject);
             }
             Astronaut.Astronauts.Clear();

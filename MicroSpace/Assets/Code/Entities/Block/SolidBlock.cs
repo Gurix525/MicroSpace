@@ -1,4 +1,4 @@
-﻿namespace Ships
+﻿namespace Entities
 {
     public abstract class SolidBlock : Block
     {

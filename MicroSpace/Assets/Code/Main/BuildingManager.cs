@@ -1,7 +1,7 @@
 using Attributes;
 using ExtensionMethods;
 using ScriptableObjects;
-using Ships;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace Main
         private GameObject _miningDesignationPrefab;
 
         [SerializeField]
-        private GameObject _shipPrefab;
+        private GameObject _satellitePrefab;
 
         [SerializeField]
         private GameObject _wallPrefab;
@@ -211,7 +211,7 @@ namespace Main
         {
             var num = _worldTransform.GetComponentsInChildren<Block>(false)
                 .Where(x => x != designation?.GetComponent<BlockDesignation>())
-                .Where(x => x.Parent.GetComponent<Ship>() != null);
+                .Where(x => x.Parent.GetComponent<Satellite>() != null);
             var closestWall = num.Count() > 0 ?
                 num.Aggregate((closest, next) =>
                 Vector2.Distance(closest.Transform.position, searchStartPosition) <
@@ -244,7 +244,7 @@ namespace Main
                 designation.transform.parent = _worldTransform;
                 designation.transform.position = targetPosition;
                 designation.transform.localEulerAngles =
-                    GameManager.FocusedShipRotation.eulerAngles +
+                    GameManager.FocusedSatelliteRotation.eulerAngles +
                     new Vector3(0, 0, _prefabRotation);
             }
         }
@@ -254,7 +254,7 @@ namespace Main
             _currentDesignation = Instantiate(
                 _temporalDesignationPrefab,
                 GetMouseWorldPosition(),
-                GameManager.FocusedShipRotation,
+                GameManager.FocusedSatelliteRotation,
                 _worldTransform);
             _currentDesignation.GetComponent<TemporalDesignation>()
                 .TemporalBlockType = _buildingMode switch
@@ -374,7 +374,7 @@ namespace Main
 
         private void SetTemporalParent()
         {
-            if (_currentDesignation.transform.parent?.GetComponent<Ship>() == null)
+            if (_currentDesignation.transform.parent?.GetComponent<Satellite>() == null)
             {
                 _temporalParent = new GameObject("TemporalParent").transform;
                 _temporalParent.position = _currentDesignation.transform.position;
@@ -439,9 +439,9 @@ namespace Main
             return hit.collider?.GetComponent<Block>();
         }
 
-        private void UpdateShip()
+        private void UpdateSatellite()
         {
-            _temporalParent?.GetComponent<Ship>()?.StartUpdateShip();
+            _temporalParent?.GetComponent<Satellite>()?.StartUpdateSatellite();
         }
 
         private void CreateFinalDesignations()
@@ -465,20 +465,20 @@ namespace Main
             }
         }
 
-        private void CreateShipIfTemporalParentIsNotAShip()
+        private void CreateSatelliteIfTemporalParentIsNotASatellite()
         {
-            if (!_temporalParent?.GetComponent<Ship>())
+            if (!_temporalParent?.GetComponent<Satellite>())
             {
-                GameObject ship = Instantiate(
-                    _shipPrefab,
+                GameObject satellite = Instantiate(
+                    _satellitePrefab,
                     _temporalParent.position,
                     Quaternion.identity,
                     _worldTransform);
-                ship.GetComponent<Rigidbody2D>().velocity =
-                    GameManager.FocusedShipVelocity;
-                TransferChildren(_temporalParent, ship.transform);
+                satellite.GetComponent<Rigidbody2D>().velocity =
+                    GameManager.FocusedSatelliteVelocity;
+                TransferChildren(_temporalParent, satellite.transform);
                 Destroy(_temporalParent.gameObject);
-                _temporalParent = ship.transform;
+                _temporalParent = satellite.transform;
             }
         }
 
@@ -755,7 +755,7 @@ namespace Main
             if (_isPointerOverUI)
                 return;
             MarkBlocksDesignedToMining();
-            UpdateShip();
+            UpdateSatellite();
             StartFromPreviousMode();
         }
 
@@ -809,7 +809,7 @@ namespace Main
             if (_isPointerOverUI)
                 return;
             CancelDesignations();
-            UpdateShip();
+            UpdateSatellite();
             StartFromPreviousMode();
         }
 
@@ -861,9 +861,9 @@ namespace Main
                 return;
             if (AreDesignationsObstructed())
                 return;
-            CreateShipIfTemporalParentIsNotAShip();
+            CreateSatelliteIfTemporalParentIsNotASatellite();
             CreateFinalDesignations();
-            UpdateShip();
+            UpdateSatellite();
             StartFromPreviousMode();
         }
 

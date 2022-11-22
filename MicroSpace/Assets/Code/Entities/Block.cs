@@ -6,9 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Ships
+namespace Entities
 {
-    [Serializable]
     public abstract class Block : MonoBehaviour
     {
         #region Fields

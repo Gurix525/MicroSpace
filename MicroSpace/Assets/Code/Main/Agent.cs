@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using static UnityEngine.InputSystem.InputAction;
 using ExtensionMethods;
 using System.Linq;
-using Ships;
+using Entities;
 
 namespace Main
 {
@@ -126,7 +126,7 @@ namespace Main
                 if (!transform.IsChildOf(_obstacleRigidbody.transform))
                 {
                     transform.parent = _obstacleRigidbody.transform;
-                    _astronaut.SetParentId(_obstacleRigidbody.GetComponent<Ship>().Id);
+                    _astronaut.SetParentId(_obstacleRigidbody.GetComponent<Satellite>().Id);
                 }
         }
 

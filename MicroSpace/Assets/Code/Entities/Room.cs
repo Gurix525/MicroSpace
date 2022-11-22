@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace Ships
+namespace Entities
 {
-    [Serializable]
     public class Room
     {
         public int Id;

@@ -1,5 +1,5 @@
 using ExtensionMethods;
-using Ships;
+using Entities;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -15,13 +15,13 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private GameObject _shipDesignationPrefab;
+        private GameObject _satelliteDesignationPrefab;
 
         [SerializeField]
         private GameObject _wallPrefab;
 
         [SerializeField]
-        private GameObject _shipPrefab;
+        private GameObject _satellitePrefab;
 
         [SerializeField]
         private GameObject _astronautPrefab;
@@ -49,7 +49,7 @@ namespace Main
 
         [SerializeField]
         [ReadonlyInspector]
-        private Rigidbody2D _focusedShipRigidbody = null;
+        private Rigidbody2D _focusedSatelliteRigidbody = null;
 
         [SerializeField]
         [ReadonlyInspector]
@@ -71,26 +71,26 @@ namespace Main
             private set => _speedometer = value;
         }
 
-        public GameObject ShipPrefab => _shipPrefab;
+        public GameObject SatellitePrefab => _satellitePrefab;
 
         public Transform World { get => _world; set => _world = value; }
 
-        public static Transform FocusedShip =>
-            Instance._focusedShipRigidbody != null ?
-            Instance._focusedShipRigidbody.transform :
+        public static Transform FocusedSatellite =>
+            Instance._focusedSatelliteRigidbody != null ?
+            Instance._focusedSatelliteRigidbody.transform :
             null;
 
-        public static int FocusedShipId =>
-            Instance._focusedShipRigidbody.GetComponent<Ship>().Id;
+        public static int FocusedSatelliteId =>
+            Instance._focusedSatelliteRigidbody.GetComponent<Satellite>().Id;
 
-        public static Vector2 FocusedShipVelocity =>
-            Instance._focusedShipRigidbody != null ?
-            Instance._focusedShipRigidbody.velocity :
+        public static Vector2 FocusedSatelliteVelocity =>
+            Instance._focusedSatelliteRigidbody != null ?
+            Instance._focusedSatelliteRigidbody.velocity :
             Vector2.zero;
 
-        public static Quaternion FocusedShipRotation =>
-            Instance._focusedShipRigidbody != null ?
-            Instance._focusedShipRigidbody.transform.rotation :
+        public static Quaternion FocusedSatelliteRotation =>
+            Instance._focusedSatelliteRigidbody != null ?
+            Instance._focusedSatelliteRigidbody.transform.rotation :
             Quaternion.identity;
 
         public GameObject AstronautPrefab => _astronautPrefab;
@@ -104,12 +104,12 @@ namespace Main
         public static void SwitchSetup() =>
                     _isSetupRunnning ^= true;
 
-        public static void SelectFocusedShip(GameObject ship)
+        public static void SelectFocusedSatellite(GameObject satellite)
         {
-            if (ship != null)
+            if (satellite != null)
             {
-                Instance._focusedShipRigidbody = ship.GetComponent<Rigidbody2D>();
-                AlignCameraToFocusedShip(new());
+                Instance._focusedSatelliteRigidbody = satellite.GetComponent<Rigidbody2D>();
+                AlignCameraToFocusedSatellite(new());
             }
         }
 
@@ -121,35 +121,35 @@ namespace Main
                 Instance._target = null;
         }
 
-        public static void ForEachShip(Action<Ship> action)
+        public static void ForEachSatellite(Action<Satellite> action)
         {
             foreach (Transform child in Instance.World)
-                if (child.TryGetComponent(out Ship ship))
-                    action(ship);
+                if (child.TryGetComponent(out Satellite satellite))
+                    action(satellite);
         }
 
         #endregion Public
 
         #region Private
 
-        private void SteerShip()
+        private void SteerSatellite()
         {
             Vector3 direction = ((Vector3)PlayerController.SteeringDirection
                 .ReadValue<Vector2>())
                 .RotateAroundPivot(
                     Vector3.zero,
-                    _focusedShipRigidbody.transform.localEulerAngles);
-            float speed = 5 * _focusedShipRigidbody.mass;
-            float rotationSpeed = _focusedShipRigidbody.mass;
+                    _focusedSatelliteRigidbody.transform.localEulerAngles);
+            float speed = 5 * _focusedSatelliteRigidbody.mass;
+            float rotationSpeed = _focusedSatelliteRigidbody.mass;
 
-            _focusedShipRigidbody.AddForce(
+            _focusedSatelliteRigidbody.AddForce(
                 direction * speed);
 
-            _focusedShipRigidbody.AddTorque(PlayerController.SteeringRotation
+            _focusedSatelliteRigidbody.AddTorque(PlayerController.SteeringRotation
                 .ReadValue<float>());
 
             if (PlayerController.SteeringAdjustSpeed.IsPressed())
-                AdjustFocusedShipSpeed(speed * Time.fixedDeltaTime);
+                AdjustFocusedSatelliteSpeed(speed * Time.fixedDeltaTime);
         }
 
         private void SetCameraFree()
@@ -178,11 +178,11 @@ namespace Main
                 0, 0, rotation * Time.unscaledDeltaTime * _cameraRotationSpeed));
         }
 
-        private void AdjustFocusedShipSpeed(float speed)
+        private void AdjustFocusedSatelliteSpeed(float speed)
         {
             Vector2 desiredVelocity = _target != null ?
                 _target.velocity : Vector2.zero;
-            var currentVelocity = _focusedShipRigidbody.velocity;
+            var currentVelocity = _focusedSatelliteRigidbody.velocity;
             float x = 0;
             float y = 0;
 
@@ -199,14 +199,14 @@ namespace Main
             else
                 y = desiredVelocity.y - currentVelocity.y;
 
-            _focusedShipRigidbody.velocity += new Vector2(x, y);
+            _focusedSatelliteRigidbody.velocity += new Vector2(x, y);
         }
 
         private void UpdateSpeedometer()
         {
             Speedometer = _target == null ?
-                _focusedShipRigidbody.velocity.magnitude :
-                Math.Abs((_focusedShipRigidbody.velocity -
+                _focusedSatelliteRigidbody.velocity.magnitude :
+                Math.Abs((_focusedSatelliteRigidbody.velocity -
                 _target.velocity).magnitude);
         }
 
@@ -237,17 +237,17 @@ namespace Main
             SaveManager.LoadGame();
         }
 
-        private void ActivateOrDeactivateShips()
+        private void ActivateOrDeactivateSatellites()
         {
-            ForEachShip(ship => ship.ActivateOrDeactivateChildren(
-                _focusedShipRigidbody.transform));
+            ForEachSatellite(satellite => satellite.ActivateOrDeactivateChildren(
+                _focusedSatelliteRigidbody.transform));
         }
 
         private void EnableSteering(CallbackContext context)
         {
             PlayerController.PlayerInput.SwitchCurrentActionMap("Steering");
             _isSteeringEnabled = true;
-            AlignCameraToFocusedShip(new());
+            AlignCameraToFocusedSatellite(new());
         }
 
         private void DisableSteering(CallbackContext context)
@@ -275,14 +275,14 @@ namespace Main
             EnableBuilding(context);
         }
 
-        public static void AlignCameraToFocusedShip(CallbackContext context)
+        public static void AlignCameraToFocusedSatellite(CallbackContext context)
         {
-            if (Instance._focusedShipRigidbody == null)
+            if (Instance._focusedSatelliteRigidbody == null)
                 return;
-            Camera.main.transform.parent = Instance._focusedShipRigidbody.transform;
+            Camera.main.transform.parent = Instance._focusedSatelliteRigidbody.transform;
             Camera.main.transform.rotation =
-                Instance._focusedShipRigidbody.transform.rotation;
-            var shipPos = Instance._focusedShipRigidbody.position;
+                Instance._focusedSatelliteRigidbody.transform.rotation;
+            var satellitePos = Instance._focusedSatelliteRigidbody.position;
             Camera.main.transform.localPosition = new Vector3(0, 0, -10);
         }
 
@@ -301,7 +301,7 @@ namespace Main
             PlayerController.DefaultEnableBuilding
                 .AddListener(ActionType.Performed, EnableBuilding);
             PlayerController.DefaultAlignCamera
-                .AddListener(ActionType.Performed, AlignCameraToFocusedShip);
+                .AddListener(ActionType.Performed, AlignCameraToFocusedSatellite);
 
             PlayerController.SteeringPause
                 .AddListener(ActionType.Performed, SwitchPause);
@@ -316,7 +316,7 @@ namespace Main
             PlayerController.SteeringSwitchToBuilding
                 .AddListener(ActionType.Performed, SwitchSteeringToBuilding);
             PlayerController.SteeringAlignCamera
-                .AddListener(ActionType.Performed, AlignCameraToFocusedShip);
+                .AddListener(ActionType.Performed, AlignCameraToFocusedSatellite);
 
             PlayerController.BuildingDisableBuilding
                 .AddListener(ActionType.Performed, DisableBuilding);
@@ -325,7 +325,7 @@ namespace Main
             PlayerController.BuildingPause
                 .AddListener(ActionType.Performed, SwitchPause);
             PlayerController.BuildingAlignCamera
-                .AddListener(ActionType.Performed, AlignCameraToFocusedShip);
+                .AddListener(ActionType.Performed, AlignCameraToFocusedSatellite);
         }
 
         //private void UnsubscribeFromInputEvents()
@@ -377,7 +377,7 @@ namespace Main
 
             //if (Input.GetKeyDown(KeyCode.N))
             //{
-            //    StartCoroutine(BuildShipCoroutine());
+            //    StartCoroutine(BuildSatelliteCoroutine());
             //    return;
             //}
 
@@ -396,12 +396,12 @@ namespace Main
 
         private void FixedUpdate()
         {
-            if (_focusedShipRigidbody != null)
+            if (_focusedSatelliteRigidbody != null)
             {
                 if (_isSteeringEnabled)
-                    SteerShip();
+                    SteerSatellite();
                 UpdateSpeedometer();
-                ActivateOrDeactivateShips();
+                ActivateOrDeactivateSatellites();
             }
         }
 

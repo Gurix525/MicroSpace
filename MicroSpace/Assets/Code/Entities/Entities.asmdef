@@ -1,5 +1,5 @@
 {
-    "name": "Ships",
+    "name": "Entities",
     "rootNamespace": "",
     "references": [
         "GUID:4db8d9708de15ba49a0388e69221f1c6",

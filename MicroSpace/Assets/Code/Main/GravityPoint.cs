@@ -1,4 +1,4 @@
-using Ships;
+using Entities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,24 +18,24 @@ namespace Main
 
         private void ApplyGravity()
         {
-            GameManager.ForEachShip(
-                ship => AddGravitationalForce(ship));
+            GameManager.ForEachSatellite(
+                satellite => AddGravitationalForce(satellite));
         }
 
-        private void AddGravitationalForce(Ship ship)
+        private void AddGravitationalForce(Satellite satellite)
         {
-            ship.Rigidbody2D.AddForce(CalculateForce(ship.Rigidbody2D));
+            satellite.Rigidbody2D.AddForce(CalculateForce(satellite.Rigidbody2D));
         }
 
-        private Vector2 CalculateForce(Rigidbody2D ship)
+        private Vector2 CalculateForce(Rigidbody2D satellite)
         {
             var distance = Vector2.Distance(
-                ship.transform.position, transform.position);
+                satellite.transform.position, transform.position);
             if (distance == 0)
                 return Vector2.zero;
             else
-                return (Vector2)(transform.position - ship.transform.position).normalized *
-                _gravityConstant * ship.mass / (distance * distance);
+                return (Vector2)(transform.position - satellite.transform.position).normalized *
+                _gravityConstant * satellite.mass / (distance * distance);
         }
 
         #endregion Private

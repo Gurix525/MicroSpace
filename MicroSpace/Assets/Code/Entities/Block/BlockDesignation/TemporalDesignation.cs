@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Ships
+namespace Entities
 {
     public class TemporalDesignation : BlockDesignation
     {

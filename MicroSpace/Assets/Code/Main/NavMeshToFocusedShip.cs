@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Main
 {
-    public class NavMeshToFocusedShip : MonoBehaviour
+    public class NavMeshToFocusedSatellite : MonoBehaviour
     {
         private void Update()
         {
-            if (GameManager.FocusedShip != null)
-                if (transform.parent != GameManager.FocusedShip)
+            if (GameManager.FocusedSatellite != null)
+                if (transform.parent != GameManager.FocusedSatellite)
                 {
-                    transform.parent = GameManager.FocusedShip;
+                    transform.parent = GameManager.FocusedSatellite;
                     transform.localPosition = Vector3.zero;
                 }
         }

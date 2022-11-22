@@ -1,4 +1,4 @@
-﻿namespace Ships
+﻿namespace Entities
 {
     public class MiningDesignation : TemporalDesignation
     {

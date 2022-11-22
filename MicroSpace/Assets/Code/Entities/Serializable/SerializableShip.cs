@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace Ships
+namespace Entities
 {
     [Serializable]
-    public class SerializableShip
+    public class SerializableSatellite
     {
         #region Fields
 
@@ -47,20 +47,20 @@ namespace Ships
 
         #endregion Properties
 
-        public SerializableShip(Ship ship)
+        public SerializableSatellite(Satellite satellite)
         {
-            foreach (var block in ship.Blocks)
+            foreach (var block in satellite.Blocks)
                 _blocks.Add(new(block));
-            _rooms = ship.Rooms;
-            _id = ship.Id;
-            _position = ship.Position;
-            _rotation = ship.Rotation;
-            _velocity = ship.Velocity;
+            _rooms = satellite.Rooms;
+            _id = satellite.Id;
+            _position = satellite.Position;
+            _rotation = satellite.Rotation;
+            _velocity = satellite.Velocity;
         }
 
-        public static implicit operator SerializableShip(Ship ship)
+        public static implicit operator SerializableSatellite(Satellite satellite)
         {
-            return new SerializableShip(ship);
+            return new SerializableSatellite(satellite);
         }
     }
 }
