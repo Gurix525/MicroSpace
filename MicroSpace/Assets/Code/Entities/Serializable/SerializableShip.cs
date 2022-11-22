@@ -26,16 +26,11 @@ namespace Entities
         [SerializeField]
         private List<SerializableBlock> _blocks = new();
 
-        [SerializeField]
-        private List<Room> _rooms = new();
-
         #endregion Fields
 
         #region Properties
 
         public List<SerializableBlock> Blocks => _blocks;
-
-        public List<Room> Rooms => _rooms;
 
         public int Id => _id;
 
@@ -51,7 +46,6 @@ namespace Entities
         {
             foreach (var block in satellite.Blocks)
                 _blocks.Add(new(block));
-            _rooms = satellite.Rooms;
             _id = satellite.Id;
             _position = satellite.Position;
             _rotation = satellite.Rotation;

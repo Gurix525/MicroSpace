@@ -228,7 +228,6 @@ namespace Main
         {
             Satellite satelliteComponent = satellite.GetComponent<Satellite>();
             satelliteComponent.Id = satelliteToLoad.Id;
-            satelliteComponent.Rooms = satelliteToLoad.Rooms;
             satellite.transform.position = satelliteToLoad.Position;
             satellite.transform.eulerAngles = new Vector3(0, 0, satelliteToLoad.Rotation);
             satellite.GetComponent<Rigidbody2D>().velocity = satelliteToLoad.Velocity;

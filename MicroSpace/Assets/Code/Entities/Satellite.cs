@@ -22,10 +22,6 @@ namespace Entities
 
         [SerializeField]
         [ReadonlyInspector]
-        private List<Room> _rooms = new();
-
-        [SerializeField]
-        [ReadonlyInspector]
         private Vector2 _position;
 
         [SerializeField]
@@ -55,8 +51,6 @@ namespace Entities
             .Where(block => block is Floor)
             .Select(block => block as Floor)
             .ToList();
-
-        public List<Room> Rooms { get => _rooms; set => _rooms = value; }
 
         public int ElementsCount { get => Blocks.Count; }
 
@@ -94,7 +88,6 @@ namespace Entities
         private void UpdateSatellite()
         {
             UpdateBlocks();
-            UpdateRooms();
             UpdateProperties();
             if (IsSatelliteEmpty())
                 DestroySatellite();
@@ -164,107 +157,107 @@ namespace Entities
             return block is TemporalDesignation;
         }
 
-        private void UpdateRooms()
-        {
-            List<Block> blocks = new();
-            foreach (var item in Blocks)
-                blocks.Add(item);
+        //private void UpdateRooms()
+        //{
+        //    List<Block> blocks = new();
+        //    foreach (var item in Blocks)
+        //        blocks.Add(item);
 
-            foreach (Block block in blocks)
-            {
-                if (block is not Floor)
-                    continue;
+        //    foreach (Block block in blocks)
+        //    {
+        //        if (block is not Floor)
+        //            continue;
 
-                var upBlock = blocks.Find(
-                    x => x.transform.localPosition.x == block.transform.localPosition.x &&
-                    x.transform.localPosition.y == block.transform.localPosition.y + 1);
-                var downBlock = blocks.Find(
-                    x => x.transform.localPosition.x == block.transform.localPosition.x &&
-                    x.transform.localPosition.y == block.transform.localPosition.y - 1);
-                var leftBlock = blocks.Find(
-                    x => x.transform.localPosition.x == block.transform.localPosition.x - 1 &&
-                    x.transform.localPosition.y == block.transform.localPosition.y);
-                var rightBlock = blocks.Find(
-                    x => x.transform.localPosition.x == block.transform.localPosition.x + 1 &&
-                    x.transform.localPosition.y == block.transform.localPosition.y);
+        //        var upBlock = blocks.Find(
+        //            x => x.transform.localPosition.x == block.transform.localPosition.x &&
+        //            x.transform.localPosition.y == block.transform.localPosition.y + 1);
+        //        var downBlock = blocks.Find(
+        //            x => x.transform.localPosition.x == block.transform.localPosition.x &&
+        //            x.transform.localPosition.y == block.transform.localPosition.y - 1);
+        //        var leftBlock = blocks.Find(
+        //            x => x.transform.localPosition.x == block.transform.localPosition.x - 1 &&
+        //            x.transform.localPosition.y == block.transform.localPosition.y);
+        //        var rightBlock = blocks.Find(
+        //            x => x.transform.localPosition.x == block.transform.localPosition.x + 1 &&
+        //            x.transform.localPosition.y == block.transform.localPosition.y);
 
-                if (upBlock == null || downBlock == null ||
-                    leftBlock == null || rightBlock == null)
-                    ((Floor)block).IsExposed = true;
-                else
-                    ((Floor)block).IsExposed = false;
+        //        if (upBlock == null || downBlock == null ||
+        //            leftBlock == null || rightBlock == null)
+        //            ((Floor)block).IsExposed = true;
+        //        else
+        //            ((Floor)block).IsExposed = false;
 
-                if (upBlock is Floor)
-                    ((Floor)block).UpFloor = (Floor)upBlock;
-                if (downBlock is Floor)
-                    ((Floor)block).DownFloor = (Floor)downBlock;
-                if (leftBlock is Floor)
-                    ((Floor)block).LeftFloor = (Floor)leftBlock;
-                if (rightBlock is Floor)
-                    ((Floor)block).RightFloor = (Floor)rightBlock;
-            }
+        //        if (upBlock is Floor)
+        //            ((Floor)block).UpFloor = (Floor)upBlock;
+        //        if (downBlock is Floor)
+        //            ((Floor)block).DownFloor = (Floor)downBlock;
+        //        if (leftBlock is Floor)
+        //            ((Floor)block).LeftFloor = (Floor)leftBlock;
+        //        if (rightBlock is Floor)
+        //            ((Floor)block).RightFloor = (Floor)rightBlock;
+        //    }
 
-            var exposedFloors = blocks
-                .Where(x => x is Floor)
-                .Where(x => ((Floor)x).IsExposed);
+        //    var exposedFloors = blocks
+        //        .Where(x => x is Floor)
+        //        .Where(x => ((Floor)x).IsExposed);
 
-            foreach (var floor in exposedFloors)
-                exposeFloor((Floor)floor);
+        //    foreach (var floor in exposedFloors)
+        //        exposeFloor((Floor)floor);
 
-            foreach (var floor in Floors)
-                setRoom(floor);
+        //    foreach (var floor in Floors)
+        //        setRoom(floor);
 
-            void exposeFloor(Floor floor)
-            {
-                floor.IsExposed = true;
+        //    void exposeFloor(Floor floor)
+        //    {
+        //        floor.IsExposed = true;
 
-                if (floor.UpFloor != null)
-                    if (!floor.UpFloor.IsExposed)
-                        exposeFloor(floor.UpFloor);
+        //        if (floor.UpFloor != null)
+        //            if (!floor.UpFloor.IsExposed)
+        //                exposeFloor(floor.UpFloor);
 
-                if (floor.DownFloor != null)
-                    if (!floor.DownFloor.IsExposed)
-                        exposeFloor(floor.DownFloor);
+        //        if (floor.DownFloor != null)
+        //            if (!floor.DownFloor.IsExposed)
+        //                exposeFloor(floor.DownFloor);
 
-                if (floor.LeftFloor != null)
-                    if (!floor.LeftFloor.IsExposed)
-                        exposeFloor(floor.LeftFloor);
+        //        if (floor.LeftFloor != null)
+        //            if (!floor.LeftFloor.IsExposed)
+        //                exposeFloor(floor.LeftFloor);
 
-                if (floor.RightFloor != null)
-                    if (!floor.RightFloor.IsExposed)
-                        exposeFloor(floor.RightFloor);
-            }
+        //        if (floor.RightFloor != null)
+        //            if (!floor.RightFloor.IsExposed)
+        //                exposeFloor(floor.RightFloor);
+        //    }
 
-            void setRoom(Floor floor, Room room = null)
-            {
-                if (floor.Room.Id > 0)
-                    room = floor.Room;
-                else
-                {
-                    if (room == null)
-                    {
-                        Rooms.Add(new(Rooms.Count + 1));
-                        room = Rooms[^1];
-                    }
-                    floor.Room = room;
-                }
+        //    void setRoom(Floor floor, Room room = null)
+        //    {
+        //        if (floor.Room.Id > 0)
+        //            room = floor.Room;
+        //        else
+        //        {
+        //            if (room == null)
+        //            {
+        //                Rooms.Add(new(Rooms.Count + 1));
+        //                room = Rooms[^1];
+        //            }
+        //            floor.Room = room;
+        //        }
 
-                if (floor.UpFloor != null)
-                    if (floor.UpFloor.Room.Id == 0)
-                        setRoom(floor.UpFloor, room);
-                if (floor.DownFloor != null)
-                    if (floor.DownFloor.Room.Id == 0)
-                        setRoom(floor.DownFloor, room);
-                if (floor.LeftFloor != null)
-                    if (floor.LeftFloor.Room.Id == 0)
-                        setRoom(floor.LeftFloor, room);
-                if (floor.RightFloor != null)
-                    if (floor.RightFloor.Room.Id == 0)
-                        setRoom(floor.RightFloor, room);
-            } // Jeszcze sie za duzo roomow tworzy bo
+        //        if (floor.UpFloor != null)
+        //            if (floor.UpFloor.Room.Id == 0)
+        //                setRoom(floor.UpFloor, room);
+        //        if (floor.DownFloor != null)
+        //            if (floor.DownFloor.Room.Id == 0)
+        //                setRoom(floor.DownFloor, room);
+        //        if (floor.LeftFloor != null)
+        //            if (floor.LeftFloor.Room.Id == 0)
+        //                setRoom(floor.LeftFloor, room);
+        //        if (floor.RightFloor != null)
+        //            if (floor.RightFloor.Room.Id == 0)
+        //                setRoom(floor.RightFloor, room);
+        //    } // Jeszcze sie za duzo roomow tworzy bo
 
-            // walle sie kopiują z pustymi roomami na WallData
-        }
+        //    // walle sie kopiują z pustymi roomami na WallData
+        //}
 
         private void GetRigidbody2D()
         {
