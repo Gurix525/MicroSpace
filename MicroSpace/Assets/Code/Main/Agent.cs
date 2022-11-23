@@ -25,6 +25,7 @@ namespace Main
         private float _speed = 5F;
         private Rigidbody2D _rigidbody;
         private CircleCollider2D _collider;
+        private Vector2 _deltaPosition;
 
         #endregion Fields
 
@@ -76,7 +77,7 @@ namespace Main
         {
             while (_path.Count() > 0)
             {
-                if (Vector2.Distance(_rigidbody.position, _path[0]) < 0.25F)
+                if (Vector2.Distance(_rigidbody.position, _path[0]) < 0.2F)
                     _path.RemoveAt(0);
                 else
                     break;
@@ -84,19 +85,27 @@ namespace Main
 
             if (_path.Count() == 0)
                 return;
-            Vector2 direction = ((Vector2)_path[0] - _rigidbody.position);
-            Vector2 normalizedDirection = direction.normalized;
-            Vector2 velocity = normalizedDirection * _speed * Time.fixedDeltaTime;
-            Vector2 clampedVelocity = Vector2.ClampMagnitude(
-                velocity,
-                Vector2.Distance(_rigidbody.position, _path[0]));
-            _rigidbody.MovePosition(_rigidbody.position + clampedVelocity);
+
+            float remainingDisplacement = _speed * Time.fixedDeltaTime;
+            while (remainingDisplacement > 0.001F && _path.Count > 0)
+            {
+                Vector2 startDeltaPosition = _deltaPosition;
+                Vector2 direction = ((Vector2)_path[0] - (_rigidbody.position + _deltaPosition));
+                Vector2 normalizedDirection = direction.normalized;
+                Vector2 velocity = normalizedDirection * remainingDisplacement;
+                Vector2 clampedVelocity = Vector2.ClampMagnitude(
+                    velocity,
+                    Vector2.Distance(_rigidbody.position + _deltaPosition, _path[0]));
+                _deltaPosition += clampedVelocity;
+                remainingDisplacement -= Vector2.Distance(startDeltaPosition, _deltaPosition);
+                if (Vector2.Distance(_rigidbody.position + _deltaPosition, _path[0]) < 0.2F)
+                    _path.RemoveAt(0);
+            }
         }
 
         private void AddRelativeDisplacement()
         {
-            _rigidbody.MovePosition(_rigidbody.position
-                + (_obstacleRigidbody.velocity * Time.fixedDeltaTime));
+            _deltaPosition += _obstacleRigidbody.velocity * Time.fixedDeltaTime;
         }
 
         private void DetectObstacle()
@@ -159,6 +168,8 @@ namespace Main
                     Move();
                 }
                 AddRelativeDisplacement();
+                _rigidbody.velocity = _deltaPosition / Time.fixedDeltaTime;
+                _deltaPosition = Vector2.zero;
             }
 
             if (_obstacleRigidbody != null)
@@ -171,10 +182,10 @@ namespace Main
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            OnTriggerStay2D(collision);
-        }
+        //private void OnTriggerEnter2D(Collider2D collision)
+        //{
+        //    OnTriggerStay2D(collision);
+        //}
 
         private void OnTriggerStay2D(Collider2D collision)
         {
