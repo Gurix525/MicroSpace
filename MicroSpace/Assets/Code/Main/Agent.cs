@@ -110,11 +110,15 @@ namespace Main
 
         private void DetectObstacle()
         {
-            bool originalQueriesState = Physics2D.queriesHitTriggers;
+            bool originalQueriesGitTriggers = Physics2D.queriesHitTriggers;
+            bool originalQueriesStartInColliders = Physics2D.queriesStartInColliders;
             Physics2D.queriesHitTriggers = false;
-            RaycastHit2D hit = Physics2D.Linecast(
-                transform.position, _target.position);
-            Physics2D.queriesHitTriggers = originalQueriesState;
+            Physics2D.queriesStartInColliders = true;
+            RaycastHit2D hit = Physics2D.CircleCast(
+                transform.position, 0.4F, _target.position - transform.position,
+                (_target.position - transform.position).magnitude);
+            Physics2D.queriesHitTriggers = originalQueriesGitTriggers;
+            Physics2D.queriesStartInColliders = originalQueriesStartInColliders;
             if (hit.collider == null)
                 _target.TryGetComponentUpInHierarchy(out _obstacleRigidbody);
             else
@@ -192,7 +196,7 @@ namespace Main
             if (collision.TryGetComponent<Wall>(out _))
             {
                 var colliderDistance = Physics2D.Distance(_collider, collision);
-                _rigidbody.MovePosition(_rigidbody.position
+                _rigidbody.position = (_rigidbody.position
                     + (colliderDistance.pointB - colliderDistance.pointA));
             }
         }
