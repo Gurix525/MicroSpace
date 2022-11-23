@@ -196,8 +196,7 @@ namespace Main
             if (collision.TryGetComponent<Wall>(out _))
             {
                 var colliderDistance = Physics2D.Distance(_collider, collision);
-                _rigidbody.position = (_rigidbody.position
-                    + (colliderDistance.pointB - colliderDistance.pointA));
+                _rigidbody.position += colliderDistance.pointB - colliderDistance.pointA;
             }
         }
 
