@@ -15,15 +15,6 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private GameObject _satelliteDesignationPrefab;
-
-        [SerializeField]
-        private GameObject _wallPrefab;
-
-        [SerializeField]
-        private GameObject _satellitePrefab;
-
-        [SerializeField]
         private GameObject _astronautPrefab;
 
         [SerializeField]
@@ -37,9 +28,6 @@ namespace Main
 
         [SerializeField]
         private static float _speedometer;
-
-        [SerializeField]
-        private BuildingManager _buildingManager;
 
         [SerializeField]
         private float _cameraMovingSpeed = 1F;
@@ -71,9 +59,8 @@ namespace Main
             private set => _speedometer = value;
         }
 
-        public GameObject SatellitePrefab => _satellitePrefab;
-
-        public Transform World { get => _world; set => _world = value; }
+        public static Transform World
+        { get => Instance._world; set => Instance._world = value; }
 
         public static Transform FocusedSatellite =>
             Instance._focusedSatelliteRigidbody != null ?
@@ -123,7 +110,7 @@ namespace Main
 
         public static void ForEachSatellite(Action<Satellite> action)
         {
-            foreach (Transform child in Instance.World)
+            foreach (Transform child in World)
                 if (child.TryGetComponent(out Satellite satellite))
                     action(satellite);
         }
@@ -260,12 +247,12 @@ namespace Main
         private void EnableBuilding(CallbackContext context)
         {
             PlayerController.PlayerInput.SwitchCurrentActionMap("Building");
-            _buildingManager.enabled = true;
+            BuildingManager.Instance.enabled = true;
         }
 
         private void DisableBuilding(CallbackContext context)
         {
-            _buildingManager.enabled = false;
+            BuildingManager.Instance.enabled = false;
             PlayerController.PlayerInput.SwitchCurrentActionMap("Default");
         }
 

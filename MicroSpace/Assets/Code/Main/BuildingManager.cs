@@ -100,12 +100,14 @@ namespace Main
 
         public static BuildingManager Instance { get; private set; }
 
-        public GameObject WallPrefab => _wallPrefab;
+        public static GameObject SatellitePrefab => Instance._satellitePrefab;
 
-        public GameObject FloorPrefab => _floorPrefab;
+        public static GameObject WallPrefab => Instance._wallPrefab;
 
-        public GameObject WallDesignationPrefab => _wallDesignationPrefab;
-        public GameObject FloorDesignationPrefab => _floorDesignationPrefab;
+        public static GameObject FloorPrefab => Instance._floorPrefab;
+
+        public static GameObject WallDesignationPrefab => Instance._wallDesignationPrefab;
+        public static GameObject FloorDesignationPrefab => Instance._floorDesignationPrefab;
 
         #endregion Properties
 

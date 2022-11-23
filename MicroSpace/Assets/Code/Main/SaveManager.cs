@@ -216,10 +216,10 @@ namespace Main
         {
             blockPrefab = blockToLoad.BlockType switch
             {
-                BlockType.Floor => buildingManager.FloorPrefab,
-                BlockType.WallDesignation => buildingManager.WallDesignationPrefab,
-                BlockType.FloorDesignation => buildingManager.FloorDesignationPrefab,
-                _ => buildingManager.WallPrefab
+                BlockType.Floor => BuildingManager.FloorPrefab,
+                BlockType.WallDesignation => BuildingManager.WallDesignationPrefab,
+                BlockType.FloorDesignation => BuildingManager.FloorDesignationPrefab,
+                _ => BuildingManager.WallPrefab
             };
         }
 
@@ -241,7 +241,7 @@ namespace Main
         private static void InstantiateSatellite(out GameObject satellite)
         {
             satellite = GameObject.Instantiate(
-                GameManager.Instance.SatellitePrefab, GameManager.Instance.World);
+                BuildingManager.SatellitePrefab, GameManager.World);
         }
 
         private static Save GetSaveFromJson(string saveJson)
@@ -365,7 +365,7 @@ namespace Main
         private static void ClearWorld()
         {
             Camera.main.transform.parent = null;
-            var world = GameManager.Instance.World;
+            var world = GameManager.World;
             for (int i = 0; i < world.transform.childCount; i++)
             {
                 Transform child = world.GetChild(i);
