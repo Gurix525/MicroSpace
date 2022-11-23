@@ -100,7 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2766b1738e8a414a9ccf4acb80f6c4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
   _id: 0
   _modelId: 0

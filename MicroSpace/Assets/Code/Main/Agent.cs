@@ -14,13 +14,17 @@ namespace Main
     {
         #region Fields
 
-        private NavMeshAgent _navMeshAgent;
         private Transform _target;
         private Rigidbody2D _obstacleRigidbody;
         private List<Vector3> _path = new();
         private Astronaut _astronaut;
         private bool _isTargetClosestPositionValid;
+        private bool _isCurrentClosestPositionValid;
         private NavMeshHit _targetClosestPosition;
+        private NavMeshHit _currentClosestPosition;
+        private float _speed = 5F;
+        private Rigidbody2D _rigidbody;
+        private CircleCollider2D _collider;
 
         #endregion Fields
 
@@ -46,43 +50,68 @@ namespace Main
 
         private void SetDestination()
         {
+            Vector2 correction = (transform.position - _target.position).normalized * 0.01F;
+            if (Math.Abs(correction.x) > Math.Abs(correction.y))
+                correction = new(0.01F * Math.Sign(correction.x), 0F);
+            else
+                correction = new(0F, 0.01F * Math.Sign(correction.y));
+            Vector2 correctedTargetPosition = _target.position + _target.InverseTransformDirection(correction);
+            _isCurrentClosestPositionValid = NavMesh.SamplePosition(
+                transform.position, out _currentClosestPosition, 2F, NavMesh.AllAreas);
             _isTargetClosestPositionValid = NavMesh.SamplePosition(
-                _target.position, out _targetClosestPosition, 2F, NavMesh.AllAreas);
-            if (_isTargetClosestPositionValid)
+                correctedTargetPosition, out _targetClosestPosition, 2F, NavMesh.AllAreas);
+            if (_isCurrentClosestPositionValid && _isTargetClosestPositionValid)
             {
                 NavMeshPath path = new();
                 NavMesh.CalculatePath(
-                    transform.position,
+                    _currentClosestPosition.position,
                     _targetClosestPosition.position,
                     NavMesh.AllAreas,
                     path);
-                if (path.corners.Length != 0)
-                {
-                    _path = path.corners.ToList();
-                    _navMeshAgent.SetPath(path);
-                }
+                _path = path.corners.ToList();
             }
+        }
+
+        private void Move()
+        {
+            while (_path.Count() > 0)
+            {
+                if (Vector2.Distance(_rigidbody.position, _path[0]) < 0.25F)
+                    _path.RemoveAt(0);
+                else
+                    break;
+            }
+
+            if (_path.Count() == 0)
+                return;
+            Vector2 direction = ((Vector2)_path[0] - _rigidbody.position);
+            Vector2 normalizedDirection = direction.normalized;
+            Vector2 velocity = normalizedDirection * _speed * Time.fixedDeltaTime;
+            Vector2 clampedVelocity = Vector2.ClampMagnitude(
+                velocity,
+                Vector2.Distance(_rigidbody.position, _path[0]));
+            _rigidbody.MovePosition(_rigidbody.position + clampedVelocity);
         }
 
         private void AddRelativeDisplacement()
         {
-            _navMeshAgent.Move(
-                _obstacleRigidbody.velocity * Time.fixedDeltaTime);
+            _rigidbody.MovePosition(_rigidbody.position
+                + (_obstacleRigidbody.velocity * Time.fixedDeltaTime));
         }
 
         private void DetectObstacle()
         {
+            bool originalQueriesState = Physics2D.queriesHitTriggers;
+            Physics2D.queriesHitTriggers = false;
             RaycastHit2D hit = Physics2D.Linecast(
                 transform.position, _target.position);
+            Physics2D.queriesHitTriggers = originalQueriesState;
             if (hit.collider == null)
                 _target.TryGetComponentUpInHierarchy(out _obstacleRigidbody);
             else
             {
-                if (hit.collider
-                    .TryGetComponentUpInHierarchy(out Rigidbody2D rigidbody))
-                {
-                    _obstacleRigidbody = rigidbody;
-                }
+                hit.collider
+                    .TryGetComponentUpInHierarchy(out _obstacleRigidbody);
             }
         }
 
@@ -92,42 +121,69 @@ namespace Main
 
         private void Start()
         {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
             PlayerController.DefaultSetNavTarget
                 .AddListener(ActionType.Performed, SetTarget);
             _astronaut = GetComponent<Astronaut>();
+            _rigidbody = GetComponent<Rigidbody2D>();
+            _collider = GetComponent<CircleCollider2D>();
         }
 
         private void Update()
         {
             if (_target != null && _isTargetClosestPositionValid)
+            {
                 Debug.DrawLine(
                     _target.position,
                     _targetClosestPosition.position,
                     Color.green);
+                for (int i = 0; i < _path.Count - 1; i++)
+                {
+                    Debug.DrawLine(_path[i], _path[i + 1], Color.yellow);
+                }
+            }
         }
 
         private void FixedUpdate()
         {
-            if (_target != null
-                && _navMeshAgent.isActiveAndEnabled)
-                SetDestination();
-
-            if (_obstacleRigidbody != null &&
-                _navMeshAgent.isActiveAndEnabled)
+            if (_target != null)
             {
-                AddRelativeDisplacement();
-                //Move();
+                SetDestination();
+                DetectObstacle();
             }
 
-            if (_target != null)
-                DetectObstacle();
             if (_obstacleRigidbody != null)
+            {
+                if (_path.Count() > 1
+                    && Vector2.Distance(transform.position, _target.position) > 1.5F)
+                {
+                    Move();
+                }
+                AddRelativeDisplacement();
+            }
+
+            if (_obstacleRigidbody != null)
+            {
                 if (!transform.IsChildOf(_obstacleRigidbody.transform))
                 {
                     transform.parent = _obstacleRigidbody.transform;
                     _astronaut.SetParentId(_obstacleRigidbody.GetComponent<Satellite>().Id);
                 }
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            OnTriggerStay2D(collision);
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (collision.TryGetComponent<Wall>(out _))
+            {
+                var colliderDistance = Physics2D.Distance(_collider, collision);
+                _rigidbody.MovePosition(_rigidbody.position
+                    + (colliderDistance.pointB - colliderDistance.pointA));
+            }
         }
 
         #endregion Unity

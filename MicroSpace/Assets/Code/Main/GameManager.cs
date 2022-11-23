@@ -88,6 +88,13 @@ namespace Main
 
         #region Public
 
+        public static void SimulatePhysics()
+        {
+            Physics2D.simulationMode = SimulationMode2D.Script;
+            Physics2D.Simulate(0.000001F);
+            Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
+        }
+
         public static void SwitchSetup() =>
                     _isSetupRunnning ^= true;
 

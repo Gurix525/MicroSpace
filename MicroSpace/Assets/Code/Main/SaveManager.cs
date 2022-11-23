@@ -96,7 +96,6 @@ namespace Main
         {
             var astronautComponent = astronaut.GetComponent<Astronaut>();
             var agentComponent = astronaut.GetComponent<Agent>();
-            var navMeshAgentComponent = astronaut.GetComponent<NavMeshAgent>();
             astronautComponent.SetId(astronautToLoad.Id);
             astronautComponent.SetParentId(astronautToLoad.ParentId);
             astronaut.transform.parent = satellites
@@ -105,7 +104,6 @@ namespace Main
             astronaut.transform.localPosition = astronautToLoad.LocalPosition;
             agentComponent.SetObstacleRigidbody(
                 astronaut.GetComponentUpInHierarchy<Rigidbody2D>());
-            navMeshAgentComponent.enabled = true;
         }
 
         private static void InstantiateAstronaut(out GameObject astronaut)
