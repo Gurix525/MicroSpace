@@ -8,27 +8,27 @@ namespace ScriptableObjects
     [CreateAssetMenu(
         fileName = "BlockList",
         menuName = "ScriptableObjects/BlockList")]
-    public class BlockModelListScriptableObject : ScriptableObject
+    public class BlockModelList : ScriptableObject
     {
         [SerializeField]
-        private List<BlockModelScriptableObject> _models = new();
+        private List<BlockModel> _models = new();
 
-        public IReadOnlyList<BlockModelScriptableObject> Models => _models;
+        public IReadOnlyList<BlockModel> Models => _models;
 
-        public BlockModelScriptableObject GetModel(int modelId)
+        public BlockModel GetModel(int modelId)
         {
             return _models.Find(block => block.Id == modelId);
         }
 
-        private static List<BlockModelScriptableObject> GetAllModels()
+        private static List<BlockModel> GetAllModels()
         {
             string[] guids = AssetDatabase
-                .FindAssets("t:" + typeof(BlockModelScriptableObject).Name);
-            var blocks = new BlockModelScriptableObject[guids.Length];
+                .FindAssets("t:" + typeof(BlockModel).Name);
+            var blocks = new BlockModel[guids.Length];
             for (int i = 0; i < guids.Length; i++)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-                blocks[i] = AssetDatabase.LoadAssetAtPath<BlockModelScriptableObject>(path);
+                blocks[i] = AssetDatabase.LoadAssetAtPath<BlockModel>(path);
             }
             return blocks.OrderBy(block => block.Id).ToList();
         }

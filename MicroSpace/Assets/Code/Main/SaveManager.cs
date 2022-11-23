@@ -15,10 +15,10 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private BlockModelListScriptableObject _blockModels;
+        private BlockModelList _blockModels;
 
         [SerializeField]
-        private ShapeListScriptableObject _blockShapes;
+        private ShapeList _blockShapes;
 
         #endregion Fields
 

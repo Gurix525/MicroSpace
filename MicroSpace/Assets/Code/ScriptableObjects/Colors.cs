@@ -7,7 +7,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(
         fileName = "Colors",
         menuName = "ScriptableObjects/Colors")]
-    public class ColorsScriptableObject : ScriptableObject
+    public class Colors : ScriptableObject
     {
         #region Fields
 

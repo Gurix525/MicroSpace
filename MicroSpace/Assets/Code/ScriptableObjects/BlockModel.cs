@@ -5,7 +5,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(
         fileName = "BlockModel",
         menuName = "ScriptableObjects/BlockModel")]
-    public class BlockModelScriptableObject : ScriptableObject
+    public class BlockModel : ScriptableObject
     {
         [SerializeField]
         private int _id;

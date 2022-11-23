@@ -8,27 +8,27 @@ namespace ScriptableObjects
     [CreateAssetMenu(
         fileName = "ShapeList",
         menuName = "ScriptableObjects/ShapeList")]
-    public class ShapeListScriptableObject : ScriptableObject
+    public class ShapeList : ScriptableObject
     {
         [SerializeField]
-        private List<ShapeScriptableObject> _shapes;
+        private List<Shape> _shapes;
 
-        public IReadOnlyList<ShapeScriptableObject> Shapes => _shapes;
+        public IReadOnlyList<Shape> Shapes => _shapes;
 
-        public ShapeScriptableObject GetShape(int shapeId)
+        public Shape GetShape(int shapeId)
         {
             return _shapes.Find(shape => shape.Id == shapeId);
         }
 
-        private static List<ShapeScriptableObject> GetAllShapes()
+        private static List<Shape> GetAllShapes()
         {
             string[] guids = AssetDatabase
-                .FindAssets("t:" + typeof(ShapeScriptableObject).Name);
-            var shapes = new ShapeScriptableObject[guids.Length];
+                .FindAssets("t:" + typeof(Shape).Name);
+            var shapes = new Shape[guids.Length];
             for (int i = 0; i < guids.Length; i++)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-                shapes[i] = AssetDatabase.LoadAssetAtPath<ShapeScriptableObject>(path);
+                shapes[i] = AssetDatabase.LoadAssetAtPath<Shape>(path);
             }
             return shapes.OrderBy(shape => shape.Id).ToList();
         }

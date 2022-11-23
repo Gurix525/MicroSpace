@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 public class Highlight : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
-    private ColorsScriptableObject _colors;
+    private Colors _colors;
 
     private Color _startColor;
     private SpriteRenderer _spriteRenderer;

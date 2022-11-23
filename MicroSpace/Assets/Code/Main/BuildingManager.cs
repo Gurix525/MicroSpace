@@ -17,13 +17,13 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private ColorsScriptableObject _colors;
+        private Colors _colors;
 
         [SerializeField]
-        private BlockModelListScriptableObject _modelList;
+        private BlockModelList _modelList;
 
         [SerializeField]
-        private ShapeListScriptableObject _shapeList;
+        private ShapeList _shapeList;
 
         [SerializeField]
         private GameObject _temporalDesignationPrefab;
@@ -70,11 +70,11 @@ namespace Main
 
         [SerializeField]
         [ReadonlyInspector]
-        private ShapeScriptableObject _shape;
+        private Shape _shape;
 
         [SerializeField]
         [ReadonlyInspector]
-        private BlockModelScriptableObject _model;
+        private BlockModel _model;
 
         [SerializeField]
         [Range(0F, 359F)]

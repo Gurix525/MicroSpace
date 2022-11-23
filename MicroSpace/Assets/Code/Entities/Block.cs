@@ -13,7 +13,7 @@ namespace Entities
         #region Fields
 
         [SerializeField]
-        protected ColorsScriptableObject _colors;
+        protected Colors _colors;
 
         [SerializeField]
         [ReadonlyInspector]

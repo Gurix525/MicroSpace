@@ -30,10 +30,10 @@ namespace Main
         private GameObject _modelPicker;
 
         [SerializeField]
-        private ShapeListScriptableObject _shapeList;
+        private ShapeList _shapeList;
 
         [SerializeField]
-        private BlockModelListScriptableObject _modelList;
+        private BlockModelList _modelList;
 
         [SerializeField]
         private GameObject _shapeButtonPrefab;
@@ -69,7 +69,7 @@ namespace Main
 
         private void CreateShapeButtons()
         {
-            foreach (ShapeScriptableObject shape in _shapeList.Shapes)
+            foreach (Shape shape in _shapeList.Shapes)
             {
                 GameObject button = Instantiate(
                     _shapeButtonPrefab, _shapePicker.transform);
@@ -81,7 +81,7 @@ namespace Main
 
         private void CreateModelButtons()
         {
-            foreach (BlockModelScriptableObject model in _modelList.Models)
+            foreach (BlockModel model in _modelList.Models)
             {
                 GameObject button = Instantiate(
                     _modelButtonPrefab, _modelPicker.transform);
