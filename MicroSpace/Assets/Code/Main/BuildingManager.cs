@@ -232,8 +232,9 @@ namespace Main
             {
                 var v3relative = closestBlock.Transform
                     .InverseTransformPoint(targetPosition)
-                    .RotateAroundPivot(Vector3.zero,
-                    closestBlock.transform.localEulerAngles);
+                    .RotateAroundPivot(
+                        Vector3.zero,
+                        closestBlock.transform.localEulerAngles);
                 designation.transform.parent = closestBlock.Parent;
                 designation.transform.localPosition =
                     closestBlock.transform.localPosition +

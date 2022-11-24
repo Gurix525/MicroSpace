@@ -128,11 +128,11 @@ namespace Main
 
         private void SteerSatellite()
         {
-            Vector3 direction = ((Vector3)PlayerController.SteeringDirection
-                .ReadValue<Vector2>())
+            Vector2 direction = PlayerController.SteeringDirection
+                .ReadValue<Vector2>()
                 .RotateAroundPivot(
-                    Vector3.zero,
-                    _focusedSatelliteRigidbody.transform.localEulerAngles);
+                    Vector2.zero,
+                    _focusedSatelliteRigidbody.transform.localEulerAngles.z);
             float speed = 5 * _focusedSatelliteRigidbody.mass;
             float rotationSpeed = _focusedSatelliteRigidbody.mass;
 
@@ -140,7 +140,7 @@ namespace Main
                 direction * speed);
 
             _focusedSatelliteRigidbody.AddTorque(PlayerController.SteeringRotation
-                .ReadValue<float>());
+                .ReadValue<float>() * rotationSpeed);
 
             if (PlayerController.SteeringAdjustSpeed.IsPressed())
                 AdjustFocusedSatelliteSpeed(speed * Time.fixedDeltaTime);

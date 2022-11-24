@@ -24,15 +24,15 @@ namespace Maths
             _vertices = vertices;
         }
 
-        public Square(Vector3 position, float halfOfEdgeLength, Vector3 rotation)
+        public Square(Vector2 position, float halfOfEdgeLength, float rotation)
         {
             _vertices = new Vector2[4];
-            _vertices[0] = position + new Vector3(-halfOfEdgeLength, -halfOfEdgeLength, 0);
-            _vertices[1] = position + new Vector3(-halfOfEdgeLength, halfOfEdgeLength, 0);
-            _vertices[2] = position + new Vector3(halfOfEdgeLength, -halfOfEdgeLength, 0);
-            _vertices[3] = position + new Vector3(halfOfEdgeLength, halfOfEdgeLength, 0);
+            _vertices[0] = position + new Vector2(-halfOfEdgeLength, -halfOfEdgeLength);
+            _vertices[1] = position + new Vector2(-halfOfEdgeLength, halfOfEdgeLength);
+            _vertices[2] = position + new Vector2(halfOfEdgeLength, -halfOfEdgeLength);
+            _vertices[3] = position + new Vector2(halfOfEdgeLength, halfOfEdgeLength);
             for (int i = 0; i < 4; i++)
-                _vertices[i] = ((Vector3)_vertices[i]).RotateAroundPivot(position, rotation);
+                _vertices[i] = _vertices[i].RotateAroundPivot(position, rotation);
         }
 
         #endregion Constructors

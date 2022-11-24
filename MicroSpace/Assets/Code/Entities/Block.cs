@@ -55,7 +55,7 @@ namespace Entities
 
         public bool IsMarkedForMining { get => _isMarkedForMining; set => _isMarkedForMining = value; }
 
-        public Square Square => new(transform.position, 0.48F, transform.eulerAngles);
+        public Square Square => new(transform.position, 0.48F, transform.eulerAngles.z);
 
         public Vector2 LocalPosition { get => _localPosition; set => _localPosition = value; }
 

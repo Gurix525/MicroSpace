@@ -186,11 +186,6 @@ namespace Main
             }
         }
 
-        //private void OnTriggerEnter2D(Collider2D collision)
-        //{
-        //    OnTriggerStay2D(collision);
-        //}
-
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (collision.TryGetComponent<Wall>(out _))
