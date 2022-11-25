@@ -6,12 +6,17 @@ using Attributes;
 using ScriptableObjects;
 using System.Collections;
 using Maths;
+using ExtensionMethods;
+using UnityEngine.AI;
 
 namespace Entities
 {
     public class Satellite : MonoBehaviour
     {
         #region Fields
+
+        [SerializeField]
+        private GameObject _obstaclePrefab;
 
         [SerializeField]
         [ReadonlyInspector]
@@ -33,6 +38,8 @@ namespace Entities
         [ReadonlyInspector]
         private Vector2 _velocity;
 
+        private List<GameObject> _obstacles = new();
+
         private bool _isSatelliteLoaded = true;
 
         private static readonly float _satelliteUnloadDistance = 200F;
@@ -43,15 +50,9 @@ namespace Entities
 
         public List<Block> Blocks { get => _blocks; set => _blocks = value; }
 
-        public List<Wall> Walls => _blocks
-            .Where(block => block is Wall)
-            .Select(block => block as Wall)
-            .ToList();
+        public List<Wall> Walls { get; set; } = new();
 
-        public List<Floor> Floors => _blocks
-            .Where(block => block is Floor)
-            .Select(block => block as Floor)
-            .ToList();
+        public List<Floor> Floors { get; set; } = new();
 
         public int ElementsCount { get => Blocks.Count; }
 
@@ -73,6 +74,7 @@ namespace Entities
         {
             SimulatePhysics();
             UpdateBlocks();
+            UpdateObstacles();
             UpdateFloors();
             UpdateProperties();
             if (IsSatelliteEmpty())
@@ -139,6 +141,17 @@ namespace Entities
                 {
                     block.UpdateBlock();
                     Blocks.Add(block);
+                    Blocks = Blocks.OrderByDescending(block => block.LocalPosition.y)
+                        .ThenBy(block => block.LocalPosition.x)
+                        .ToList();
+                    Walls = Blocks
+                        .Where(block => block is Wall)
+                        .Select(block => block as Wall)
+                        .ToList();
+                    Floors = Blocks
+                        .Where(block => block is Floor)
+                        .Select(block => block as Floor)
+                        .ToList();
                 }
             }
         }
@@ -172,6 +185,105 @@ namespace Entities
                 }
             }
             Physics2D.queriesStartInColliders ^= true;
+        }
+
+        private void UpdateObstacles()
+        {
+            ResetObstacles();
+            foreach (Wall wall in Walls)
+            {
+                if (!wall.IsIncludedInObstacle)
+                {
+                    CreateObstacle(wall);
+                }
+            }
+        }
+
+        private void ResetObstacles()
+        {
+            while (_obstacles.Count > 0)
+            {
+                Destroy(_obstacles[0]);
+                _obstacles.RemoveAt(0);
+            }
+            foreach (Wall wall in Walls)
+                wall.IsIncludedInObstacle = false;
+        }
+
+        private void CreateObstacle(Wall originalWall)
+        {
+            float minX = originalWall.LocalPosition.x;
+            float maxY = originalWall.LocalPosition.y;
+            float maxX = FindObstacleMaxX(originalWall);
+            float minY = FindObstacleMinY(minX, maxX, maxY);
+
+            foreach (Wall wall in Walls)
+            {
+                if (wall.LocalPosition.x >= minX
+                    && wall.LocalPosition.x <= maxX
+                    && wall.LocalPosition.y >= minY
+                    && wall.LocalPosition.y <= maxY)
+                    wall.IsIncludedInObstacle = true;
+            }
+            Vector2 obstacleCenter = new(
+                (maxX + minX) / 2F,
+                (maxY + minY) / 2F);
+            Vector3 obstacleSize = new(
+                maxX - minX + 1F,
+                maxY - minY + 1F,
+                0.2F);
+            GameObject obstacle = Instantiate(_obstaclePrefab, transform);
+            _obstacles.Add(obstacle);
+            obstacle.transform.localPosition = Vector2.zero;
+            var obstacleComponent = obstacle.GetComponent<NavMeshObstacle>();
+            obstacleComponent.center = obstacleCenter;
+            obstacleComponent.size = obstacleSize;
+        }
+
+        private float FindObstacleMinY(float minX, float maxX, float maxY)
+        {
+            if (IsThereAnotherYLevel(minX, maxX, maxY))
+                return FindObstacleMinY(minX, maxX, maxY - 1F);
+            return maxY;
+        }
+
+        private bool IsThereAnotherYLevel(float minX, float maxX, float maxY)
+        {
+            List<Wall> foundWalls = new();
+            foreach (Wall wall in Walls)
+            {
+                Vector2 roudedWallPosition = wall.LocalPosition.Round();
+                if (roudedWallPosition.x >= minX
+                    && roudedWallPosition.x <= maxX
+                    && roudedWallPosition.y == maxY - 1F)
+                    if (!wall.IsIncludedInObstacle)
+                        foundWalls.Add(wall);
+            }
+            if (foundWalls.Count == maxX - minX + 1F)
+                return true;
+            return false;
+        }
+
+        private float FindObstacleMaxX(Wall wall)
+        {
+            if (IsThereNotIncludedWallToTheRight(wall, out Wall rightWall))
+                return FindObstacleMaxX(rightWall);
+            return wall.LocalPosition.x;
+        }
+
+        private bool IsThereNotIncludedWallToTheRight(Wall wall, out Wall rightWall)
+        {
+            foreach (Wall otherWall in Walls)
+                if (wall != otherWall)
+                    if (otherWall.LocalPosition.Round()
+                        == new Vector2(wall.LocalPosition.x + 1F, wall.LocalPosition.y).Round())
+                        if (!otherWall.IsIncludedInObstacle)
+                        {
+                            rightWall = otherWall;
+                            return true;
+                        }
+            rightWall = null;
+            return false;
         }
 
         private bool IsTemporalDesignation(Block block)

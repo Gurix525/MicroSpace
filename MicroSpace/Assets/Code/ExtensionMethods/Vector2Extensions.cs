@@ -17,5 +17,12 @@ namespace ExtensionMethods
         {
             return new Point(v.x, v.y);
         }
+
+        public static Vector2 Round(this Vector2 point)
+        {
+            return new Vector2(
+                Mathf.Round(point.x),
+                Mathf.Round(point.y));
+        }
     }
 }

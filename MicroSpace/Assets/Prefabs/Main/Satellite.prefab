@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120e8bc0890221840b27d581f25eca50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _obstaclePrefab: {fileID: 5302452992096335850, guid: 58cd496381a149c489d1131a2c45524e, type: 3}
   _id: 0
   _blocks: []
-  _rooms: []
   _position: {x: 0, y: 0}
   _rotation: 0
   _velocity: {x: 0, y: 0}
