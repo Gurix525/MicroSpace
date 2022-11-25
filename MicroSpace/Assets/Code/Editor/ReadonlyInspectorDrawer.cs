@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-
 using UnityEditor;
 using Attributes;
 using UnityEngine;
@@ -17,5 +15,3 @@ namespace Editor
         }
     }
 }
-
-#endif

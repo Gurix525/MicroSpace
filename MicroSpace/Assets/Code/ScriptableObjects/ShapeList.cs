@@ -20,8 +20,6 @@ namespace ScriptableObjects
             return _shapes.Find(shape => shape.Id == shapeId);
         }
 
-#if UNITY_EDITOR
-
         private static List<Shape> GetAllShapes()
         {
             string[] guids = AssetDatabase
@@ -66,7 +64,5 @@ namespace ScriptableObjects
                     Debug.LogWarning($"Kształt {shape} wymaga dodatkowych informacji");
             });
         }
-
-#endif
     }
 }
