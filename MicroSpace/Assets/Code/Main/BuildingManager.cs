@@ -111,46 +111,6 @@ namespace Main
 
         #endregion Properties
 
-        #region Unity
-
-        private void Update()
-        {
-            InvokeUpdateEvent();
-            CheckIfCursorOverUI();
-        }
-
-        private void Awake()
-        {
-            Instance = this;
-            SetDefaultShape();
-            SetDefaultModel();
-        }
-
-        private void Start()
-        {
-            SubscribeToShapeChangedEvent();
-            SubscribeToModelChangedEvent();
-        }
-
-        private void OnEnable()
-        {
-            SubscribeToInputEvents();
-            StartFromPreviousMode();
-            SetBuildingMenuActive(true);
-        }
-
-        private void OnDisable()
-        {
-            ClearUpdateEventListeners();
-            UnsubscribeFromInputEvents();
-            ClearCurentDesignation();
-            ClearTemporalParent();
-            DestroyDesignations();
-            SetBuildingMenuActive(false);
-        }
-
-        #endregion Unity
-
         #region Private
 
         private void SubscribeToShapeChangedEvent()
@@ -910,5 +870,45 @@ namespace Main
         }
 
         #endregion Callbacks
+
+        #region Unity
+
+        private void Update()
+        {
+            InvokeUpdateEvent();
+            CheckIfCursorOverUI();
+        }
+
+        private void Awake()
+        {
+            Instance = this;
+            SetDefaultShape();
+            SetDefaultModel();
+        }
+
+        private void Start()
+        {
+            SubscribeToShapeChangedEvent();
+            SubscribeToModelChangedEvent();
+        }
+
+        private void OnEnable()
+        {
+            SubscribeToInputEvents();
+            StartFromPreviousMode();
+            SetBuildingMenuActive(true);
+        }
+
+        private void OnDisable()
+        {
+            ClearUpdateEventListeners();
+            UnsubscribeFromInputEvents();
+            ClearCurentDesignation();
+            ClearTemporalParent();
+            DestroyDesignations();
+            SetBuildingMenuActive(false);
+        }
+
+        #endregion Unity
     }
 }

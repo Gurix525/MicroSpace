@@ -30,7 +30,7 @@ namespace Entities
         public SerializableAstronaut(Astronaut astronaut)
         {
             _id = astronaut.Id;
-            _parentId = astronaut.GetParentId();
+            _parentId = astronaut.ParentId;
             _localPosition = astronaut.transform.localPosition;
         }
 

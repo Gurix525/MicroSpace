@@ -84,26 +84,6 @@ namespace Entities
 
         #endregion Public
 
-        #region Unity
-
-        protected virtual void Awake()
-        {
-            SetId();
-        }
-
-        protected virtual void Start()
-        {
-            SetSpriteOrderInLayer();
-            TrySetSpriteMaskRange();
-        }
-
-        protected void SetSpriteOrderInLayer()
-        {
-            GetComponent<SpriteRenderer>().sortingOrder = Id;
-        }
-
-        #endregion Unity
-
         #region Protected
 
         protected bool IsCollidingWithAnotherBlock()
@@ -166,5 +146,25 @@ namespace Entities
         }
 
         #endregion Protected
+
+        #region Unity
+
+        protected virtual void Awake()
+        {
+            SetId();
+        }
+
+        protected virtual void Start()
+        {
+            SetSpriteOrderInLater();
+            TrySetSpriteMaskRange();
+        }
+
+        protected void SetSpriteOrderInLater()
+        {
+            GetComponent<SpriteRenderer>().sortingOrder = Id;
+        }
+
+        #endregion Unity
     }
 }

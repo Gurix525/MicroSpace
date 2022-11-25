@@ -38,11 +38,9 @@ namespace Main
 
         #endregion Properties
 
-        public Save()
+        public Save(List<Satellite> satellites)
         {
-            foreach (Satellite satellite in Satellite.Satellites)
-                satellite.UpdateSatellite();
-            _satellites = Satellite.Satellites
+            _satellites = satellites
                 .Select(satellite => (SerializableSatellite)satellite)
                 .ToArray();
             _astronauts = Astronaut.Astronauts

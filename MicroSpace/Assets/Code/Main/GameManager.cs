@@ -68,9 +68,7 @@ namespace Main
             null;
 
         public static int FocusedSatelliteId =>
-            Instance._focusedSatelliteRigidbody != null ?
-            Instance._focusedSatelliteRigidbody.GetComponent<Satellite>().Id :
-            0;
+            Instance._focusedSatelliteRigidbody.GetComponent<Satellite>().Id;
 
         public static Vector2 FocusedSatelliteVelocity =>
             Instance._focusedSatelliteRigidbody != null ?
@@ -119,8 +117,9 @@ namespace Main
 
         public static void ForEachSatellite(Action<Satellite> action)
         {
-            foreach (Satellite satellite in Satellite.Satellites)
-                action(satellite);
+            foreach (Transform child in World)
+                if (child.TryGetComponent(out Satellite satellite))
+                    action(satellite);
         }
 
         #endregion Public
@@ -147,8 +146,17 @@ namespace Main
                 AdjustFocusedSatelliteSpeed(speed * Time.fixedDeltaTime);
         }
 
+        private void SetCameraFree()
+        {
+            Camera.main.transform.parent = null;
+        }
+
         private void SteerCamera()
         {
+            if ((Vector2)Camera.main.transform.localPosition != Vector2.zero &&
+                Camera.main.transform.parent != null)
+                Camera.main.transform.parent = null;
+
             Vector3 direction = (Vector3)PlayerController.DefaultDirection
                 .ReadValue<Vector2>() +
                 (Vector3)PlayerController.BuildingDirection
@@ -240,6 +248,7 @@ namespace Main
         {
             PlayerController.PlayerInput.SwitchCurrentActionMap("Default");
             _isSteeringEnabled = false;
+            SetCameraFree();
         }
 
         private void EnableBuilding(CallbackContext context)
@@ -335,6 +344,7 @@ namespace Main
         private void Awake()
         {
             Instance = this;
+            //_designManager = GetComponent<DesignManager>();
         }
 
         private void Update()
