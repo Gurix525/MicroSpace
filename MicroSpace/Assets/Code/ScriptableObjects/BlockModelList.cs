@@ -20,6 +20,8 @@ namespace ScriptableObjects
             return _models.Find(block => block.Id == modelId);
         }
 
+#if UNITY_EDITOR
+
         private static List<BlockModel> GetAllModels()
         {
             string[] guids = AssetDatabase
@@ -64,5 +66,7 @@ namespace ScriptableObjects
                     Debug.LogWarning($"Blok {model} wymaga dodatkowych informacji");
             });
         }
+
+#endif
     }
 }
