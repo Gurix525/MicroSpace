@@ -102,8 +102,10 @@ namespace Main
                 .Find(satellite => satellite.Id == astronautToLoad.ParentId)
                 .transform;
             astronaut.transform.localPosition = astronautToLoad.LocalPosition;
+            agentComponent.SetTarget(
+                astronaut.transform.parent);
             agentComponent.SetObstacleRigidbody(
-                astronaut.GetComponentUpInHierarchy<Rigidbody2D>());
+                astronaut.transform.parent.GetComponentUpInHierarchy<Rigidbody2D>());
         }
 
         private static void InstantiateAstronaut(out GameObject astronaut)
@@ -343,21 +345,7 @@ namespace Main
 
         private static Save CreateSave()
         {
-            return new(GetSatellitesList());
-        }
-
-        private static List<Satellite> GetSatellitesList()
-        {
-            List<Satellite> satellites = new();
-            GameManager.ForEachSatellite(satellite => satellites.Add(satellite));
-            UpdateSatellites(satellites);
-            return satellites;
-        }
-
-        private static void UpdateSatellites(List<Satellite> satellites)
-        {
-            foreach (var satellite in satellites)
-                satellite.UpdateSatellite();
+            return new();
         }
 
         private static void ClearWorld()
@@ -371,6 +359,7 @@ namespace Main
                     GameObject.Destroy(child.gameObject);
             }
             Astronaut.Astronauts.Clear();
+            Satellite.Satellites.Clear();
         }
 
         #endregion Private

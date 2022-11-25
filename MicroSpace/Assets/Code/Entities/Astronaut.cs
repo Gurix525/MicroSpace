@@ -4,6 +4,7 @@ using Attributes;
 using UnityEngine;
 using ScriptableObjects;
 using System;
+using UnityEngine.Events;
 
 namespace Entities
 {
@@ -15,8 +16,6 @@ namespace Entities
         [ReadonlyInspector]
         private int _id;
 
-        [SerializeField]
-        [ReadonlyInspector]
         private int _parentId;
 
         #endregion Fields
@@ -24,12 +23,18 @@ namespace Entities
         #region Properties
 
         public int Id => _id;
-        public int ParentId => _parentId;
-        public static List<Astronaut> Astronauts = new();
+        public static List<Astronaut> Astronauts { get; } = new();
+        public UnityEvent GettingParentId = new();
 
         #endregion Properties
 
         #region Public
+
+        public int GetParentId()
+        {
+            GettingParentId.Invoke();
+            return _parentId;
+        }
 
         public void SetParentId(int id)
         {
@@ -42,6 +47,21 @@ namespace Entities
         }
 
         #endregion Public
+
+        #region Unity
+
+        private void Awake()
+        {
+            SetId();
+            AddAstronautToList();
+        }
+
+        private void OnDestroy()
+        {
+            RemoveAstronautFromList();
+        }
+
+        #endregion Unity
 
         #region Private
 
@@ -62,20 +82,5 @@ namespace Entities
         }
 
         #endregion Private
-
-        #region Unity
-
-        private void Awake()
-        {
-            SetId();
-            AddAstronautToList();
-        }
-
-        private void OnDestroy()
-        {
-            RemoveAstronautFromList();
-        }
-
-        #endregion Unity
     }
 }
