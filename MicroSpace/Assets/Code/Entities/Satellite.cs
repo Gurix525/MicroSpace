@@ -48,13 +48,13 @@ namespace Entities
 
         #region Properties
 
+        public static List<Satellite> Satellites { get; } = new();
+
         public List<Block> Blocks { get => _blocks; set => _blocks = value; }
 
         public List<Wall> Walls { get; set; } = new();
 
         public List<Floor> Floors { get; set; } = new();
-
-        public int ElementsCount { get => Blocks.Count; }
 
         public int Id { get => _id; set => _id = value; }
 
@@ -95,14 +95,19 @@ namespace Entities
 
         private void DestroySatellite()
         {
+            SetCameraFree();
+            Destroy(gameObject);
+        }
+
+        private void SetCameraFree()
+        {
             if (Camera.main.transform.parent == transform)
                 Camera.main.transform.parent = null;
-            Destroy(gameObject);
         }
 
         private bool IsSatelliteEmpty()
         {
-            return Blocks.Count <= 0;
+            return Blocks.Count == 0;
         }
 
         private void UpdateProperties()
@@ -137,7 +142,7 @@ namespace Entities
             foreach (Transform child in transform)
             {
                 var block = child.gameObject.GetComponent<Block>();
-                if (block != null && !IsTemporalDesignation(block))
+                if (block != null && !IsBlockTemporalDesignation(block))
                 {
                     block.UpdateBlock();
                     Blocks.Add(block);
@@ -158,33 +163,43 @@ namespace Entities
 
         private void UpdateFloors()
         {
-            Physics2D.queriesStartInColliders ^= true;
+            bool originalQueriesStartInColliders = Physics2D.queriesStartInColliders;
+            Physics2D.queriesStartInColliders = true;
             foreach (Floor floor in Floors)
             {
-                for (int i = 0; i < 8; i++)
-                {
-                    Debug.DrawLine(
-                        floor.CheckingLines[i].A,
-                        floor.CheckingLines[i].B,
-                        Color.red,
-                        float.PositiveInfinity);
-                    var hits = Physics2D.LinecastAll(
-                        floor.CheckingLines[i].A, floor.CheckingLines[i].B);
-                    SolidBlock detectedBlock = hits
-                        .Where(hit => hit.collider.TryGetComponent<Wall>(out _))
-                        .Select(hit => hit.collider.GetComponent<Wall>())
-                        .FirstOrDefault();
-                    if (detectedBlock == null)
-                        detectedBlock = hits
-                            .Where(hit => hit.collider.TryGetComponent<Floor>(out _))
-                            .Where(hit => hit.collider.gameObject != floor.gameObject)
-                            .Select(hit => hit.collider.GetComponent<Floor>())
-                            .FirstOrDefault();
-                    floor.NeighbouringBlocks[i] = detectedBlock;
-                    //Debug.Log(detectedBlock);
-                }
+                UpdateFloor(floor);
             }
-            Physics2D.queriesStartInColliders ^= true;
+            Physics2D.queriesStartInColliders = originalQueriesStartInColliders;
+        }
+
+        private static void UpdateFloor(Floor floor)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                RaycastHit2D[] hits = Physics2D.LinecastAll(
+                    floor.CheckingLines[i].A, floor.CheckingLines[i].B);
+                if (!TryGetNeighbouringBlock<Wall>(hits, floor, out SolidBlock detectedBlock))
+                    TryGetNeighbouringBlock<Floor>(hits, floor, out detectedBlock);
+                floor.NeighbouringBlocks[i] = detectedBlock;
+            }
+        }
+
+        private static bool TryGetNeighbouringBlock<T>(
+            RaycastHit2D[] hits,
+            Floor floor,
+            out SolidBlock block)
+            where T : SolidBlock
+        {
+            hits = hits
+                .Where(hit => hit.collider.TryGetComponent<T>(out _))
+                .ToArray();
+            if (typeof(T) == typeof(Floor))
+                hits = hits
+                    .Where(hit => hit.collider.gameObject != floor.gameObject)
+                    .ToArray();
+            block = hits.Select(hit => hit.collider.GetComponent<T>())
+                .FirstOrDefault();
+            return block != null;
         }
 
         private void UpdateObstacles()
@@ -286,7 +301,7 @@ namespace Entities
             return false;
         }
 
-        private bool IsTemporalDesignation(Block block)
+        private bool IsBlockTemporalDesignation(Block block)
         {
             return block is TemporalDesignation;
         }
@@ -303,6 +318,16 @@ namespace Entities
             Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
         }
 
+        private void AddSatelliteToList()
+        {
+            Satellites.Add(this);
+        }
+
+        private void RemoveSatelliteFromList()
+        {
+            Satellites.Remove(this);
+        }
+
         #endregion Private
 
         #region Unity
@@ -311,6 +336,12 @@ namespace Entities
         {
             SetId();
             GetRigidbody2D();
+            AddSatelliteToList();
+        }
+
+        private void OnDestroy()
+        {
+            RemoveSatelliteFromList();
         }
 
         #endregion Unity
