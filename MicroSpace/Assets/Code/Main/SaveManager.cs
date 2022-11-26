@@ -20,11 +20,17 @@ namespace Main
         [SerializeField]
         private ShapeList _blockShapes;
 
+        private static readonly string _savesFolderName = "Saves";
+
         #endregion Fields
 
         #region Properties
 
         public static SaveManager Instance { get; set; }
+
+        private static string SavesFolderPath => Path.Combine(
+            Application.persistentDataPath,
+            _savesFolderName);
 
         #endregion Properties
 
@@ -122,7 +128,10 @@ namespace Main
 
         private static GameObject FindSatelliteById(int focusedSatelliteId, List<Satellite> satellites)
         {
-            return satellites.Find(satellite => satellite.Id == focusedSatelliteId).gameObject;
+            var satellite = satellites.Find(satellite => satellite.Id == focusedSatelliteId);
+            if (satellite != null)
+                return satellite.gameObject;
+            return null;
         }
 
         private static void LoadIdManager(int nextId)
@@ -263,7 +272,7 @@ namespace Main
 
         private static bool TryGetJsonFromLatestFile(ref string saveJson)
         {
-            var directory = GetDirectory();
+            var directory = GetSavesDirectory();
             try
             {
                 return TryFindAndReadLatestFile(ref saveJson, directory);
@@ -302,20 +311,22 @@ namespace Main
             return IsGettingJsonSuccessfull(true);
         }
 
-        private static DirectoryInfo GetDirectory()
+        private static DirectoryInfo GetSavesDirectory()
         {
-            return new DirectoryInfo(Application.persistentDataPath);
+            if (Directory.Exists(SavesFolderPath))
+                return new DirectoryInfo(SavesFolderPath);
+            return Directory.CreateDirectory(SavesFolderPath);
         }
 
         private static string GetJsonFromFile(string name)
         {
             return File.ReadAllText(
-                                Path.Combine(Application.persistentDataPath, name));
+                                Path.Combine(SavesFolderPath, name));
         }
 
         private static bool IsFileExisting(string name)
         {
-            return File.Exists(Path.Combine(Application.persistentDataPath, name));
+            return File.Exists(Path.Combine(SavesFolderPath, name));
         }
 
         private static void SaveToFile(string saveJson, string filePath)
@@ -325,7 +336,7 @@ namespace Main
 
         private static string CreateSavePath()
         {
-            string path = Path.Combine(Application.persistentDataPath, "saveFile");
+            string path = Path.Combine(SavesFolderPath, "saveFile");
             int fileNumber = 0;
             string filePath = $"{path}{fileNumber}.txt";
             while (File.Exists(filePath))

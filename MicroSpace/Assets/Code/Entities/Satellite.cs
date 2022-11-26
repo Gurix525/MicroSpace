@@ -8,6 +8,7 @@ using System.Collections;
 using Maths;
 using ExtensionMethods;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace Entities
 {
@@ -46,9 +47,7 @@ namespace Entities
 
         #endregion Fields
 
-        #region Properties
-
-        public static List<Satellite> Satellites { get; } = new();
+        #region Public Properties
 
         public List<Block> Blocks { get => _blocks; set => _blocks = value; }
 
@@ -66,9 +65,17 @@ namespace Entities
 
         public Rigidbody2D Rigidbody2D { get; private set; }
 
-        #endregion Properties
+        #endregion Public Properties
 
-        #region Public
+        #region Public Static Properties
+
+        public static List<Satellite> Satellites { get; } = new();
+
+        public static UnityEvent<Satellite> FirstSatelliteCreated = new();
+
+        #endregion Public Static Properties
+
+        #region Public Methods
 
         public void UpdateSatellite()
         {
@@ -89,9 +96,9 @@ namespace Entities
                 SetSatelliteChildrenActive(true);
         }
 
-        #endregion Public
+        #endregion Public Methods
 
-        #region Private
+        #region Private Methods
 
         private void DestroySatellite()
         {
@@ -321,6 +328,8 @@ namespace Entities
         private void AddSatelliteToList()
         {
             Satellites.Add(this);
+            if (Satellites.Count == 1)
+                FirstSatelliteCreated.Invoke(this);
         }
 
         private void RemoveSatelliteFromList()
@@ -328,7 +337,7 @@ namespace Entities
             Satellites.Remove(this);
         }
 
-        #endregion Private
+        #endregion Private Methods
 
         #region Unity
 

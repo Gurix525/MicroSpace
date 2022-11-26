@@ -217,7 +217,7 @@ namespace Main
         {
             PlayerController.DefaultSetNavTarget
                             .AddListener(ActionType.Performed, SetTargetFromClick);
-            Astronaut.GettingParentId.AddListener(OnAstronautGettingParentId);
+            Astronaut.GettingParentId.AddListener(SetAstronautParentId);
         }
 
         private void CreatePathIfPossible()
@@ -273,7 +273,7 @@ namespace Main
                 _target = hit.collider.transform;
         }
 
-        private void OnAstronautGettingParentId()
+        private void SetAstronautParentId()
         {
             Astronaut.SetParentId(_obstacleRigidbody.GetComponent<Satellite>().Id);
         }

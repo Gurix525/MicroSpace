@@ -334,6 +334,7 @@ namespace Main
 
         private void Awake()
         {
+            Satellite.FirstSatelliteCreated.AddListener(SetFirstFocusedSatellite);
             Instance = this;
         }
 
@@ -346,36 +347,6 @@ namespace Main
 
             if (!_isSteeringEnabled)
                 SteerCamera();
-
-            //if (Input.GetKeyDown(KeyCode.C))
-            //{
-            //    _designManager.StartCancelDesignation();
-            //    return;
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.X))
-            //{
-            //    _designManager.StartDesignateMining();
-            //    return;
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.N))
-            //{
-            //    StartCoroutine(BuildSatelliteCoroutine());
-            //    return;
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.V))
-            //{
-            //    _designManager.StartDesignateBlock(BlockType.Floor);
-            //    return;
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.B))
-            //{
-            //    _designManager.StartDesignateBlock(BlockType.Wall);
-            //    return;
-            //}
         }
 
         private void FixedUpdate()
@@ -405,5 +376,15 @@ namespace Main
         //}
 
         #endregion Unity
+
+        #region Callbacks
+
+        private void SetFirstFocusedSatellite(Satellite satellite)
+        {
+            _focusedSatelliteRigidbody ??= satellite.GetComponent<Rigidbody2D>();
+            Satellite.FirstSatelliteCreated.RemoveAllListeners();
+        }
+
+        #endregion Callbacks
     }
 }
