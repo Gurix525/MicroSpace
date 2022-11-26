@@ -14,7 +14,7 @@ public class FPSCounter : MonoBehaviour
 
     private void Update()
     {
-        if (_timer >= 1F)
+        if (_timer >= 0.2F)
         {
             Counter.text = $"FPS: {System.Math.Round(1 / (_timer / _frames))}";
             _timer = 0;
