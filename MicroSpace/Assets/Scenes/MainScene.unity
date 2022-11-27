@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 98350700}
   - component: {fileID: 98350699}
   - component: {fileID: 98350698}
+  - component: {fileID: 98350701}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -650,6 +651,18 @@ MonoBehaviour:
   _shapeButtonPrefab: {fileID: 3864066361280169147, guid: a99c786c4816ac94485b0ea66b83a6e1, type: 3}
   _modelButtonPrefab: {fileID: 3864066361280169147, guid: ecd533d35bb306a4586e3d2510c26c17, type: 3}
   _contextualMenu: {fileID: 439706603}
+--- !u!114 &98350701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98350691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e1c7ea283ae3644bffe74b93d40d59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &439706603
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,12 +1,11 @@
 ﻿using System;
 using UnityEngine;
 using Attributes;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Maths;
 using System.Linq;
 using Miscellaneous;
 using TMPro;
+using ExtensionMethods;
 
 namespace Entities
 {
@@ -46,6 +45,7 @@ namespace Entities
         private Floor[] NeighbouringFloors => NeighbouringBlocks
             .Where(block => block is Floor)
             .Select(block => block as Floor)
+            .MakeRandomPermutation()
             .OrderBy(floor => floor.Gas)
             .ToArray();
 
@@ -58,10 +58,8 @@ namespace Entities
 
         private void ExchangeGasses()
         {
-            // dodać randomowe przemieszczenie jeśli gazu jest 1
-            // https://stackoverflow.com/questions/375351/most-efficient-way-to-randomly-sort-shuffle-a-list-of-integers-in-c-sharp/375446#375446
             for (int i = 0; i < NeighbouringVoids; i++)
-                _gas -= (int)Math.Ceiling( _gas/ (double)8);
+                _gas -= (int)Math.Ceiling(_gas / (double)8);
             foreach (Floor floor in NeighbouringFloors)
                 if (_gas > floor.Gas)
                 {
