@@ -1,7 +1,7 @@
 using UnityEngine;
 using Attributes;
 
-namespace ScriptableObjects
+namespace Miscellaneous
 {
     public static class IdManager
     {

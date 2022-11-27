@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using Attributes;
 using UnityEngine;
-using ScriptableObjects;
-using System;
 using UnityEngine.Events;
+using Miscellaneous;
 
 namespace Entities
 {

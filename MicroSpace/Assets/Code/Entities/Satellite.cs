@@ -1,14 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using Attributes;
-using ScriptableObjects;
-using System.Collections;
-using Maths;
 using ExtensionMethods;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using Miscellaneous;
 
 namespace Entities
 {

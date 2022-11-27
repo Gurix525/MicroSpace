@@ -1,13 +1,8 @@
 {
-    "name": "Entities",
+    "name": "Miscellaneous",
     "rootNamespace": "",
     "references": [
-        "GUID:4db8d9708de15ba49a0388e69221f1c6",
-        "GUID:f728def38c0934d4a8222621ae614276",
-        "GUID:debc1d5d3cd036243846ef3abaaacc58",
-        "GUID:cdc90491ff91ecc41bd3738443842ffa",
-        "GUID:bae75cbe09f593a4f9257f43bd56a9fc",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:f728def38c0934d4a8222621ae614276"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
