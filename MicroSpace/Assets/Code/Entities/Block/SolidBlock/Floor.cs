@@ -58,6 +58,8 @@ namespace Entities
 
         private void ExchangeGasses()
         {
+            // dodać randomowe przemieszczenie jeśli gazu jest 1
+            // https://stackoverflow.com/questions/375351/most-efficient-way-to-randomly-sort-shuffle-a-list-of-integers-in-c-sharp/375446#375446
             for (int i = 0; i < NeighbouringVoids; i++)
                 _gas -= (int)Math.Ceiling( _gas/ (double)8);
             foreach (Floor floor in NeighbouringFloors)
