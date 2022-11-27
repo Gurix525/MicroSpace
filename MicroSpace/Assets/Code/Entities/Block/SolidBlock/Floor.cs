@@ -58,13 +58,8 @@ namespace Entities
 
         private void ExchangeGasses()
         {
-            if (_gas == 1)
-            {
-                _gas = 0;
-                return;
-            }
             for (int i = 0; i < NeighbouringVoids; i++)
-                _gas /= 8;
+                _gas -= (int)Math.Ceiling( _gas/ (double)8);
             foreach (Floor floor in NeighbouringFloors)
                 if (_gas > floor.Gas)
                 {
