@@ -15,48 +15,39 @@ namespace ScriptableObjects
 
         public int Id => _id;
 
-        private static List<GasModel> GasModels = new();
+        private static List<GasModel> _models = new();
 
         public static GasModel GetModel(int modelId)
         {
-            return GasModels.Find(block => block.Id == modelId);
+            return _models.Find(model => model.Id == modelId);
         }
 
-        public override string ToString()
-        {
-            return $"{_id} : {name}";
-        }
-
-        public bool IsNotFullyCreated()
-        {
-            return name == string.Empty ||
-                name == null;
-        }
+        public static List<GasModel> Models => _models;
 
 #if UNITY_EDITOR
 
         private void OnValidate()
         {
-            if (GasModels.Find(model => model == this) == null)
-                GasModels.Add(this);
-            GasModels = GasModels
+            if (_models.Find(model => model == this) == null)
+                _models.Add(this);
+            _models = _models
                 .OrderBy(model => model.Id)
                 .ToList();
             CheckIfModelFinished();
             CheckForIdDuplicates();
-            Debug.Log($"{string.Join("\n", GasModels)}\n{GasModels.Count}");
+            Debug.Log($"{string.Join("\n", _models)}\n{_models.Count}");
         }
 
         private static void CheckForIdDuplicates()
         {
             bool areDuplicates = false;
-            var duplicates = GasModels.GroupBy(model => model.Id)
+            var duplicates = _models.GroupBy(model => model.Id)
                             .SelectMany(g => g.Skip(1))
                             .ToList();
             duplicates.ForEach(duplicate =>
             {
                 areDuplicates = true;
-                GasModels.FindAll(model => model.Id == duplicate.Id)
+                _models.FindAll(model => model.Id == duplicate.Id)
                     .ForEach(model => Debug.LogError($"Zduplikowane ID w gazie {model}"));
             });
             if (areDuplicates)
@@ -67,6 +58,17 @@ namespace ScriptableObjects
         {
             if (IsNotFullyCreated())
                 Debug.LogWarning($"Blok {this} wymaga dodatkowych informacji");
+        }
+
+        public bool IsNotFullyCreated()
+        {
+            return name == string.Empty ||
+                name == null;
+        }
+
+        public override string ToString()
+        {
+            return $"{_id} : {name}";
         }
 
 #endif

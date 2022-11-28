@@ -14,12 +14,6 @@ namespace Main
     {
         #region Fields
 
-        [SerializeField]
-        private BlockModelList _blockModels;
-
-        [SerializeField]
-        private ShapeList _blockShapes;
-
         private static readonly string _savesFolderName = "Saves";
 
         #endregion Fields
@@ -178,7 +172,7 @@ namespace Main
         private static void LoadBlockModel(GameObject block)
         {
             var blockComponent = block.GetComponent<Block>();
-            var model = Instance._blockModels.GetModel(blockComponent.ModelId);
+            var model = BlockModel.GetModel(blockComponent.ModelId);
             blockComponent.gameObject.name = model.name;
             blockComponent.GetComponent<SpriteRenderer>().sprite = model.Sprite;
         }
@@ -186,7 +180,7 @@ namespace Main
         private static void LoadShape(GameObject block)
         {
             var blockComponent = block.GetComponent<Block>();
-            GameObject shape = Instance._blockShapes
+            GameObject shape = Shape
                 .GetShape(blockComponent.ShapeId).Prefab;
             if (blockComponent is Wall || blockComponent is WallDesignation)
             {

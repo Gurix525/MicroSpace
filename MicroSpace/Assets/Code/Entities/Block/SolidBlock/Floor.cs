@@ -6,6 +6,7 @@ using System.Linq;
 using Miscellaneous;
 using TMPro;
 using ExtensionMethods;
+using System.Collections.Generic;
 
 namespace Entities
 {
@@ -16,9 +17,16 @@ namespace Entities
         private SolidBlock[] _neighbouringBlocks = new SolidBlock[8];
 
         [SerializeField]
-        private int _gas = 1000;
+        private TextMeshPro _nitrogenText;
 
-        private TextMeshPro _text;
+        [SerializeField]
+        private TextMeshPro _oxygenText;
+
+        private Dictionary<int, int> _gasses = new()
+        {
+            { 0, 790 },
+            { 1, 210 },
+        };
 
         private static readonly Line[] _relativeCheckingLines =
         {
@@ -40,49 +48,82 @@ namespace Entities
         public SolidBlock[] NeighbouringBlocks
         { get => _neighbouringBlocks; set => _neighbouringBlocks = value; }
 
-        public int Gas { get => _gas; set => _gas = value; }
+        public Dictionary<int, int> Gasses { get => _gasses; set => _gasses = value; }
 
         private Floor[] NeighbouringFloors => NeighbouringBlocks
             .Where(block => block is Floor)
             .Select(block => block as Floor)
-            .MakeRandomPermutation()
-            .OrderBy(floor => floor.Gas)
             .ToArray();
 
         private int NeighbouringVoids => NeighbouringBlocks
             .Where(block => block == null)
             .Count();
 
-        private TextMeshPro Text =>
-            _text ??= GetComponentInChildren<TextMeshPro>();
-
-        private void ExchangeGasses()
+        private void ExchangeGas(int gasId)
         {
             for (int i = 0; i < NeighbouringVoids; i++)
-                _gas -= (int)Math.Ceiling(_gas / (double)8);
+                for (int j = 0; j < Gasses.Count; j++)
+                    Gasses[j] -= (int)Math.Ceiling(Gasses[j] / (double)8);
             foreach (Floor floor in NeighbouringFloors)
-                if (_gas > floor.Gas)
+            {
+                if (!floor.Gasses.ContainsKey(gasId))
+                    floor.Gasses.Add(gasId, 0);
+            }
+            var neighbouringFloors = NeighbouringFloors
+                .MakeRandomPermutation();
+            foreach (Floor floor in neighbouringFloors)
+                if (Gasses[gasId] > floor.Gasses[gasId])
                 {
-                    int difference = _gas - floor.Gas;
+                    int difference = Gasses[gasId] - floor.Gasses[gasId];
                     int flow = (int)Math.Ceiling(difference / (double)8);
-                    _gas -= flow;
-                    floor.Gas += flow;
+                    Gasses[gasId] -= flow;
+                    floor.Gasses[gasId] += flow;
                 }
         }
 
         private void FixedUpdate()
         {
-            Text.text = _gas.ToString();
+            _nitrogenText.text = Gasses.ContainsKey(0) ?
+                Gasses[0].ToString() :
+                "0";
+            _oxygenText.text = Gasses.ContainsKey(1) ?
+                Gasses[1].ToString() :
+                "0";
         }
 
         private void OnEnable()
         {
-            GasExchangeTimer.GasExchangeTicked.AddListener(ExchangeGasses);
+            GasExchangeTimer.GassesExchangeTicked.AddListener(ExchangeGasses);
+            GasExchangeTimer.GassesExchangeFinished.AddListener(ClearEmptyGasses);
         }
 
         private void OnDisable()
         {
-            GasExchangeTimer.GasExchangeTicked.RemoveListener(ExchangeGasses);
+            GasExchangeTimer.GassesExchangeTicked.RemoveListener(ExchangeGasses);
+            GasExchangeTimer.GassesExchangeFinished.RemoveListener(ClearEmptyGasses);
         }
+
+        #region Callbacks
+
+        private void ExchangeGasses()
+        {
+            int[] gassesIds = Gasses.Keys.ToArray();
+            foreach (int gasId in gassesIds)
+            {
+                ExchangeGas(gasId);
+            }
+        }
+
+        private void ClearEmptyGasses()
+        {
+            int[] gassesIds = Gasses.Keys.ToArray();
+            foreach (int gasId in gassesIds)
+            {
+                if (Gasses[gasId] == 0)
+                    Gasses.Remove(gasId);
+            }
+        }
+
+        #endregion Callbacks
     }
 }

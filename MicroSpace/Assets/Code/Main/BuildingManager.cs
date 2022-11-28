@@ -20,12 +20,6 @@ namespace Main
         private Colors _colors;
 
         [SerializeField]
-        private BlockModelList _modelList;
-
-        [SerializeField]
-        private ShapeList _shapeList;
-
-        [SerializeField]
         private GameObject _temporalDesignationPrefab;
 
         [SerializeField]
@@ -74,7 +68,7 @@ namespace Main
 
         [SerializeField]
         [ReadonlyInspector]
-        private BlockModel _model;
+        private BlockModel _blockModel;
 
         [SerializeField]
         [Range(0F, 359F)]
@@ -165,13 +159,13 @@ namespace Main
 
         private void ChangeSelectedShape(int shapeId)
         {
-            _shape = _shapeList.GetShape(shapeId);
+            _shape = Shape.GetShape(shapeId);
             StartFromPreviousMode();
         }
 
         private void ChangeSelectedModel(int modelId)
         {
-            _model = _modelList.GetModel(modelId);
+            _blockModel = BlockModel.GetModel(modelId);
             StartFromPreviousMode();
         }
 
@@ -333,17 +327,17 @@ namespace Main
                 block.GetComponent<Block>().ShapeId = 0;
                 if (block.TryGetComponent(out SpriteMask mask))
                 {
-                    mask.sprite = _shapeList.GetShape(0).Sprite;
+                    mask.sprite = Shape.GetShape(0).Sprite;
                 }
             }
         }
 
         private void SetBlockModel(GameObject block)
         {
-            block.GetComponent<Block>().ModelId = _model.Id;
+            block.GetComponent<Block>().ModelId = _blockModel.Id;
             if (block.TryGetComponent(out SpriteRenderer renderer))
             {
-                renderer.sprite = _model.Sprite;
+                renderer.sprite = _blockModel.Sprite;
             }
         }
 
@@ -670,12 +664,12 @@ namespace Main
 
         private void SetDefaultShape()
         {
-            _shape = _shapeList.GetShape(0);
+            _shape = Shape.GetShape(0);
         }
 
         private void SetDefaultModel()
         {
-            _model = _modelList.GetModel(0);
+            _blockModel = BlockModel.GetModel(0);
         }
 
         #endregion Private

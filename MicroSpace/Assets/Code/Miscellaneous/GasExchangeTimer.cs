@@ -10,7 +10,8 @@ namespace Miscellaneous
         public static float _timer = 0;
         public static readonly float _exchangeTickLength = 0.1F;
 
-        public static UnityEvent GasExchangeTicked = new();
+        public static UnityEvent GassesExchangeTicked = new();
+        public static UnityEvent GassesExchangeFinished = new();
 
         private void FixedUpdate()
         {
@@ -18,7 +19,8 @@ namespace Miscellaneous
             if (_timer >= 0.1F)
             {
                 _timer -= 0.1F;
-                GasExchangeTicked.Invoke();
+                GassesExchangeTicked.Invoke();
+                GassesExchangeFinished.Invoke();
             }
         }
     }
