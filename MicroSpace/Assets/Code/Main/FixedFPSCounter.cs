@@ -16,7 +16,7 @@ public class FixedFPSCounter : MonoBehaviour
     {
         if (_timer >= 1F)
         {
-            Counter.text = $"FFPS: {System.Math.Round(1 / (_timer / _frames))}";
+            Counter.text = $"FFPS: {_frames}";
             _timer = 0;
             _frames = 0;
         }
