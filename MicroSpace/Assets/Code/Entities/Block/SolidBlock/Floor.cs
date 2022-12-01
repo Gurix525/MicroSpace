@@ -4,7 +4,6 @@ using Attributes;
 using Maths;
 using System.Linq;
 using Miscellaneous;
-using TMPro;
 using ExtensionMethods;
 using System.Collections.Generic;
 
@@ -15,12 +14,6 @@ namespace Entities
         [SerializeField]
         [ReadonlyInspector]
         private SolidBlock[] _neighbouringBlocks = new SolidBlock[8];
-
-        [SerializeField]
-        private TextMeshPro _nitrogenText;
-
-        [SerializeField]
-        private TextMeshPro _oxygenText;
 
         private Dictionary<int, int> _gasses = new();
 
@@ -75,16 +68,6 @@ namespace Entities
                     Gasses[gasId] -= flow;
                     floor.Gasses[gasId] += flow;
                 }
-        }
-
-        private void FixedUpdate()
-        {
-            _nitrogenText.text = Gasses.ContainsKey(0) ?
-                Gasses[0].ToString() :
-                "0";
-            _oxygenText.text = Gasses.ContainsKey(1) ?
-                Gasses[1].ToString() :
-                "0";
         }
 
         private void OnEnable()
