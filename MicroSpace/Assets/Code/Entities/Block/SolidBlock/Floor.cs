@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Entities
 {
-    public class Floor : SolidBlock
+    public class Floor : SolidBlock, IGasContainer
     {
         [SerializeField]
         [ReadonlyInspector]
@@ -22,11 +22,7 @@ namespace Entities
         [SerializeField]
         private TextMeshPro _oxygenText;
 
-        private Dictionary<int, int> _gasses = new()
-        {
-            { 0, 790 },
-            { 1, 210 },
-        };
+        private Dictionary<int, int> _gasses = new();
 
         private static readonly Line[] _relativeCheckingLines =
         {

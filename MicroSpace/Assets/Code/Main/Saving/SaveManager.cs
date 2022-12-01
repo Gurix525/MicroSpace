@@ -146,8 +146,20 @@ namespace Main
             InstantiateSatellite(out GameObject satellite);
             SetSatelliteParameters(satellite, satelliteToLoad);
             LoadBlocks(satellite, satelliteToLoad);
+            LoadGasses(satellite, satelliteToLoad);
             UpdateSatellite(satellite);
             return satellite.GetComponent<Satellite>();
+        }
+
+        private static void LoadGasses(GameObject satellite, SerializableSatellite satelliteToLoad)
+        {
+            foreach (var gas in satelliteToLoad.Gasses)
+            {
+                var container = satellite.GetComponentsInChildren<IGasContainer>()
+                    .Where(container => container.Id == gas.ContainerId)
+                    .FirstOrDefault();
+                container.Gasses.Add(gas.ModelId, gas.Amount);
+            }
         }
 
         private static void UpdateSatellite(GameObject satellite)

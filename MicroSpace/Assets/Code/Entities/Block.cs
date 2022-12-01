@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Entities
 {
-    public abstract class Block : MonoBehaviour
+    public abstract class Block : MonoBehaviour, IEntity
     {
         #region Fields
 

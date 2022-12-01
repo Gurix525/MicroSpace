@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections.ObjectModel;
 
 namespace Entities
 {
@@ -26,11 +27,16 @@ namespace Entities
         [SerializeField]
         private List<SerializableBlock> _blocks = new();
 
+        [SerializeField]
+        private List<SerializableGas> _gasses = new();
+
         #endregion Fields
 
         #region Properties
 
-        public List<SerializableBlock> Blocks => _blocks;
+        public IEnumerable<SerializableBlock> Blocks => _blocks;
+
+        public IEnumerable<SerializableGas> Gasses => _gasses;
 
         public int Id => _id;
 
@@ -46,6 +52,9 @@ namespace Entities
         {
             foreach (var block in satellite.Blocks)
                 _blocks.Add(new(block));
+            foreach (var block in satellite.Blocks)
+                if (block is IGasContainer)
+                    AddGasses((IGasContainer)block);
             _id = satellite.Id;
             _position = satellite.Position;
             _rotation = satellite.Rotation;
@@ -55,6 +64,14 @@ namespace Entities
         public static implicit operator SerializableSatellite(Satellite satellite)
         {
             return new SerializableSatellite(satellite);
+        }
+
+        private void AddGasses(IGasContainer container)
+        {
+            foreach (var gas in container.Gasses)
+            {
+                _gasses.Add(new(container.Id, gas.Key, gas.Value));
+            }
         }
     }
 }
