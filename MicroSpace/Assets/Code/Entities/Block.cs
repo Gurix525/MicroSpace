@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Entities
 {
-    public abstract class Block : MonoBehaviour, IEntity
+    public abstract class Block : Entity
     {
         #region Fields
 
@@ -43,7 +43,7 @@ namespace Entities
 
         #region Properties
 
-        public int Id { get => _id; set => _id = value; }
+        public override int Id { get => _id; set => _id = value; }
 
         public Transform Transform => transform;
 

@@ -6,7 +6,7 @@ using Miscellaneous;
 
 namespace Entities
 {
-    public class Astronaut : MonoBehaviour
+    public class Astronaut : Entity
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace Entities
 
         #region Properties
 
-        public int Id => _id;
+        public override int Id { get => _id; set => _id = value; }
         public static List<Astronaut> Astronauts { get; } = new();
         public UnityEvent GettingParentId = new();
 

@@ -9,7 +9,7 @@ using Miscellaneous;
 
 namespace Entities
 {
-    public class Satellite : MonoBehaviour
+    public class Satellite : Entity
     {
         #region Fields
 
@@ -52,7 +52,7 @@ namespace Entities
 
         public List<Floor> Floors { get; set; } = new();
 
-        public int Id { get => _id; set => _id = value; }
+        public override int Id { get => _id; set => _id = value; }
 
         public Vector2 Position { get => _position; set => _position = value; }
 

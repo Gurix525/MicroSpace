@@ -145,19 +145,22 @@ namespace Main
         {
             InstantiateSatellite(out GameObject satellite);
             SetSatelliteParameters(satellite, satelliteToLoad);
-            LoadBlocks(satellite, satelliteToLoad);
-            LoadGasses(satellite, satelliteToLoad);
+            LoadBlocks(satellite, satelliteToLoad, out IEnumerable<Block> blocks);
+            LoadGasses(satellite, satelliteToLoad, blocks);
             UpdateSatellite(satellite);
             return satellite.GetComponent<Satellite>();
         }
 
-        private static void LoadGasses(GameObject satellite, SerializableSatellite satelliteToLoad)
+        private static void LoadGasses(
+            GameObject satellite,
+            SerializableSatellite satelliteToLoad,
+            IEnumerable<Block> blocks)
         {
             foreach (var gas in satelliteToLoad.Gasses)
             {
-                var container = satellite.GetComponentsInChildren<IGasContainer>()
+                var container = blocks
                     .Where(container => container.Id == gas.ContainerId)
-                    .FirstOrDefault();
+                    .FirstOrDefault() as IGasContainer;
                 container.Gasses.Add(gas.ModelId, gas.Amount);
             }
         }
@@ -167,18 +170,24 @@ namespace Main
             satellite.GetComponent<Satellite>().UpdateSatellite();
         }
 
-        private static void LoadBlocks(GameObject satellite, SerializableSatellite satelliteToLoad)
+        private static void LoadBlocks(
+            GameObject satellite,
+            SerializableSatellite satelliteToLoad,
+            out IEnumerable<Block> blocks)
         {
+            List<Block> newBlocks = new();
             foreach (SerializableBlock block in satelliteToLoad.Blocks)
-                LoadBlock(satellite, block);
+                newBlocks.Add(LoadBlock(satellite, block));
+            blocks = newBlocks;
         }
 
-        private static void LoadBlock(GameObject satellite, SerializableBlock blockToLoad)
+        private static Block LoadBlock(GameObject satellite, SerializableBlock blockToLoad)
         {
             InstantiateBlock(out GameObject block, satellite, blockToLoad);
-            SetBlockParameters(block, blockToLoad);
+            SetBlockParameters(block, blockToLoad, out Block blockComponent);
             LoadBlockModel(block);
             LoadShape(block);
+            return blockComponent;
         }
 
         private static void LoadBlockModel(GameObject block)
@@ -208,9 +217,12 @@ namespace Main
             }
         }
 
-        private static void SetBlockParameters(GameObject block, SerializableBlock blockToLoad)
+        private static void SetBlockParameters(
+            GameObject block,
+            SerializableBlock blockToLoad,
+            out Block blockComponent)
         {
-            Block blockComponent = block.GetComponent<Block>();
+            blockComponent = block.GetComponent<Block>();
             blockComponent.Id = blockToLoad.Id;
             blockComponent.ModelId = blockToLoad.ModelId;
             blockComponent.ShapeId = blockToLoad.ShapeId;
