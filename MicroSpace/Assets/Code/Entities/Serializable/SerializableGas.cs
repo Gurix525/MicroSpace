@@ -6,26 +6,20 @@ namespace Entities
     [Serializable]
     public struct SerializableGas
     {
-        [SerializeField]
-        private int _containerId;
+        [field: SerializeField]
+        public int ContainerId { get; private set; }
 
-        [SerializeField]
-        private int _modelId;
+        [field: SerializeField]
+        public int ModelId { get; private set; }
 
-        [SerializeField]
-        private int _amount;
-
-        public int ContainerId => _containerId;
-
-        public int ModelId => _modelId;
-
-        public int Amount => _amount;
+        [field: SerializeField]
+        public int Amount { get; private set; }
 
         public SerializableGas(int containerId, int modelId, int amount)
         {
-            _containerId = containerId;
-            _modelId = modelId;
-            _amount = amount;
+            ContainerId = containerId;
+            ModelId = modelId;
+            Amount = amount;
         }
     }
 }

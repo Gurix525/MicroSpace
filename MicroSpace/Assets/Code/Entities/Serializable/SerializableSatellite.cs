@@ -8,57 +8,39 @@ namespace Entities
     [Serializable]
     public class SerializableSatellite
     {
-        #region Fields
-
-        // Pola nie mogą być readonly bo serializacja nie zadziała
-
-        [SerializeField]
-        private int _id;
-
-        [SerializeField]
-        private Vector2 _position;
-
-        [SerializeField]
-        private float _rotation;
-
-        [SerializeField]
-        private Vector2 _velocity;
-
-        [SerializeField]
-        private List<SerializableBlock> _blocks = new();
-
-        [SerializeField]
-        private List<SerializableGas> _gasses = new();
-
-        #endregion Fields
-
         #region Properties
 
-        public IEnumerable<SerializableBlock> Blocks => _blocks;
+        [field: SerializeField]
+        public List<SerializableBlock> Blocks { get; private set; } = new();
 
-        public IEnumerable<SerializableGas> Gasses => _gasses;
+        [field: SerializeField]
+        public List<SerializableGas> Gasses { get; private set; } = new();
 
-        public int Id => _id;
+        [field: SerializeField]
+        public int Id { get; private set; }
 
-        public Vector2 Position => _position;
+        [field: SerializeField]
+        public Vector2 Position { get; private set; }
 
-        public float Rotation => _rotation;
+        [field: SerializeField]
+        public float Rotation { get; private set; }
 
-        public Vector2 Velocity => _velocity;
+        [field: SerializeField]
+        public Vector2 Velocity { get; private set; }
 
         #endregion Properties
 
         public SerializableSatellite(Satellite satellite)
         {
             foreach (var block in satellite.Blocks)
-                _blocks.Add(new(block));
+                Blocks.Add(new(block));
             foreach (var block in satellite.Blocks)
                 if (block is IGasContainer)
                     AddGasses((IGasContainer)block);
-            _id = satellite.Id;
-            _position = satellite.Position;
-            _rotation = satellite.Rotation;
-            _velocity = satellite.Velocity;
+            Id = satellite.Id;
+            Position = satellite.Position;
+            Rotation = satellite.Rotation;
+            Velocity = satellite.Velocity;
         }
 
         public static implicit operator SerializableSatellite(Satellite satellite)
@@ -70,7 +52,7 @@ namespace Entities
         {
             foreach (var gas in container.Gasses)
             {
-                _gasses.Add(new(container.Id, gas.Key, gas.Value));
+                Gasses.Add(new(container.Id, gas.Key, gas.Value));
             }
         }
     }

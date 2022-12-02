@@ -10,28 +10,20 @@ namespace Entities
     [Serializable]
     public class SerializableAstronaut
     {
-        // Pola nie mogą być readonly bo serializacja nie zadziała
+        [field: SerializeField]
+        public int Id { get; private set; }
 
-        [SerializeField]
-        private int _id;
+        [field: SerializeField]
+        public int ParentId { get; private set; }
 
-        [SerializeField]
-        private int _parentId;
-
-        [SerializeField]
-        private Vector2 _localPosition;
-
-        public int Id => _id;
-
-        public int ParentId => _parentId;
-
-        public Vector2 LocalPosition => _localPosition;
+        [field: SerializeField]
+        public Vector2 LocalPosition { get; private set; }
 
         public SerializableAstronaut(Astronaut astronaut)
         {
-            _id = astronaut.Id;
-            _parentId = astronaut.GetParentId();
-            _localPosition = astronaut.transform.localPosition;
+            Id = astronaut.Id;
+            ParentId = astronaut.GetParentId();
+            LocalPosition = astronaut.transform.localPosition;
         }
 
         public static implicit operator SerializableAstronaut(Astronaut astronaut)

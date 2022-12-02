@@ -6,46 +6,36 @@ namespace Entities
     [Serializable]
     public class SerializableBlock
     {
-        // Pola nie mogą być readonly bo serializacja nie zadziała
+        [field: SerializeField]
+        public int Id { get; private set; }
 
-        [SerializeField]
-        private int _id;
+        [field: SerializeField]
+        public int ModelId { get; private set; }
 
-        [SerializeField]
-        private BlockType _blockType;
+        [field: SerializeField]
+        public int ShapeId { get; private set; }
 
-        [SerializeField]
-        private int _modelId;
+        [field: SerializeField]
+        public bool IsMarkedForMining { get; private set; }
 
-        [SerializeField]
-        private int _shapeId;
+        [field: SerializeField]
+        public Vector2 LocalPosition { get; private set; }
 
-        [SerializeField]
-        private Vector2 _localPosition;
+        [field: SerializeField]
+        public float LocalRotation { get; private set; }
 
-        [SerializeField]
-        private float _localRotation;
-
-        [SerializeField]
-        private bool _isMarkedForMining;
-
-        public int Id => _id;
-        public int ModelId => _modelId;
-        public int ShapeId => _shapeId;
-        public bool IsMarkedForMining => _isMarkedForMining;
-        public Vector2 LocalPosition => _localPosition;
-        public float LocalRotation => _localRotation;
-        public BlockType BlockType => _blockType;
+        [field: SerializeField]
+        public BlockType BlockType { get; private set; }
 
         public SerializableBlock(Block block)
         {
-            _id = block.Id;
-            _modelId = block.ModelId;
-            _shapeId = block.ShapeId;
-            _localPosition = block.LocalPosition;
-            _localRotation = block.LocalRotation;
-            _isMarkedForMining = block.IsMarkedForMining;
-            _blockType = block.BlockType;
+            Id = block.Id;
+            ModelId = block.ModelId;
+            ShapeId = block.ShapeId;
+            LocalPosition = block.LocalPosition;
+            LocalRotation = block.LocalRotation;
+            IsMarkedForMining = block.IsMarkedForMining;
+            BlockType = block.BlockType;
         }
     }
 }

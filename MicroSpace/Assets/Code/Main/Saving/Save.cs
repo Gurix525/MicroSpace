@@ -10,31 +10,19 @@ namespace Main
     [Serializable]
     public class Save
     {
-        #region Fields
-
-        [SerializeField]
-        private int _nextId;
-
-        [SerializeField]
-        private int _focusedSatelliteId;
-
-        [SerializeField]
-        private SerializableSatellite[] _satellites;
-
-        [SerializeField]
-        private SerializableAstronaut[] _astronauts;
-
-        #endregion Fields
-
         #region Properties
 
-        public List<SerializableSatellite> Satellites => _satellites.ToList();
+        [field: SerializeField]
+        public List<SerializableSatellite> Satellites { get; private set; } = new();
 
-        public List<SerializableAstronaut> Astronauts => _astronauts.ToList();
+        [field: SerializeField]
+        public List<SerializableAstronaut> Astronauts { get; private set; } = new();
 
-        public int NextId => _nextId;
+        [field: SerializeField]
+        public int NextId { get; private set; }
 
-        public int FocusedSatelliteId => _focusedSatelliteId;
+        [field: SerializeField]
+        public int FocusedSatelliteId { get; private set; }
 
         #endregion Properties
 
@@ -42,14 +30,14 @@ namespace Main
         {
             foreach (Satellite satellite in Satellite.Satellites)
                 satellite.UpdateSatellite();
-            _satellites = Satellite.Satellites
+            Satellites = Satellite.Satellites
                 .Select(satellite => (SerializableSatellite)satellite)
-                .ToArray();
-            _astronauts = Astronaut.Astronauts
+                .ToList();
+            Astronauts = Astronaut.Astronauts
                 .Select(astronaut => (SerializableAstronaut)astronaut)
-                .ToArray();
-            _nextId = IdManager.NextId;
-            _focusedSatelliteId = GameManager.FocusedSatelliteId;
+                .ToList();
+            NextId = IdManager.NextId;
+            FocusedSatelliteId = GameManager.FocusedSatelliteId;
         }
     }
 }
