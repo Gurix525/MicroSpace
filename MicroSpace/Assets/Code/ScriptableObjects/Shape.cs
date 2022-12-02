@@ -33,6 +33,11 @@ namespace ScriptableObjects
 
 #if UNITY_EDITOR
 
+        private void Awake()
+        {
+            OnValidate();
+        }
+
         public bool IsNotFullyCreated()
         {
             return name == string.Empty ||

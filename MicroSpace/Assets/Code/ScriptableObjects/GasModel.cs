@@ -26,6 +26,11 @@ namespace ScriptableObjects
 
 #if UNITY_EDITOR
 
+        private void Awake()
+        {
+            OnValidate();
+        }
+
         private void OnValidate()
         {
             if (_models.Find(model => model == this) == null)
