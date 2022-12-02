@@ -11,11 +11,7 @@ namespace Entities
 {
     public class Floor : SolidBlock, IGasContainer
     {
-        [SerializeField]
-        [ReadonlyInspector]
-        private SolidBlock[] _neighbouringBlocks = new SolidBlock[8];
-
-        private Dictionary<int, int> _gasses = new();
+        #region Fields
 
         private static readonly Line[] _relativeCheckingLines =
         {
@@ -29,15 +25,21 @@ namespace Entities
             new (new(-0.4F, 0.25F), new(-0.6F, 0.25F))
         };
 
+        #endregion Fields
+
+        #region Properties
+
         public Line[] CheckingLines => _relativeCheckingLines
             .Select(line => line.TransformLine(transform))
             .ToArray();
 
-        // 2 na każdą stronę (góra, prawo, dół, lewo)
-        public SolidBlock[] NeighbouringBlocks
-        { get => _neighbouringBlocks; set => _neighbouringBlocks = value; }
+        public SolidBlock[] NeighbouringBlocks { get; set; } = new SolidBlock[8];
 
-        public Dictionary<int, int> Gasses { get => _gasses; set => _gasses = value; }
+        public Dictionary<int, int> Gasses { get; set; } = new();
+
+        #endregion Properties
+
+        #region Private
 
         private Floor[] NeighbouringFloors => NeighbouringBlocks
             .Where(block => block is Floor)
@@ -81,6 +83,8 @@ namespace Entities
             GasExchangeTimer.GassesExchangeTicked.RemoveListener(ExchangeGasses);
             GasExchangeTimer.GassesExchangeFinished.RemoveListener(ClearEmptyGasses);
         }
+
+        #endregion Private
 
         #region Callbacks
 
