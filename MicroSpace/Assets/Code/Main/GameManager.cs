@@ -135,7 +135,7 @@ namespace Main
                     Vector2.zero,
                     _focusedSatelliteRigidbody.transform.localEulerAngles.z);
             float speed = 5 * _focusedSatelliteRigidbody.mass;
-            float rotationSpeed = _focusedSatelliteRigidbody.mass;
+            float rotationSpeed = _focusedSatelliteRigidbody.inertia;
 
             _focusedSatelliteRigidbody.AddForce(
                 direction * speed);
