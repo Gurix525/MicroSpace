@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using Miscellaneous;
 using UnityEngine;
 
 namespace Entities
 {
-    public abstract class Entity : MonoBehaviour, IEntity
+    public abstract class Entity : MonoBehaviour, IIdentifiable
     {
         public abstract int Id { get; set; }
     }

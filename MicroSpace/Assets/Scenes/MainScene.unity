@@ -344,8 +344,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
-  _modelList: {fileID: 11400000, guid: 6fbef3c65248a894ba8b92bb3aeb08ee, type: 2}
-  _shapeList: {fileID: 11400000, guid: ce3986323707e9c4b871f5482ee49898, type: 2}
   _temporalDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
   _cancelDesignationPrefab: {fileID: 2505317657868975611, guid: 2b67422fca0a67c49b9d1ff427c679d6, type: 3}
   _miningDesignationPrefab: {fileID: 2505317657868975611, guid: a51bf7d682bc7834897db0254d0b5a00, type: 3}
@@ -361,7 +359,7 @@ MonoBehaviour:
   _maxDesignDistance: 9
   _buildingMode: 0
   _shape: {fileID: 0}
-  _model: {fileID: 0}
+  _blockModel: {fileID: 0}
   _prefabRotation: 0
 --- !u!114 &98350695
 MonoBehaviour:
@@ -582,8 +580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8e622fcde59c340ac5654a8f72aac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blockModels: {fileID: 11400000, guid: 6fbef3c65248a894ba8b92bb3aeb08ee, type: 2}
-  _blockShapes: {fileID: 11400000, guid: ce3986323707e9c4b871f5482ee49898, type: 2}
 --- !u!114 &98350698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,8 +642,6 @@ MonoBehaviour:
   _buttonPrefab: {fileID: 7772782357545991682, guid: 4eea43d0bb779ad4488b4411ac2cc049, type: 3}
   _shapePicker: {fileID: 1688614401}
   _modelPicker: {fileID: 1833859025}
-  _shapeList: {fileID: 11400000, guid: ce3986323707e9c4b871f5482ee49898, type: 2}
-  _modelList: {fileID: 11400000, guid: 6fbef3c65248a894ba8b92bb3aeb08ee, type: 2}
   _shapeButtonPrefab: {fileID: 3864066361280169147, guid: a99c786c4816ac94485b0ea66b83a6e1, type: 3}
   _modelButtonPrefab: {fileID: 3864066361280169147, guid: ecd533d35bb306a4586e3d2510c26c17, type: 3}
   _contextualMenu: {fileID: 439706603}
