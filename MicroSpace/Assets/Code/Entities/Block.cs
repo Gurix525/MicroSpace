@@ -82,19 +82,9 @@ namespace Entities
             LocalRotation = transform.localEulerAngles.z;
         }
 
-        public void SetId(int id)
-        {
-            Id = id;
-        }
-
         #endregion Public
 
         #region Unity
-
-        protected virtual void Awake()
-        {
-            CreateId();
-        }
 
         protected virtual void Start()
         {
@@ -162,12 +152,6 @@ namespace Entities
             }
             collidingBlocks = newCollidingBlocks.ToArray();
             return collidingBlocks.Length > 0;
-        }
-
-        protected virtual void CreateId()
-        {
-            if (Id == 0)
-                Id = IdManager.NextId;
         }
 
         #endregion Protected

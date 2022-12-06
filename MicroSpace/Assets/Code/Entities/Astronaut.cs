@@ -39,18 +39,13 @@ namespace Entities
             _parentId = id;
         }
 
-        public void SetId(int id)
-        {
-            _id = id;
-        }
-
         #endregion Public
 
         #region Unity
 
-        private void Awake()
+        private new void Awake()
         {
-            SetId();
+            base.Awake();
             AddAstronautToList();
         }
 
@@ -71,12 +66,6 @@ namespace Entities
         private void RemoveAstronautFromList()
         {
             Astronauts.Remove(this);
-        }
-
-        private void SetId()
-        {
-            if (_id == 0)
-                _id = IdManager.NextId;
         }
 
         #endregion Private

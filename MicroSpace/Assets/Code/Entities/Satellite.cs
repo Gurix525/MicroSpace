@@ -74,11 +74,6 @@ namespace Entities
 
         #region Public Methods
 
-        public void SetId(int id)
-        {
-            Id = id;
-        }
-
         public void UpdateSatellite()
         {
             SimulatePhysics();
@@ -124,12 +119,6 @@ namespace Entities
             Position = transform.position;
             Rotation = transform.eulerAngles.z;
             Velocity = GetComponent<Rigidbody2D>().velocity;
-        }
-
-        private void CreateId()
-        {
-            if (Id == 0)
-                Id = IdManager.NextId;
         }
 
         private void SetSatelliteChildrenActive(bool state)
@@ -343,9 +332,9 @@ namespace Entities
 
         #region Unity
 
-        private void Awake()
+        private new void Awake()
         {
-            CreateId();
+            base.Awake();
             GetRigidbody2D();
             AddSatelliteToList();
         }
