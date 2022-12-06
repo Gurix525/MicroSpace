@@ -223,7 +223,7 @@ namespace Main
             out Block blockComponent)
         {
             blockComponent = block.GetComponent<Block>();
-            blockComponent.Id = blockToLoad.Id;
+            blockComponent.SetId(blockToLoad.Id);
             blockComponent.ModelId = blockToLoad.ModelId;
             blockComponent.ShapeId = blockToLoad.ShapeId;
             block.transform.localPosition = blockToLoad.LocalPosition;
@@ -259,7 +259,7 @@ namespace Main
         private static void SetSatelliteParameters(GameObject satellite, SerializableSatellite satelliteToLoad)
         {
             Satellite satelliteComponent = satellite.GetComponent<Satellite>();
-            satelliteComponent.Id = satelliteToLoad.Id;
+            satelliteComponent.SetId(satelliteToLoad.Id);
             satellite.transform.position = satelliteToLoad.Position;
             satellite.transform.eulerAngles = new Vector3(0, 0, satelliteToLoad.Rotation);
             satellite.GetComponent<Rigidbody2D>().velocity = satelliteToLoad.Velocity;

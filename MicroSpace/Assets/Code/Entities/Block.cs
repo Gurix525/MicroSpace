@@ -43,7 +43,7 @@ namespace Entities
 
         #region Properties
 
-        public override int Id { get => _id; set => _id = value; }
+        public override int Id { get => _id; protected set => _id = value; }
 
         public Transform Transform => transform;
 
@@ -82,13 +82,18 @@ namespace Entities
             LocalRotation = transform.localEulerAngles.z;
         }
 
+        public void SetId(int id)
+        {
+            Id = id;
+        }
+
         #endregion Public
 
         #region Unity
 
         protected virtual void Awake()
         {
-            SetId();
+            CreateId();
         }
 
         protected virtual void Start()
@@ -159,7 +164,7 @@ namespace Entities
             return collidingBlocks.Length > 0;
         }
 
-        protected virtual void SetId()
+        protected virtual void CreateId()
         {
             if (Id == 0)
                 Id = IdManager.NextId;

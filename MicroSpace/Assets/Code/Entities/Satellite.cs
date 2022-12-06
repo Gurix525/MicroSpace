@@ -52,7 +52,7 @@ namespace Entities
 
         public List<Floor> Floors { get; set; } = new();
 
-        public override int Id { get => _id; set => _id = value; }
+        public override int Id { get => _id; protected set => _id = value; }
 
         public Vector2 Position { get => _position; set => _position = value; }
 
@@ -73,6 +73,11 @@ namespace Entities
         #endregion Public Static Properties
 
         #region Public Methods
+
+        public void SetId(int id)
+        {
+            Id = id;
+        }
 
         public void UpdateSatellite()
         {
@@ -121,7 +126,7 @@ namespace Entities
             Velocity = GetComponent<Rigidbody2D>().velocity;
         }
 
-        private void SetId()
+        private void CreateId()
         {
             if (Id == 0)
                 Id = IdManager.NextId;
@@ -340,7 +345,7 @@ namespace Entities
 
         private void Awake()
         {
-            SetId();
+            CreateId();
             GetRigidbody2D();
             AddSatelliteToList();
         }

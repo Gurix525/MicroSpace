@@ -20,7 +20,7 @@ namespace Entities
 
         #region Properties
 
-        public override int Id { get => _id; set => _id = value; }
+        public override int Id { get => _id; protected set => _id = value; }
         public static List<Astronaut> Astronauts { get; } = new();
         public UnityEvent GettingParentId = new();
 
