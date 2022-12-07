@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -29,8 +28,6 @@ namespace ScriptableObjects
 
         public static List<BlockModel> Models => _models;
 
-#if UNITY_EDITOR
-
         private void Awake()
         {
             OnValidate();
@@ -50,18 +47,14 @@ namespace ScriptableObjects
 
         private static void CheckForIdDuplicates()
         {
-            bool areDuplicates = false;
             var duplicates = _models.GroupBy(model => model.Id)
                             .SelectMany(g => g.Skip(1))
                             .ToList();
             duplicates.ForEach(duplicate =>
             {
-                areDuplicates = true;
                 _models.FindAll(model => model.Id == duplicate.Id)
                     .ForEach(model => Debug.LogError($"Zduplikowane ID w gazie {model}"));
             });
-            if (areDuplicates)
-                EditorApplication.isPlaying = false;
         }
 
         private void CheckIfModelFinished()
@@ -82,7 +75,5 @@ namespace ScriptableObjects
         {
             return $"{_id} : {name} : {_sprite.name}";
         }
-
-#endif
     }
 }
