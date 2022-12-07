@@ -2,7 +2,7 @@
 
 namespace ScriptableObjects
 {
-    internal class Model : ScriptableObject
+    public class Model : ScriptableObject
     {
     }
 }

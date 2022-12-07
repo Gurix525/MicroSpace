@@ -8,7 +8,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(
         fileName = "BlockModel",
         menuName = "ScriptableObjects/BlockModel")]
-    public class BlockModel : ScriptableObject
+    public class BlockModel : Model
     {
         [SerializeField]
         private int _id;

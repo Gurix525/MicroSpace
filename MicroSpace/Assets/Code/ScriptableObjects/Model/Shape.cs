@@ -8,7 +8,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(
         fileName = "Shape",
         menuName = "ScriptableObjects/Shape")]
-    public class Shape : ScriptableObject
+    public class Shape : Model
     {
         [SerializeField]
         private int _id;

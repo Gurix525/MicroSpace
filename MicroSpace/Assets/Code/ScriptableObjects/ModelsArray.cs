@@ -29,13 +29,15 @@ namespace ScriptableObjects
         {
             string[] guids = AssetDatabase
                 .FindAssets("t:" + typeof(ScriptableObject).Name);
-            var scriptableObjects = new ScriptableObject[guids.Length];
+            List<ScriptableObject> scriptableObjects = new();
             for (int i = 0; i < guids.Length; i++)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-                scriptableObjects[i] = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
+                var scriptableObject = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
+                if (scriptableObject is Model)
+                    scriptableObjects.Add(scriptableObject);
             }
-            return scriptableObjects;
+            return scriptableObjects.ToArray();
         }
 
 #endif
