@@ -14,6 +14,8 @@ namespace Items
         [field: SerializeField, ReadonlyInspector]
         public int Id { get; private set; }
 
+        public bool IsTool => this is Tool;
+
         public Item(int itemModel)
         {
             ItemModel = itemModel;
