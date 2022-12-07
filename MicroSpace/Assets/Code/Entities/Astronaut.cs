@@ -10,17 +10,12 @@ namespace Entities
     {
         #region Fields
 
-        [SerializeField]
-        [ReadonlyInspector]
-        private int _id;
-
         private int _parentId;
 
         #endregion Fields
 
         #region Properties
 
-        public override int Id { get => _id; protected set => _id = value; }
         public static List<Astronaut> Astronauts { get; } = new();
         public UnityEvent GettingParentId = new();
 

@@ -1,3 +1,4 @@
+using Attributes;
 using Miscellaneous;
 using UnityEngine;
 
@@ -5,9 +6,10 @@ namespace Entities
 {
     public abstract class Entity : MonoBehaviour, IIdentifiable
     {
-        public abstract int Id { get; protected set; }
+        [field: SerializeField, ReadonlyInspector]
+        public int Id { get; private set; }
 
-        public virtual void SetId(int id)
+        public void SetId(int id)
         {
             Id = id;
         }

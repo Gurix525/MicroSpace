@@ -1,6 +1,6 @@
 ﻿namespace Entities
 {
-    public class MiningDesignation : TemporalDesignation
+    public sealed class MiningDesignation : TemporalDesignation
     {
         private bool _isActive = false;
 
@@ -16,8 +16,7 @@
             }
         }
 
-        // To override temporal
-        private void Update()
+        private new void Update()
         {
         }
     }

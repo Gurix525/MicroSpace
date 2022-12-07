@@ -17,10 +17,6 @@ namespace Entities
 
         [SerializeField]
         [ReadonlyInspector]
-        private int _id;
-
-        [SerializeField]
-        [ReadonlyInspector]
         private int _modelId;
 
         [SerializeField]
@@ -42,8 +38,6 @@ namespace Entities
         #endregion Fields
 
         #region Properties
-
-        public override int Id { get => _id; protected set => _id = value; }
 
         public Transform Transform => transform;
 

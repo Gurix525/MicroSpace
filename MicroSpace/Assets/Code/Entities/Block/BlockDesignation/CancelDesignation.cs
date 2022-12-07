@@ -1,6 +1,6 @@
 ﻿namespace Entities
 {
-    public class CancelDesignation : TemporalDesignation
+    public sealed class CancelDesignation : TemporalDesignation
     {
         private bool _isActive = false;
 
@@ -16,10 +16,8 @@
             }
         }
 
-        // To override temporal
-        private void Update()
+        private new void Update()
         {
-            
         }
     }
 }

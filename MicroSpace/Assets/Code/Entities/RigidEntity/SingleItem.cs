@@ -1,12 +1,18 @@
+using Attributes;
+using Items;
 using UnityEngine;
 
 namespace Entities
 {
     public class SingleItem : RigidEntity
     {
-        private new void Awake()
+        [field: SerializeField]
+        public Item Item { get; private set; }
+
+        //test
+        private void Start()
         {
-            base.Awake();
+            Item = new(0);
         }
     }
 }

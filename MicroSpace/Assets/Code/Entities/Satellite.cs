@@ -18,10 +18,6 @@ namespace Entities
 
         [SerializeField]
         [ReadonlyInspector]
-        private int _id;
-
-        [SerializeField]
-        [ReadonlyInspector]
         private List<Block> _blocks = new();
 
         [SerializeField]
@@ -51,8 +47,6 @@ namespace Entities
         public List<Wall> Walls { get; set; } = new();
 
         public List<Floor> Floors { get; set; } = new();
-
-        public override int Id { get => _id; protected set => _id = value; }
 
         public Vector2 Position { get => _position; set => _position = value; }
 

@@ -6,7 +6,7 @@ namespace Entities
     {
         public BlockType TemporalBlockType { get; set; }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (transform.parent != null)
             {
