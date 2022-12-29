@@ -35,15 +35,6 @@ namespace ScriptableObjects
             OnValidate();
         }
 
-        public bool IsNotFullyCreated()
-        {
-            return name == string.Empty ||
-                name == null ||
-                _prefab == null ||
-                !_prefab.GetComponent<SpriteMask>() ||
-                !_prefab.GetComponent<PolygonCollider2D>();
-        }
-
         private void OnValidate()
         {
             if (_shapes.Find(model => model == this) == null)
@@ -53,7 +44,7 @@ namespace ScriptableObjects
                 .ToList();
             CheckIfModelFinished();
             CheckForIdDuplicates();
-            Debug.Log($"{string.Join("\n", _shapes)}\n{_shapes.Count}");
+            //Debug.Log($"{string.Join("\n", _shapes)}\n{_shapes.Count}");
         }
 
         private static void CheckForIdDuplicates()
@@ -72,6 +63,15 @@ namespace ScriptableObjects
         {
             if (IsNotFullyCreated())
                 Debug.LogWarning($"Blok {this} wymaga dodatkowych informacji");
+        }
+
+        private bool IsNotFullyCreated()
+        {
+            return name == string.Empty ||
+                name == null ||
+                _prefab == null ||
+                !_prefab.GetComponent<SpriteMask>() ||
+                !_prefab.GetComponent<PolygonCollider2D>();
         }
 
         public override string ToString()

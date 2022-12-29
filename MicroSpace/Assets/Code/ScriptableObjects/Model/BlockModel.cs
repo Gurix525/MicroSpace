@@ -42,7 +42,7 @@ namespace ScriptableObjects
                 .ToList();
             CheckIfModelFinished();
             CheckForIdDuplicates();
-            Debug.Log($"{string.Join("\n", _models)}\n{_models.Count}");
+            //Debug.Log($"{string.Join("\n", _models)}\n{_models.Count}");
         }
 
         private static void CheckForIdDuplicates()
@@ -63,7 +63,7 @@ namespace ScriptableObjects
                 Debug.LogWarning($"Blok {this} wymaga dodatkowych informacji");
         }
 
-        public bool IsNotFullyCreated()
+        private bool IsNotFullyCreated()
         {
             return name == string.Empty ||
                 name == null ||

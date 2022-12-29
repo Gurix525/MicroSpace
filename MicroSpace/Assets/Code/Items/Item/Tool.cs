@@ -1,4 +1,6 @@
-﻿namespace Items
+﻿using Miscellaneous;
+
+namespace Items
 {
     public class Tool : Item
     {
