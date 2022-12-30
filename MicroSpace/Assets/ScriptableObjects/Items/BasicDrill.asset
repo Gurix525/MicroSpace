@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BasicDrill
   m_EditorClassIdentifier: 
   _id: 0
-  _toolType: 1
+  _toolType: 2
