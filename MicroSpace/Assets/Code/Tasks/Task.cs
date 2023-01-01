@@ -6,6 +6,8 @@ namespace Tasks
 {
     public class Task : IIdentifiable
     {
+        #region Properties
+
         public int Id { get; }
         public Dictionary<int, float> Items { get; } = new();
         public int ToolType { get; }
@@ -14,6 +16,10 @@ namespace Tasks
         public float SkillPower { get; }
 
         public static List<Task> Tasks { get; } = new();
+
+        #endregion Properties
+
+        #region Constructors
 
         public Task(int[] itemModels, float[] itemAmounts, int toolModel, float toolPower, int skillModel, float skillPower)
         {
@@ -24,6 +30,15 @@ namespace Tasks
             ToolPower = toolPower;
             SkillModel = skillModel;
             SkillPower = skillPower;
+        }
+
+        #endregion Constructors
+
+        #region Public
+
+        public override string ToString()
+        {
+            return $"Task nr {Id}";
         }
 
         public static void AddTask(Task task)
@@ -37,5 +52,7 @@ namespace Tasks
             if (Tasks.Contains(task))
                 Tasks.Remove(task);
         }
+
+        #endregion Public
     }
 }

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using Entities;
 using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
@@ -7,47 +7,27 @@ using UnityEngine;
 namespace Tasks
 {
     [RequireComponent(typeof(TaskSource))]
-    public class TaskProvider : MonoBehaviour
+    public abstract class TaskProvider : MonoBehaviour
     {
-        [Header("Przedmioty wymagane do wykonania polecenia")]
-        [SerializeField]
-        private ItemModel[] _itemModels;
-
-        [Header("Ilości tych przedmiotów")]
-        [SerializeField]
-        private float[] _itemAmounts;
+        #region Fields
 
         [SerializeField]
-        private ToolType _toolType;
+        protected ToolType _toolType;
 
         private TaskSource _taskSource;
 
-        private TaskSource TaskSource =>
+        #endregion Fields
+
+        #region Properties
+
+        protected TaskSource TaskSource =>
             _taskSource ??= GetComponent<TaskSource>();
 
-        #region Unity
-
-        private void OnValidate()
-        {
-            if (_itemModels.Length != _itemAmounts.Length)
-                Debug.LogError("ItemModels and ItemAmounts muszą posiadać tyle" +
-                    "samo elementów");
-        }
-
-        #endregion Unity
+        #endregion Properties
 
         #region Private
 
-        private Task GetTask()
-        {
-            return new(
-                _itemModels.Select(model => model.Id).ToArray(),
-                _itemAmounts,
-                (int)_toolType,
-                0,
-                0,
-                0);
-        }
+        protected abstract Task GetTask();
 
         #endregion Private
     }

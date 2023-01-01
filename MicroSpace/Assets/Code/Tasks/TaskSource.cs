@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
@@ -6,16 +6,27 @@ namespace Tasks
 {
     public class TaskSource : MonoBehaviour
     {
+        #region Fields
+
         private ObservableCollection<Task> _tasks = new();
 
-        public ObservableCollection<Task> Tasks => _tasks;
+        #endregion Fields
+
+        #region Public
+
+        public void AddTask(Task task)
+        {
+            _tasks.Add(task);
+        }
+
+        #endregion Public
 
         #region Unity
 
         private void OnEnable()
         {
             EnableTasks();
-            Tasks.CollectionChanged += TasksCollectionChanged;
+            _tasks.CollectionChanged += TasksCollectionChanged;
         }
 
         private void OnDisable()
@@ -39,10 +50,13 @@ namespace Tasks
                 Task.RemoveTask(task);
         }
 
-        private void TasksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void TasksCollectionChanged(
+            object sender,
+            NotifyCollectionChangedEventArgs e)
         {
             if (gameObject.activeInHierarchy)
                 EnableTasks();
+            Debug.Log(_tasks[0]);
         }
 
         #endregion Private
