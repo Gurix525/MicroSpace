@@ -71,7 +71,9 @@ namespace ScriptableObjects
 
         public override string ToString()
         {
-            return $"{_id} : {name}";
+            if (this != null)
+                return $"{_id} : {name}";
+            return base.ToString();
         }
     }
 }

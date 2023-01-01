@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7636051739394779793}
   - component: {fileID: 589271343126821892}
   - component: {fileID: 5827058328995844579}
-  - component: {fileID: -6453358993877083826}
-  - component: {fileID: 2666433605526067692}
+  - component: {fileID: 5062955161960017491}
+  - component: {fileID: 2254555478196496339}
   m_Layer: 0
   m_Name: WallDesignation
   m_TagString: Untagged
@@ -185,7 +185,7 @@ SpriteMask:
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 0
---- !u!114 &-6453358993877083826
+--- !u!114 &5062955161960017491
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,10 +194,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7440152704112946889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 696f0ffae7bd1c44dbccb6eb9acc67e3, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d80ec5377eb98409f4729309a520ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2666433605526067692
+--- !u!114 &2254555478196496339
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
