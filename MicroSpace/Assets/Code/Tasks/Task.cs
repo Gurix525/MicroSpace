@@ -5,6 +5,7 @@ using System.Linq;
 using Attributes;
 using Miscellaneous;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Tasks
 {
@@ -29,6 +30,7 @@ namespace Tasks
         public float RequiredTime { get; }
         public float ElapsedTime { get; set; } = 0f;
         public Action Action { get; }
+        public UnityEvent<Task> TaskExecuted { get; } = new();
 
         public static ObservableCollection<Task> Tasks { get; } = new();
 

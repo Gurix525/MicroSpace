@@ -37,6 +37,7 @@ namespace Tasks
             {
                 _assignedTask.Action();
                 Astronaut.AstronautState = AstronautState.Idle;
+                _assignedTask.TaskExecuted.Invoke(_assignedTask);
                 _assignedTask = null;
             }
         }

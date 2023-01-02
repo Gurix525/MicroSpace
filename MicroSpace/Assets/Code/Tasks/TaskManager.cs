@@ -20,7 +20,7 @@ namespace Tasks
 
         private void Start()
         {
-            Task.Tasks.CollectionChanged += TasksCollectionChanged;
+            Task.Tasks.CollectionChanged += OnTasksCollectionChanged;
         }
 
         private void FixedUpdate()
@@ -61,7 +61,7 @@ namespace Tasks
                 .ToArray();
         }
 
-        private void TasksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnTasksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             _tasks = Task.Tasks.ToArray();
         }

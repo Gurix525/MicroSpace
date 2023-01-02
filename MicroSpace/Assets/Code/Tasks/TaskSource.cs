@@ -16,6 +16,7 @@ namespace Tasks
 
         public void AddTask(Task task)
         {
+            task.TaskExecuted.AddListener(OnTaskExecuted);
             _tasks.Add(task);
         }
 
@@ -26,7 +27,7 @@ namespace Tasks
         private void OnEnable()
         {
             EnableTasks();
-            _tasks.CollectionChanged += TasksCollectionChanged;
+            _tasks.CollectionChanged += OnTasksCollectionChanged;
         }
 
         private void OnDisable()
@@ -50,12 +51,18 @@ namespace Tasks
                 Task.RemoveTask(task);
         }
 
-        private void TasksCollectionChanged(
+        private void OnTasksCollectionChanged(
             object sender,
             NotifyCollectionChangedEventArgs e)
         {
             if (gameObject.activeInHierarchy)
                 EnableTasks();
+        }
+
+        private void OnTaskExecuted(Task task)
+        {
+            Task.RemoveTask(task);
+            _tasks.Remove(task);
         }
 
         #endregion Private

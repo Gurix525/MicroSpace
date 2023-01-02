@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using ExtensionMethods;
 using ScriptableObjects;
+using System;
 
 namespace Entities
 {
@@ -21,6 +22,11 @@ namespace Entities
 
         public void BuildBlock()
         {
+            if (this is not WallDesignation && this is not FloorDesignation)
+                throw new InvalidOperationException("BuildBlock jest dostępne" +
+                    "tylko dla WallDesignation i FloorDesignation. Możliwe, że" +
+                    "próbujesz użyć BuildBlock dla desygnatu, który nie jest " +
+                    "jednym z podanych");
             GameObject newBlock = Instantiate(
                 _finishedBlockPrefab,
                 transform.position,
