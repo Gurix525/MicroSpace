@@ -16,8 +16,9 @@ namespace Entities
 
         #region Properties
 
+        public AstronautState AstronautState { get; set; }
+        public UnityEvent GettingParentId { get; } = new();
         public static List<Astronaut> Astronauts { get; } = new();
-        public UnityEvent GettingParentId = new();
 
         #endregion Properties
 

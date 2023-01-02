@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7851312921077627140}
   - component: {fileID: -1726151193655652073}
   - component: {fileID: 8468010359055013147}
+  - component: {fileID: -7973753750638479468}
+  - component: {fileID: -2190225200922089790}
   m_Layer: 0
   m_Name: FloorDesignation
   m_TagString: Untagged
@@ -73,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1229291131
-  m_SortingLayer: 5
+  m_SortingLayer: 1
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 4a8abae0713d25242b794d541f809ba3, type: 3}
   m_Color: {r: 0.4, g: 0.4, b: 0.4, a: 0.53333336}
@@ -98,14 +100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff59df7a38e1e14a8a5376f7b762dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
+  <Id>k__BackingField: 0
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
-  _id: 0
   _modelId: 0
   _shapeId: 0
   _localPosition: {x: 0, y: 0}
   _localRotation: 0
   _isMarkedForMining: 0
+  _finishedBlockPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
 --- !u!61 &8468010359055013147
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -132,3 +134,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &-7973753750638479468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6571155050859523946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d80ec5377eb98409f4729309a520ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-2190225200922089790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6571155050859523946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e6677286c948f42b0933cc199aa4cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toolType: 2

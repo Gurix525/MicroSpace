@@ -56,7 +56,6 @@ namespace Tasks
         {
             if (gameObject.activeInHierarchy)
                 EnableTasks();
-            Debug.Log(_tasks[0]);
         }
 
         #endregion Private

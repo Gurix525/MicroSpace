@@ -108,6 +108,7 @@ MonoBehaviour:
   _localPosition: {x: 0, y: 0}
   _localRotation: 0
   _isMarkedForMining: 0
+  _finishedBlockPrefab: {fileID: 7440152704112946889, guid: 8b2411273005b114d8032424950d9c9b, type: 3}
 --- !u!61 &589271343126821892
 BoxCollider2D:
   m_ObjectHideFlags: 0

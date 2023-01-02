@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,19 +20,28 @@ namespace Tasks
         {
             BlockModel blockModel = BlockModel.GetModel(BlockDesignation.ModelId);
             return new(
-                    blockModel.ItemModels
+                transform,
+                BlockDesignation.Id,
+                blockModel.ItemModels
                     .Select(model => model.Id)
                     .ToArray(),
                 blockModel.ItemAmounts,
                 (int)_toolType,
                 0,
                 0,
-                0);
+                0,
+                1,
+                Execute);
         }
 
         private void Start()
         {
             TaskSource.AddTask(GetTask());
+        }
+
+        private void Execute()
+        {
+            _blockDesignation.BuildBlock();
         }
     }
 }

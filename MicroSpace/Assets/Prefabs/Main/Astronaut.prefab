@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2595264310817611482}
   - component: {fileID: 6069652703114551488}
   - component: {fileID: 6474679711542177708}
+  - component: {fileID: -2588060256651506829}
   m_Layer: 0
   m_Name: Astronaut
   m_TagString: Agent
@@ -60,8 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b2e7c65a7c53845bf8d7f4d6f37baa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 0
-  _parentId: 0
+  <Id>k__BackingField: 0
 --- !u!50 &6069652703114551488
 Rigidbody2D:
   serializedVersion: 4
@@ -99,6 +99,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!114 &-2588060256651506829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5644769167682127745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6695959c93501c4583d43b339826a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5644769169039027943
 GameObject:
   m_ObjectHideFlags: 0

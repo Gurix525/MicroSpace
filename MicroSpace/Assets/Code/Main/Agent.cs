@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,6 +6,7 @@ using static UnityEngine.InputSystem.InputAction;
 using ExtensionMethods;
 using System.Linq;
 using Entities;
+using Tasks;
 
 namespace Main
 {
@@ -15,6 +15,7 @@ namespace Main
         #region Fields
 
         private Astronaut _astronaut;
+        private TaskExecutor _taskExecutor;
         private Rigidbody2D _rigidbody;
         private CircleCollider2D _collider;
         private Transform _target;
@@ -31,6 +32,9 @@ namespace Main
 
         private Astronaut Astronaut =>
             _astronaut ??= GetComponent<Astronaut>();
+
+        private TaskExecutor TaskExecutor =>
+            _taskExecutor ??= GetComponent<TaskExecutor>();
 
         private Rigidbody2D Rigidbody =>
             _rigidbody ??= GetComponent<Rigidbody2D>();
@@ -67,6 +71,7 @@ namespace Main
 
         private void FixedUpdate()
         {
+            AssignTargetFromTask();
             GetCurrentPath();
             ChangeRigidbodyVelocity();
             ChangeParentToObstacle();
@@ -80,6 +85,12 @@ namespace Main
         #endregion Unity
 
         #region Private
+
+        private void AssignTargetFromTask()
+        {
+            if (TaskExecutor.AssignedTask != null)
+                _target = TaskExecutor.AssignedTask.Target;
+        }
 
         private void GetCurrentPath()
         {
@@ -215,8 +226,8 @@ namespace Main
 
         private void AddEventListeners()
         {
-            PlayerController.DefaultSetNavTarget
-                            .AddListener(ActionType.Performed, SetTargetFromClick);
+            //PlayerController.DefaultSetNavTarget
+            //                .AddListener(ActionType.Performed, SetTargetFromClick);
             Astronaut.GettingParentId.AddListener(SetAstronautParentId);
         }
 
