@@ -1,11 +1,11 @@
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 using Attributes;
 using ExtensionMethods;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using Miscellaneous;
+using UnityEngine;
+using System;
 
 namespace Entities
 {
@@ -62,6 +62,8 @@ namespace Entities
 
         public static List<Satellite> Satellites { get; } = new();
 
+        public static List<Satellite> EnabledSatellites { get; } = new();
+
         public static UnityEvent<Satellite> FirstSatelliteCreated = new();
 
         #endregion Public Static Properties
@@ -93,8 +95,18 @@ namespace Entities
 
         private void DestroySatellite()
         {
+            SetAstronautsFree();
             SetCameraFree();
             Destroy(gameObject);
+        }
+
+        private void SetAstronautsFree()
+        {
+            var astronauts = GetComponentsInChildren<Astronaut>();
+            foreach (var astronaut in astronauts)
+            {
+                astronaut.transform.parent = null;
+            }
         }
 
         private void SetCameraFree()
@@ -119,6 +131,10 @@ namespace Entities
         {
             foreach (Transform child in transform)
                 child.gameObject.SetActive(state);
+            if (state && !EnabledSatellites.Contains(this))
+                EnabledSatellites.Add(this);
+            else if (!state && EnabledSatellites.Contains(this))
+                EnabledSatellites.Remove(this);
             _isSatelliteLoaded = state;
         }
 
@@ -313,6 +329,7 @@ namespace Entities
         private void AddSatelliteToList()
         {
             Satellites.Add(this);
+            EnabledSatellites.Add(this);
             if (Satellites.Count == 1)
                 FirstSatelliteCreated.Invoke(this);
         }

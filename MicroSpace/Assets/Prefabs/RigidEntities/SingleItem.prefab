@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7752755649261724620}
   - component: {fileID: -7771473895928314813}
-  - component: {fileID: 8175331315760669352}
+  - component: {fileID: 32357272890134364}
   - component: {fileID: -3149521221565690069}
   m_Layer: 0
   m_Name: SingleItem
@@ -55,8 +55,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &8175331315760669352
-BoxCollider2D:
+--- !u!58 &32357272890134364
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -69,18 +69,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Radius: 0.5
 --- !u!114 &-3149521221565690069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,3 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d0a45d0e3143de46aa70217a9aa9acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Id>k__BackingField: 0
+  <Item>k__BackingField:
+    <ItemModel>k__BackingField: 0
+    <Id>k__BackingField: 0

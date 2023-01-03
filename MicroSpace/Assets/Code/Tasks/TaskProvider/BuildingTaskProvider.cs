@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Entities;
-using Miscellaneous;
 using ScriptableObjects;
-using UnityEngine;
+using System.Linq;
 
 namespace Tasks
 {
@@ -39,7 +34,7 @@ namespace Tasks
             TaskSource.AddTask(GetTask());
         }
 
-        private void Execute()
+        protected override void Execute()
         {
             _blockDesignation.BuildBlock();
         }

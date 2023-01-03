@@ -5,6 +5,7 @@ using ScriptableObjects;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Entities
 {
@@ -47,7 +48,19 @@ namespace Entities
             set => transform.parent = value;
         }
 
-        public bool IsMarkedForMining { get => _isMarkedForMining; set => _isMarkedForMining = value; }
+        public bool IsMarkedForMining
+        {
+            get
+            {
+                return _isMarkedForMining;
+            }
+            set
+            {
+                if (_isMarkedForMining != value)
+                    MiningMarkChanged.Invoke(value);
+                _isMarkedForMining = value;
+            }
+        }
 
         public Square Square => new(transform.position, 0.48F, transform.eulerAngles.z);
 
@@ -65,6 +78,8 @@ namespace Entities
 
         public int ModelId { get => _modelId; set => _modelId = value; }
         public int ShapeId { get => _shapeId; set => _shapeId = value; }
+
+        public UnityEvent<bool> MiningMarkChanged { get; } = new();
 
         #endregion Properties
 

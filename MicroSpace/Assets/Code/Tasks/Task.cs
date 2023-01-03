@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Attributes;
+using Miscellaneous;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Attributes;
-using Miscellaneous;
-using UnityEngine;
+using System;
 using UnityEngine.Events;
+using UnityEngine;
 
 namespace Tasks
 {
@@ -31,6 +31,8 @@ namespace Tasks
         public float ElapsedTime { get; set; } = 0f;
         public Action Action { get; }
         public UnityEvent<Task> TaskExecuted { get; } = new();
+
+        public bool IsValid => Target != null;
 
         public static ObservableCollection<Task> Tasks { get; } = new();
 

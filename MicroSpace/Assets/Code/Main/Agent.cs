@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-using static UnityEngine.InputSystem.InputAction;
-using ExtensionMethods;
-using System.Linq;
 using Entities;
+using ExtensionMethods;
+using static UnityEngine.InputSystem.InputAction;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 using Tasks;
+using UnityEngine.AI;
+using UnityEngine;
 
 namespace Main
 {
@@ -74,6 +74,7 @@ namespace Main
             AssignTargetFromTask();
             GetCurrentPath();
             ChangeRigidbodyVelocity();
+            FindClosestObstacleIfNull();
             ChangeParentToObstacle();
         }
 
@@ -85,6 +86,24 @@ namespace Main
         #endregion Unity
 
         #region Private
+
+        private void FindClosestObstacleIfNull()
+        {
+            if (_obstacleRigidbody == null)
+            {
+                var closestSatellite = Satellite.Satellites.Aggregate((a, b) =>
+                {
+                    if (Vector2.Distance(
+                        a.transform.position, transform.position)
+                        < Vector2.Distance(
+                        b.transform.position, transform.position))
+                        return a;
+                    else
+                        return b;
+                });
+                _obstacleRigidbody = closestSatellite.GetComponent<Rigidbody2D>();
+            }
+        }
 
         private void AssignTargetFromTask()
         {
@@ -133,11 +152,12 @@ namespace Main
         {
             if (_obstacleRigidbody != null)
             {
-                if (_path.Count() > 1
-                    && Vector2.Distance(transform.position, _target.position) > 1.5F)
-                {
-                    AddMoveDisplacement();
-                }
+                if (_target != null)
+                    if (_path.Count() > 1
+                        && Vector2.Distance(transform.position, _target.position) > 1.5F)
+                    {
+                        AddMoveDisplacement();
+                    }
                 AddDisplacementFromObstacle();
                 Rigidbody.velocity = _deltaPosition / Time.fixedDeltaTime;
                 _deltaPosition = Vector2.zero;

@@ -1,5 +1,5 @@
-using System;
 using Entities;
+using System.Collections.Specialized;
 using UnityEngine;
 
 namespace Tasks
@@ -7,6 +7,7 @@ namespace Tasks
     public class TaskExecutor : MonoBehaviour
     {
         private Task _assignedTask;
+
         private Astronaut _astronaut;
 
         private Astronaut Astronaut =>
@@ -14,19 +15,39 @@ namespace Tasks
 
         public Task AssignedTask => _assignedTask;
 
-        private bool IsTargetInRange =>
-            Vector2.Distance(transform.position, _assignedTask.Target.position) <= 1.6F;
-
         public void AssignTask(Task task)
         {
             _assignedTask = task;
         }
 
+        public void UnassignTask()
+        {
+            Astronaut.AstronautState = AstronautState.Idle;
+            _assignedTask = null;
+        }
+
+        private void Start()
+        {
+            Task.Tasks.CollectionChanged += OnTasksCollectionChanged;
+        }
+
         private void FixedUpdate()
         {
             if (_assignedTask != null)
-                if (IsTargetInRange)
+                if (IsTargetInRange())
                     ExecuteTask();
+            Debug.Log(_assignedTask);
+        }
+
+        private bool IsTargetInRange()
+        {
+            if (_assignedTask != null)
+                if (_assignedTask.Target != null)
+                    return Vector2.Distance(
+                        transform.position,
+                        _assignedTask.Target.position)
+                        <= 1.6F;
+            return false;
         }
 
         private void ExecuteTask()
@@ -35,11 +56,20 @@ namespace Tasks
                 _assignedTask.ElapsedTime += Time.fixedDeltaTime;
             else
             {
-                _assignedTask.Action();
-                Astronaut.AstronautState = AstronautState.Idle;
-                _assignedTask.TaskExecuted.Invoke(_assignedTask);
-                _assignedTask = null;
+                Task executedTask = _assignedTask;
+                executedTask.Action();
+                executedTask.TaskExecuted.Invoke(executedTask);
+                UnassignTask();
             }
+        }
+
+        private void OnTasksCollectionChanged(
+            object sender,
+            NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null && _assignedTask != null)
+                if (e.OldItems.Contains(_assignedTask))
+                    UnassignTask();
         }
     }
 }

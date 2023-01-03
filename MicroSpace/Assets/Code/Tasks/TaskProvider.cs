@@ -29,6 +29,8 @@ namespace Tasks
 
         protected abstract Task GetTask();
 
+        protected abstract void Execute();
+
         #endregion Private
     }
 }

@@ -1,5 +1,5 @@
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using UnityEngine;
 
 namespace Tasks
@@ -18,6 +18,12 @@ namespace Tasks
         {
             task.TaskExecuted.AddListener(OnTaskExecuted);
             _tasks.Add(task);
+        }
+
+        public void RemoveTask(Task task)
+        {
+            task.TaskExecuted.RemoveListener(OnTaskExecuted);
+            _tasks.Remove(task);
         }
 
         #endregion Public
@@ -55,13 +61,16 @@ namespace Tasks
             object sender,
             NotifyCollectionChangedEventArgs e)
         {
-            if (gameObject.activeInHierarchy)
-                EnableTasks();
+            if (e.NewItems != null)
+                foreach (Task task in e.NewItems)
+                    Task.AddTask(task);
+            if (e.OldItems != null)
+                foreach (Task task in e.OldItems)
+                    Task.RemoveTask(task);
         }
 
         private void OnTaskExecuted(Task task)
         {
-            Task.RemoveTask(task);
             _tasks.Remove(task);
         }
 
