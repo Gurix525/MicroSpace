@@ -7,6 +7,7 @@ using System;
 using Tasks;
 using UnityEngine.AI;
 using UnityEngine;
+using Miscellaneous;
 
 namespace Main
 {
@@ -21,8 +22,6 @@ namespace Main
         private Transform _target;
         private Rigidbody2D _obstacleRigidbody;
         private List<Vector3> _path = new();
-        private NavMeshHit _targetClosestPosition;
-        private NavMeshHit _currentClosestPosition;
         private float _speed = 5F;
         private Vector2 _deltaPosition;
 
@@ -115,8 +114,24 @@ namespace Main
         {
             if (_target != null)
             {
-                CreatePathIfPossible();
+                PathProvider.TryGetPath(
+                    transform.position,
+                    _target.position,
+                    out _path,
+                    _target);
                 DetectObstacle();
+            }
+        }
+
+        private void DetectObstacle()
+        {
+            RaycastHit2D hit = CastRayToDetectObstacle();
+            if (hit.collider == null)
+                _target.TryGetComponentUpInHierarchy(out _obstacleRigidbody);
+            else
+            {
+                hit.collider
+                    .TryGetComponentUpInHierarchy(out _obstacleRigidbody);
             }
         }
 
@@ -137,17 +152,6 @@ namespace Main
             _deltaPosition += _obstacleRigidbody.velocity * Time.fixedDeltaTime;
         }
 
-        private void CreatePath()
-        {
-            NavMeshPath path = new();
-            NavMesh.CalculatePath(
-                _currentClosestPosition.position,
-                _targetClosestPosition.position,
-                NavMesh.AllAreas,
-                path);
-            _path = path.corners.ToList();
-        }
-
         private void ChangeRigidbodyVelocity()
         {
             if (_obstacleRigidbody != null)
@@ -162,39 +166,6 @@ namespace Main
                 Rigidbody.velocity = _deltaPosition / Time.fixedDeltaTime;
                 _deltaPosition = Vector2.zero;
             }
-        }
-
-        private bool IsPathPossibleToCreate(Vector2 correctedTargetPosition)
-        {
-            bool isCurrentClosestPositionValid = CheckIfPositionIsValid(
-                transform.position,
-                out _currentClosestPosition);
-            bool isTargetClosestPositionValid = CheckIfPositionIsValid(
-                correctedTargetPosition,
-                out _targetClosestPosition);
-            return isCurrentClosestPositionValid && isTargetClosestPositionValid;
-        }
-
-        private bool CheckIfPositionIsValid(Vector2 position, out NavMeshHit closestPosition)
-        {
-            return NavMesh.SamplePosition(
-                            position, out closestPosition, 2F, NavMesh.AllAreas);
-        }
-
-        private Vector2 CorrectTargetPosition(ref Vector2 correction)
-        {
-            return _target.position
-                + _target.InverseTransformDirection(correction);
-        }
-
-        private Vector2 CreateCorrection()
-        {
-            Vector2 correction = (transform.position - _target.position).normalized * 0.01F;
-            if (Math.Abs(correction.x) > Math.Abs(correction.y))
-                correction = new(0.01F * Math.Sign(correction.x), 0F);
-            else
-                correction = new(0F, 0.01F * Math.Sign(correction.y));
-            return correction;
         }
 
         private float CalculateMoveDisplacement(ref float remainingDisplacement)
@@ -249,26 +220,6 @@ namespace Main
             //PlayerController.DefaultSetNavTarget
             //                .AddListener(ActionType.Performed, SetTargetFromClick);
             Astronaut.GettingParentId.AddListener(SetAstronautParentId);
-        }
-
-        private void CreatePathIfPossible()
-        {
-            Vector2 targetPositionCorrection = CreateCorrection();
-            Vector2 correctedTargetPosition = CorrectTargetPosition(ref targetPositionCorrection);
-            if (IsPathPossibleToCreate(correctedTargetPosition))
-                CreatePath();
-        }
-
-        private void DetectObstacle()
-        {
-            RaycastHit2D hit = CastRayToDetectObstacle();
-            if (hit.collider == null)
-                _target.TryGetComponentUpInHierarchy(out _obstacleRigidbody);
-            else
-            {
-                hit.collider
-                    .TryGetComponentUpInHierarchy(out _obstacleRigidbody);
-            }
         }
 
         private void ChangeParentToObstacle()
