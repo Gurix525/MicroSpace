@@ -36,7 +36,6 @@ namespace Tasks
             if (_assignedTask != null)
                 if (IsTargetInRange())
                     ExecuteTask();
-            Debug.Log(_assignedTask);
         }
 
         private bool IsTargetInRange()

@@ -28,9 +28,24 @@ namespace Miscellaneous
                 out NavMeshHit currentClosestHit,
                 out NavMeshHit targetClosestHit))
             {
-                return CreatePath(currentClosestHit, targetClosestHit, out path);
+                CreatePath(currentClosestHit, targetClosestHit, out path);
+                return !IsPathObstructed(path);
             }
             path = new();
+            return false;
+        }
+
+        private static bool IsPathObstructed(List<Vector3> path)
+        {
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                if (NavMesh.Raycast(
+                    path[i],
+                    path[i + 1],
+                    out NavMeshHit hit,
+                    NavMesh.AllAreas))
+                    return true;
+            }
             return false;
         }
 

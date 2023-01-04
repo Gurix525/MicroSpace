@@ -114,11 +114,12 @@ namespace Main
         {
             if (_target != null)
             {
-                PathProvider.TryGetPath(
+                bool test = PathProvider.TryGetPath(
                     transform.position,
                     _target.position,
                     out _path,
                     _target);
+                Debug.Log(test);
                 DetectObstacle();
             }
         }
