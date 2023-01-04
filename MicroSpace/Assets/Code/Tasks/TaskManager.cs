@@ -1,5 +1,6 @@
 using Attributes;
 using Entities;
+using Miscellaneous;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -39,11 +40,32 @@ namespace Tasks
             foreach (var astronaut in IdleAstronauts)
                 if (FreeTasks.Count > 0)
                 {
-                    FreeTasks[0].AssignedAstronautId = astronaut.Id;
-                    astronaut.AstronautState = AstronautState.Working;
-                    astronaut.GetComponent<TaskExecutor>().AssignTask(FreeTasks[0]);
-                    FreeTasks.RemoveAt(0);
+                    AssignAstronautToTask(astronaut);
                 }
+        }
+
+        private void AssignAstronautToTask(Astronaut astronaut)
+        {
+            for (int i = 0; i < FreeTasks.Count; i++)
+            {
+                if (IsPathToTaskValid(astronaut, i))
+                {
+                    FreeTasks[i].AssignedAstronautId = astronaut.Id;
+                    astronaut.AstronautState = AstronautState.Working;
+                    astronaut.GetComponent<TaskExecutor>().AssignTask(FreeTasks[i]);
+                    FreeTasks.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        private bool IsPathToTaskValid(Astronaut astronaut, int i)
+        {
+            return PathProvider.TryGetPath(
+                                astronaut.transform.position,
+                                FreeTasks[i].Target.position,
+                                out _,
+                                FreeTasks[i].Target);
         }
 
         private void UpdateFreeTasksList()
