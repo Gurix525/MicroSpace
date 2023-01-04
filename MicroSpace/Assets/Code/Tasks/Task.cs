@@ -19,7 +19,7 @@ namespace Tasks
         private string _name;
 
         public int Id { get; }
-        public int AssignedAstronautId { get; set; }
+        public int AssignedAstronautId { get; private set; }
         public Transform Target { get; }
         public int TargetId { get; }
         public Dictionary<int, float> Items { get; } = new();
@@ -63,6 +63,16 @@ namespace Tasks
         public override string ToString()
         {
             return $"Task nr {Id}";
+        }
+
+        public void AssignAstronaut(int id)
+        {
+            AssignedAstronautId = id;
+        }
+
+        public void UnassignAstronaut()
+        {
+            AssignedAstronautId = 0;
         }
 
         public static void AddTask(Task task)

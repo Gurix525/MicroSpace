@@ -50,8 +50,6 @@ namespace Tasks
             {
                 if (IsPathToTaskValid(astronaut, i))
                 {
-                    FreeTasks[i].AssignedAstronautId = astronaut.Id;
-                    astronaut.AstronautState = AstronautState.Working;
                     astronaut.GetComponent<TaskExecutor>().AssignTask(FreeTasks[i]);
                     FreeTasks.RemoveAt(i);
                     return;

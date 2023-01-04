@@ -18,12 +18,18 @@ namespace Tasks
         public void AssignTask(Task task)
         {
             _assignedTask = task;
+            task.AssignAstronaut(Astronaut.Id);
+            Astronaut.AstronautState = AstronautState.Working;
         }
 
         public void UnassignTask()
         {
             Astronaut.AstronautState = AstronautState.Idle;
-            _assignedTask = null;
+            if (_assignedTask != null)
+            {
+                _assignedTask.UnassignAstronaut();
+                _assignedTask = null;
+            }
         }
 
         private void Start()

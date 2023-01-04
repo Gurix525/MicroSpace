@@ -24,6 +24,8 @@ namespace Main
         private List<Vector3> _path = new();
         private float _speed = 5F;
         private Vector2 _deltaPosition;
+        private float _pathObstructedTime = 0F;
+        private float _pathObstructedTimeLimit = 3F;
 
         #endregion Fields
 
@@ -112,15 +114,27 @@ namespace Main
 
         private void GetCurrentPath()
         {
-            if (_target != null)
+            if (_target == null)
+                return;
+
+            if (
+            PathProvider.TryGetPath(
+                transform.position,
+                _target.position,
+                out List<Vector3> newPath,
+                _target))
             {
-                PathProvider.TryGetPath(
-                    transform.position,
-                    _target.position,
-                    out _path,
-                    _target);
-                DetectObstacle();
+                _path = newPath;
+                _pathObstructedTime = 0F;
             }
+            else
+            {
+                _path = new();
+                _pathObstructedTime += Time.fixedDeltaTime;
+                if (_pathObstructedTime >= _pathObstructedTimeLimit)
+                    TaskExecutor.UnassignTask();
+            }
+            DetectObstacle();
         }
 
         private void DetectObstacle()
