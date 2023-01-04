@@ -46,11 +46,11 @@ TagManager:
   - name: FloorDesignations
     uniqueID: 1229291131
     locked: 0
-  - name: WallDesignations
-    uniqueID: 3655477331
-    locked: 0
   - name: Floors
     uniqueID: 2670858447
+    locked: 0
+  - name: WallDesignations
+    uniqueID: 3655477331
     locked: 0
   - name: Walls
     uniqueID: 294175409

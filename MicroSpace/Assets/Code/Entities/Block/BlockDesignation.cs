@@ -2,23 +2,41 @@
 using ExtensionMethods;
 using ScriptableObjects;
 using System;
+using UnityEngine.Events;
 
 namespace Entities
 {
     public abstract class BlockDesignation : Block
     {
+        #region Fields
+
         [SerializeField]
         private GameObject _finishedBlockPrefab;
 
         protected SpriteRenderer _spriteRenderer;
 
-        public bool IsObstructed { get; protected set; } = true;
+        private bool _isObstructed = true;
 
-        protected override void Awake()
+        #endregion Fields
+
+        #region Properties
+
+        public bool IsObstructed
         {
-            base.Awake();
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            get => _isObstructed;
+            protected set
+            {
+                if (_isObstructed != value)
+                    ObstructedStateChanged.Invoke(value);
+                _isObstructed = value;
+            }
         }
+
+        public UnityEvent<bool> ObstructedStateChanged = new();
+
+        #endregion Properties
+
+        #region Public
 
         public void BuildBlock()
         {
@@ -40,6 +58,20 @@ namespace Entities
             satellite.UpdateSatellite();
             Destroy(gameObject);
         }
+
+        #endregion Public
+
+        #region Unity
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        #endregion Unity
+
+        #region Private
 
         private void SetBlockShape(Block block, int shapeId)
         {
@@ -76,5 +108,7 @@ namespace Entities
                 renderer.sprite = BlockModel.GetModel(modelId).Sprite;
             }
         }
+
+        #endregion Private
     }
 }

@@ -7,13 +7,9 @@ namespace Tasks
     public class MiningTaskProvider : TaskProvider
     {
         private Block _block;
-        private Task _task;
 
         private Block Block =>
             _block ??= GetComponent<Block>();
-
-        private Task Task =>
-            _task ??= GetTask();
 
         protected override Task GetTask()
         {

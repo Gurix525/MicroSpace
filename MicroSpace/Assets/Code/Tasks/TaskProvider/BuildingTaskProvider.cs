@@ -29,9 +29,19 @@ namespace Tasks
                 Execute);
         }
 
-        private void Start()
+        private void Awake()
         {
-            TaskSource.AddTask(GetTask());
+            BlockDesignation.ObstructedStateChanged.AddListener(OnObstructedStateChanged);
+        }
+
+        private void OnObstructedStateChanged(bool state)
+        {
+            if (!state)
+            {
+                TaskSource.AddTask(Task);
+            }
+            else
+                TaskSource.RemoveTask(Task);
         }
 
         protected override void Execute()

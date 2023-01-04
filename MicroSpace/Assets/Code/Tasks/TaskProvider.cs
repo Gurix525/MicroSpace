@@ -16,12 +16,17 @@ namespace Tasks
 
         private TaskSource _taskSource;
 
+        private Task _task;
+
         #endregion Fields
 
         #region Properties
 
         protected TaskSource TaskSource =>
             _taskSource ??= GetComponent<TaskSource>();
+
+        protected Task Task =>
+            _task ??= GetTask();
 
         #endregion Properties
 

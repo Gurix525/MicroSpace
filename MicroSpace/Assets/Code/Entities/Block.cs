@@ -50,10 +50,7 @@ namespace Entities
 
         public bool IsMarkedForMining
         {
-            get
-            {
-                return _isMarkedForMining;
-            }
+            get => _isMarkedForMining;
             set
             {
                 if (_isMarkedForMining != value)
