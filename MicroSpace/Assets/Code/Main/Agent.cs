@@ -251,8 +251,14 @@ namespace Main
         {
             if (collision.TryGetComponent<Wall>(out _))
             {
-                var colliderDistance = Physics2D.Distance(Collider, collision);
-                Rigidbody.position += colliderDistance.pointB - colliderDistance.pointA;
+                NavMesh.SamplePosition(
+                    transform.position,
+                    out NavMeshHit closestHit,
+                    float.PositiveInfinity,
+                    NavMesh.AllAreas);
+                Rigidbody.position = closestHit.position;
+                //var colliderDistance = Physics2D.Distance(Collider, collision);
+                //Rigidbody.position += colliderDistance.pointB - colliderDistance.pointA;
             }
         }
 
