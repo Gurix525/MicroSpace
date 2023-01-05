@@ -257,8 +257,6 @@ namespace Main
                     float.PositiveInfinity,
                     NavMesh.AllAreas);
                 Rigidbody.position = closestHit.position;
-                //var colliderDistance = Physics2D.Distance(Collider, collision);
-                //Rigidbody.position += colliderDistance.pointB - colliderDistance.pointA;
             }
         }
 
