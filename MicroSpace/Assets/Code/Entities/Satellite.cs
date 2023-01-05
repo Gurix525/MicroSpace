@@ -72,7 +72,6 @@ namespace Entities
 
         public void UpdateSatellite()
         {
-            SimulatePhysics();
             UpdateBlocks();
             UpdateObstacles();
             UpdateFloors();
@@ -317,13 +316,6 @@ namespace Entities
         private void GetRigidbody2D()
         {
             Rigidbody2D = GetComponent<Rigidbody2D>();
-        }
-
-        private static void SimulatePhysics()
-        {
-            Physics2D.simulationMode = SimulationMode2D.Script;
-            Physics2D.Simulate(0.000001F);
-            Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
         }
 
         private void AddSatelliteToList()
