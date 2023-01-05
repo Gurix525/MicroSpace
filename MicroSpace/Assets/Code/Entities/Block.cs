@@ -98,14 +98,14 @@ namespace Entities
             TrySetSpriteMaskRange();
         }
 
+        #endregion Unity
+
+        #region Protected
+
         protected void SetSpriteOrderInLayer()
         {
             GetComponent<SpriteRenderer>().sortingOrder = Id;
         }
-
-        #endregion Unity
-
-        #region Protected
 
         protected bool IsCollidingWithAnotherBlock()
         {
