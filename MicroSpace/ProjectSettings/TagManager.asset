@@ -15,7 +15,7 @@ TagManager:
   - UI
   - Walls
   - Floors
-  - 
+  - RigidEntities
   - 
   - 
   - 
@@ -55,7 +55,7 @@ TagManager:
   - name: Walls
     uniqueID: 294175409
     locked: 0
-  - name: Items
+  - name: RigidEntities
     uniqueID: 870505337
     locked: 0
   - name: Astronauts
