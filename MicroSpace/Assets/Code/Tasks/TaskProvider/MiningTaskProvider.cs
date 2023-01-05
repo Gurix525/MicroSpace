@@ -44,7 +44,7 @@ namespace Tasks
 
         protected override void Execute()
         {
-            Destroy(gameObject);
+            Block.GetComponent<SolidBlock>().ExecuteMiningTask();
         }
     }
 }

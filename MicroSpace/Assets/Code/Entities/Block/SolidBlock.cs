@@ -1,12 +1,17 @@
 ﻿using ExtensionMethods;
+using UnityEngine;
 
 namespace Entities
 {
     public abstract class SolidBlock : Block
     {
-        protected virtual void OnDestroy()
+        public void ExecuteMiningTask()
         {
-            this.GetComponentUpInHierarchy<Satellite>().UpdateSatellite();
+            GetComponent<Collider2D>().enabled = false;
+            Satellite satellite = this.GetComponentUpInHierarchy<Satellite>();
+            transform.parent = null;
+            satellite.UpdateSatellite();
+            Destroy(gameObject);
         }
     }
 }
