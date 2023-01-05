@@ -79,11 +79,6 @@ namespace Main
             ChangeParentToObstacle();
         }
 
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            SolveCollision(collision);
-        }
-
         #endregion Unity
 
         #region Private
@@ -244,19 +239,6 @@ namespace Main
                 {
                     transform.parent = _obstacleRigidbody.transform;
                 }
-            }
-        }
-
-        private void SolveCollision(Collider2D collision)
-        {
-            if (collision.TryGetComponent<Wall>(out _))
-            {
-                NavMesh.SamplePosition(
-                    transform.position,
-                    out NavMeshHit closestHit,
-                    float.PositiveInfinity,
-                    NavMesh.AllAreas);
-                Rigidbody.position = closestHit.position;
             }
         }
 
