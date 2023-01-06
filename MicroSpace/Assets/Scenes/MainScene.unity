@@ -313,7 +313,6 @@ MonoBehaviour:
   _astronautPrefab: {fileID: 5644769167682127745, guid: 7a49df2b34bd8a9469536ceb94dcad2a, type: 3}
   _navMeshPrefab: {fileID: 4996609623112498550, guid: 91653e3fdbdd82342a35f2db9b9021b2, type: 3}
   _target: {fileID: 0}
-  _world: {fileID: 445740361}
   _cameraMovingSpeed: 1
   _cameraRotationSpeed: 100
   _focusedSatelliteRigidbody: {fileID: 0}
@@ -357,7 +356,6 @@ MonoBehaviour:
   _buildingUI: {fileID: 1387751628}
   _shapePickerUI: {fileID: 1688614401}
   _modelPickerUI: {fileID: 1833859025}
-  _worldTransform: {fileID: 445740361}
   _maxDesignDistance: 9
   _buildingMode: 0
   _shape: {fileID: 0}
@@ -757,6 +755,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 445740361}
+  - component: {fileID: 445740362}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -780,6 +779,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &445740362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445740360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4230649c43d3eee4482eb4ec011f3469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
