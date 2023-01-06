@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using static UnityEngine.InputSystem.InputAction;
+using Miscellaneous;
 
 namespace Main
 {
@@ -51,9 +52,6 @@ namespace Main
 
         [SerializeField]
         private GameObject _modelPickerUI;
-
-        [SerializeField]
-        private Transform _worldTransform;
 
         [SerializeField]
         private int _maxDesignDistance = 9;
@@ -245,7 +243,7 @@ namespace Main
         private Block FindClosestBlock(
             GameObject designation, Vector3 searchStartPosition)
         {
-            var num = _worldTransform.GetComponentsInChildren<Block>(false)
+            var num = References.WorldTransform.GetComponentsInChildren<Block>(false)
                 .Where(x => x != designation?.GetComponent<BlockDesignation>())
                 .Where(x => x.Parent.GetComponent<Satellite>() != null);
             var closestWall = num.Count() > 0 ?
@@ -278,7 +276,7 @@ namespace Main
             }
             else
             {
-                designation.transform.parent = _worldTransform;
+                designation.transform.parent = References.WorldTransform;
                 designation.transform.position = targetPosition;
                 designation.transform.localEulerAngles =
                     GameManager.FocusedSatelliteRotation.eulerAngles +
@@ -292,7 +290,7 @@ namespace Main
                 _temporalDesignationPrefab,
                 GetMouseWorldPosition(),
                 GameManager.FocusedSatelliteRotation,
-                _worldTransform);
+                References.WorldTransform);
             _currentDesignation.GetComponent<TemporalDesignation>()
                 .TemporalBlockType = _buildingMode switch
                 {
@@ -510,7 +508,7 @@ namespace Main
                     _satellitePrefab,
                     _temporalParent.position,
                     Quaternion.identity,
-                    _worldTransform);
+                    References.WorldTransform);
                 satellite.GetComponent<Rigidbody2D>().velocity =
                     GameManager.FocusedSatelliteVelocity;
                 TransferChildren(_temporalParent, satellite.transform);

@@ -1,4 +1,5 @@
 ﻿using ExtensionMethods;
+using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ namespace Entities
                     _massItemPrefab,
                     transform.position,
                     transform.rotation,
-                    null);
+                    References.WorldTransform);
                 newItem.ItemModel = item.Key.Id;
                 newItem.Mass = item.Value;
                 newItem.GetComponent<Rigidbody2D>().velocity = velocity;

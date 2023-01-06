@@ -24,9 +24,6 @@ namespace Main
         private Rigidbody2D _target;
 
         [SerializeField]
-        private Transform _world;
-
-        [SerializeField]
         private static float _speedometer;
 
         [SerializeField]
@@ -58,9 +55,6 @@ namespace Main
             get => _speedometer;
             private set => _speedometer = value;
         }
-
-        public static Transform World
-        { get => Instance._world; set => Instance._world = value; }
 
         public static Transform FocusedSatellite =>
             Instance._focusedSatelliteRigidbody != null ?
