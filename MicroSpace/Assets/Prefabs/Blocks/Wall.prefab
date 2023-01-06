@@ -108,6 +108,7 @@ MonoBehaviour:
   _localPosition: {x: 0, y: 0}
   _localRotation: 0
   _isMarkedForMining: 0
+  _massItemPrefab: {fileID: -1318484637211757363, guid: 10513411bca298b41aedae0c58f7e64a, type: 3}
 --- !u!331 &5274589325775319546
 SpriteMask:
   m_ObjectHideFlags: 0

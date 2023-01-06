@@ -41,6 +41,10 @@ namespace ScriptableObjects
 
         public static List<BlockModel> Models => _models;
 
+        public Dictionary<ItemModel, float> Items =>
+            Enumerable.Range(0, ItemModels.Length)
+            .ToDictionary(i => ItemModels[i], j => ItemAmounts[j]);
+
         #endregion Properties
 
         #region Public
