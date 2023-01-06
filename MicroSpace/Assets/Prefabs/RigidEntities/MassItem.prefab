@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4644874505910544591}
   - component: {fileID: -7746583376062827503}
   - component: {fileID: -727177717291861145}
-  - component: {fileID: -1318484637211757363}
-  - component: {fileID: 382821134214087591}
   - component: {fileID: -2357497286596040050}
+  - component: {fileID: 382821134214087591}
+  - component: {fileID: -1318484637211757363}
   m_Layer: 8
   m_Name: MassItem
   m_TagString: Untagged
@@ -126,33 +126,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &-1318484637211757363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938864459101416298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2befeb26f4af9ab45b3c840c8fd99690, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: 0
-  <ItemModel>k__BackingField: 0
-  <Mass>k__BackingField: 0
---- !u!114 &382821134214087591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938864459101416298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c67beb01934152144b0df3a48c131686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &-2357497286596040050
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -168,4 +141,31 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.49
+  m_Radius: 0.45
+--- !u!114 &382821134214087591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938864459101416298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c67beb01934152144b0df3a48c131686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-1318484637211757363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938864459101416298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2befeb26f4af9ab45b3c840c8fd99690, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 0
+  <ItemModel>k__BackingField: 0
+  <Mass>k__BackingField: 0
