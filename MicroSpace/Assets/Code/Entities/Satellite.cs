@@ -36,6 +36,8 @@ namespace Entities
 
         private bool _isSatelliteLoaded = true;
 
+        private Rigidbody2D _rigidbody;
+
         private static readonly float _satelliteUnloadDistance = 200F;
 
         #endregion Fields
@@ -54,7 +56,8 @@ namespace Entities
 
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
-        public Rigidbody2D Rigidbody2D { get; private set; }
+        public Rigidbody2D Rigidbody =>
+            _rigidbody ??= GetComponent<Rigidbody2D>();
 
         #endregion Public Properties
 
@@ -86,6 +89,12 @@ namespace Entities
                 SetSatelliteChildrenActive(false);
             else if (!IsSatelliteDistantFromGivenSatellite(focusedSatellite) && !_isSatelliteLoaded)
                 SetSatelliteChildrenActive(true);
+        }
+
+        public static void ForEach(Action<Satellite> action)
+        {
+            foreach (Satellite satellite in Satellites)
+                action(satellite);
         }
 
         #endregion Public Methods
@@ -313,11 +322,6 @@ namespace Entities
             return block is TemporalDesignation;
         }
 
-        private void GetRigidbody2D()
-        {
-            Rigidbody2D = GetComponent<Rigidbody2D>();
-        }
-
         private void AddSatelliteToList()
         {
             Satellites.Add(this);
@@ -338,7 +342,6 @@ namespace Entities
         private new void Awake()
         {
             base.Awake();
-            GetRigidbody2D();
             AddSatelliteToList();
         }
 

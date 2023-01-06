@@ -117,12 +117,6 @@ namespace Main
                 Instance._target = null;
         }
 
-        public static void ForEachSatellite(Action<Satellite> action)
-        {
-            foreach (Satellite satellite in Satellite.Satellites)
-                action(satellite);
-        }
-
         #endregion Public
 
         #region Private
@@ -225,7 +219,8 @@ namespace Main
 
         private void ActivateOrDeactivateSatellites()
         {
-            ForEachSatellite(satellite => satellite.ActivateOrDeactivateChildren(
+            Satellite.ForEach(
+                satellite => satellite.ActivateOrDeactivateChildren(
                 _focusedSatelliteRigidbody.transform));
         }
 

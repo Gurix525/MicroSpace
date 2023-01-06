@@ -18,13 +18,15 @@ namespace Main
 
         private void ApplyGravity()
         {
-            GameManager.ForEachSatellite(
-                satellite => AddGravitationalForce(satellite));
+            Satellite.ForEach(
+                satellite => AddGravitationalForce(satellite.Rigidbody));
+            RigidEntity.ForEach(
+                rigidEntity => AddGravitationalForce(rigidEntity.Rigidbody));
         }
 
-        private void AddGravitationalForce(Satellite satellite)
+        private void AddGravitationalForce(Rigidbody2D rigidbody)
         {
-            satellite.Rigidbody2D.AddForce(CalculateForce(satellite.Rigidbody2D));
+            rigidbody.AddForce(CalculateForce(rigidbody));
         }
 
         private Vector2 CalculateForce(Rigidbody2D satellite)
