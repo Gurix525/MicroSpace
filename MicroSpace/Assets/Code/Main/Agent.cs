@@ -103,8 +103,10 @@ namespace Main
 
         private void AssignTargetFromTask()
         {
-            if (TaskExecutor.AssignedTask != null)
-                _target = TaskExecutor.AssignedTask.Target;
+            if (TaskExecutor.CurrentTarget != null)
+                _target = TaskExecutor.CurrentTarget;
+            else
+                _target = null;
         }
 
         private void GetCurrentPath()

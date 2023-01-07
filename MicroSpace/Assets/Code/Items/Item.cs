@@ -9,22 +9,22 @@ namespace Items
     public class Item : IIdentifiable
     {
         [field: SerializeField, ReadonlyInspector]
-        public int ItemModel { get; private set; }
+        public int ModelId { get; private set; }
 
         [field: SerializeField, ReadonlyInspector]
         public int Id { get; private set; }
 
         public bool IsTool => this is Tool;
 
-        public Item(int itemModel)
+        public Item(int modelId)
         {
-            ItemModel = itemModel;
+            ModelId = modelId;
             Id = IdManager.NextId;
         }
 
-        public Item(int itemModel, int id)
+        public Item(int modelId, int id)
         {
-            ItemModel = itemModel;
+            ModelId = modelId;
             Id = id;
         }
     }

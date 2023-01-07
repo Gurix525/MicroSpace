@@ -30,7 +30,7 @@ namespace Entities
                     transform.position,
                     transform.rotation,
                     References.WorldTransform);
-                newItem.ItemModel = item.Key.Id;
+                newItem.ModelId = item.Key.Id;
                 newItem.Mass = item.Value;
                 newItem.GetComponent<Rigidbody2D>().velocity = velocity;
             }
