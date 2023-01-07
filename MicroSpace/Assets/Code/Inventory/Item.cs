@@ -3,7 +3,7 @@ using Attributes;
 using Miscellaneous;
 using UnityEngine;
 
-namespace Items
+namespace Inventory
 {
     [Serializable]
     public class Item : IIdentifiable

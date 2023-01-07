@@ -30,9 +30,8 @@ namespace Tasks
         public float RequiredTime { get; }
         public float ElapsedTime { get; set; } = 0f;
         public Action Action { get; }
-        public UnityEvent<Task> TaskExecuted { get; } = new();
-
-        public bool IsValid => Target != null;
+        public UnityEvent<Task> Executing { get; } = new();
+        public UnityEvent<Task> Executed { get; } = new();
 
         public static ObservableCollection<Task> Tasks { get; } = new();
 

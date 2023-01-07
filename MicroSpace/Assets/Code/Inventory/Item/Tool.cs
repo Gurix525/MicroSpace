@@ -1,6 +1,6 @@
 ﻿using Miscellaneous;
 
-namespace Items
+namespace Inventory
 {
     public class Tool : Item
     {

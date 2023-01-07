@@ -25,6 +25,12 @@ namespace Entities
 
         #region Public
 
+        public void DestroyRigidEntity()
+        {
+            SetAstronautsFree();
+            Destroy(gameObject);
+        }
+
         public static void ForEach(Action<RigidEntity> action)
         {
             foreach (RigidEntity rigidEntity in RigidEntities)
@@ -58,6 +64,15 @@ namespace Entities
         private void RemoveRigidEntityFromList()
         {
             RigidEntities.Remove(this);
+        }
+
+        private void SetAstronautsFree()
+        {
+            var astronauts = GetComponentsInChildren<Astronaut>();
+            foreach (var astronaut in astronauts)
+            {
+                astronaut.transform.parent = null;
+            }
         }
 
         #endregion Private

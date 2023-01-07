@@ -1,5 +1,5 @@
 {
-    "name": "Items",
+    "name": "Inventory",
     "rootNamespace": "",
     "references": [
         "GUID:f728def38c0934d4a8222621ae614276",

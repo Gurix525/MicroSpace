@@ -1,4 +1,5 @@
 using Entities;
+using Inventory;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,6 +14,8 @@ namespace Tasks
         private Task _assignedTask;
         private Dictionary<int, float> _requiredItems;
         private Astronaut _astronaut;
+        private Container _container;
+        private TargetType _targetType = TargetType.TaskExecution;
 
         #endregion Fields
 
@@ -20,6 +23,9 @@ namespace Tasks
 
         private Astronaut Astronaut =>
             _astronaut ??= GetComponent<Astronaut>();
+
+        private Container Container =>
+            _container ??= GetComponent<Container>();
 
         public Task AssignedTask => _assignedTask;
 
@@ -34,6 +40,7 @@ namespace Tasks
             _requiredItems = task.Items;
             _assignedTask = task;
             task.AssignAstronaut(Astronaut.Id);
+            task.Executing.AddListener(OnTaskExecuting);
             Astronaut.AstronautState = AstronautState.Working;
         }
 
@@ -43,6 +50,7 @@ namespace Tasks
             if (_assignedTask != null)
             {
                 _assignedTask.UnassignAstronaut();
+                _assignedTask.Executing.RemoveListener(OnTaskExecuting);
                 _assignedTask = null;
             }
         }
@@ -61,8 +69,17 @@ namespace Tasks
             if (_assignedTask != null)
             {
                 AssignCurrentTarget();
-                //if (IsTargetInRange())
-                //    ExecuteTask();
+                if (IsTargetInRange())
+                    switch (_targetType)
+                    {
+                        case TargetType.ItemPickUp:
+                            PickUpItem();
+                            break;
+
+                        default:
+                            ExecuteTask();
+                            break;
+                    }
             }
         }
 
@@ -70,28 +87,59 @@ namespace Tasks
 
         #region Private
 
+        private void PickUpItem()
+        {
+            var targetItem = CurrentTarget.GetComponent<Entities.Item>();
+            if (targetItem is MassItem)
+            {
+                var massItem = (MassItem)targetItem;
+                Container.AddItem(massItem.ModelId, massItem.Mass);
+                targetItem.DestroyRigidEntity();
+            }
+            else
+                throw new NotImplementedException(
+                    "Single item pick up not implemented yet");
+        }
+
         private void AssignCurrentTarget()
         {
             if (HasRequiredItems(out (int, float) nextMissingItem))
+            {
+                _targetType = TargetType.TaskExecution;
                 CurrentTarget = _assignedTask.Target;
+            }
             else
+            {
+                _targetType = TargetType.ItemPickUp;
                 CurrentTarget = ItemFinder.FindClosestItem(
                     nextMissingItem.Item1,
                     transform.position);
+                if (CurrentTarget == null)
+                    UnassignTask();
+            }
         }
 
         private bool HasRequiredItems(out (int, float) nextMissingItem)
         {
+            foreach (var item in _requiredItems)
+            {
+                if (!Container.HasItem(item.Key, item.Value))
+                {
+                    nextMissingItem = (item.Key, item.Value);
+                    return false;
+                }
+            }
+            nextMissingItem = (0, 0);
+            return true;
         }
 
         private bool IsTargetInRange()
         {
-            if (_assignedTask != null)
-                if (_assignedTask.Target != null)
-                    return Vector2.Distance(
-                        transform.position,
-                        _assignedTask.Target.position)
-                        <= 1.6F;
+            if (CurrentTarget != null)
+                return Vector2.Distance(
+                    transform.position,
+                    CurrentTarget.position)
+                    <= 1.6F;
             return false;
         }
 
@@ -101,9 +149,10 @@ namespace Tasks
                 _assignedTask.ElapsedTime += Time.fixedDeltaTime;
             else
             {
-                Task executedTask = _assignedTask;
-                executedTask.Action();
-                executedTask.TaskExecuted.Invoke(executedTask);
+                Task currentTask = _assignedTask;
+                currentTask.Executing.Invoke(currentTask);
+                currentTask.Action();
+                currentTask.Executed.Invoke(currentTask);
                 UnassignTask();
             }
         }
@@ -115,6 +164,14 @@ namespace Tasks
             if (e.OldItems != null && _assignedTask != null)
                 if (e.OldItems.Contains(_assignedTask))
                     UnassignTask();
+        }
+
+        private void OnTaskExecuting(Task task)
+        {
+            foreach (var item in _requiredItems)
+            {
+                Container.RemoveItem(item.Key, item.Value);
+            }
         }
 
         #endregion Private

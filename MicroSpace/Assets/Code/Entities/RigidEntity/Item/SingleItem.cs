@@ -1,5 +1,4 @@
-using Attributes;
-using Items;
+using Inventory;
 using UnityEngine;
 
 namespace Entities
@@ -16,6 +15,6 @@ namespace Entities
         }
 
         [field: SerializeField]
-        public Items.Item Item { get; private set; }
+        public Inventory.Item Item { get; private set; }
     }
 }

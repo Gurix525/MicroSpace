@@ -16,13 +16,13 @@ namespace Tasks
 
         public void AddTask(Task task)
         {
-            task.TaskExecuted.AddListener(OnTaskExecuted);
+            task.Executed.AddListener(OnTaskExecuted);
             _tasks.Add(task);
         }
 
         public void RemoveTask(Task task)
         {
-            task.TaskExecuted.RemoveListener(OnTaskExecuted);
+            task.Executed.RemoveListener(OnTaskExecuted);
             _tasks.Remove(task);
         }
 
