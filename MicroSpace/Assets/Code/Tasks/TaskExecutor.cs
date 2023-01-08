@@ -51,6 +51,7 @@ namespace Tasks
             {
                 _assignedTask.UnassignAstronaut();
                 _assignedTask.Executing.RemoveListener(OnTaskExecuting);
+                CurrentTarget = null;
                 _assignedTask = null;
             }
         }
