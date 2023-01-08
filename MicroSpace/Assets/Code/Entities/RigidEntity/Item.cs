@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Entities
 {
@@ -17,6 +18,11 @@ namespace Entities
         protected override void Awake()
         {
             base.Awake();
+            System.Random random = new();
+            transform.position += new Vector3(
+                (float)random.NextDouble() * 0.6F - 0.3F,
+                (float)random.NextDouble() * 0.6F - 0.3F,
+                0);
             _itemType = this is MassItem ?
                 ItemType.MassItem :
                 ItemType.SingleItem;
