@@ -103,6 +103,7 @@ namespace Entities
 
         private void DestroySatellite()
         {
+            SetAstronautsFree();
             SetCameraFree();
             Destroy(gameObject);
         }

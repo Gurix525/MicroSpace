@@ -27,6 +27,7 @@ namespace Entities
 
         public void DestroyRigidEntity()
         {
+            SetAstronautsFree();
             Destroy(gameObject);
         }
 
