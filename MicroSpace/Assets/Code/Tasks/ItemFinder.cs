@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Entities;
+using Miscellaneous;
 using UnityEngine;
+using ExtensionMethods;
 
 namespace Tasks
 {
@@ -11,9 +13,19 @@ namespace Tasks
         {
             return Item.EnabledItems
                 .Where(item => item.ModelId == modelId)
-                .OrderBy(item => Vector2.Distance(startPosition, item.transform.position))
+                .ToDictionary(item => item, item =>
+                {
+                    PathProvider.TryGetPath(
+                        startPosition,
+                        item.transform.position,
+                        out List<Vector3> path,
+                        item.transform);
+                    return path;
+                })
+                .Where(item => item.Value != null)
+                .OrderBy(item => item.Value.ToArray().GetPathLength())
                 .FirstOrDefault()
-                .transform;
+                .Key.transform;
         }
 
         public static bool AreRequiredItemsAvailable(KeyValuePair<int, float>[] items)
