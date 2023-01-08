@@ -27,7 +27,6 @@ namespace Entities
 
         public void DestroyRigidEntity()
         {
-            SetAstronautsFree();
             Destroy(gameObject);
         }
 
@@ -49,6 +48,7 @@ namespace Entities
 
         private void OnDestroy()
         {
+            SetAstronautsFree();
             RemoveRigidEntityFromList();
         }
 
@@ -71,6 +71,7 @@ namespace Entities
             var astronauts = GetComponentsInChildren<Astronaut>();
             foreach (var astronaut in astronauts)
             {
+                astronaut.gameObject.SetActive(true);
                 astronaut.transform.parent = null;
             }
         }

@@ -103,7 +103,6 @@ namespace Entities
 
         private void DestroySatellite()
         {
-            SetAstronautsFree();
             SetCameraFree();
             Destroy(gameObject);
         }
@@ -113,6 +112,7 @@ namespace Entities
             var astronauts = GetComponentsInChildren<Astronaut>();
             foreach (var astronaut in astronauts)
             {
+                astronaut.gameObject.SetActive(true);
                 astronaut.transform.parent = null;
             }
         }
@@ -347,6 +347,7 @@ namespace Entities
 
         private void OnDestroy()
         {
+            SetAstronautsFree();
             RemoveSatelliteFromList();
         }
 
