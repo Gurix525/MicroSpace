@@ -69,7 +69,8 @@ namespace Tasks
         private void UpdateFreeTasksList()
         {
             FreeTasks = _tasks
-                .Where(task => task.AssignedAstronautId == 0)
+                .Where(task => task.AssignedAstronautId == 0
+                    && ItemFinder.AreRequiredItemsAvailable(task.Items.ToArray()))
                 .ToList();
         }
 

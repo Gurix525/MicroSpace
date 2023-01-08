@@ -68,24 +68,30 @@ namespace Tasks
         {
             if (_assignedTask != null)
             {
-                AssignCurrentTarget();
+                if (CurrentTarget == null)
+                    AssignCurrentTarget();
                 if (IsTargetInRange())
-                    switch (_targetType)
-                    {
-                        case TargetType.ItemPickUp:
-                            PickUpItem();
-                            break;
-
-                        default:
-                            ExecuteTask();
-                            break;
-                    }
+                    PerformActionOnTarget();
             }
         }
 
         #endregion Unity
 
         #region Private
+
+        private void PerformActionOnTarget()
+        {
+            switch (_targetType)
+            {
+                case TargetType.ItemPickUp:
+                    PickUpItem();
+                    break;
+
+                default:
+                    ExecuteTask();
+                    break;
+            }
+        }
 
         private void PickUpItem()
         {
@@ -139,7 +145,7 @@ namespace Tasks
                 return Vector2.Distance(
                     transform.position,
                     CurrentTarget.position)
-                    <= 1.6F;
+                    <= 1.5F;
             return false;
         }
 

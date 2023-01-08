@@ -169,7 +169,7 @@ namespace Main
             {
                 if (_target != null)
                     if (_path.Count() > 1
-                        && Vector2.Distance(transform.position, _target.position) > 1.5F)
+                        && Vector2.Distance(transform.position, _target.position) > 1F)
                     {
                         AddMoveDisplacement();
                     }
