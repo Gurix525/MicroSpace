@@ -1,6 +1,7 @@
 using Attributes;
 using Entities;
 using Miscellaneous;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -48,13 +49,22 @@ namespace Tasks
         {
             for (int i = 0; i < FreeTasks.Count; i++)
             {
-                if (IsPathToTaskValid(astronaut, i))
+                if (IsPathToTaskValid(astronaut, i)
+                    && AreRequiredItemsAccessible(astronaut, FreeTasks[i]))
                 {
                     astronaut.GetComponent<TaskExecutor>().AssignTask(FreeTasks[i]);
                     FreeTasks.RemoveAt(i);
                     return;
                 }
             }
+        }
+
+        private bool AreRequiredItemsAccessible(Astronaut astronaut, Task task)
+        {
+            if (ItemFinder.AreItemsAvailable(task.Items.ToArray()))
+                if (ItemFinder.AreItemsAccessible(astronaut, task.Items.ToArray()))
+                    return true;
+            return false;
         }
 
         private bool IsPathToTaskValid(Astronaut astronaut, int i)
@@ -70,7 +80,7 @@ namespace Tasks
         {
             FreeTasks = _tasks
                 .Where(task => task.AssignedAstronautId == 0
-                    && ItemFinder.AreRequiredItemsAvailable(task.Items.ToArray()))
+                    && ItemFinder.AreItemsAvailable(task.Items.ToArray()))
                 .ToList();
         }
 
