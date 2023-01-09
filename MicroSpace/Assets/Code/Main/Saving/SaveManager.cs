@@ -69,7 +69,7 @@ namespace Main
 
         private static void LoadNavMesh(GameObject focusedSatellite)
         {
-            GameObject navMesh = Instantiate(GameManager.Instance.NavMeshPrefab);
+            GameObject navMesh = Instantiate(Prefabs.NavMesh);
             navMesh.transform.parent = focusedSatellite.transform;
             navMesh.transform.localPosition = Vector3.zero;
         }
@@ -110,7 +110,7 @@ namespace Main
 
         private static void InstantiateAstronaut(out GameObject astronaut)
         {
-            astronaut = Instantiate(GameManager.Instance.AstronautPrefab);
+            astronaut = Instantiate(Prefabs.Astronaut);
         }
 
         private static void LoadFocusedSatellite(int focusedSatelliteId, List<Satellite> satellites,

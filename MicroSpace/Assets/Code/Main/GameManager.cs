@@ -15,12 +15,6 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private GameObject _astronautPrefab;
-
-        [SerializeField]
-        private GameObject _navMeshPrefab;
-
-        [SerializeField]
         private Rigidbody2D _target;
 
         [SerializeField]
@@ -75,10 +69,6 @@ namespace Main
             Instance._focusedSatelliteRigidbody != null ?
             Instance._focusedSatelliteRigidbody.transform.rotation :
             Quaternion.identity;
-
-        public GameObject AstronautPrefab => _astronautPrefab;
-
-        public GameObject NavMeshPrefab => _navMeshPrefab;
 
         #endregion Properties
 
