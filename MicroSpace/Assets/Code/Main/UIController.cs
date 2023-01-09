@@ -15,9 +15,6 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private InputActionAsset _inputAsset;
-
-        [SerializeField]
         private TextMeshProUGUI _velocityText;
 
         [SerializeField]

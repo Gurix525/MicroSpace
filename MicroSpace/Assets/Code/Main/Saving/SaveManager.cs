@@ -233,20 +233,20 @@ namespace Main
         private static void InstantiateBlock(out GameObject block,
             GameObject satellite, SerializableBlock blockToLoad)
         {
-            var buildingManager = BuildingManager.Instance;
-            GetBlockPrefab(blockToLoad, buildingManager, out GameObject blockPrefab);
+            GetBlockPrefab(blockToLoad, out GameObject blockPrefab);
             block = InstantiateBlockFromPrefab(blockPrefab, satellite);
         }
 
-        private static void GetBlockPrefab(SerializableBlock blockToLoad,
-            BuildingManager buildingManager, out GameObject blockPrefab)
+        private static void GetBlockPrefab(
+            SerializableBlock blockToLoad,
+            out GameObject blockPrefab)
         {
             blockPrefab = blockToLoad.BlockType switch
             {
-                BlockType.Floor => BuildingManager.FloorPrefab,
-                BlockType.WallDesignation => BuildingManager.WallDesignationPrefab,
-                BlockType.FloorDesignation => BuildingManager.FloorDesignationPrefab,
-                _ => BuildingManager.WallPrefab
+                BlockType.Floor => Prefabs.Floor,
+                BlockType.WallDesignation => Prefabs.WallDesignation,
+                BlockType.FloorDesignation => Prefabs.FloorDesignation,
+                _ => Prefabs.Wall
             };
         }
 
@@ -267,8 +267,8 @@ namespace Main
 
         private static void InstantiateSatellite(out GameObject satellite)
         {
-            satellite = GameObject.Instantiate(
-                BuildingManager.SatellitePrefab, References.WorldTransform);
+            satellite = Instantiate(
+                Prefabs.Satellite, References.WorldTransform);
         }
 
         private static Save GetSaveFromJson(string saveJson)

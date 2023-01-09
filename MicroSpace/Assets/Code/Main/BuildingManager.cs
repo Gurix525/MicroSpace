@@ -18,33 +18,6 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private Colors _colors;
-
-        [SerializeField]
-        private GameObject _temporalDesignationPrefab;
-
-        [SerializeField]
-        private GameObject _cancelDesignationPrefab;
-
-        [SerializeField]
-        private GameObject _miningDesignationPrefab;
-
-        [SerializeField]
-        private GameObject _satellitePrefab;
-
-        [SerializeField]
-        private GameObject _wallPrefab;
-
-        [SerializeField]
-        private GameObject _floorPrefab;
-
-        [SerializeField]
-        private GameObject _wallDesignationPrefab;
-
-        [SerializeField]
-        private GameObject _floorDesignationPrefab;
-
-        [SerializeField]
         private GameObject _buildingUI;
 
         [SerializeField]
@@ -91,15 +64,6 @@ namespace Main
         #region Properties
 
         public static BuildingManager Instance { get; private set; }
-
-        public static GameObject SatellitePrefab => Instance._satellitePrefab;
-
-        public static GameObject WallPrefab => Instance._wallPrefab;
-
-        public static GameObject FloorPrefab => Instance._floorPrefab;
-
-        public static GameObject WallDesignationPrefab => Instance._wallDesignationPrefab;
-        public static GameObject FloorDesignationPrefab => Instance._floorDesignationPrefab;
 
         #endregion Properties
 
@@ -287,7 +251,7 @@ namespace Main
         private void StartBlockDesignation()
         {
             _currentDesignation = Instantiate(
-                _temporalDesignationPrefab,
+                Prefabs.TemporalDesignation,
                 GetMouseWorldPosition(),
                 GameManager.FocusedSatelliteRotation,
                 References.WorldTransform);
@@ -483,8 +447,8 @@ namespace Main
         {
             GameObject prefab = _buildingMode switch
             {
-                BuildingMode.Wall => _wallDesignationPrefab,
-                _ => _floorDesignationPrefab
+                BuildingMode.Wall => Prefabs.WallDesignation,
+                _ => Prefabs.FloorDesignation
             };
             foreach (GameObject temporalDesignation in _temporalDesignations)
             {
@@ -505,7 +469,7 @@ namespace Main
             if (!_temporalParent?.GetComponent<Satellite>())
             {
                 GameObject satellite = Instantiate(
-                    _satellitePrefab,
+                    Prefabs.Satellite,
                     _temporalParent.position,
                     Quaternion.identity,
                     References.WorldTransform);
@@ -759,7 +723,7 @@ namespace Main
             if (block is not SolidBlock)
                 return;
             _temporalParent = block.transform.parent;
-            _currentDesignation = Instantiate(_miningDesignationPrefab, _temporalParent);
+            _currentDesignation = Instantiate(Prefabs.MiningDesignation, _temporalParent);
             _currentDesignation.transform.localPosition = block.transform.localPosition;
             _currentDesignation.transform.localRotation = block.transform.localRotation;
             _currentDesignation.GetComponent<MiningDesignation>().IsActive = true;
@@ -813,7 +777,7 @@ namespace Main
                 if (!block.IsMarkedForMining)
                     return;
             _temporalParent = block.transform.parent;
-            _currentDesignation = Instantiate(_cancelDesignationPrefab, _temporalParent);
+            _currentDesignation = Instantiate(Prefabs.CancelDesignation, _temporalParent);
             _currentDesignation.transform.localPosition = block.transform.localPosition;
             _currentDesignation.transform.localRotation = block.transform.localRotation;
             _currentDesignation.GetComponent<CancelDesignation>().IsActive = true;
@@ -850,14 +814,14 @@ namespace Main
         private void SetBuildingModeWall(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Wall);
-            _selectedDesignationPrefab = _temporalDesignationPrefab;
+            _selectedDesignationPrefab = Prefabs.TemporalDesignation;
             StartBlockDesignation();
         }
 
         private void SetBuildingModeFloor(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Floor);
-            _selectedDesignationPrefab = _temporalDesignationPrefab;
+            _selectedDesignationPrefab = Prefabs.TemporalDesignation;
             StartBlockDesignation();
         }
 
@@ -869,14 +833,14 @@ namespace Main
         private void SetBuildingModeMining(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Mining);
-            _selectedDesignationPrefab = _miningDesignationPrefab;
+            _selectedDesignationPrefab = Prefabs.MiningDesignation;
             StartMiningDesignation();
         }
 
         private void SetBuildingModeCancel(CallbackContext context)
         {
             SetBuildingMode(BuildingMode.Cancel);
-            _selectedDesignationPrefab = _cancelDesignationPrefab;
+            _selectedDesignationPrefab = Prefabs.CancelDesignation;
             StartCancelDesignation();
         }
 

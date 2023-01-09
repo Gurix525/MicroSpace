@@ -1,20 +1,18 @@
 using Attributes;
 using ExtensionMethods;
+using Miscellaneous;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine;
-using System;
 
 namespace Entities
 {
     public class Satellite : Entity
     {
         #region Fields
-
-        [SerializeField]
-        private GameObject _obstaclePrefab;
 
         [SerializeField]
         [ReadonlyInspector]
@@ -263,7 +261,7 @@ namespace Entities
                 maxX - minX + 1F,
                 maxY - minY + 1F,
                 0.2F);
-            GameObject obstacle = Instantiate(_obstaclePrefab, transform);
+            GameObject obstacle = Instantiate(Prefabs.Obstacle, transform);
             _obstacles.Add(obstacle);
             obstacle.transform.localPosition = Vector2.zero;
             var obstacleComponent = obstacle.GetComponent<NavMeshObstacle>();
