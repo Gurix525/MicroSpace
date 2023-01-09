@@ -30,6 +30,11 @@ namespace Inventory
                 ContainerItems.Remove(containerItem);
         }
 
+        public void Clear()
+        {
+            ContainerItems.Clear();
+        }
+
         public bool HasItem(int modelId, float mass)
         {
             var containerItem = ContainerItems

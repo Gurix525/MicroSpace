@@ -50,6 +50,7 @@ namespace Tasks
             if (_assignedTask != null)
             {
                 _assignedTask.UnassignAstronaut();
+                DropAllItems();
                 _assignedTask.Executing.RemoveListener(OnTaskExecuting);
                 CurrentTarget = null;
                 _assignedTask = null;
@@ -106,6 +107,19 @@ namespace Tasks
             else
                 throw new NotImplementedException(
                     "Single item pick up not implemented yet");
+        }
+
+        private void DropAllItems()
+        {
+            foreach (var item in Container.ContainerItems)
+            {
+                DropItem(item);
+            }
+        }
+
+        private void DropItem(ContainerItem item)
+        {
+            throw new NotImplementedException();
         }
 
         private void AssignCurrentTarget()
