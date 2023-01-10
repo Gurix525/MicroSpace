@@ -30,13 +30,7 @@ namespace Main
         [ReadonlyInspector]
         private Rigidbody2D _focusedSatelliteRigidbody = null;
 
-        [SerializeField]
-        [ReadonlyInspector]
-        private string _currentActionMapName = "";
-
         private static bool _isSteeringEnabled = false;
-
-        private static bool _isSetupRunnning = false;
 
         #endregion Fields
 
@@ -73,16 +67,6 @@ namespace Main
         #endregion Properties
 
         #region Public
-
-        public static void SimulatePhysics()
-        {
-            Physics2D.simulationMode = SimulationMode2D.Script;
-            Physics2D.Simulate(0.000001F);
-            Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
-        }
-
-        public static void SwitchSetup() =>
-                    _isSetupRunnning ^= true;
 
         public static void SelectFocusedSatellite(GameObject satellite)
         {
@@ -319,11 +303,6 @@ namespace Main
 
         private void Update()
         {
-            _currentActionMapName = PlayerController.PlayerInput.currentActionMap.name;
-
-            if (_isSetupRunnning)
-                return;
-
             if (!_isSteeringEnabled)
                 SteerCamera();
         }
