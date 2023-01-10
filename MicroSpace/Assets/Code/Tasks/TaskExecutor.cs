@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 using ExtensionMethods;
+using System.Linq;
 
 namespace Tasks
 {
@@ -113,8 +114,12 @@ namespace Tasks
 
         private void DropAllItems()
         {
-            Vector3 velocity = transform.parent
-                .GetComponentUpInHierarchy<Rigidbody2D>().velocity;
+            Vector3 velocity = transform.parent != null ?
+                transform.parent.GetComponentUpInHierarchy<Rigidbody2D>().velocity
+                : Satellite.EnabledSatellites
+                .OrderBy(satellite => Vector2.Distance(
+                    satellite.Position, transform.position))
+                .First().GetComponent<Rigidbody2D>().velocity;
             foreach (var item in Container.ContainerItems)
             {
                 DropItem(item, velocity);

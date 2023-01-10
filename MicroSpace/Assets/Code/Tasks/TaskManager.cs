@@ -59,6 +59,7 @@ namespace Tasks
                     })
                         .Where(astronaut => astronaut.Value > 0F
                         && AreRequiredItemsAccessible(astronaut.Key, task))
+                        .OrderBy(astronaut => astronaut.Value)
                         .FirstOrDefault()
                         .Key;
                     if (astronaut != null)
