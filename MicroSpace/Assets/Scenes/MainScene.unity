@@ -291,6 +291,7 @@ GameObject:
   - component: {fileID: 98350701}
   - component: {fileID: 98350702}
   - component: {fileID: 98350703}
+  - component: {fileID: 98350704}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -310,8 +311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e65ed417998eac428096de8af86d51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _astronautPrefab: {fileID: 5644769167682127745, guid: 7a49df2b34bd8a9469536ceb94dcad2a, type: 3}
-  _navMeshPrefab: {fileID: 4996609623112498550, guid: 91653e3fdbdd82342a35f2db9b9021b2, type: 3}
   _target: {fileID: 0}
   _cameraMovingSpeed: 1
   _cameraRotationSpeed: 100
@@ -344,15 +343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e743ea3ae8463643a29eb3e6e26d71d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
-  _temporalDesignationPrefab: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
-  _cancelDesignationPrefab: {fileID: 2505317657868975611, guid: 2b67422fca0a67c49b9d1ff427c679d6, type: 3}
-  _miningDesignationPrefab: {fileID: 2505317657868975611, guid: a51bf7d682bc7834897db0254d0b5a00, type: 3}
-  _satellitePrefab: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
-  _wallPrefab: {fileID: 7440152704112946889, guid: 8b2411273005b114d8032424950d9c9b, type: 3}
-  _floorPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
-  _wallDesignationPrefab: {fileID: 7440152704112946889, guid: 4eb40b092d3fd63488ed563fe7030af1, type: 3}
-  _floorDesignationPrefab: {fileID: 6571155050859523946, guid: 74ff299408fddd649a093c564deebb24, type: 3}
   _buildingUI: {fileID: 1387751628}
   _shapePickerUI: {fileID: 1688614401}
   _modelPickerUI: {fileID: 1833859025}
@@ -637,7 +627,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906fb66dba7769845ac71ce959d31ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   _velocityText: {fileID: 1437645280}
   _buttonPrefab: {fileID: 7772782357545991682, guid: 4eea43d0bb779ad4488b4411ac2cc049, type: 3}
   _shapePicker: {fileID: 1688614401}
@@ -683,6 +672,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tasks: []
+--- !u!114 &98350704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98350691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c17e2d26fc8b66442b1173bace4a5c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cancelDesignation: {fileID: 2505317657868975611, guid: 2b67422fca0a67c49b9d1ff427c679d6, type: 3}
+  _floor: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
+  _floorDesignation: {fileID: 6571155050859523946, guid: 74ff299408fddd649a093c564deebb24, type: 3}
+  _miningDesignation: {fileID: 2505317657868975611, guid: a51bf7d682bc7834897db0254d0b5a00, type: 3}
+  _temporalDesignation: {fileID: 2505317657868975611, guid: 9b704e6e36b9e5f43a5dae0abb541c35, type: 3}
+  _wall: {fileID: 7440152704112946889, guid: 8b2411273005b114d8032424950d9c9b, type: 3}
+  _wallDesignation: {fileID: 7440152704112946889, guid: 4eb40b092d3fd63488ed563fe7030af1, type: 3}
+  _astronaut: {fileID: 5644769167682127745, guid: 7a49df2b34bd8a9469536ceb94dcad2a, type: 3}
+  _navMesh: {fileID: 4996609623112498550, guid: 91653e3fdbdd82342a35f2db9b9021b2, type: 3}
+  _obstacle: {fileID: 5302452992096335850, guid: 58cd496381a149c489d1131a2c45524e, type: 3}
+  _satellite: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
+  _massItem: {fileID: 1938864459101416298, guid: 10513411bca298b41aedae0c58f7e64a, type: 3}
+  _singleItem: {fileID: 2160315549646813676, guid: e1ca0c99d3c66d440bd3c1023d14c79d, type: 3}
+  _contextualMenuButton: {fileID: 7772782357545991682, guid: 4eea43d0bb779ad4488b4411ac2cc049, type: 3}
+  _modelButton: {fileID: 3864066361280169147, guid: ecd533d35bb306a4586e3d2510c26c17, type: 3}
+  _shapeButton: {fileID: 3864066361280169147, guid: a99c786c4816ac94485b0ea66b83a6e1, type: 3}
 --- !u!1 &439706603
 GameObject:
   m_ObjectHideFlags: 0
