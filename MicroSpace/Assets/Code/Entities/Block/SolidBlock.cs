@@ -7,13 +7,22 @@ namespace Entities
 {
     public abstract class SolidBlock : Block
     {
+        private Satellite _satellite;
+        private Rigidbody2D _rigidbody;
+
+        private Satellite Satellite =>
+            _satellite ??= this.GetComponentUpInHierarchy<Satellite>();
+
+        private Rigidbody2D Rigidbody =>
+            _rigidbody ??= Satellite.GetComponent<Rigidbody2D>();
+
         public void ExecuteMiningTask()
         {
             GetComponent<Collider2D>().enabled = false;
-            Satellite satellite = this.GetComponentUpInHierarchy<Satellite>();
+            Rigidbody2D rigidbody = Rigidbody;
             transform.parent = null;
-            satellite.UpdateSatellite();
-            SpawnMassItems(satellite.GetComponent<Rigidbody2D>().velocity);
+            Satellite.UpdateSatellite();
+            SpawnMassItems(rigidbody.velocity);
             Destroy(gameObject);
         }
 

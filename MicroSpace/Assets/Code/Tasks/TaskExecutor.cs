@@ -1,9 +1,11 @@
 using Entities;
 using Inventory;
+using Miscellaneous;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
+using ExtensionMethods;
 
 namespace Tasks
 {
@@ -111,15 +113,26 @@ namespace Tasks
 
         private void DropAllItems()
         {
+            Vector3 velocity = transform.parent
+                .GetComponentUpInHierarchy<Rigidbody2D>().velocity;
             foreach (var item in Container.ContainerItems)
             {
-                DropItem(item);
+                DropItem(item, velocity);
             }
+            Container.Clear();
         }
 
-        private void DropItem(ContainerItem item)
+        private void DropItem(ContainerItem item, Vector3 velocity)
         {
-            throw new NotImplementedException();
+            var newItem = Instantiate(
+                    Prefabs.MassItem,
+                    transform.position,
+                    Quaternion.identity,
+                    References.WorldTransform)
+                    .GetComponent<MassItem>();
+            newItem.ModelId = item.ModelId;
+            newItem.Mass = item.Mass;
+            newItem.GetComponent<Rigidbody2D>().velocity = velocity;
         }
 
         private void AssignCurrentTarget()
