@@ -1,5 +1,6 @@
 using Attributes;
 using Entities;
+using ExtensionMethods;
 using Miscellaneous;
 using System;
 using System.Collections.Generic;
@@ -36,27 +37,46 @@ namespace Tasks
 
         private void AssignAstronautsToTasks()
         {
-            if (IdleAstronauts.Count() > 0)
+            if (IdleAstronauts.Length > 0)
                 UpdateFreeTasksList();
-            foreach (var astronaut in IdleAstronauts)
-                if (FreeTasks.Count > 0)
-                {
-                    AssignAstronautToTask(astronaut);
-                }
-        }
-
-        private void AssignAstronautToTask(Astronaut astronaut)
-        {
-            for (int i = 0; i < FreeTasks.Count; i++)
+            if (FreeTasks.Count > 0)
             {
-                if (IsPathToTaskValid(astronaut, i)
-                    && AreRequiredItemsAccessible(astronaut, FreeTasks[i]))
+                for (int i = 0; i < FreeTasks.Count; i++)
                 {
-                    astronaut.GetComponent<TaskExecutor>().AssignTask(FreeTasks[i]);
-                    FreeTasks.RemoveAt(i);
-                    return;
+                    var task = FreeTasks[i];
+                    if (IdleAstronauts.Length == 0)
+                        return;
+                    var astronaut = IdleAstronauts.ToDictionary(
+                        astronaut => astronaut,
+                        astronaut =>
+                    {
+                        PathProvider.TryGetPath(
+                            astronaut.transform.position,
+                            task.Target.position,
+                            out List<Vector3> path,
+                            task.Target);
+                        return path.ToArray().GetPathLength();
+                    })
+                        .Where(astronaut => astronaut.Value > 0F
+                        && AreRequiredItemsAccessible(astronaut.Key, task))
+                        .FirstOrDefault()
+                        .Key;
+                    if (astronaut != null)
+                    {
+                        AssignAstronautToTask(astronaut, task);
+                        i--;
+                    }
                 }
             }
+        }
+
+        private void AssignAstronautToTask(Astronaut astronaut, Task task)
+        {
+            astronaut.GetComponent<TaskExecutor>().AssignTask(task);
+            FreeTasks.Remove(task);
+            var idleAstronauts = IdleAstronauts.ToList();
+            idleAstronauts.Remove(astronaut);
+            IdleAstronauts = idleAstronauts.ToArray();
         }
 
         private bool AreRequiredItemsAccessible(Astronaut astronaut, Task task)

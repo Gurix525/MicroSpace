@@ -11,6 +11,8 @@ namespace ExtensionMethods
     {
         public static float GetPathLength(this Vector3[] path)
         {
+            if (path == null)
+                return 0;
             float length = 0;
             for (int i = 0; i < path.Length - 1; i++)
             {
