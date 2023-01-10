@@ -10,9 +10,12 @@ namespace Tasks
 {
     public static class ItemFinder
     {
-        public static Transform FindClosestItem(int modelId, Vector3 startPosition)
+        public static Transform FindClosestItem(
+            int modelId,
+            Vector3 startPosition,
+            bool isUnoccupied = true)
         {
-            return Item.EnabledItems
+            var item = Item.EnabledItems
                 .Where(item => item.ModelId == modelId)
                 .ToDictionary(item => item, item =>
                 {
@@ -24,9 +27,18 @@ namespace Tasks
                     return path;
                 })
                 .Where(item => item.Value != null)
+                .Where(item =>
+                {
+                    if (isUnoccupied)
+                        return !item.Key.IsOccupied;
+                    return true;
+                })
                 .OrderBy(item => item.Value.ToArray().GetPathLength())
                 .FirstOrDefault()
-                .Key.transform;
+                .Key;
+            return item != null ?
+                item.transform
+                : null;
         }
 
         public static bool AreItemsAvailable(KeyValuePair<int, float>[] items)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Attributes;
 using UnityEngine;
 
 namespace Entities
@@ -8,6 +9,9 @@ namespace Entities
         private ItemType _itemType;
 
         public abstract int ModelId { get; set; }
+
+        [field: SerializeField, ReadonlyInspector]
+        public bool IsOccupied { get; set; }
 
         public static List<Item> EnabledItems { get; } = new();
 

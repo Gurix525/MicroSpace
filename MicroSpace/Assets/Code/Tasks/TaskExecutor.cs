@@ -144,18 +144,28 @@ namespace Tasks
         {
             if (HasRequiredItems(out (int, float) nextMissingItem))
             {
+                MarkItemOccupied(CurrentTarget, false);
                 _targetType = TargetType.TaskExecution;
                 CurrentTarget = _assignedTask.Target;
             }
             else
             {
                 _targetType = TargetType.ItemPickUp;
+                MarkItemOccupied(CurrentTarget, false);
                 CurrentTarget = ItemFinder.FindClosestItem(
                     nextMissingItem.Item1,
                     transform.position);
                 if (CurrentTarget == null)
                     UnassignTask();
             }
+            MarkItemOccupied(CurrentTarget, true);
+        }
+
+        private void MarkItemOccupied(Transform itemTransform, bool state)
+        {
+            if (itemTransform != null)
+                if (itemTransform.TryGetComponent(out Entities.Item item))
+                    item.IsOccupied = state;
         }
 
         private bool HasRequiredItems(out (int, float) nextMissingItem)
