@@ -207,7 +207,7 @@ namespace Main
         private Block FindClosestBlock(
             GameObject designation, Vector3 searchStartPosition)
         {
-            var num = References.WorldTransform.GetComponentsInChildren<Block>(false)
+            var num = References.World.GetComponentsInChildren<Block>(false)
                 .Where(x => x != designation?.GetComponent<BlockDesignation>())
                 .Where(x => x.Parent.GetComponent<Satellite>() != null);
             var closestWall = num.Count() > 0 ?
@@ -240,10 +240,12 @@ namespace Main
             }
             else
             {
-                designation.transform.parent = References.WorldTransform;
+                designation.transform.parent = References.World;
                 designation.transform.position = targetPosition;
                 designation.transform.localEulerAngles =
-                    GameManager.FocusedSatelliteRotation.eulerAngles +
+                    References.FocusedSatellite != null ?
+                    References.FocusedSatellite.transform.eulerAngles
+                    + new Vector3(0, 0, _prefabRotation) :
                     new Vector3(0, 0, _prefabRotation);
             }
         }
@@ -253,8 +255,10 @@ namespace Main
             _currentDesignation = Instantiate(
                 Prefabs.TemporalDesignation,
                 GetMouseWorldPosition(),
-                GameManager.FocusedSatelliteRotation,
-                References.WorldTransform);
+                References.FocusedSatellite != null ?
+                References.FocusedSatellite.transform.rotation :
+                Quaternion.identity,
+                References.World);
             _currentDesignation.GetComponent<TemporalDesignation>()
                 .TemporalBlockType = _buildingMode switch
                 {
@@ -472,9 +476,11 @@ namespace Main
                     Prefabs.Satellite,
                     _temporalParent.position,
                     Quaternion.identity,
-                    References.WorldTransform);
+                    References.World);
                 satellite.GetComponent<Rigidbody2D>().velocity =
-                    GameManager.FocusedSatelliteVelocity;
+                    References.FocusedSatellite != null ?
+                    References.FocusedSatellite.velocity :
+                    Vector2.zero;
                 TransferChildren(_temporalParent, satellite.transform);
                 Destroy(_temporalParent.gameObject);
                 _temporalParent = satellite.transform;

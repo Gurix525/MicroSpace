@@ -34,7 +34,7 @@ namespace Entities
                     Prefabs.MassItem,
                     transform.position,
                     transform.rotation,
-                    References.WorldTransform)
+                    References.World)
                     .GetComponent<MassItem>();
                 newItem.ModelId = item.Key.Id;
                 newItem.Mass = item.Value;

@@ -37,7 +37,9 @@ namespace Main
                 .Select(astronaut => (SerializableAstronaut)astronaut)
                 .ToList();
             NextId = IdManager.NextId;
-            FocusedSatelliteId = GameManager.FocusedSatelliteId;
+            FocusedSatelliteId = References.FocusedSatellite != null ?
+                References.FocusedSatellite.GetComponent<Satellite>().Id :
+                0;
         }
     }
 }

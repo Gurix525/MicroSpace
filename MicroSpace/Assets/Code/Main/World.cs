@@ -5,6 +5,6 @@ public class World : MonoBehaviour
 {
     private void Awake()
     {
-        References.SetWorldTransform(transform);
+        References.World = transform;
     }
 }

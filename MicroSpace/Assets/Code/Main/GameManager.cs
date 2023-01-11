@@ -7,6 +7,7 @@ using ScriptableObjects;
 using static UnityEngine.InputSystem.InputAction;
 using Attributes;
 using System.Collections.Generic;
+using Miscellaneous;
 
 namespace Main
 {
@@ -26,10 +27,6 @@ namespace Main
         [SerializeField]
         private float _cameraRotationSpeed = 1F;
 
-        [SerializeField]
-        [ReadonlyInspector]
-        private Rigidbody2D _focusedSatelliteRigidbody = null;
-
         private static bool _isSteeringEnabled = false;
 
         #endregion Fields
@@ -44,26 +41,6 @@ namespace Main
             private set => _speedometer = value;
         }
 
-        public static Transform FocusedSatellite =>
-            Instance._focusedSatelliteRigidbody != null ?
-            Instance._focusedSatelliteRigidbody.transform :
-            null;
-
-        public static int FocusedSatelliteId =>
-            Instance._focusedSatelliteRigidbody != null ?
-            Instance._focusedSatelliteRigidbody.GetComponent<Satellite>().Id :
-            0;
-
-        public static Vector2 FocusedSatelliteVelocity =>
-            Instance._focusedSatelliteRigidbody != null ?
-            Instance._focusedSatelliteRigidbody.velocity :
-            Vector2.zero;
-
-        public static Quaternion FocusedSatelliteRotation =>
-            Instance._focusedSatelliteRigidbody != null ?
-            Instance._focusedSatelliteRigidbody.transform.rotation :
-            Quaternion.identity;
-
         #endregion Properties
 
         #region Public
@@ -72,7 +49,7 @@ namespace Main
         {
             if (satellite != null)
             {
-                Instance._focusedSatelliteRigidbody = satellite.GetComponent<Rigidbody2D>();
+                References.FocusedSatellite = satellite.GetComponent<Rigidbody2D>();
                 AlignCameraToFocusedSatellite(new());
             }
         }
@@ -91,18 +68,19 @@ namespace Main
 
         private void SteerSatellite()
         {
+            var rigidbody = References.FocusedSatellite;
             Vector2 direction = PlayerController.SteeringDirection
                 .ReadValue<Vector2>()
                 .RotateAroundPivot(
                     Vector2.zero,
-                    _focusedSatelliteRigidbody.transform.localEulerAngles.z);
-            float speed = 5 * _focusedSatelliteRigidbody.mass;
-            float rotationSpeed = _focusedSatelliteRigidbody.inertia;
+                    rigidbody.transform.localEulerAngles.z);
+            float speed = 5 * rigidbody.mass;
+            float rotationSpeed = rigidbody.inertia;
 
-            _focusedSatelliteRigidbody.AddForce(
+            rigidbody.AddForce(
                 direction * speed);
 
-            _focusedSatelliteRigidbody.AddTorque(PlayerController.SteeringRotation
+            rigidbody.AddTorque(PlayerController.SteeringRotation
                 .ReadValue<float>() * rotationSpeed);
 
             if (PlayerController.SteeringAdjustSpeed.IsPressed())
@@ -130,7 +108,7 @@ namespace Main
         {
             Vector2 desiredVelocity = _target != null ?
                 _target.velocity : Vector2.zero;
-            var currentVelocity = _focusedSatelliteRigidbody.velocity;
+            var currentVelocity = References.FocusedSatellite.velocity;
             float x = 0;
             float y = 0;
 
@@ -147,14 +125,15 @@ namespace Main
             else
                 y = desiredVelocity.y - currentVelocity.y;
 
-            _focusedSatelliteRigidbody.velocity += new Vector2(x, y);
+            References.FocusedSatellite.velocity += new Vector2(x, y);
         }
 
         private void UpdateSpeedometer()
         {
+            Rigidbody2D focusedRigidbody = References.FocusedSatellite;
             Speedometer = _target == null ?
-                _focusedSatelliteRigidbody.velocity.magnitude :
-                Math.Abs((_focusedSatelliteRigidbody.velocity -
+                focusedRigidbody.velocity.magnitude :
+                Math.Abs((focusedRigidbody.velocity -
                 _target.velocity).magnitude);
         }
 
@@ -189,7 +168,7 @@ namespace Main
         {
             Satellite.ForEach(
                 satellite => satellite.ActivateOrDeactivateChildren(
-                _focusedSatelliteRigidbody.transform));
+                References.FocusedSatellite.transform));
         }
 
         private void EnableSteering(CallbackContext context)
@@ -225,12 +204,13 @@ namespace Main
 
         public static void AlignCameraToFocusedSatellite(CallbackContext context)
         {
-            if (Instance._focusedSatelliteRigidbody == null)
+            if (References.FocusedSatellite == null)
                 return;
-            Camera.main.transform.parent = Instance._focusedSatelliteRigidbody.transform;
+            Transform focusedSatellite = References.FocusedSatellite.transform;
+            Camera.main.transform.parent = focusedSatellite;
             Camera.main.transform.rotation =
-                Instance._focusedSatelliteRigidbody.transform.rotation;
-            var satellitePos = Instance._focusedSatelliteRigidbody.position;
+                focusedSatellite.rotation;
+            var satellitePos = focusedSatellite.position;
             Camera.main.transform.localPosition = new Vector3(0, 0, -10);
         }
 
@@ -309,7 +289,7 @@ namespace Main
 
         private void FixedUpdate()
         {
-            if (_focusedSatelliteRigidbody != null)
+            if (References.FocusedSatellite != null)
             {
                 if (_isSteeringEnabled)
                     SteerSatellite();
@@ -339,7 +319,7 @@ namespace Main
 
         private void SetFirstFocusedSatellite(Satellite satellite)
         {
-            _focusedSatelliteRigidbody ??= satellite.GetComponent<Rigidbody2D>();
+            References.FocusedSatellite ??= satellite.GetComponent<Rigidbody2D>();
             Satellite.FirstSatelliteCreated.RemoveAllListeners();
         }
 

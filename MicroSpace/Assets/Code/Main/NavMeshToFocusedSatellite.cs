@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Miscellaneous;
 using UnityEngine;
 
 namespace Main
@@ -8,10 +9,11 @@ namespace Main
     {
         private void Update()
         {
-            if (GameManager.FocusedSatellite != null)
-                if (transform.parent != GameManager.FocusedSatellite)
+            Transform focusedSatellite = References.FocusedSatellite.transform;
+            if (focusedSatellite != null)
+                if (transform.parent != focusedSatellite)
                 {
-                    transform.parent = GameManager.FocusedSatellite;
+                    transform.parent = focusedSatellite;
                     transform.localPosition = Vector3.zero;
                 }
         }

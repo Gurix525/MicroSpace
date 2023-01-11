@@ -268,7 +268,7 @@ namespace Main
         private static void InstantiateSatellite(out GameObject satellite)
         {
             satellite = Instantiate(
-                Prefabs.Satellite, References.WorldTransform);
+                Prefabs.Satellite, References.World);
         }
 
         private static Save GetSaveFromJson(string saveJson)
@@ -380,7 +380,7 @@ namespace Main
         private static void ClearWorld()
         {
             Camera.main.transform.parent = null;
-            var world = References.WorldTransform;
+            var world = References.World;
             for (int i = 0; i < world.childCount; i++)
             {
                 Transform child = world.GetChild(i);

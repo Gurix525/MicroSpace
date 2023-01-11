@@ -133,7 +133,7 @@ namespace Tasks
                     Prefabs.MassItem,
                     transform.position,
                     Quaternion.identity,
-                    References.WorldTransform)
+                    References.World)
                     .GetComponent<MassItem>();
             newItem.ModelId = item.ModelId;
             newItem.Mass = item.Mass;
