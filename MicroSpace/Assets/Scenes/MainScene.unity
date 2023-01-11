@@ -311,11 +311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e65ed417998eac428096de8af86d51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 0}
   _cameraMovingSpeed: 1
   _cameraRotationSpeed: 100
-  _focusedSatelliteRigidbody: {fileID: 0}
-  _currentActionMapName: 
 --- !u!4 &98350693
 Transform:
   m_ObjectHideFlags: 0
@@ -627,7 +624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906fb66dba7769845ac71ce959d31ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _velocityText: {fileID: 1437645280}
   _buttonPrefab: {fileID: 7772782357545991682, guid: 4eea43d0bb779ad4488b4411ac2cc049, type: 3}
   _shapePicker: {fileID: 1688614401}
   _modelPicker: {fileID: 1833859025}
@@ -1338,6 +1334,7 @@ GameObject:
   - component: {fileID: 1437645279}
   - component: {fileID: 1437645281}
   - component: {fileID: 1437645280}
+  - component: {fileID: 1437645282}
   m_Layer: 5
   m_Name: VelocityText
   m_TagString: Untagged
@@ -1462,6 +1459,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437645278}
   m_CullTransparentMesh: 1
+--- !u!114 &1437645282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437645278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d550d59649ebb746a59515bf7544cb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1528886406
 GameObject:
   m_ObjectHideFlags: 0

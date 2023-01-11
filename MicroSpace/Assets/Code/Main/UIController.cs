@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 using ScriptableObjects;
+using Miscellaneous;
 
 namespace Main
 {
@@ -15,22 +16,10 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private TextMeshProUGUI _velocityText;
-
-        [SerializeField]
-        private GameObject _buttonPrefab;
-
-        [SerializeField]
         private GameObject _shapePicker;
 
         [SerializeField]
         private GameObject _modelPicker;
-
-        [SerializeField]
-        private GameObject _shapeButtonPrefab;
-
-        [SerializeField]
-        private GameObject _modelButtonPrefab;
 
         [SerializeField]
         private GameObject _contextualMenu;
@@ -63,7 +52,7 @@ namespace Main
             foreach (Shape shape in Shape.Shapes)
             {
                 GameObject button = Instantiate(
-                    _shapeButtonPrefab, _shapePicker.transform);
+                    Prefabs.ShapeButton, _shapePicker.transform);
                 button.transform.GetChild(0).GetComponent<Image>().sprite = shape.Sprite;
                 button.GetComponent<Button>().onClick
                     .AddListener(() => InvokeShapeChangedEvent(shape.Id));
@@ -75,7 +64,7 @@ namespace Main
             foreach (BlockModel model in BlockModel.Models)
             {
                 GameObject button = Instantiate(
-                    _modelButtonPrefab, _modelPicker.transform);
+                    Prefabs.ModelButton, _modelPicker.transform);
                 button.transform.GetChild(0).GetComponent<Image>().sprite = model.Sprite;
                 button.GetComponent<Button>().onClick
                     .AddListener(() => InvokeModelChangedEvent(model.Id));
@@ -124,7 +113,9 @@ namespace Main
 
         private void CreateButton(UnityAction action, string displayText)
         {
-            GameObject button = Instantiate(_buttonPrefab, _contextualMenu.transform);
+            GameObject button = Instantiate(
+                Prefabs.ContextualMenuButton,
+                _contextualMenu.transform);
             button.GetComponent<Button>().onClick.AddListener(action);
             button.transform.GetChild(0)
                 .GetComponent<TextMeshProUGUI>().text = displayText;
@@ -133,11 +124,6 @@ namespace Main
         private void CloseContextualMenu()
         {
             _contextualMenu.SetActive(false);
-        }
-
-        private void UpdateSpeedometer()
-        {
-            _velocityText.text = $"{GameManager.Speedometer:0.000} m/s";
         }
 
         private void SubscribeToInputEvents()
@@ -178,11 +164,6 @@ namespace Main
         private void Update()
         {
             CheckIfPointerIsOverUI();
-        }
-
-        private void FixedUpdate()
-        {
-            UpdateSpeedometer();
         }
 
         private void OnDisable()

@@ -16,12 +16,6 @@ namespace Main
         #region Fields
 
         [SerializeField]
-        private Rigidbody2D _target;
-
-        [SerializeField]
-        private static float _speedometer;
-
-        [SerializeField]
         private float _cameraMovingSpeed = 1F;
 
         [SerializeField]
@@ -34,12 +28,6 @@ namespace Main
         #region Properties
 
         public static GameManager Instance { get; private set; }
-
-        public static float Speedometer
-        {
-            get => _speedometer;
-            private set => _speedometer = value;
-        }
 
         #endregion Properties
 
@@ -57,9 +45,9 @@ namespace Main
         public static void SelectTarget(GameObject target)
         {
             if (target != null)
-                Instance._target = target.GetComponent<Rigidbody2D>();
+                References.Target = target.GetComponent<Rigidbody2D>();
             else
-                Instance._target = null;
+                References.Target = null;
         }
 
         #endregion Public
@@ -106,8 +94,8 @@ namespace Main
 
         private void AdjustFocusedSatelliteSpeed(float speed)
         {
-            Vector2 desiredVelocity = _target != null ?
-                _target.velocity : Vector2.zero;
+            Vector2 desiredVelocity = References.Target != null ?
+                References.Target.velocity : Vector2.zero;
             var currentVelocity = References.FocusedSatellite.velocity;
             float x = 0;
             float y = 0;
@@ -126,15 +114,6 @@ namespace Main
                 y = desiredVelocity.y - currentVelocity.y;
 
             References.FocusedSatellite.velocity += new Vector2(x, y);
-        }
-
-        private void UpdateSpeedometer()
-        {
-            Rigidbody2D focusedRigidbody = References.FocusedSatellite;
-            Speedometer = _target == null ?
-                focusedRigidbody.velocity.magnitude :
-                Math.Abs((focusedRigidbody.velocity -
-                _target.velocity).magnitude);
         }
 
         private void SwitchPause(CallbackContext context)
@@ -293,7 +272,6 @@ namespace Main
             {
                 if (_isSteeringEnabled)
                     SteerSatellite();
-                UpdateSpeedometer();
                 ActivateOrDeactivateSatellites();
             }
         }
