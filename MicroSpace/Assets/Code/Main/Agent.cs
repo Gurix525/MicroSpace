@@ -87,7 +87,7 @@ namespace Main
         {
             if (_obstacleRigidbody == null)
             {
-                var closestSatellite = Satellite.Satellites.Aggregate((a, b) =>
+                var closestSatellite = Satellite.EnabledSatellites.Aggregate((a, b) =>
                 {
                     if (Vector2.Distance(
                         a.transform.position, transform.position)

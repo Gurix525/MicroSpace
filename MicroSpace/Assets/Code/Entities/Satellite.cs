@@ -74,7 +74,7 @@ namespace Entities
             UpdateFloors();
             UpdateProperties();
             if (IsSatelliteEmpty())
-                DestroySatellite();
+                DestroySelf();
         }
 
         public static void ForEach(Action<Satellite> action)
@@ -85,10 +85,38 @@ namespace Entities
 
         #endregion Public Methods
 
+        #region Unity
+
+        private new void Awake()
+        {
+            base.Awake();
+            AddSelfToList();
+        }
+
+        private void OnEnable()
+        {
+            if (!EnabledSatellites.Contains(this))
+                EnabledSatellites.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            if (EnabledSatellites.Contains(this))
+                EnabledSatellites.Remove(this);
+        }
+
+        private void OnDestroy()
+        {
+            RemoveSelfFromList();
+        }
+
+        #endregion Unity
+
         #region Private Methods
 
-        private void DestroySatellite()
+        private void DestroySelf()
         {
+            RemoveSelfFromList();
             SetAstronautsFree();
             SetCameraFree();
             Destroy(gameObject);
@@ -291,47 +319,24 @@ namespace Entities
             return block is TemporalDesignation;
         }
 
-        private void AddSatelliteToList()
+        private void AddSelfToList()
         {
-            Satellites.Add(this);
-            EnabledSatellites.Add(this);
+            if (!Satellites.Contains(this))
+                Satellites.Add(this);
+            if (!EnabledSatellites.Contains(this))
+                EnabledSatellites.Add(this);
             if (Satellites.Count == 1)
                 FirstSatelliteCreated.Invoke(this);
         }
 
-        private void RemoveSatelliteFromList()
+        private void RemoveSelfFromList()
         {
-            Satellites.Remove(this);
-        }
-
-        #endregion Private Methods
-
-        #region Unity
-
-        private new void Awake()
-        {
-            base.Awake();
-            AddSatelliteToList();
-        }
-
-        private void OnEnable()
-        {
-            if (!EnabledSatellites.Contains(this))
-                EnabledSatellites.Add(this);
-        }
-
-        private void OnDisable()
-        {
+            if (Satellites.Contains(this))
+                Satellites.Remove(this);
             if (EnabledSatellites.Contains(this))
                 EnabledSatellites.Remove(this);
         }
 
-        private void OnDestroy()
-        {
-            SetAstronautsFree();
-            RemoveSatelliteFromList();
-        }
-
-        #endregion Unity
+        #endregion Private Methods
     }
 }

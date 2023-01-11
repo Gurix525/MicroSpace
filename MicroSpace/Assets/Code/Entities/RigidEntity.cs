@@ -19,13 +19,11 @@ namespace Entities
 
         public static List<RigidEntity> RigidEntities { get; } = new();
 
-        public static List<RigidEntity> EnabledRigidEntities { get; } = new();
-
         #endregion Properties
 
         #region Public
 
-        public void DestroyRigidEntity()
+        public virtual void DestroySelf()
         {
             SetAstronautsFree();
             Destroy(gameObject);
@@ -49,7 +47,6 @@ namespace Entities
 
         private void OnDestroy()
         {
-            SetAstronautsFree();
             RemoveRigidEntityFromList();
         }
 

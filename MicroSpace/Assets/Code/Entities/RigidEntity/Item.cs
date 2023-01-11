@@ -19,6 +19,12 @@ namespace Entities
 
         public static List<SingleItem> EnabledSingleItems { get; } = new();
 
+        public override void DestroySelf()
+        {
+            RemoveSelfFromList();
+            base.DestroySelf();
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -34,20 +40,44 @@ namespace Entities
 
         protected void OnEnable()
         {
-            EnabledItems.Add(this);
-            if (_itemType == ItemType.MassItem)
-                EnabledMassItems.Add((MassItem)this);
-            else
-                EnabledSingleItems.Add((SingleItem)this);
+            AddSelfToList();
         }
 
         private void OnDisable()
         {
-            EnabledItems.Remove(this);
+            RemoveSelfFromList();
+        }
+
+        private void AddSelfToList()
+        {
+            if (!EnabledItems.Contains(this))
+                EnabledItems.Add(this);
             if (_itemType == ItemType.MassItem)
-                EnabledMassItems.Remove((MassItem)this);
+            {
+                if (!EnabledMassItems.Contains((MassItem)this))
+                    EnabledMassItems.Add((MassItem)this);
+            }
             else
-                EnabledSingleItems.Remove((SingleItem)this);
+            {
+                if (!EnabledSingleItems.Contains((SingleItem)this))
+                    EnabledSingleItems.Add((SingleItem)this);
+            }
+        }
+
+        private void RemoveSelfFromList()
+        {
+            if (EnabledItems.Contains(this))
+                EnabledItems.Remove(this);
+            if (_itemType == ItemType.MassItem)
+            {
+                if (EnabledMassItems.Contains((MassItem)this))
+                    EnabledMassItems.Remove((MassItem)this);
+            }
+            else
+            {
+                if (EnabledSingleItems.Contains((SingleItem)this))
+                    EnabledSingleItems.Remove((SingleItem)this);
+            }
         }
     }
 }

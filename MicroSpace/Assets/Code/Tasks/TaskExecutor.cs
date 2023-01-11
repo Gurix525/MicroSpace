@@ -105,7 +105,7 @@ namespace Tasks
             {
                 var massItem = (MassItem)targetItem;
                 Container.AddItem(massItem.ModelId, massItem.Mass);
-                targetItem.DestroyRigidEntity();
+                targetItem.DestroySelf();
             }
             else
                 throw new NotImplementedException(
