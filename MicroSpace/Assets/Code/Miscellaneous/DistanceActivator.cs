@@ -3,8 +3,23 @@ using UnityEngine;
 
 public class DistanceActivator : MonoBehaviour
 {
+    #region Fields
+
     private bool _isSatelliteLoaded = true;
     private static readonly float _satelliteUnloadDistance = 200F;
+
+    #endregion Fields
+
+    #region Unity
+
+    private void FixedUpdate()
+    {
+        ActivateOrDeactivateChildren();
+    }
+
+    #endregion Unity
+
+    #region Private
 
     public void ActivateOrDeactivateChildren()
     {
@@ -26,4 +41,6 @@ public class DistanceActivator : MonoBehaviour
         return Vector2.Distance(transform.position, References.FocusedSatellite.position) >
             _satelliteUnloadDistance;
     }
+
+    #endregion Private
 }
