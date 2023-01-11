@@ -32,11 +32,7 @@ namespace Entities
 
         private List<GameObject> _obstacles = new();
 
-        private bool _isSatelliteLoaded = true;
-
         private Rigidbody2D _rigidbody;
-
-        private static readonly float _satelliteUnloadDistance = 200F;
 
         #endregion Fields
 
@@ -81,14 +77,6 @@ namespace Entities
                 DestroySatellite();
         }
 
-        public void ActivateOrDeactivateChildren(Transform focusedSatellite)
-        {
-            if (IsSatelliteDistantFromGivenSatellite(focusedSatellite) && _isSatelliteLoaded)
-                SetSatelliteChildrenActive(false);
-            else if (!IsSatelliteDistantFromGivenSatellite(focusedSatellite) && !_isSatelliteLoaded)
-                SetSatelliteChildrenActive(true);
-        }
-
         public static void ForEach(Action<Satellite> action)
         {
             foreach (Satellite satellite in Satellites)
@@ -131,23 +119,6 @@ namespace Entities
             Position = transform.position;
             Rotation = transform.eulerAngles.z;
             Velocity = GetComponent<Rigidbody2D>().velocity;
-        }
-
-        private void SetSatelliteChildrenActive(bool state)
-        {
-            foreach (Transform child in transform)
-                child.gameObject.SetActive(state);
-            if (state && !EnabledSatellites.Contains(this))
-                EnabledSatellites.Add(this);
-            else if (!state && EnabledSatellites.Contains(this))
-                EnabledSatellites.Remove(this);
-            _isSatelliteLoaded = state;
-        }
-
-        private bool IsSatelliteDistantFromGivenSatellite(Transform satellite)
-        {
-            return Vector2.Distance(transform.position, satellite.position) >
-                _satelliteUnloadDistance;
         }
 
         private void UpdateBlocks()
@@ -341,6 +312,18 @@ namespace Entities
         {
             base.Awake();
             AddSatelliteToList();
+        }
+
+        private void OnEnable()
+        {
+            if (!EnabledSatellites.Contains(this))
+                EnabledSatellites.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            if (EnabledSatellites.Contains(this))
+                EnabledSatellites.Remove(this);
         }
 
         private void OnDestroy()

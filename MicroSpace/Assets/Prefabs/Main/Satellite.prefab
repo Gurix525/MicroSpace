@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8310065123803728136}
   - component: {fileID: 8310065123803728151}
   - component: {fileID: 4542050502911274631}
+  - component: {fileID: 4759216449658040579}
   m_Layer: 0
   m_Name: Satellite
   m_TagString: Untagged
@@ -45,8 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120e8bc0890221840b27d581f25eca50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _obstaclePrefab: {fileID: 5302452992096335850, guid: 58cd496381a149c489d1131a2c45524e, type: 3}
-  _id: 0
+  <Id>k__BackingField: 0
   _blocks: []
   _position: {x: 0, y: 0}
   _rotation: 0
@@ -72,3 +72,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4759216449658040579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8310065123803728149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4df75a10f764e44a85020d75774c91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

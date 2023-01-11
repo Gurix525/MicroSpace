@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -2357497286596040050}
   - component: {fileID: 382821134214087591}
   - component: {fileID: -1318484637211757363}
+  - component: {fileID: 2137405331803737093}
   m_Layer: 8
   m_Name: MassItem
   m_TagString: Untagged
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 870505337
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 98434c9b903b18f458893d5a369222bf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -167,5 +168,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 0
-  <ItemModel>k__BackingField: 0
+  <IsOccupied>k__BackingField: 0
+  <ModelId>k__BackingField: 0
   <Mass>k__BackingField: 0
+--- !u!114 &2137405331803737093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938864459101416298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4df75a10f764e44a85020d75774c91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

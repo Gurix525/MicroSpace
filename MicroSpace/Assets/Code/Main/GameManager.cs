@@ -25,12 +25,6 @@ namespace Main
 
         #endregion Fields
 
-        #region Properties
-
-        public static GameManager Instance { get; private set; }
-
-        #endregion Properties
-
         #region Public
 
         public static void SelectFocusedSatellite(GameObject satellite)
@@ -143,13 +137,6 @@ namespace Main
             SaveManager.LoadGame();
         }
 
-        private void ActivateOrDeactivateSatellites()
-        {
-            Satellite.ForEach(
-                satellite => satellite.ActivateOrDeactivateChildren(
-                References.FocusedSatellite.transform));
-        }
-
         private void EnableSteering(CallbackContext context)
         {
             PlayerController.PlayerInput.SwitchCurrentActionMap("Steering");
@@ -257,7 +244,6 @@ namespace Main
         private void Awake()
         {
             Satellite.FirstSatelliteCreated.AddListener(SetFirstFocusedSatellite);
-            Instance = this;
         }
 
         private void Update()
@@ -272,7 +258,6 @@ namespace Main
             {
                 if (_isSteeringEnabled)
                     SteerSatellite();
-                ActivateOrDeactivateSatellites();
             }
         }
 
