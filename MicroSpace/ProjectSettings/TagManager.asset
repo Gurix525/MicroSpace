@@ -16,7 +16,7 @@ TagManager:
   - Walls
   - Floors
   - RigidEntities
-  - 
+  - Astronauts
   - 
   - 
   - 
@@ -49,16 +49,25 @@ TagManager:
   - name: FloorDesignations
     uniqueID: 1229291131
     locked: 0
-  - name: Floors
+  - name: FloorsDark
+    uniqueID: 2839387517
+    locked: 0
+  - name: FloorsLight
     uniqueID: 2670858447
     locked: 0
   - name: WallDesignations
     uniqueID: 3655477331
     locked: 0
-  - name: Walls
+  - name: WallsDark
+    uniqueID: 3056916067
+    locked: 0
+  - name: WallsLight
     uniqueID: 294175409
     locked: 0
-  - name: RigidEntities
+  - name: RigidEntitiesDark
+    uniqueID: 3755388353
+    locked: 0
+  - name: RigidEntitiesLight
     uniqueID: 870505337
     locked: 0
   - name: Astronauts
