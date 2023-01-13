@@ -303,7 +303,7 @@ namespace Main
             block.GetComponent<Block>().ModelId = _blockModel.Id;
             if (block.TryGetComponent(out SpriteRenderer renderer))
             {
-                renderer.sprite = _blockModel.Sprite;
+                renderer.sprite = _blockModel.Tile.sprite;
             }
         }
 

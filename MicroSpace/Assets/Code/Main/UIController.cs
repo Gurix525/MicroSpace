@@ -65,7 +65,7 @@ namespace Main
             {
                 GameObject button = Instantiate(
                     Prefabs.ModelButton, _modelPicker.transform);
-                button.transform.GetChild(0).GetComponent<Image>().sprite = model.Sprite;
+                button.transform.GetChild(0).GetComponent<Image>().sprite = model.Tile.sprite;
                 button.GetComponent<Button>().onClick
                     .AddListener(() => InvokeModelChangedEvent(model.Id));
             }

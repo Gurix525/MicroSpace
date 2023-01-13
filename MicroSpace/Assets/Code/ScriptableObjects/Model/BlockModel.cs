@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace ScriptableObjects
 {
@@ -15,7 +16,7 @@ namespace ScriptableObjects
         private int _id;
 
         [SerializeField]
-        private Sprite _sprite;
+        private Tile _tile;
 
         [Header("Przedmioty wymagane do wykonania polecenia")]
         [SerializeField]
@@ -33,7 +34,7 @@ namespace ScriptableObjects
 
         public int Id => _id;
 
-        public Sprite Sprite => _sprite;
+        public Tile Tile => _tile;
 
         public ItemModel[] ItemModels => _itemModels;
 
@@ -56,7 +57,7 @@ namespace ScriptableObjects
 
         public override string ToString()
         {
-            return $"{_id} : {name} : {_sprite.name}";
+            return $"{_id} : {name} : {_tile.name}";
         }
 
         #endregion Public
@@ -114,8 +115,8 @@ namespace ScriptableObjects
         {
             return name == string.Empty ||
                 name == null ||
-                _sprite == null ||
-                _sprite.name == "BlockDefault";
+                _tile == null ||
+                _tile.name == "BlockDefault";
         }
 
         #endregion Private

@@ -7,6 +7,8 @@ using System;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using ScriptableObjects;
 
 namespace Entities
 {
@@ -29,6 +31,12 @@ namespace Entities
         [SerializeField]
         [ReadonlyInspector]
         private Vector2 _velocity;
+
+        [SerializeField]
+        private Tilemap _floorsTilemap;
+
+        [SerializeField]
+        private Tilemap _wallsTilemap;
 
         private List<GameObject> _obstacles = new();
 
@@ -73,6 +81,7 @@ namespace Entities
             UpdateObstacles();
             UpdateFloors();
             UpdateProperties();
+            UpdateTilemaps();
             if (IsSatelliteEmpty())
                 DestroySelf();
         }
@@ -113,6 +122,35 @@ namespace Entities
         #endregion Unity
 
         #region Private Methods
+
+        private void UpdateTilemaps()
+        {
+            UpdateWallsTilemap();
+            UpdateFloorsTilemap();
+        }
+
+        private void UpdateWallsTilemap()
+        {
+            _wallsTilemap.ClearAllTiles();
+            foreach (var wall in Walls)
+            {
+                _wallsTilemap.SetTile(
+                    Vector3Int.RoundToInt(wall.LocalPosition),
+                    BlockModel.GetModel(wall.ModelId).Tile);
+            }
+        }
+
+        private void UpdateFloorsTilemap()
+        {
+            _floorsTilemap.ClearAllTiles();
+            _floorsTilemap.ClearAllTiles();
+            foreach (var floor in Floors)
+            {
+                _floorsTilemap.SetTile(
+                    Vector3Int.RoundToInt(floor.LocalPosition),
+                    BlockModel.GetModel(floor.ModelId).Tile);
+            }
+        }
 
         private void DestroySelf()
         {

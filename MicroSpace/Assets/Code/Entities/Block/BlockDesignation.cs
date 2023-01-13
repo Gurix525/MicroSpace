@@ -105,7 +105,7 @@ namespace Entities
             block.ModelId = modelId;
             if (block.TryGetComponent(out SpriteRenderer renderer))
             {
-                renderer.sprite = BlockModel.GetModel(modelId).Sprite;
+                renderer.sprite = BlockModel.GetModel(modelId).Tile.sprite;
             }
         }
 
