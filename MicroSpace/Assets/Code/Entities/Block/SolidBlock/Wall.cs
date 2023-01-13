@@ -35,12 +35,6 @@ namespace Entities
             AddSelfToList();
         }
 
-        protected override void FixedUpdate()
-        {
-            base.FixedUpdate();
-            _spriteMask.sortingLayerName = _renderer.sortingLayerName;
-        }
-
         private void OnDisable()
         {
             RemoveSelfFromList();
