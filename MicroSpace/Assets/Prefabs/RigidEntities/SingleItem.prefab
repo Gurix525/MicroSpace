@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 0
+  _light: {fileID: 1831700682520835943}
   <IsOccupied>k__BackingField: 0
   <Item>k__BackingField:
     <ModelId>k__BackingField: 0

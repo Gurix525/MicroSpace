@@ -37,7 +37,27 @@ namespace Entities
 
         public Dictionary<int, int> Gasses { get; set; } = new();
 
+        public static List<Floor> EnabledFloors { get; } = new();
+
         #endregion Properties
+
+        #region Unity
+
+        private void OnEnable()
+        {
+            AddSelfToList();
+            GasExchangeTimer.GassesExchangeTicked.AddListener(ExchangeGasses);
+            GasExchangeTimer.GassesExchangeFinished.AddListener(ClearEmptyGasses);
+        }
+
+        private void OnDisable()
+        {
+            RemoveSelfFromList();
+            GasExchangeTimer.GassesExchangeTicked.RemoveListener(ExchangeGasses);
+            GasExchangeTimer.GassesExchangeFinished.RemoveListener(ClearEmptyGasses);
+        }
+
+        #endregion Unity
 
         #region Private
 
@@ -72,16 +92,16 @@ namespace Entities
                 }
         }
 
-        private void OnEnable()
+        private void AddSelfToList()
         {
-            GasExchangeTimer.GassesExchangeTicked.AddListener(ExchangeGasses);
-            GasExchangeTimer.GassesExchangeFinished.AddListener(ClearEmptyGasses);
+            if (!EnabledFloors.Contains(this))
+                EnabledFloors.Add(this);
         }
 
-        private void OnDisable()
+        private void RemoveSelfFromList()
         {
-            GasExchangeTimer.GassesExchangeTicked.RemoveListener(ExchangeGasses);
-            GasExchangeTimer.GassesExchangeFinished.RemoveListener(ClearEmptyGasses);
+            if (EnabledFloors.Contains(this))
+                EnabledFloors.Remove(this);
         }
 
         #endregion Private

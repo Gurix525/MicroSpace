@@ -8,7 +8,11 @@ namespace Entities
     {
         #region Fields
 
+        [SerializeField]
+        private GameObject _light;
+
         private Rigidbody2D _rigidbody;
+        private int _lightTimer = 0;
 
         #endregion Fields
 
@@ -17,7 +21,26 @@ namespace Entities
         public Rigidbody2D Rigidbody =>
             _rigidbody ??= GetComponent<Rigidbody2D>();
 
+        public Maths.Range ShadowRange
+        {
+            get
+            {
+                Vector2 perpendicular = Vector2
+                    .Perpendicular(transform.position).normalized;
+                float oneSideWidth = transform.localScale.x / 2;
+                float leftAngle = Vector2.SignedAngle(
+                    Vector2.up,
+                    (Vector2)transform.position - perpendicular * oneSideWidth);
+                float rightAngle = Vector2.SignedAngle(
+                    Vector2.up,
+                    (Vector2)transform.position + perpendicular * oneSideWidth);
+                return new Maths.Range(leftAngle, rightAngle);
+            }
+        }
+
         public static List<RigidEntity> RigidEntities { get; } = new();
+
+        public static List<RigidEntity> EnabledRigidEntities { get; } = new();
 
         #endregion Properties
 
@@ -27,6 +50,14 @@ namespace Entities
         {
             SetAstronautsFree();
             Destroy(gameObject);
+        }
+
+        public void SetLightActive(bool state)
+        {
+            if (_lightTimer < 10 || _light.activeInHierarchy == state)
+                return;
+            _lightTimer = 0;
+            _light.SetActive(state);
         }
 
         public static void ForEach(Action<RigidEntity> action)
@@ -42,27 +73,32 @@ namespace Entities
         protected override void Awake()
         {
             base.Awake();
-            AddRigidEntityToList();
+            AddSelfToList();
+        }
+
+        protected virtual void OnEnable()
+        {
+            AddSelfToList();
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            _lightTimer++;
+        }
+
+        protected virtual void OnDisable()
+        {
+            RemoveSelfFromList();
         }
 
         private void OnDestroy()
         {
-            RemoveRigidEntityFromList();
+            RemoveSelfFromList();
         }
 
         #endregion Unity
 
         #region Private
-
-        private void AddRigidEntityToList()
-        {
-            RigidEntities.Add(this);
-        }
-
-        private void RemoveRigidEntityFromList()
-        {
-            RigidEntities.Remove(this);
-        }
 
         private void SetAstronautsFree()
         {
@@ -71,6 +107,22 @@ namespace Entities
             {
                 astronaut.transform.parent = null;
             }
+        }
+
+        private void AddSelfToList()
+        {
+            if (!RigidEntities.Contains(this))
+                RigidEntities.Add(this);
+            if (!EnabledRigidEntities.Contains(this))
+                EnabledRigidEntities.Add(this);
+        }
+
+        private void RemoveSelfFromList()
+        {
+            if (RigidEntities.Contains(this))
+                RigidEntities.Remove(this);
+            if (EnabledRigidEntities.Contains(this))
+                EnabledRigidEntities.Remove(this);
         }
 
         #endregion Private

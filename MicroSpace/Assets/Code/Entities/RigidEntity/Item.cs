@@ -6,7 +6,13 @@ namespace Entities
 {
     public abstract class Item : RigidEntity
     {
+        #region Fields
+
         private ItemType _itemType;
+
+        #endregion Fields
+
+        #region Properties
 
         public abstract int ModelId { get; set; }
 
@@ -19,11 +25,19 @@ namespace Entities
 
         public static List<SingleItem> EnabledSingleItems { get; } = new();
 
+        #endregion Properties
+
+        #region Public
+
         public override void DestroySelf()
         {
             RemoveSelfFromList();
             base.DestroySelf();
         }
+
+        #endregion Public
+
+        #region Unity
 
         protected override void Awake()
         {
@@ -38,15 +52,21 @@ namespace Entities
                 ItemType.SingleItem;
         }
 
-        protected void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             AddSelfToList();
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             RemoveSelfFromList();
         }
+
+        #endregion Unity
+
+        #region Private
 
         private void AddSelfToList()
         {
@@ -79,5 +99,7 @@ namespace Entities
                     EnabledSingleItems.Remove((SingleItem)this);
             }
         }
+
+        #endregion Private
     }
 }

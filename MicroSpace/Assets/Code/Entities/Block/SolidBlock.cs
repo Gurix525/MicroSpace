@@ -8,11 +8,18 @@ namespace Entities
 {
     public abstract class SolidBlock : Block
     {
+        #region Fields
+
         [SerializeField]
         private GameObject _light;
 
         private Satellite _satellite;
         private Rigidbody2D _rigidbody;
+        private int _lightTimer = 0;
+
+        #endregion Fields
+
+        #region Properties
 
         public Maths.Range ShadowRange
         {
@@ -41,6 +48,10 @@ namespace Entities
         private Rigidbody2D Rigidbody =>
             _rigidbody ??= Satellite.GetComponent<Rigidbody2D>();
 
+        #endregion Properties
+
+        #region Public
+
         public void ExecuteMiningTask()
         {
             GetComponent<Collider2D>().enabled = false;
@@ -53,8 +64,24 @@ namespace Entities
 
         public void SetLightActive(bool state)
         {
+            if (_lightTimer < 10 || _light.activeInHierarchy == state)
+                return;
+            _lightTimer = 0;
             _light.SetActive(state);
         }
+
+        #endregion Public
+
+        #region Unity
+
+        protected virtual void FixedUpdate()
+        {
+            _lightTimer++;
+        }
+
+        #endregion Unity
+
+        #region Private
 
         private void SpawnMassItems(Vector2 velocity)
         {
@@ -71,5 +98,7 @@ namespace Entities
                 newItem.GetComponent<Rigidbody2D>().velocity = velocity;
             }
         }
+
+        #endregion Private
     }
 }

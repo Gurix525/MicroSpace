@@ -4,13 +4,23 @@ namespace Maths
 {
     public struct Range : IEquatable<Range>
     {
+        #region Fields
+
         private float _start;
         private float _end;
+
+        #endregion Fields
+
+        #region Properties
 
         public float Start => _start;
         public float End => _end;
 
         public float Length => _end - _start;
+
+        #endregion Properties
+
+        #region Construtors
 
         public Range(float start, float end)
         {
@@ -25,6 +35,10 @@ namespace Maths
                 _end = start;
             }
         }
+
+        #endregion Construtors
+
+        #region Public
 
         public override string ToString()
         {
@@ -75,5 +89,7 @@ namespace Maths
             combinedRange = this;
             return false;
         }
+
+        #endregion Public
     }
 }
