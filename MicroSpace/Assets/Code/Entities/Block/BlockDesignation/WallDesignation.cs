@@ -1,3 +1,5 @@
+using System;
+using ExtensionMethods;
 using UnityEngine;
 
 namespace Entities
@@ -8,6 +10,7 @@ namespace Entities
         {
             base.Start();
             IsObstructed = false;
+            SetSpriteMaskRange();
         }
 
         private void OnTriggerStay2D(Collider2D collision)
@@ -16,7 +19,9 @@ namespace Entities
             {
                 if (block.BlockType == BlockType.Wall)
                 {
-                    _spriteRenderer.color = _colors.WallDesignationObstructed;
+                    _satellite.WallDesignationsTilemap.SetColor(
+                        Vector3Int.RoundToInt(LocalPosition),
+                        _colors.WallDesignationObstructed);
                     IsObstructed = true;
                 }
             }
@@ -24,8 +29,21 @@ namespace Entities
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _spriteRenderer.color = _colors.WallDesignationNormal;
+            _satellite.WallDesignationsTilemap.SetColor(
+                Vector3Int.RoundToInt(LocalPosition),
+                _colors.WallDesignationNormal);
             IsObstructed = false;
+        }
+
+        protected void SetSpriteMaskRange()
+        {
+            SpriteMask mask = GetComponent<SpriteMask>();
+            if (this.TryGetComponentUpInHierarchy(out Satellite satellite))
+            {
+                mask.isCustomRangeActive = true;
+                mask.frontSortingOrder = satellite.Id;
+                mask.backSortingOrder = satellite.Id - 1;
+            }
         }
     }
 }

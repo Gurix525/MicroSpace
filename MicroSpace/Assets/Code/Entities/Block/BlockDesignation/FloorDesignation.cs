@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Entities
@@ -16,7 +17,9 @@ namespace Entities
             {
                 if (block.BlockType == BlockType.Floor)
                 {
-                    _spriteRenderer.color = _colors.FloorDesignationObstructed;
+                    _satellite.FloorDesignationsTilemap.SetColor(
+                        Vector3Int.RoundToInt(LocalPosition),
+                        _colors.FloorDesignationObstructed);
                     IsObstructed = true;
                 }
             }
@@ -24,7 +27,9 @@ namespace Entities
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _spriteRenderer.color = _colors.FloorDesignationNormal;
+            _satellite.FloorDesignationsTilemap.SetColor(
+                        Vector3Int.RoundToInt(LocalPosition),
+                        _colors.FloorDesignationNormal);
             IsObstructed = false;
         }
     }

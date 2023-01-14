@@ -13,7 +13,6 @@ namespace Entities
         [SerializeField]
         private GameObject _light;
 
-        private Satellite _satellite;
         private Rigidbody2D _rigidbody;
         private int _lightTimer = 0;
 
@@ -42,11 +41,8 @@ namespace Entities
             }
         }
 
-        private Satellite Satellite =>
-            _satellite ??= this.GetComponentUpInHierarchy<Satellite>();
-
         private Rigidbody2D Rigidbody =>
-            _rigidbody ??= Satellite.GetComponent<Rigidbody2D>();
+            _rigidbody ??= _satellite.GetComponent<Rigidbody2D>();
 
         #endregion Properties
 
@@ -57,7 +53,7 @@ namespace Entities
             GetComponent<Collider2D>().enabled = false;
             Rigidbody2D rigidbody = Rigidbody;
             transform.parent = null;
-            Satellite.UpdateSatellite();
+            _satellite.UpdateSatellite();
             SpawnMassItems(rigidbody.velocity);
             Destroy(gameObject);
         }

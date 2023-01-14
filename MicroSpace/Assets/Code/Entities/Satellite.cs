@@ -33,10 +33,24 @@ namespace Entities
         private Vector2 _velocity;
 
         [SerializeField]
+        private Tilemap _floorDesignationsTilemap;
+
+        [SerializeField]
         private Tilemap _floorsTilemap;
 
         [SerializeField]
+        private Tilemap _wallDesignationsTilemap;
+
+        [SerializeField]
         private Tilemap _wallsTilemap;
+
+        private TilemapRenderer _wallsRenderer;
+
+        private TilemapRenderer _wallDesignationsRenderer;
+
+        private TilemapRenderer _floorsRenderer;
+
+        private TilemapRenderer _floorDesignationsRenderer;
 
         private List<GameObject> _obstacles = new();
 
@@ -50,6 +64,10 @@ namespace Entities
 
         public List<Wall> Walls { get; set; } = new();
 
+        public List<WallDesignation> WallDesignations { get; set; } = new();
+
+        public List<FloorDesignation> FloorDesignations { get; set; } = new();
+
         public List<Floor> Floors { get; set; } = new();
 
         public Vector2 Position { get => _position; set => _position = value; }
@@ -57,6 +75,11 @@ namespace Entities
         public float Rotation { get => _rotation; set => _rotation = value; }
 
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
+
+        public Tilemap FloorsTilemap => _floorsTilemap;
+        public Tilemap WallsTilemap => _wallsTilemap;
+        public Tilemap FloorDesignationsTilemap => _floorDesignationsTilemap;
+        public Tilemap WallDesignationsTilemap => _wallDesignationsTilemap;
 
         public Rigidbody2D Rigidbody =>
             _rigidbody ??= GetComponent<Rigidbody2D>();
@@ -81,7 +104,7 @@ namespace Entities
             UpdateObstacles();
             UpdateFloors();
             UpdateProperties();
-            UpdateTilemaps();
+            UpdateTilemap();
             if (IsSatelliteEmpty())
                 DestroySelf();
         }
@@ -99,6 +122,7 @@ namespace Entities
         private new void Awake()
         {
             base.Awake();
+            AssignReferences();
             AddSelfToList();
         }
 
@@ -123,15 +147,50 @@ namespace Entities
 
         #region Private Methods
 
-        private void UpdateTilemaps()
+        private void AssignReferences()
         {
-            UpdateWallsTilemap();
+            _wallsRenderer = _wallsTilemap.GetComponent<TilemapRenderer>();
+            _floorsRenderer = _floorsTilemap.GetComponent<TilemapRenderer>();
+            _floorDesignationsRenderer = _floorDesignationsTilemap.GetComponent<TilemapRenderer>();
+            _wallDesignationsRenderer = _wallDesignationsTilemap.GetComponent<TilemapRenderer>();
+        }
+
+        private void UpdateTilemap()
+        {
+            UpdateFloorDesignationsTilemap();
             UpdateFloorsTilemap();
+            UpdateWallDesignationsTilemap();
+            UpdateWallsTilemap();
+        }
+
+        private void UpdateWallDesignationsTilemap()
+        {
+            _wallDesignationsTilemap.ClearAllTiles();
+            _wallDesignationsRenderer.sortingOrder = Id;
+            foreach (var wallDesignation in WallDesignations)
+            {
+                _wallDesignationsTilemap.SetTile(
+                    Vector3Int.RoundToInt(wallDesignation.LocalPosition),
+                    BlockModel.GetModel(wallDesignation.ModelId).Tile);
+            }
+        }
+
+        private void UpdateFloorDesignationsTilemap()
+        {
+            _floorDesignationsTilemap.ClearAllTiles();
+            _floorDesignationsRenderer.sortingOrder = Id;
+            foreach (var floorDesignation in FloorDesignations)
+            {
+                _floorDesignationsTilemap.SetTile(
+                    Vector3Int.RoundToInt(floorDesignation.LocalPosition),
+                    BlockModel.GetModel(floorDesignation.ModelId).Tile);
+            }
         }
 
         private void UpdateWallsTilemap()
         {
             _wallsTilemap.ClearAllTiles();
+            _wallsRenderer.sortingOrder = Id;
             foreach (var wall in Walls)
             {
                 _wallsTilemap.SetTile(
@@ -143,7 +202,7 @@ namespace Entities
         private void UpdateFloorsTilemap()
         {
             _floorsTilemap.ClearAllTiles();
-            _floorsTilemap.ClearAllTiles();
+            _floorsRenderer.sortingOrder = Id;
             foreach (var floor in Floors)
             {
                 _floorsTilemap.SetTile(
@@ -207,6 +266,14 @@ namespace Entities
                     Floors = Blocks
                         .Where(block => block is Floor)
                         .Select(block => block as Floor)
+                        .ToList();
+                    WallDesignations = Blocks
+                        .Where(block => block is WallDesignation)
+                        .Select(block => block as WallDesignation)
+                        .ToList();
+                    FloorDesignations = Blocks
+                        .Where(block => block is FloorDesignation)
+                        .Select(block => block as FloorDesignation)
                         .ToList();
                 }
             }

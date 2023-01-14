@@ -1,4 +1,6 @@
-﻿namespace Entities
+﻿using UnityEngine;
+
+namespace Entities
 {
     public sealed class CancelDesignation : TemporalDesignation
     {
@@ -16,8 +18,13 @@
             }
         }
 
-        private new void Update()
+        private new void Awake()
         {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer.sortingOrder = Id;
         }
+
+        private new void Update()
+        { }
     }
 }

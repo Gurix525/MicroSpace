@@ -1,4 +1,5 @@
 ﻿using Attributes;
+using ExtensionMethods;
 using Maths;
 using Miscellaneous;
 using ScriptableObjects;
@@ -35,6 +36,8 @@ namespace Entities
         [SerializeField]
         [ReadonlyInspector]
         private bool _isMarkedForMining;
+
+        protected Satellite _satellite;
 
         #endregion Fields
 
@@ -94,32 +97,17 @@ namespace Entities
 
         protected virtual void Start()
         {
-            SetSpriteOrderInLayer();
-            TrySetSpriteMaskRange();
+            _satellite = this.TryGetComponentUpInHierarchy(out Satellite satellite) ?
+                satellite : null;
         }
 
         #endregion Unity
 
         #region Protected
 
-        protected void SetSpriteOrderInLayer()
-        {
-            GetComponent<SpriteRenderer>().sortingOrder = Id;
-        }
-
         protected bool IsCollidingWithAnotherBlock()
         {
             return IsCollidingWithAnotherBlock(out _);
-        }
-
-        protected void TrySetSpriteMaskRange()
-        {
-            if (TryGetComponent(out SpriteMask mask))
-            {
-                mask.isCustomRangeActive = true;
-                mask.frontSortingOrder = Id;
-                mask.backSortingOrder = Id - 1;
-            }
         }
 
         protected bool IsCollidingWithAnotherBlock(out Block collidingBlock)

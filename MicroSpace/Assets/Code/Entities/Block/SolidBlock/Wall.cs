@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExtensionMethods;
 using UnityEngine;
 
 namespace Entities
@@ -9,7 +10,6 @@ namespace Entities
         #region Fields
 
         private SpriteMask _spriteMask;
-        private SpriteRenderer _renderer;
 
         #endregion Fields
 
@@ -23,11 +23,11 @@ namespace Entities
 
         #region Unity
 
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
+            base.Start();
             _spriteMask = GetComponent<SpriteMask>();
-            _renderer = GetComponent<SpriteRenderer>();
+            SetSpriteMaskOrder();
         }
 
         private void OnEnable()
@@ -54,6 +54,12 @@ namespace Entities
         {
             if (EnabledWalls.Contains(this))
                 EnabledWalls.Remove(this);
+        }
+
+        private void SetSpriteMaskOrder()
+        {
+            _spriteMask.frontSortingOrder = _satellite.Id;
+            _spriteMask.backSortingOrder = _satellite.Id - 1;
         }
 
         #endregion Private

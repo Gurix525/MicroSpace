@@ -4,7 +4,26 @@ namespace Entities
 {
     public class TemporalDesignation : BlockDesignation
     {
+        #region Fields
+
+        protected SpriteRenderer _spriteRenderer;
+
+        #endregion Fields
+
+        #region Properties
+
         public BlockType TemporalBlockType { get; set; }
+
+        #endregion Properties
+
+        #region Unity
+
+        protected override void Awake()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer.sortingOrder = Id;
+            TrySetSpriteMaskRange();
+        }
 
         protected virtual void Update()
         {
@@ -28,9 +47,20 @@ namespace Entities
             }
         }
 
-        protected override void Awake()
+        #endregion Unity
+
+        #region Protected
+
+        private void TrySetSpriteMaskRange()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            if (TryGetComponent(out SpriteMask mask))
+            {
+                mask.isCustomRangeActive = true;
+                mask.frontSortingOrder = Id;
+                mask.backSortingOrder = Id - 1;
+            }
         }
+
+        #endregion Protected
     }
 }

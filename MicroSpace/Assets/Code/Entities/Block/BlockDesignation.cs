@@ -13,8 +13,6 @@ namespace Entities
         [SerializeField]
         private GameObject _finishedBlockPrefab;
 
-        protected SpriteRenderer _spriteRenderer;
-
         private bool _isObstructed = true;
 
         #endregion Fields
@@ -61,16 +59,6 @@ namespace Entities
 
         #endregion Public
 
-        #region Unity
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-
-        #endregion Unity
-
         #region Private
 
         private void SetBlockShape(Block block, int shapeId)
@@ -103,10 +91,6 @@ namespace Entities
         private void SetBlockModel(Block block, int modelId)
         {
             block.ModelId = modelId;
-            if (block.TryGetComponent(out SpriteRenderer renderer))
-            {
-                renderer.sprite = BlockModel.GetModel(modelId).Tile.sprite;
-            }
         }
 
         #endregion Private

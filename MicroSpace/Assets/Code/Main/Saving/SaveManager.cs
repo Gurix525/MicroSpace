@@ -195,7 +195,6 @@ namespace Main
             var blockComponent = block.GetComponent<Block>();
             var model = BlockModel.GetModel(blockComponent.ModelId);
             blockComponent.gameObject.name = model.name;
-            blockComponent.GetComponent<SpriteRenderer>().sprite = model.Tile.sprite;
         }
 
         private static void LoadShape(GameObject block)
