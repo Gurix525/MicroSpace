@@ -57,7 +57,7 @@ namespace Entities
 
         private Rigidbody2D _rigidbody;
 
-        private bool _hasChangedLastFrame = false;
+        private bool _hasWallsChangedLastFrame = false;
 
         #endregion Fields
 
@@ -103,10 +103,10 @@ namespace Entities
 
         private void UpdateSatellite()
         {
-            if (!_hasChangedLastFrame)
+            if (!_hasWallsChangedLastFrame)
                 return;
 
-            _hasChangedLastFrame = false;
+            _hasWallsChangedLastFrame = false;
 
             Debug.ClearDeveloperConsole();
             System.Diagnostics.Stopwatch watch = new();
@@ -395,7 +395,7 @@ namespace Entities
 
         private void OnBlocksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            _hasChangedLastFrame = true;
+            _hasWallsChangedLastFrame = true;
         }
 
         #endregion Callbacks
