@@ -71,7 +71,7 @@ namespace Entities
                     if (ShapeId == 0)
                         Destroy(mask);
                     else
-                        mask.sprite = shape.Sprite;
+                        mask.sprite = shape.MaskSprite;
                 }
                 if (block.TryGetComponent(out PolygonCollider2D collider))
                 {

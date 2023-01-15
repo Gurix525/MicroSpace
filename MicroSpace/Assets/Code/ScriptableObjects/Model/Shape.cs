@@ -21,7 +21,8 @@ namespace ScriptableObjects
 
         public GameObject Prefab => _prefab;
 
-        public Sprite Sprite => _prefab.GetComponent<SpriteMask>().sprite;
+        public Sprite MaskSprite => _prefab.GetComponent<SpriteMask>().sprite;
+        public Sprite ButtonSprite => _prefab.GetComponent<SpriteRenderer>().sprite;
 
         public static Shape GetShape(int modelId)
         {

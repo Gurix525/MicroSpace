@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 83034829
-  m_SortingLayer: 3
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4a8abae0713d25242b794d541f809ba3, type: 3}
   m_Color: {r: 0.6, g: 0.8, b: 0.6, a: 0.6}
@@ -83,8 +83,8 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 1
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 2
   m_SpriteSortPoint: 0
 --- !u!114 &5268658532383212623
 MonoBehaviour:
@@ -98,14 +98,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e64fb5db73b1a694c9685f70cfe7e497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idManager: {fileID: 11400000, guid: 1bb329466defd8b41b615aff5c03cfbe, type: 2}
+  <Id>k__BackingField: 0
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
-  _id: 0
   _modelId: 0
   _shapeId: 0
-  _localPosition: {x: 0, y: 0}
-  _localRotation: 0
   _isMarkedForMining: 0
+  _finishedBlockPrefab: {fileID: 0}
+  ObstructedStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!331 &5038026589769287469
 SpriteMask:
   m_ObjectHideFlags: 0
@@ -151,8 +152,8 @@ SpriteMask:
   m_MaskAlphaCutoff: 1
   m_FrontSortingLayerID: 83034829
   m_BackSortingLayerID: 83034829
-  m_FrontSortingLayer: 3
-  m_BackSortingLayer: 3
+  m_FrontSortingLayer: 8
+  m_BackSortingLayer: 8
   m_FrontSortingOrder: 0
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 1

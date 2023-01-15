@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SpriteMasks
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+    - {fileID: 2800000, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -1450609556, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 942999205, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 752340637, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: -284989150, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: -1793740125, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: -1839626638, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: -683711268, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 884643190, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: -22804986, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 1866713123, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: -451962000, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 2118436918, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 1682990371, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 1447431207, guid: 9c5a7650db78b264ea76f3c02d2b40b6, type: 3}
+  - {fileID: 785097129, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 240619593, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: -45930525, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: -102255933, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: -1557662556, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: -463121189, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: -1485175602, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: -1715174767, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 189488338, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 577827243, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 1376489964, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 1946894724, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 1960198834, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  - {fileID: 652107532, guid: 3249e50146eb0e347ae067ba2d9b3f18, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - OneQuarter
+  - FreePeak
+  - ThreeQuarters
+  - TriplePeak
+  - DoublePeak
+  - LongSpitz
+  - Triangle
+  - FullRectangle
+  - QuadruplePeak
+  - HalfRectangle
+  - TriangleAndPeak
+  - Spitz
+  - TwoPeaks
+  - OnePeak
+  - OneQuarter
+  - FreePeak
+  - ThreeQuarters
+  - TriplePeak
+  - DoublePeak
+  - LongSpitz
+  - Triangle
+  - FullRectangle
+  - QuadruplePeak
+  - HalfRectangle
+  - TriangleAndPeak
+  - Spitz
+  - TwoPeaks
+  - OnePeak
+  m_RenderDataMap: {}
+  m_Tag: SpriteMasks
+  m_IsVariant: 0

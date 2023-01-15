@@ -53,7 +53,7 @@ namespace Main
             {
                 GameObject button = Instantiate(
                     Prefabs.ShapeButton, _shapePicker.transform);
-                button.transform.GetChild(0).GetComponent<Image>().sprite = shape.Sprite;
+                button.transform.GetChild(0).GetComponent<Image>().sprite = shape.ButtonSprite;
                 button.GetComponent<Button>().onClick
                     .AddListener(() => InvokeShapeChangedEvent(shape.Id));
             }

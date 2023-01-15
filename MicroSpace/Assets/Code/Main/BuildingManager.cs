@@ -281,7 +281,7 @@ namespace Main
                     if (_shape.Id == 0)
                         Destroy(mask);
                     else
-                        mask.sprite = _shape.Sprite;
+                        mask.sprite = _shape.MaskSprite;
                 }
                 if (block.TryGetComponent(out PolygonCollider2D collider))
                 {
