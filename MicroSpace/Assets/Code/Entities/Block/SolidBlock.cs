@@ -53,7 +53,6 @@ namespace Entities
             GetComponent<Collider2D>().enabled = false;
             Rigidbody2D rigidbody = Rigidbody;
             transform.parent = null;
-            _satellite.UpdateSatellite();
             SpawnMassItems(rigidbody.velocity);
             Destroy(gameObject);
         }

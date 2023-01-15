@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExtensionMethods;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Entities
@@ -28,29 +29,60 @@ namespace Entities
             base.Start();
             _spriteMask = GetComponent<SpriteMask>();
             SetSpriteMaskOrder();
+            AddSelfToSatelliteList();
         }
 
         private void OnEnable()
         {
-            AddSelfToList();
+            AddSelfToEnabledList();
         }
 
         private void OnDisable()
         {
-            RemoveSelfFromList();
+            RemoveSelfFromEnabledList();
+        }
+
+        private void OnDestroy()
+        {
+            RemoveSelfFromSatelliteList();
         }
 
         #endregion Unity
 
         #region Private
 
-        private void AddSelfToList()
+        private void AddSelfToSatelliteList()
+        {
+            if (_satellite == null)
+                return;
+            _satellite.Blocks.Add(this);
+            _satellite.Walls.Add(this);
+            _satellite.WallsTilemap.SetTile(
+                Vector3Int.RoundToInt(LocalPosition),
+                BlockModel.GetModel(ModelId).Tile);
+            _satellite.WallsTilemap.SetTileFlags(
+                Vector3Int.RoundToInt(LocalPosition),
+                UnityEngine.Tilemaps.TileFlags.None);
+        }
+
+        private void RemoveSelfFromSatelliteList()
+        {
+            if (_satellite == null)
+                return;
+            _satellite.Blocks.Remove(this);
+            _satellite.Walls.Remove(this);
+            _satellite.WallsTilemap.SetTile(
+                Vector3Int.RoundToInt(LocalPosition),
+                null);
+        }
+
+        private void AddSelfToEnabledList()
         {
             if (!EnabledWalls.Contains(this))
                 EnabledWalls.Add(this);
         }
 
-        private void RemoveSelfFromList()
+        private void RemoveSelfFromEnabledList()
         {
             if (EnabledWalls.Contains(this))
                 EnabledWalls.Remove(this);

@@ -442,11 +442,6 @@ namespace Main
             return hit.collider?.GetComponent<Block>();
         }
 
-        private void UpdateSatellite()
-        {
-            _temporalParent?.GetComponent<Satellite>()?.UpdateSatellite();
-        }
-
         private void CreateFinalDesignations()
         {
             GameObject prefab = _buildingMode switch
@@ -759,7 +754,6 @@ namespace Main
             if (_isPointerOverUI)
                 return;
             MarkBlocksDesignedToMining();
-            UpdateSatellite();
             StartFromPreviousMode();
         }
 
@@ -813,7 +807,6 @@ namespace Main
             if (_isPointerOverUI)
                 return;
             CancelDesignations();
-            UpdateSatellite();
             StartFromPreviousMode();
         }
 
@@ -867,7 +860,6 @@ namespace Main
                 return;
             CreateSatelliteIfTemporalParentIsNotASatellite();
             CreateFinalDesignations();
-            UpdateSatellite();
             StartFromPreviousMode();
         }
 

@@ -27,14 +27,6 @@ namespace Entities
 
         [SerializeField]
         [ReadonlyInspector]
-        private Vector2 _localPosition;
-
-        [SerializeField]
-        [ReadonlyInspector]
-        private float _localRotation;
-
-        [SerializeField]
-        [ReadonlyInspector]
         private bool _isMarkedForMining;
 
         protected Satellite _satellite;
@@ -64,9 +56,9 @@ namespace Entities
 
         public Square Square => new(transform.position, 0.48F, transform.eulerAngles.z);
 
-        public Vector2 LocalPosition { get => _localPosition; set => _localPosition = value; }
+        public Vector2 LocalPosition => transform.localPosition;
 
-        public float LocalRotation { get => _localRotation; set => _localRotation = value; }
+        public float LocalRotation => transform.localEulerAngles.z;
 
         public BlockType BlockType => this switch
         {
@@ -82,16 +74,6 @@ namespace Entities
         public UnityEvent<bool> MiningMarkChanged { get; } = new();
 
         #endregion Properties
-
-        #region Public
-
-        public void UpdateBlock()
-        {
-            LocalPosition = transform.localPosition;
-            LocalRotation = transform.localEulerAngles.z;
-        }
-
-        #endregion Public
 
         #region Unity
 

@@ -147,7 +147,6 @@ namespace Main
             SetSatelliteParameters(satellite, satelliteToLoad);
             LoadBlocks(satellite, satelliteToLoad, out IEnumerable<Block> blocks);
             LoadGasses(satellite, satelliteToLoad, blocks);
-            UpdateSatellite(satellite);
             return satellite.GetComponent<Satellite>();
         }
 
@@ -163,11 +162,6 @@ namespace Main
                     .FirstOrDefault() as IGasContainer;
                 container.Gasses.Add(gas.ModelId, gas.Amount);
             }
-        }
-
-        private static void UpdateSatellite(GameObject satellite)
-        {
-            satellite.GetComponent<Satellite>().UpdateSatellite();
         }
 
         private static void LoadBlocks(

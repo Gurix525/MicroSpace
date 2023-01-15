@@ -9,6 +9,7 @@ using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using ScriptableObjects;
+using System.Collections.ObjectModel;
 
 namespace Entities
 {
@@ -18,7 +19,7 @@ namespace Entities
 
         [SerializeField]
         [ReadonlyInspector]
-        private List<Block> _blocks = new();
+        private ObservableCollection<Block> _blocks = new();
 
         [SerializeField]
         [ReadonlyInspector]
@@ -56,11 +57,13 @@ namespace Entities
 
         private Rigidbody2D _rigidbody;
 
+        private bool _hasChangedLastFrame = false;
+
         #endregion Fields
 
         #region Public Properties
 
-        public List<Block> Blocks { get => _blocks; set => _blocks = value; }
+        public ObservableCollection<Block> Blocks { get => _blocks; set => _blocks = value; }
 
         public List<Wall> Walls { get; set; } = new();
 
@@ -98,13 +101,32 @@ namespace Entities
 
         #region Public Methods
 
-        public void UpdateSatellite()
+        private void UpdateSatellite()
         {
-            UpdateBlocks();
+            if (!_hasChangedLastFrame)
+                return;
+
+            _hasChangedLastFrame = false;
+
+            Debug.ClearDeveloperConsole();
+            System.Diagnostics.Stopwatch watch = new();
+            watch.Start();
+
             UpdateObstacles();
+
+            watch.Stop();
+            Debug.Log("Obstacles: " + watch.Elapsed.TotalMilliseconds);
+            watch.Restart();
+
             UpdateFloors();
+
+            Debug.Log("Floors: " + watch.Elapsed.TotalMilliseconds);
+            watch.Restart();
+
             UpdateProperties();
-            UpdateTilemap();
+
+            Debug.Log("Properties: " + watch.Elapsed.TotalMilliseconds);
+
             if (IsSatelliteEmpty())
                 DestroySelf();
         }
@@ -124,6 +146,17 @@ namespace Entities
             base.Awake();
             AssignReferences();
             AddSelfToList();
+            Blocks.CollectionChanged += OnBlocksCollectionChanged;
+        }
+
+        private void Start()
+        {
+            UpdateTilemaps();
+        }
+
+        private void Update()
+        {
+            UpdateSatellite();
         }
 
         private void OnEnable()
@@ -155,60 +188,12 @@ namespace Entities
             _wallDesignationsRenderer = _wallDesignationsTilemap.GetComponent<TilemapRenderer>();
         }
 
-        private void UpdateTilemap()
+        private void UpdateTilemaps()
         {
-            UpdateFloorDesignationsTilemap();
-            UpdateFloorsTilemap();
-            UpdateWallDesignationsTilemap();
-            UpdateWallsTilemap();
-        }
-
-        private void UpdateWallDesignationsTilemap()
-        {
-            _wallDesignationsTilemap.ClearAllTiles();
             _wallDesignationsRenderer.sortingOrder = Id;
-            foreach (var wallDesignation in WallDesignations)
-            {
-                _wallDesignationsTilemap.SetTile(
-                    Vector3Int.RoundToInt(wallDesignation.LocalPosition),
-                    BlockModel.GetModel(wallDesignation.ModelId).Tile);
-            }
-        }
-
-        private void UpdateFloorDesignationsTilemap()
-        {
-            _floorDesignationsTilemap.ClearAllTiles();
-            _floorDesignationsRenderer.sortingOrder = Id;
-            foreach (var floorDesignation in FloorDesignations)
-            {
-                _floorDesignationsTilemap.SetTile(
-                    Vector3Int.RoundToInt(floorDesignation.LocalPosition),
-                    BlockModel.GetModel(floorDesignation.ModelId).Tile);
-            }
-        }
-
-        private void UpdateWallsTilemap()
-        {
-            _wallsTilemap.ClearAllTiles();
             _wallsRenderer.sortingOrder = Id;
-            foreach (var wall in Walls)
-            {
-                _wallsTilemap.SetTile(
-                    Vector3Int.RoundToInt(wall.LocalPosition),
-                    BlockModel.GetModel(wall.ModelId).Tile);
-            }
-        }
-
-        private void UpdateFloorsTilemap()
-        {
-            _floorsTilemap.ClearAllTiles();
             _floorsRenderer.sortingOrder = Id;
-            foreach (var floor in Floors)
-            {
-                _floorsTilemap.SetTile(
-                    Vector3Int.RoundToInt(floor.LocalPosition),
-                    BlockModel.GetModel(floor.ModelId).Tile);
-            }
+            _floorDesignationsRenderer.sortingOrder = Id;
         }
 
         private void DestroySelf()
@@ -244,39 +229,6 @@ namespace Entities
             Position = transform.position;
             Rotation = transform.eulerAngles.z;
             Velocity = GetComponent<Rigidbody2D>().velocity;
-        }
-
-        private void UpdateBlocks()
-        {
-            Blocks.Clear();
-            foreach (Transform child in transform)
-            {
-                var block = child.gameObject.GetComponent<Block>();
-                if (block != null && !IsBlockTemporalDesignation(block))
-                {
-                    block.UpdateBlock();
-                    Blocks.Add(block);
-                    Blocks = Blocks.OrderByDescending(block => block.LocalPosition.y)
-                        .ThenBy(block => block.LocalPosition.x)
-                        .ToList();
-                    Walls = Blocks
-                        .Where(block => block is Wall)
-                        .Select(block => block as Wall)
-                        .ToList();
-                    Floors = Blocks
-                        .Where(block => block is Floor)
-                        .Select(block => block as Floor)
-                        .ToList();
-                    WallDesignations = Blocks
-                        .Where(block => block is WallDesignation)
-                        .Select(block => block as WallDesignation)
-                        .ToList();
-                    FloorDesignations = Blocks
-                        .Where(block => block is FloorDesignation)
-                        .Select(block => block as FloorDesignation)
-                        .ToList();
-                }
-            }
         }
 
         private void UpdateFloors()
@@ -419,11 +371,6 @@ namespace Entities
             return false;
         }
 
-        private bool IsBlockTemporalDesignation(Block block)
-        {
-            return block is TemporalDesignation;
-        }
-
         private void AddSelfToList()
         {
             if (!Satellites.Contains(this))
@@ -443,5 +390,14 @@ namespace Entities
         }
 
         #endregion Private Methods
+
+        #region Callbacks
+
+        private void OnBlocksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            _hasChangedLastFrame = true;
+        }
+
+        #endregion Callbacks
     }
 }

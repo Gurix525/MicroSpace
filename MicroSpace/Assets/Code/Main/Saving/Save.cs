@@ -28,8 +28,6 @@ namespace Main
 
         public Save()
         {
-            foreach (Satellite satellite in Satellite.Satellites)
-                satellite.UpdateSatellite();
             Satellites = Satellite.Satellites
                 .Select(satellite => (SerializableSatellite)satellite)
                 .ToList();

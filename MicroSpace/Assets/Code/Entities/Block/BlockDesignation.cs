@@ -53,7 +53,6 @@ namespace Entities
             SetBlockModel(newBlockComponent, ModelId);
             Satellite satellite = this.GetComponentUpInHierarchy<Satellite>();
             transform.parent = null;
-            satellite.UpdateSatellite();
             Destroy(gameObject);
         }
 

@@ -71,6 +71,8 @@ namespace Main
 
         private void SteerCamera()
         {
+            if (Camera.main == null)
+                return;
             Vector3 direction = (Vector3)PlayerController.DefaultDirection
                 .ReadValue<Vector2>() +
                 (Vector3)PlayerController.BuildingDirection

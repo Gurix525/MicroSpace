@@ -6,6 +6,7 @@ using System.Linq;
 using Miscellaneous;
 using ExtensionMethods;
 using System.Collections.Generic;
+using ScriptableObjects;
 
 namespace Entities
 {
@@ -43,18 +44,29 @@ namespace Entities
 
         #region Unity
 
+        protected override void Start()
+        {
+            base.Start();
+            AddSelfToSatelliteList();
+        }
+
         private void OnEnable()
         {
-            AddSelfToList();
+            AddSelfToEnabledList();
             GasExchangeTimer.GassesExchangeTicked.AddListener(ExchangeGasses);
             GasExchangeTimer.GassesExchangeFinished.AddListener(ClearEmptyGasses);
         }
 
         private void OnDisable()
         {
-            RemoveSelfFromList();
+            RemoveSelfFromEnabledList();
             GasExchangeTimer.GassesExchangeTicked.RemoveListener(ExchangeGasses);
             GasExchangeTimer.GassesExchangeFinished.RemoveListener(ClearEmptyGasses);
+        }
+
+        private void OnDestroy()
+        {
+            RemoveSelfFromSatelliteList();
         }
 
         #endregion Unity
@@ -92,13 +104,38 @@ namespace Entities
                 }
         }
 
-        private void AddSelfToList()
+        private void AddSelfToSatelliteList()
+        {
+            if (_satellite == null)
+                return;
+            _satellite.Blocks.Add(this);
+            _satellite.Floors.Add(this);
+            _satellite.FloorsTilemap.SetTile(
+                Vector3Int.RoundToInt(LocalPosition),
+                BlockModel.GetModel(ModelId).Tile);
+            _satellite.FloorsTilemap.SetTileFlags(
+                Vector3Int.RoundToInt(LocalPosition),
+                UnityEngine.Tilemaps.TileFlags.None);
+        }
+
+        private void RemoveSelfFromSatelliteList()
+        {
+            if (_satellite == null)
+                return;
+            _satellite.Blocks.Remove(this);
+            _satellite.Floors.Remove(this);
+            _satellite.FloorsTilemap.SetTile(
+                Vector3Int.RoundToInt(LocalPosition),
+                null);
+        }
+
+        private void AddSelfToEnabledList()
         {
             if (!EnabledFloors.Contains(this))
                 EnabledFloors.Add(this);
         }
 
-        private void RemoveSelfFromList()
+        private void RemoveSelfFromEnabledList()
         {
             if (EnabledFloors.Contains(this))
                 EnabledFloors.Remove(this);
