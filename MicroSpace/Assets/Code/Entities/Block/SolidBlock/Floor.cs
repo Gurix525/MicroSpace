@@ -48,6 +48,7 @@ namespace Entities
         {
             base.Start();
             AddSelfToSatelliteList();
+            AddTile();
         }
 
         private void OnEnable()
@@ -67,6 +68,7 @@ namespace Entities
         private void OnDestroy()
         {
             RemoveSelfFromSatelliteList();
+            RemoveTile();
         }
 
         #endregion Unity
@@ -110,11 +112,15 @@ namespace Entities
                 return;
             _satellite.Blocks.Add(this);
             _satellite.Floors.Add(this);
+        }
+
+        private void AddTile()
+        {
             _satellite.FloorsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 BlockModel.GetModel(ModelId).Tile);
             _satellite.FloorsTilemap.SetTileFlags(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
         }
 
@@ -124,8 +130,12 @@ namespace Entities
                 return;
             _satellite.Blocks.Remove(this);
             _satellite.Floors.Remove(this);
+        }
+
+        private void RemoveTile()
+        {
             _satellite.FloorsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 null);
         }
 

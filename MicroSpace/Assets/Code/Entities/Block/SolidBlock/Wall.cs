@@ -30,6 +30,7 @@ namespace Entities
             _spriteMask = GetComponent<SpriteMask>();
             SetSpriteMaskOrder();
             AddSelfToSatelliteList();
+            AddTile();
         }
 
         private void OnEnable()
@@ -45,6 +46,7 @@ namespace Entities
         private void OnDestroy()
         {
             RemoveSelfFromSatelliteList();
+            RemoveTile();
         }
 
         #endregion Unity
@@ -57,12 +59,23 @@ namespace Entities
                 return;
             _satellite.Blocks.Add(this);
             _satellite.Walls.Add(this);
+        }
+
+        private void AddTile()
+        {
             _satellite.WallsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
-                BlockModel.GetModel(ModelId).Tile);
+               FixedLocalPosition,
+               BlockModel.GetModel(ModelId).Tile);
             _satellite.WallsTilemap.SetTileFlags(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
+        }
+
+        private void RemoveTile()
+        {
+            _satellite.WallsTilemap.SetTile(
+                FixedLocalPosition,
+                null);
         }
 
         private void RemoveSelfFromSatelliteList()
@@ -71,9 +84,6 @@ namespace Entities
                 return;
             _satellite.Blocks.Remove(this);
             _satellite.Walls.Remove(this);
-            _satellite.WallsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
-                null);
         }
 
         private void AddSelfToEnabledList()

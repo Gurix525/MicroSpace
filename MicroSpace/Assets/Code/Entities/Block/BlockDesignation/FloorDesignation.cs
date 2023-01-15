@@ -13,6 +13,7 @@ namespace Entities
             base.Start();
             IsObstructed = false;
             AddSelfToSatelliteList();
+            AddTile();
         }
 
         private void OnTriggerStay2D(Collider2D collision)
@@ -40,6 +41,7 @@ namespace Entities
         private void OnDestroy()
         {
             RemoveSelfFromSatelliteList();
+            RemoveTile();
         }
 
         #endregion Unity
@@ -52,11 +54,15 @@ namespace Entities
                 return;
             _satellite.Blocks.Add(this);
             _satellite.FloorDesignations.Add(this);
+        }
+
+        private void AddTile()
+        {
             _satellite.FloorDesignationsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 BlockModel.GetModel(ModelId).Tile);
             _satellite.FloorDesignationsTilemap.SetTileFlags(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
         }
 
@@ -66,8 +72,12 @@ namespace Entities
                 return;
             _satellite.Blocks.Remove(this);
             _satellite.FloorDesignations.Remove(this);
-            _satellite.WallsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
+        }
+
+        private void RemoveTile()
+        {
+            _satellite.FloorDesignationsTilemap.SetTile(
+                FixedLocalPosition,
                 null);
         }
 

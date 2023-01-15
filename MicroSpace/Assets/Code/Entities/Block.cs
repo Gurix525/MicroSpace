@@ -56,6 +56,8 @@ namespace Entities
 
         public Square Square => new(transform.position, 0.48F, transform.eulerAngles.z);
 
+        public Vector3Int FixedLocalPosition { get; private set; }
+
         public Vector2 LocalPosition => transform.localPosition;
 
         public float LocalRotation => transform.localEulerAngles.z;
@@ -79,8 +81,14 @@ namespace Entities
 
         protected virtual void Start()
         {
+            SetSatellite();
+            SetFixedLocalPosition();
+        }
+
+        private void SetSatellite()
+        {
             _satellite = this.TryGetComponentUpInHierarchy(out Satellite satellite) ?
-                satellite : null;
+                            satellite : null;
         }
 
         #endregion Unity
@@ -131,5 +139,14 @@ namespace Entities
         }
 
         #endregion Protected
+
+        #region Private
+
+        private void SetFixedLocalPosition()
+        {
+            FixedLocalPosition = Vector3Int.RoundToInt(transform.localPosition);
+        }
+
+        #endregion Private
     }
 }

@@ -15,6 +15,7 @@ namespace Entities
             IsObstructed = false;
             SetSpriteMaskRange();
             AddSelfToSatelliteList();
+            AddTile();
         }
 
         private void OnTriggerStay2D(Collider2D collision)
@@ -42,6 +43,7 @@ namespace Entities
         private void OnDestroy()
         {
             RemoveSelfFromSatelliteList();
+            RemoveTile();
         }
 
         #endregion Unity
@@ -65,11 +67,15 @@ namespace Entities
                 return;
             _satellite.Blocks.Add(this);
             _satellite.WallDesignations.Add(this);
+        }
+
+        private void AddTile()
+        {
             _satellite.WallDesignationsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 BlockModel.GetModel(ModelId).Tile);
             _satellite.WallDesignationsTilemap.SetTileFlags(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
         }
 
@@ -79,8 +85,12 @@ namespace Entities
                 return;
             _satellite.Blocks.Remove(this);
             _satellite.WallDesignations.Remove(this);
+        }
+
+        private void RemoveTile()
+        {
             _satellite.WallDesignationsTilemap.SetTile(
-                Vector3Int.RoundToInt(LocalPosition),
+                FixedLocalPosition,
                 null);
         }
 
