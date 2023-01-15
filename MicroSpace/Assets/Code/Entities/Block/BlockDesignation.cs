@@ -68,7 +68,10 @@ namespace Entities
                 block.ShapeId = shapeId;
                 if (block.TryGetComponent(out SpriteMask mask))
                 {
-                    mask.sprite = shape.Sprite;
+                    if (ShapeId == 0)
+                        Destroy(mask);
+                    else
+                        mask.sprite = shape.Sprite;
                 }
                 if (block.TryGetComponent(out PolygonCollider2D collider))
                 {
@@ -82,7 +85,7 @@ namespace Entities
                 ShapeId = 0;
                 if (block.TryGetComponent(out SpriteMask mask))
                 {
-                    mask.sprite = Shape.GetShape(0).Sprite;
+                    Destroy(mask);
                 }
             }
         }

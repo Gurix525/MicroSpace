@@ -119,7 +119,7 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 1
+  m_MaskInteraction: 2
 --- !u!1 &1564687762493344171
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +359,7 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 1
+  m_MaskInteraction: 2
 --- !u!1 &6058290927143523084
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +456,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 0
-  _blocks: []
   _position: {x: 0, y: 0}
   _rotation: 0
   _velocity: {x: 0, y: 0}

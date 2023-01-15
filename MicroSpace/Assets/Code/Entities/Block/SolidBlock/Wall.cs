@@ -8,12 +8,6 @@ namespace Entities
 {
     public class Wall : SolidBlock
     {
-        #region Fields
-
-        private SpriteMask _spriteMask;
-
-        #endregion Fields
-
         #region Properties
 
         public bool IsIncludedInObstacle { get; set; }
@@ -27,8 +21,7 @@ namespace Entities
         protected override void Start()
         {
             base.Start();
-            _spriteMask = GetComponent<SpriteMask>();
-            SetSpriteMaskOrder();
+            TrySetSpriteMaskRange();
             AddSelfToSatelliteList();
             AddTile();
         }
@@ -98,10 +91,13 @@ namespace Entities
                 EnabledWalls.Remove(this);
         }
 
-        private void SetSpriteMaskOrder()
+        private void TrySetSpriteMaskRange()
         {
-            _spriteMask.frontSortingOrder = _satellite.Id;
-            _spriteMask.backSortingOrder = _satellite.Id - 1;
+            if (!TryGetComponent(out SpriteMask mask))
+                return;
+            mask.isCustomRangeActive = true;
+            mask.frontSortingOrder = _satellite.Id;
+            mask.backSortingOrder = _satellite.Id - 1;
         }
 
         #endregion Private

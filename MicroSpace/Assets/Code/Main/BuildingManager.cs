@@ -278,7 +278,10 @@ namespace Main
                 block.GetComponent<Block>().ShapeId = _shape.Id;
                 if (block.TryGetComponent(out SpriteMask mask))
                 {
-                    mask.sprite = _shape.Sprite;
+                    if (_shape.Id == 0)
+                        Destroy(mask);
+                    else
+                        mask.sprite = _shape.Sprite;
                 }
                 if (block.TryGetComponent(out PolygonCollider2D collider))
                 {
@@ -293,7 +296,7 @@ namespace Main
                 block.GetComponent<Block>().ShapeId = 0;
                 if (block.TryGetComponent(out SpriteMask mask))
                 {
-                    mask.sprite = Shape.GetShape(0).Sprite;
+                    Destroy(mask);
                 }
             }
         }

@@ -198,8 +198,11 @@ namespace Main
                 .GetShape(blockComponent.ShapeId).Prefab;
             if (blockComponent is Wall || blockComponent is WallDesignation)
             {
-                block.GetComponent<SpriteMask>().sprite =
-                    shape.GetComponent<SpriteMask>().sprite;
+                if (blockComponent.ShapeId == 0)
+                    Destroy(block.GetComponent<SpriteMask>());
+                else
+                    block.GetComponent<SpriteMask>().sprite =
+                        shape.GetComponent<SpriteMask>().sprite;
             }
             if (blockComponent is Wall)
             {

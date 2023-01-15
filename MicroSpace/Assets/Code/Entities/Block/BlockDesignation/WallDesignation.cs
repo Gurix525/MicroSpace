@@ -13,7 +13,7 @@ namespace Entities
         {
             base.Start();
             IsObstructed = false;
-            SetSpriteMaskRange();
+            TrySetSpriteMaskRange();
             AddSelfToSatelliteList();
             AddTile();
         }
@@ -50,15 +50,13 @@ namespace Entities
 
         #region Private
 
-        private void SetSpriteMaskRange()
+        private void TrySetSpriteMaskRange()
         {
-            SpriteMask mask = GetComponent<SpriteMask>();
-            if (this.TryGetComponentUpInHierarchy(out Satellite satellite))
-            {
-                mask.isCustomRangeActive = true;
-                mask.frontSortingOrder = satellite.Id;
-                mask.backSortingOrder = satellite.Id - 1;
-            }
+            if (!TryGetComponent(out SpriteMask mask))
+                return;
+            mask.isCustomRangeActive = true;
+            mask.frontSortingOrder = _satellite.Id;
+            mask.backSortingOrder = _satellite.Id - 1;
         }
 
         private void AddSelfToSatelliteList()
