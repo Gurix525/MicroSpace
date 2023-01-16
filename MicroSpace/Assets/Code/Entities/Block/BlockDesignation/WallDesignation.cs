@@ -9,6 +9,13 @@ namespace Entities
 {
     public class WallDesignation : BlockDesignation
     {
+        #region Fields
+
+        private int _timer = 0;
+        private bool _isColliding = false;
+
+        #endregion Fields
+
         #region Unity
 
         protected override void Start()
@@ -20,11 +27,24 @@ namespace Entities
             AddTile();
         }
 
+        private void FixedUpdate()
+        {
+            _timer++;
+            if (_timer >= 5)
+            {
+                _timer = 0;
+                if (_isColliding)
+                    SetObstructed();
+                else
+                    SetUnobstructed();
+            }
+        }
+
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (collision.gameObject.layer == References.WallsLayer)
             {
-                SetObstructed();
+                _isColliding = true;
             }
         }
 
@@ -32,7 +52,7 @@ namespace Entities
         {
             if (collision.gameObject.layer == References.WallsLayer)
             {
-                SetUnobstructed();
+                _isColliding = false;
             }
         }
 
