@@ -20,15 +20,12 @@ namespace Entities
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.TryGetComponent(out Block block))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Walls"))
             {
-                if (block.BlockType == BlockType.Wall)
-                {
-                    _satellite.WallDesignationsTilemap.SetColor(
-                        Vector3Int.RoundToInt(LocalPosition),
-                        _colors.WallDesignationObstructed);
-                    IsObstructed = true;
-                }
+                _satellite.WallDesignationsTilemap.SetColor(
+                    Vector3Int.RoundToInt(LocalPosition),
+                    _colors.WallDesignationObstructed);
+                IsObstructed = true;
             }
         }
 

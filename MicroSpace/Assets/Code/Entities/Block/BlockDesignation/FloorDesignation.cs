@@ -18,22 +18,19 @@ namespace Entities
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.TryGetComponent(out Block block))
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Floors"))
             {
-                if (block.BlockType == BlockType.Floor)
-                {
-                    _satellite.FloorDesignationsTilemap.SetColor(
-                        Vector3Int.RoundToInt(LocalPosition),
-                        _colors.FloorDesignationObstructed);
-                    IsObstructed = true;
-                }
+                _satellite.FloorDesignationsTilemap.SetColor(
+                    Vector3Int.RoundToInt(FixedLocalPosition),
+                    _colors.FloorDesignationObstructed);
+                IsObstructed = true;
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
             _satellite.FloorDesignationsTilemap.SetColor(
-                        Vector3Int.RoundToInt(LocalPosition),
+                        Vector3Int.RoundToInt(FixedLocalPosition),
                         _colors.FloorDesignationNormal);
             IsObstructed = false;
         }
