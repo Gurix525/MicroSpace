@@ -10,16 +10,13 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using ScriptableObjects;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Entities
 {
     public class Satellite : Entity
     {
         #region Fields
-
-        [SerializeField]
-        [ReadonlyInspector]
-        private ObservableCollection<Block> _blocks = new();
 
         [SerializeField]
         [ReadonlyInspector]
@@ -57,15 +54,17 @@ namespace Entities
 
         private Rigidbody2D _rigidbody;
 
+        private bool _hasBlocksChangedLastFrame = false;
+
         private bool _hasWallsChangedLastFrame = false;
 
         #endregion Fields
 
-        #region Public Properties
+        #region Properties
 
-        public ObservableCollection<Block> Blocks { get => _blocks; set => _blocks = value; }
+        public ObservableCollection<Block> Blocks { get; set; } = new();
 
-        public List<Wall> Walls { get; set; } = new();
+        public ObservableCollection<Wall> Walls { get; set; } = new();
 
         public List<WallDesignation> WallDesignations { get; set; } = new();
 
@@ -87,9 +86,9 @@ namespace Entities
         public Rigidbody2D Rigidbody =>
             _rigidbody ??= GetComponent<Rigidbody2D>();
 
-        #endregion Public Properties
+        #endregion Properties
 
-        #region Public Static Properties
+        #region Static Properties
 
         public static List<Satellite> Satellites { get; } = new();
 
@@ -97,36 +96,18 @@ namespace Entities
 
         public static UnityEvent<Satellite> FirstSatelliteCreated = new();
 
-        #endregion Public Static Properties
+        #endregion Static Properties
 
-        #region Public Methods
+        #region Public
 
         private void UpdateSatellite()
         {
-            if (!_hasWallsChangedLastFrame)
+            if (!_hasBlocksChangedLastFrame)
                 return;
-
-            _hasWallsChangedLastFrame = false;
-
-            Debug.ClearDeveloperConsole();
-            System.Diagnostics.Stopwatch watch = new();
-            watch.Start();
-
+            _hasBlocksChangedLastFrame = false;
             UpdateObstacles();
-
-            watch.Stop();
-            Debug.Log("Obstacles: " + watch.Elapsed.TotalMilliseconds);
-            watch.Restart();
-
             UpdateFloors();
-
-            Debug.Log("Floors: " + watch.Elapsed.TotalMilliseconds);
-            watch.Restart();
-
             UpdateProperties();
-
-            Debug.Log("Properties: " + watch.Elapsed.TotalMilliseconds);
-
             if (IsSatelliteEmpty())
                 DestroySelf();
         }
@@ -137,7 +118,7 @@ namespace Entities
                 action(satellite);
         }
 
-        #endregion Public Methods
+        #endregion Public
 
         #region Unity
 
@@ -147,6 +128,7 @@ namespace Entities
             AssignReferences();
             AddSelfToList();
             Blocks.CollectionChanged += OnBlocksCollectionChanged;
+            Walls.CollectionChanged += OnWallsCollectionChanged;
         }
 
         private void Start()
@@ -178,7 +160,7 @@ namespace Entities
 
         #endregion Unity
 
-        #region Private Methods
+        #region Private
 
         private void AssignReferences()
         {
@@ -274,6 +256,9 @@ namespace Entities
 
         private void UpdateObstacles()
         {
+            if (!_hasWallsChangedLastFrame)
+                return;
+            _hasWallsChangedLastFrame = false;
             ResetObstacles();
             foreach (Wall wall in Walls)
             {
@@ -389,11 +374,20 @@ namespace Entities
                 EnabledSatellites.Remove(this);
         }
 
-        #endregion Private Methods
+        #endregion Private
 
         #region Callbacks
 
-        private void OnBlocksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnBlocksCollectionChanged(
+            object sender,
+            NotifyCollectionChangedEventArgs e)
+        {
+            _hasBlocksChangedLastFrame = true;
+        }
+
+        private void OnWallsCollectionChanged(
+            object sender,
+            NotifyCollectionChangedEventArgs e)
         {
             _hasWallsChangedLastFrame = true;
         }

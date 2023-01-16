@@ -62,13 +62,7 @@ namespace Entities
 
         public float LocalRotation => transform.localEulerAngles.z;
 
-        public BlockType BlockType => this switch
-        {
-            Floor => BlockType.Floor,
-            FloorDesignation => BlockType.FloorDesignation,
-            WallDesignation => BlockType.WallDesignation,
-            _ => BlockType.Wall
-        };
+        public BlockType BlockType { get; private set; }
 
         public int ModelId { get => _modelId; set => _modelId = value; }
         public int ShapeId { get => _shapeId; set => _shapeId = value; }
@@ -78,6 +72,12 @@ namespace Entities
         #endregion Properties
 
         #region Unity
+
+        protected override void Awake()
+        {
+            base.Awake();
+            SetBlockType();
+        }
 
         protected virtual void Start()
         {
@@ -141,6 +141,17 @@ namespace Entities
         #endregion Protected
 
         #region Private
+
+        private void SetBlockType()
+        {
+            BlockType = this switch
+            {
+                Floor => BlockType.Floor,
+                FloorDesignation => BlockType.FloorDesignation,
+                WallDesignation => BlockType.WallDesignation,
+                _ => BlockType.Wall
+            };
+        }
 
         private void SetFixedLocalPosition()
         {
