@@ -9,6 +9,8 @@ namespace ScriptableObjects
         menuName = "ScriptableObjects/Shape")]
     public class Shape : Model
     {
+        #region Fields
+
         [SerializeField]
         private int _id;
 
@@ -17,19 +19,35 @@ namespace ScriptableObjects
 
         private static List<Shape> _shapes = new();
 
+        #endregion Fields
+
+        #region Properties
+
         public int Id => _id;
 
         public GameObject Prefab => _prefab;
 
         public Sprite MaskSprite => _prefab.GetComponent<SpriteMask>().sprite;
         public Sprite ButtonSprite => _prefab.GetComponent<SpriteRenderer>().sprite;
+        public static List<Shape> Shapes => _shapes;
+
+        #endregion Properties
+
+        #region Public
 
         public static Shape GetShape(int modelId)
         {
             return _shapes.Find(model => model.Id == modelId);
         }
 
-        public static List<Shape> Shapes => _shapes;
+        public override string ToString()
+        {
+            return $"{_id} : {name}";
+        }
+
+        #endregion Public
+
+        #region Unity
 
         private void Awake()
         {
@@ -47,6 +65,10 @@ namespace ScriptableObjects
             CheckForIdDuplicates();
             //Debug.Log($"{string.Join("\n", _shapes)}\n{_shapes.Count}");
         }
+
+        #endregion Unity
+
+        #region Private
 
         private static void CheckForIdDuplicates()
         {
@@ -75,9 +97,6 @@ namespace ScriptableObjects
                 !_prefab.GetComponent<PolygonCollider2D>();
         }
 
-        public override string ToString()
-        {
-            return $"{_id} : {name}";
-        }
+        #endregion Private
     }
 }

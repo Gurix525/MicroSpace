@@ -3,6 +3,7 @@ using ExtensionMethods;
 using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Entities
 {
