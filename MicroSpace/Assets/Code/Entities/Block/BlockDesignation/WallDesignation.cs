@@ -1,5 +1,6 @@
 using System;
 using ExtensionMethods;
+using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -20,21 +21,18 @@ namespace Entities
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Walls"))
+            if (collision.gameObject.layer == References.WallsLayer)
             {
-                _satellite.WallDesignationsTilemap.SetColor(
-                    Vector3Int.RoundToInt(LocalPosition),
-                    _colors.WallDesignationObstructed);
-                IsObstructed = true;
+                SetObstructed();
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _satellite.WallDesignationsTilemap.SetColor(
-                Vector3Int.RoundToInt(LocalPosition),
-                _colors.WallDesignationNormal);
-            IsObstructed = false;
+            if (collision.gameObject.layer == References.WallsLayer)
+            {
+                SetUnobstructed();
+            }
         }
 
         private void OnDestroy()
@@ -46,6 +44,22 @@ namespace Entities
         #endregion Unity
 
         #region Private
+
+        private void SetObstructed()
+        {
+            _satellite.WallDesignationsTilemap.SetColor(
+                Vector3Int.RoundToInt(LocalPosition),
+                _colors.WallDesignationObstructed);
+            IsObstructed = true;
+        }
+
+        private void SetUnobstructed()
+        {
+            _satellite.WallDesignationsTilemap.SetColor(
+                Vector3Int.RoundToInt(LocalPosition),
+                _colors.WallDesignationNormal);
+            IsObstructed = false;
+        }
 
         private void TrySetSpriteMaskRange()
         {

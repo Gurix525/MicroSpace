@@ -1,4 +1,5 @@
 using System;
+using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -18,21 +19,18 @@ namespace Entities
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Floors"))
+            if (collision.gameObject.layer == References.FloorsLayer)
             {
-                _satellite.FloorDesignationsTilemap.SetColor(
-                    Vector3Int.RoundToInt(FixedLocalPosition),
-                    _colors.FloorDesignationObstructed);
-                IsObstructed = true;
+                SetObstructed();
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _satellite.FloorDesignationsTilemap.SetColor(
-                        Vector3Int.RoundToInt(FixedLocalPosition),
-                        _colors.FloorDesignationNormal);
-            IsObstructed = false;
+            if (collision.gameObject.layer == References.FloorsLayer)
+            {
+                SetUnobstructed();
+            }
         }
 
         private void OnDestroy()
@@ -44,6 +42,22 @@ namespace Entities
         #endregion Unity
 
         #region Private
+
+        private void SetObstructed()
+        {
+            _satellite.FloorDesignationsTilemap.SetColor(
+                Vector3Int.RoundToInt(FixedLocalPosition),
+                _colors.FloorDesignationObstructed);
+            IsObstructed = true;
+        }
+
+        private void SetUnobstructed()
+        {
+            _satellite.FloorDesignationsTilemap.SetColor(
+                Vector3Int.RoundToInt(FixedLocalPosition),
+                _colors.FloorDesignationNormal);
+            IsObstructed = false;
+        }
 
         private void AddSelfToSatelliteList()
         {

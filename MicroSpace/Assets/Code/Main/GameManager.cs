@@ -245,6 +245,7 @@ namespace Main
 
         private void Awake()
         {
+            References.Initialize();
             Satellite.FirstSatelliteCreated.AddListener(SetFirstFocusedSatellite);
         }
 
