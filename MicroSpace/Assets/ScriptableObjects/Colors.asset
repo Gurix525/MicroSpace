@@ -17,9 +17,9 @@ MonoBehaviour:
   _temporalDesignationNormal: {r: 0.6, g: 0.8, b: 0.6, a: 0.6}
   _temporalDesignationObstructed: {r: 0.8117647, g: 0.49411765, b: 0.49411765, a: 0.6}
   _wallDesignationNormal: {r: 1, g: 1, b: 1, a: 1}
-  _wallDesignationObstructed: {r: 0.9, g: 0.2, b: 0.2, a: 1}
+  _wallDesignationObstructed: {r: 1, g: 0.5518868, b: 0.61590314, a: 1}
   _floorDesignationNormal: {r: 1, g: 1, b: 1, a: 1}
-  _floorDesignationObstructed: {r: 0.9019608, g: 0.2, b: 0.2, a: 1}
+  _floorDesignationObstructed: {r: 1, g: 0.5529412, b: 0.61960787, a: 1}
   _cancelDesignationActive: {r: 0.75686276, g: 0.105882354, b: 0.07058824, a: 0.6}
   _cancelDesignationInactive: {r: 1, g: 0.6117647, b: 0.5921569, a: 0.6}
   _miningDesignationActive: {r: 0.75686276, g: 0.105882354, b: 0.07058824, a: 0.6}
