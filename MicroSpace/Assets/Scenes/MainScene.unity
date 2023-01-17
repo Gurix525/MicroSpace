@@ -343,7 +343,7 @@ MonoBehaviour:
   _buildingUI: {fileID: 1387751628}
   _shapePickerUI: {fileID: 1688614401}
   _modelPickerUI: {fileID: 1833859025}
-  _maxDesignDistance: 9
+  _maxDesignDistance: 19
   _buildingMode: 0
   _shape: {fileID: 0}
   _blockModel: {fileID: 0}
