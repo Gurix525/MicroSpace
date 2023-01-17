@@ -34,6 +34,7 @@ namespace Entities
             .Select(line => line.TransformLine(transform))
             .ToArray();
 
+        [field: SerializeField, ReadonlyInspector]
         public SolidBlock[] NeighbouringBlocks { get; set; } = new SolidBlock[8];
 
         public Dictionary<int, int> Gasses { get; set; } = new();
@@ -111,6 +112,7 @@ namespace Entities
             if (_satellite == null)
                 return;
             _satellite.Blocks.Add(this);
+            _satellite.SolidBlocks.Add(this);
             _satellite.Floors.Add(this);
         }
 
@@ -129,6 +131,7 @@ namespace Entities
             if (_satellite == null)
                 return;
             _satellite.Blocks.Remove(this);
+            _satellite.SolidBlocks.Remove(this);
             _satellite.Floors.Remove(this);
         }
 

@@ -51,6 +51,7 @@ namespace Entities
             if (_satellite == null)
                 return;
             _satellite.Blocks.Add(this);
+            _satellite.SolidBlocks.Add(this);
             _satellite.Walls.Add(this);
         }
 
@@ -76,6 +77,7 @@ namespace Entities
             if (_satellite == null)
                 return;
             _satellite.Blocks.Remove(this);
+            _satellite.SolidBlocks.Remove(this);
             _satellite.Walls.Remove(this);
         }
 

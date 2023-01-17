@@ -18,16 +18,13 @@ namespace Entities
     {
         #region Fields
 
-        [SerializeField]
-        [ReadonlyInspector]
+        [SerializeField, ReadonlyInspector]
         private Vector2 _position;
 
-        [SerializeField]
-        [ReadonlyInspector]
+        [SerializeField, ReadonlyInspector]
         private float _rotation;
 
-        [SerializeField]
-        [ReadonlyInspector]
+        [SerializeField, ReadonlyInspector]
         private Vector2 _velocity;
 
         [SerializeField]
@@ -43,11 +40,8 @@ namespace Entities
         private Tilemap _wallsTilemap;
 
         private TilemapRenderer _wallsRenderer;
-
         private TilemapRenderer _wallDesignationsRenderer;
-
         private TilemapRenderer _floorsRenderer;
-
         private TilemapRenderer _floorDesignationsRenderer;
 
         private List<GameObject> _obstacles = new();
@@ -55,27 +49,23 @@ namespace Entities
         private Rigidbody2D _rigidbody;
 
         private bool _hasBlocksChangedLastFrame = false;
-
         private bool _hasWallsChangedLastFrame = false;
+        private bool _hasSolidBlocksChangedLastFrame = false;
+
+        private List<SolidBlock> _changedSolidBlocks = new();
 
         #endregion Fields
 
         #region Properties
 
         public ObservableCollection<Block> Blocks { get; set; } = new();
-
         public ObservableCollection<Wall> Walls { get; set; } = new();
-
-        public List<WallDesignation> WallDesignations { get; set; } = new();
-
-        public List<FloorDesignation> FloorDesignations { get; set; } = new();
-
+        public ObservableCollection<SolidBlock> SolidBlocks { get; set; } = new();
         public List<Floor> Floors { get; set; } = new();
-
+        public List<WallDesignation> WallDesignations { get; set; } = new();
+        public List<FloorDesignation> FloorDesignations { get; set; } = new();
         public Vector2 Position { get => _position; set => _position = value; }
-
         public float Rotation { get => _rotation; set => _rotation = value; }
-
         public Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
         public Tilemap FloorsTilemap => _floorsTilemap;
@@ -102,11 +92,11 @@ namespace Entities
 
         private void UpdateSatellite()
         {
-            if (!_hasBlocksChangedLastFrame)
-                return;
             _hasBlocksChangedLastFrame = false;
-            UpdateObstacles();
-            UpdateFloors();
+            if (_hasWallsChangedLastFrame)
+                UpdateObstacles();
+            if (_hasSolidBlocksChangedLastFrame)
+                UpdateFloors();
             UpdateProperties();
             if (IsSatelliteEmpty())
                 DestroySelf();
@@ -129,6 +119,7 @@ namespace Entities
             AddSelfToList();
             Blocks.CollectionChanged += OnBlocksCollectionChanged;
             Walls.CollectionChanged += OnWallsCollectionChanged;
+            SolidBlocks.CollectionChanged += OnSolidBlocksCollectionChanged;
         }
 
         private void Start()
@@ -138,7 +129,8 @@ namespace Entities
 
         private void Update()
         {
-            UpdateSatellite();
+            if (_hasBlocksChangedLastFrame)
+                UpdateSatellite();
         }
 
         private void OnEnable()
@@ -215,13 +207,39 @@ namespace Entities
 
         private void UpdateFloors()
         {
+            _hasSolidBlocksChangedLastFrame = false;
+
+            System.Diagnostics.Stopwatch stopwatch = new();
+            stopwatch.Start();
+
+            List<Floor> _allChangedFloors = new();
+
+            foreach (SolidBlock changedBlock in _changedSolidBlocks)
+            {
+                var foundFloors = Floors
+                    .Where(floor =>
+                    floor.FixedLocalPosition.x >= changedBlock.FixedLocalPosition.x - 1
+                    && floor.FixedLocalPosition.x <= changedBlock.FixedLocalPosition.x + 1
+                    && floor.FixedLocalPosition.y >= changedBlock.FixedLocalPosition.y - 1
+                    && floor.FixedLocalPosition.y <= changedBlock.FixedLocalPosition.y + 1);
+                foreach (var floor in foundFloors)
+                    _allChangedFloors.Add(floor);
+            }
+
+            var _changedFloors = _allChangedFloors.Distinct();
+
             bool originalQueriesStartInColliders = Physics2D.queriesStartInColliders;
             Physics2D.queriesStartInColliders = true;
-            foreach (Floor floor in Floors)
+            foreach (Floor floor in _changedFloors)
             {
                 UpdateFloor(floor);
             }
             Physics2D.queriesStartInColliders = originalQueriesStartInColliders;
+
+            stopwatch.Stop();
+            Debug.Log(stopwatch.Elapsed.TotalMilliseconds);
+
+            _changedSolidBlocks.Clear();
         }
 
         private static void UpdateFloor(Floor floor)
@@ -256,8 +274,6 @@ namespace Entities
 
         private void UpdateObstacles()
         {
-            if (!_hasWallsChangedLastFrame)
-                return;
             _hasWallsChangedLastFrame = false;
             ResetObstacles();
             foreach (Wall wall in Walls)
@@ -390,6 +406,23 @@ namespace Entities
             NotifyCollectionChangedEventArgs e)
         {
             _hasWallsChangedLastFrame = true;
+        }
+
+        private void OnSolidBlocksCollectionChanged(
+            object sender,
+            NotifyCollectionChangedEventArgs e)
+        {
+            _hasSolidBlocksChangedLastFrame = true;
+            if (e.NewItems != null)
+            {
+                foreach (SolidBlock item in e.NewItems)
+                    _changedSolidBlocks.Add(item);
+            }
+            if (e.OldItems != null)
+            {
+                foreach (SolidBlock item in e.OldItems)
+                    _changedSolidBlocks.Add(item);
+            }
         }
 
         #endregion Callbacks
