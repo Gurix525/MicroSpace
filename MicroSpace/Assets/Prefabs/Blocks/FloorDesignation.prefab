@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8468010359055013147}
   - component: {fileID: -7973753750638479468}
   - component: {fileID: -2190225200922089790}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FloorDesignation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,8 +51,6 @@ MonoBehaviour:
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
   _modelId: 0
   _shapeId: 0
-  _localPosition: {x: 0, y: 0}
-  _localRotation: 0
   _isMarkedForMining: 0
   _finishedBlockPrefab: {fileID: 6571155050859523946, guid: 0a4a9ef133ebbc24bbc2421248778790, type: 3}
   ObstructedStateChanged:

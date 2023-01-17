@@ -29,18 +29,20 @@ namespace Entities
         {
             if (transform.parent != null)
             {
-                if (IsCollidingWithAnotherBlocks(out Block[] blocks))
-                {
-                    foreach (var block in blocks)
+                Collider2D collider = Physics2D.OverlapBox(
+                    transform.position,
+                    new Vector2(0.49F, 0.49F),
+                    transform.rotation.z,
+                    TemporalBlockType switch
                     {
-                        if (block.BlockType == TemporalBlockType ||
-                        block.BlockType == TemporalBlockType - 2)
-                        {
-                            IsObstructed = true;
-                            _spriteRenderer.color = _colors.TemporalDesignationObstructed;
-                            return;
-                        }
-                    }
+                        BlockType.WallDesignation => LayerMask.GetMask("Walls", "WallDesignations"),
+                        _ => LayerMask.GetMask("Floors", "FloorDesignations")
+                    });
+                if (collider != null)
+                {
+                    IsObstructed = true;
+                    _spriteRenderer.color = _colors.TemporalDesignationObstructed;
+                    return;
                 }
                 IsObstructed = false;
                 _spriteRenderer.color = _colors.TemporalDesignationNormal;

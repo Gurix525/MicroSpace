@@ -93,53 +93,6 @@ namespace Entities
 
         #endregion Unity
 
-        #region Protected
-
-        protected bool IsCollidingWithAnotherBlock()
-        {
-            return IsCollidingWithAnotherBlock(out _);
-        }
-
-        protected bool IsCollidingWithAnotherBlock(out Block collidingBlock)
-        {
-            var blocks = FindObjectsOfType<Block>()
-                .Where(x =>
-                Vector2.Distance(transform.position, x.transform.position) < 1.42F &&
-                x != this &&
-                x is not TemporalDesignation);
-            foreach (var block in blocks)
-            {
-                if (Square.IsIntersecting(block.Square))
-                {
-                    collidingBlock = block;
-                    return true;
-                }
-            }
-            collidingBlock = null;
-            return false;
-        }
-
-        protected bool IsCollidingWithAnotherBlocks(out Block[] collidingBlocks)
-        {
-            List<Block> newCollidingBlocks = new();
-            var blocks = FindObjectsOfType<Block>()
-                .Where(x =>
-                Vector2.Distance(transform.position, x.transform.position) < 1.42F &&
-                x != this &&
-                x is not TemporalDesignation);
-            foreach (var block in blocks)
-            {
-                if (Square.IsIntersecting(block.Square))
-                {
-                    newCollidingBlocks.Add(block);
-                }
-            }
-            collidingBlocks = newCollidingBlocks.ToArray();
-            return collidingBlocks.Length > 0;
-        }
-
-        #endregion Protected
-
         #region Private
 
         private void SetBlockType()

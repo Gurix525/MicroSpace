@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 589271343126821892}
   - component: {fileID: 5702153356437881332}
   - component: {fileID: 5463991334177452279}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallDesignation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,8 +52,6 @@ MonoBehaviour:
   _colors: {fileID: 11400000, guid: c98fe3f3fcac8ea4aa02dac196d19763, type: 2}
   _modelId: 0
   _shapeId: 0
-  _localPosition: {x: 0, y: 0}
-  _localRotation: 0
   _isMarkedForMining: 0
   _finishedBlockPrefab: {fileID: 7440152704112946889, guid: 8b2411273005b114d8032424950d9c9b, type: 3}
   ObstructedStateChanged:
