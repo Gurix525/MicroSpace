@@ -77,8 +77,9 @@ namespace Entities
         #region Private
 
         private Floor[] NeighbouringFloors => NeighbouringBlocks
-            .Where(block => block is Floor)
-            .Select(block => block as Floor)
+            .Where(block => block != null)
+            .Where(block => block.BlockType == BlockType.Floor)
+            .Select(block => (Floor)block)
             .ToArray();
 
         private int NeighbouringVoids => NeighbouringBlocks

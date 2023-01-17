@@ -218,10 +218,12 @@ namespace Entities
             {
                 var foundFloors = Floors
                     .Where(floor =>
-                    floor.FixedLocalPosition.x >= changedBlock.FixedLocalPosition.x - 1
+                    (floor.FixedLocalPosition.x >= changedBlock.FixedLocalPosition.x - 1
                     && floor.FixedLocalPosition.x <= changedBlock.FixedLocalPosition.x + 1
-                    && floor.FixedLocalPosition.y >= changedBlock.FixedLocalPosition.y - 1
-                    && floor.FixedLocalPosition.y <= changedBlock.FixedLocalPosition.y + 1);
+                    && floor.FixedLocalPosition.y == changedBlock.FixedLocalPosition.y)
+                    || (floor.FixedLocalPosition.y >= changedBlock.FixedLocalPosition.y - 1
+                    && floor.FixedLocalPosition.y <= changedBlock.FixedLocalPosition.y + 1
+                    && floor.FixedLocalPosition.x == changedBlock.FixedLocalPosition.x));
                 foreach (var floor in foundFloors)
                     _allChangedFloors.Add(floor);
             }
@@ -248,27 +250,38 @@ namespace Entities
             {
                 RaycastHit2D[] hits = Physics2D.LinecastAll(
                     floor.CheckingLines[i].A, floor.CheckingLines[i].B);
-                if (!TryGetNeighbouringBlock<Wall>(hits, floor, out SolidBlock detectedBlock))
-                    TryGetNeighbouringBlock<Floor>(hits, floor, out detectedBlock);
+                if (!TryGetNeighbouringBlock(
+                    hits,
+                    References.WallsLayer,
+                    floor,
+                    out SolidBlock detectedBlock))
+                {
+                    TryGetNeighbouringBlock(
+                        hits,
+                        References.FloorsLayer,
+                        floor,
+                        out detectedBlock);
+                }
                 floor.NeighbouringBlocks[i] = detectedBlock;
             }
         }
 
-        private static bool TryGetNeighbouringBlock<T>(
+        private static bool TryGetNeighbouringBlock(
             RaycastHit2D[] hits,
+            int layer,
             Floor floor,
             out SolidBlock block)
-            where T : SolidBlock
         {
             hits = hits
-                .Where(hit => hit.collider.TryGetComponent<T>(out _))
+                .Where(hit => hit.collider.gameObject.layer == layer)
                 .ToArray();
-            if (typeof(T) == typeof(Floor))
+            if (layer == References.FloorsLayer)
                 hits = hits
                     .Where(hit => hit.collider.gameObject != floor.gameObject)
                     .ToArray();
-            block = hits.Select(hit => hit.collider.GetComponent<T>())
-                .FirstOrDefault();
+            block = hits.FirstOrDefault().collider != null ?
+                hits.FirstOrDefault().collider.GetComponent<SolidBlock>() :
+                null;
             return block != null;
         }
 
