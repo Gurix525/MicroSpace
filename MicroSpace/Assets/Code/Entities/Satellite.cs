@@ -208,12 +208,20 @@ namespace Entities
         private void UpdateFloors()
         {
             _hasSolidBlocksChangedLastFrame = false;
+            IEnumerable<Floor> _changedFloors = GetChangedFloors();
+            bool originalQueriesStartInColliders = Physics2D.queriesStartInColliders;
+            Physics2D.queriesStartInColliders = true;
+            foreach (Floor floor in _changedFloors)
+            {
+                UpdateFloor(floor);
+            }
+            Physics2D.queriesStartInColliders = originalQueriesStartInColliders;
+            _changedSolidBlocks.Clear();
+        }
 
-            System.Diagnostics.Stopwatch stopwatch = new();
-            stopwatch.Start();
-
-            List<Floor> _allChangedFloors = new();
-
+        private IEnumerable<Floor> GetChangedFloors()
+        {
+            List<Floor> _changedFloors = new();
             foreach (SolidBlock changedBlock in _changedSolidBlocks)
             {
                 var foundFloors = Floors
@@ -225,23 +233,9 @@ namespace Entities
                     && floor.FixedLocalPosition.y <= changedBlock.FixedLocalPosition.y + 1
                     && floor.FixedLocalPosition.x == changedBlock.FixedLocalPosition.x));
                 foreach (var floor in foundFloors)
-                    _allChangedFloors.Add(floor);
+                    _changedFloors.Add(floor);
             }
-
-            var _changedFloors = _allChangedFloors.Distinct();
-
-            bool originalQueriesStartInColliders = Physics2D.queriesStartInColliders;
-            Physics2D.queriesStartInColliders = true;
-            foreach (Floor floor in _changedFloors)
-            {
-                UpdateFloor(floor);
-            }
-            Physics2D.queriesStartInColliders = originalQueriesStartInColliders;
-
-            stopwatch.Stop();
-            Debug.Log(stopwatch.Elapsed.TotalMilliseconds);
-
-            _changedSolidBlocks.Clear();
+            return _changedFloors.Distinct();
         }
 
         private static void UpdateFloor(Floor floor)
