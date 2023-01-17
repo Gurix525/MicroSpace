@@ -27,7 +27,7 @@ namespace Main
         private GameObject _modelPickerUI;
 
         [SerializeField]
-        private int _maxDesignDistance = 9;
+        private int _maxDesignDistance = 19;
 
         [SerializeField]
         [ReadonlyInspector]
