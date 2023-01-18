@@ -26,9 +26,6 @@ namespace Entities
 
         public void Generate()
         {
-            System.Diagnostics.Stopwatch watch = new();
-            watch.Start();
-
             _satellite.WallsTilemap.ClearAllTiles();
 
             int size = 500;
@@ -50,6 +47,7 @@ namespace Entities
                     return;
                 }
             }
+
             Range range = new(
                 _treshold,
                 1 - _treshold / 10F);
@@ -112,22 +110,6 @@ namespace Entities
                     new(cell.Key.x, cell.Key.y, 0),
                     TileFlags.None);
             }
-
-            List<float> values = new();
-
-            for (int i = 0; i <= 1000; i++)
-            {
-                for (int j = 0; j <= 1000; j++)
-                {
-                    values.Add(CalculateValue((i, j), randoms));
-                }
-            }
-
-            float min = values.Min();
-            float max = values.Max();
-
-            watch.Stop();
-            Debug.Log($"{min}:{max}");
         }
 
         #endregion Public
@@ -163,7 +145,7 @@ namespace Entities
                 (cell.y + randoms[i].b) / _perlinScale);
             }
 
-            return result / randoms.Length;
+            return (result / randoms.Length).Map(0.16F, 0.77F, 0F, 1F);
         }
 
         #endregion Private
