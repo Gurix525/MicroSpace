@@ -72,8 +72,12 @@ namespace Main
                 {
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _lesserBound, 0)),
-                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _greaterBound, 0))),
+                            new(
+                                Screen.width - 16F,
+                                16F),
+                            new(
+                                Screen.width - 16F,
+                                Screen.height - 16F)),
                         out Vector2 intersection);
                     return intersection;
                 }
@@ -81,8 +85,12 @@ namespace Main
                 {
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _lesserBound, 0)),
-                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _greaterBound, 0))),
+                            new(
+                                16F,
+                                16F),
+                            new(
+                                16F,
+                                Screen.height - 16F)),
                         out Vector2 intersection);
                     return intersection;
                 }
@@ -93,8 +101,12 @@ namespace Main
                 {
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _greaterBound, 0)),
-                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _greaterBound, 0))),
+                            new(
+                                16F,
+                                Screen.height - 16F),
+                            new(
+                                Screen.width - 16F,
+                                Screen.height - 16F)),
                         out Vector2 intersection);
                     return intersection;
                 }
@@ -102,8 +114,12 @@ namespace Main
                 {
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _lesserBound, 0)),
-                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _lesserBound, 0))),
+                            new(
+                                16F,
+                                16F),
+                            new(
+                                Screen.width - 16F,
+                                16F)),
                         out Vector2 intersection);
                     return intersection;
                 }
