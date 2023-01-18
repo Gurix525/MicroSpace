@@ -12,6 +12,9 @@ namespace Main
         private Image _image;
         private float _hue = 0;
 
+        private readonly float _greaterBound = 0.99F;
+        private readonly float _lesserBound = 0.01F;
+
         private void Awake()
         {
             _pointer = Instantiate(Prefabs.Pointer, References.Pointers);
@@ -62,26 +65,24 @@ namespace Main
         {
             Line lineOfSight = new(
                 Camera.main.WorldToScreenPoint(transform.position),
-                Camera.main.transform.position);
+                Camera.main.ViewportToScreenPoint(new(0.5F, 0.5F, 0)));
             if (Math.Abs(viewportPosition.x - 0.5F) >= Math.Abs(viewportPosition.y - 0.5F))
             {
                 if (viewportPosition.x >= 0.5F)
                 {
-                    Debug.Log("X > 0.5F");
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(1, 0, 0)),
-                            Camera.main.ViewportToScreenPoint(new(1, 1, 0))),
+                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _lesserBound, 0)),
+                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _greaterBound, 0))),
                         out Vector2 intersection);
                     return intersection;
                 }
                 else
                 {
-                    Debug.Log("X < 0.5F");
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(0, 0, 0)),
-                            Camera.main.ViewportToScreenPoint(new(0, 1, 0))),
+                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _lesserBound, 0)),
+                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _greaterBound, 0))),
                         out Vector2 intersection);
                     return intersection;
                 }
@@ -90,21 +91,19 @@ namespace Main
             {
                 if (viewportPosition.y >= 0.5F)
                 {
-                    Debug.Log("Y > 0.5F");
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(0, 1, 0)),
-                            Camera.main.ViewportToScreenPoint(new(1, 1, 0))),
+                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _greaterBound, 0)),
+                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _greaterBound, 0))),
                         out Vector2 intersection);
                     return intersection;
                 }
                 else
                 {
-                    Debug.Log("Y < 0.5F");
                     lineOfSight.IsIntersecting(
                         new Line(
-                            Camera.main.ViewportToScreenPoint(new(0, 0, 0)),
-                            Camera.main.ViewportToScreenPoint(new(1, 0, 0))),
+                            Camera.main.ViewportToScreenPoint(new(_lesserBound, _lesserBound, 0)),
+                            Camera.main.ViewportToScreenPoint(new(_greaterBound, _lesserBound, 0))),
                         out Vector2 intersection);
                     return intersection;
                 }
