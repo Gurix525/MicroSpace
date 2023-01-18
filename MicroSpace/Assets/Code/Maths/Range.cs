@@ -62,6 +62,11 @@ namespace Maths
             return GetHashCode() == other.GetHashCode();
         }
 
+        public bool IsIncluding(float a)
+        {
+            return a > _start && a < _end;
+        }
+
         public bool IsCovered(Range other)
         {
             if (_start > other.Start && _end < other.End)

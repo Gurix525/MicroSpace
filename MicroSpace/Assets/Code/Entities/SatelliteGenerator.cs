@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
+using Maths;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using ExtensionMethods;
 
 namespace Entities
 {
@@ -9,13 +13,7 @@ namespace Entities
         #region Fields
 
         [SerializeField]
-        private Gradient _gradient;
-
-        [SerializeField]
         private float _perlinScale = 100F;
-
-        [SerializeField]
-        private float _perlinModifier = 2F;
 
         [SerializeField, Range(0F, 1F)]
         private float _treshold = 0.5F;
@@ -28,33 +26,108 @@ namespace Entities
 
         public void Generate()
         {
-            int size = 1000;
-            float random = Random.value * 10000;
-            Dictionary<(int, int), bool> cells = new();
-            Dictionary<(int, int), bool> openCells = new();
-            openCells.Add((0, 0), false);
+            System.Diagnostics.Stopwatch watch = new();
+            watch.Start();
 
-            while (openCells.Count > 0 && cells.Count <= size)
+            _satellite.WallsTilemap.ClearAllTiles();
+
+            int size = 500;
+            (float a, float b)[] randoms = new (float, float)[5];
+            float originalValue = 0F;
+            for (int j = 0; j < 10000; j++)
             {
-                openCells.ContainsKey
+                for (int i = 0; i < randoms.Length; i++)
+                {
+                    randoms[i].a = Random.value * 1000000;
+                    randoms[i].b = Random.value * 1000000;
+                }
+                originalValue = CalculateValue((0, 0), randoms);
+                if (originalValue > _treshold)
+                    break;
+                if (j == 999)
+                {
+                    Debug.LogException(new System.InvalidOperationException("Brak wyniku"));
+                    return;
+                }
+            }
+            Range range = new(
+                _treshold,
+                1 - _treshold / 10F);
+            Dictionary<(int x, int y), float> cells = new();
+            Dictionary<(int x, int y), float> openCells = new();
+            openCells.Add((0, 0), originalValue);
+
+            while (openCells.Count > 0 && cells.Count < size)
+            {
+                var cell = openCells.Last();
+
+                (int x, int y)[] sideCells =
+                {
+                    (x: cell.Key.x + 1, y: cell.Key.y),
+                    (x: cell.Key.x - 1, y: cell.Key.y),
+                    (x: cell.Key.x, y: cell.Key.y + 1),
+                    (x: cell.Key.x, y: cell.Key.y - 1)
+                };
+
+                foreach (var sideCell in sideCells)
+                {
+                    if (!cells.ContainsKey(sideCell)
+                        && !openCells.ContainsKey(sideCell))
+                        if (IsValueInRange(sideCell, randoms, range, out float value))
+                            openCells.Add(sideCell, value);
+                }
+                cells.Add(cell.Key, cell.Value);
+                openCells.Remove(cell.Key);
             }
 
-            //float[,] values = new float[100, 100];
-            //for (int i = 0; i < values.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < values.GetLength(1); j++)
-            //    {
-            //        values[i, j] =
-            //            (Mathf.PerlinNoise((i + random) / _perlinScale, (j + random) / _perlinScale)
-            //            + Mathf.PerlinNoise((i + random) / _perlinScale / _perlinModifier, (j + random) / _perlinScale / _perlinModifier)) / 2F;
-            //        _satellite.WallsTilemap.SetColor(
-            //            new(i, j, 0),
-            //            values[i, j] >= _treshold ? new(1, 1, 1, 1) : new(1, 1, 1, 0));
-            //    }
-            //}
+            while (openCells.Count > 0)
+            {
+                var cell = openCells.Last();
 
-            //_satellite.WallsTilemap.SetTile(new(i, j, 0), BlockModel.GetModel(0).Tile);
-            //_satellite.WallsTilemap.SetTileFlags(new(i, j, 0), TileFlags.None);
+                (int x, int y)[] sideCells =
+                {
+                    (x: cell.Key.x + 1, y: cell.Key.y),
+                    (x: cell.Key.x - 1, y: cell.Key.y),
+                    (x: cell.Key.x, y: cell.Key.y + 1),
+                    (x: cell.Key.x, y: cell.Key.y - 1)
+                };
+
+                foreach (var sideCell in sideCells)
+                {
+                    if (!cells.ContainsKey(sideCell)
+                        && !openCells.ContainsKey(sideCell))
+                        if (IsValueInRange(sideCell, randoms, range, out float value))
+                            cells.Add(sideCell, value);
+                }
+                cells.Add(cell.Key, cell.Value);
+                openCells.Remove(cell.Key);
+            }
+
+            foreach (var cell in cells)
+            {
+                _satellite.WallsTilemap.SetTile(
+                    new(cell.Key.x, cell.Key.y, 0),
+                    BlockModel.GetModel(0).Tile);
+                _satellite.WallsTilemap.SetTileFlags(
+                    new(cell.Key.x, cell.Key.y, 0),
+                    TileFlags.None);
+            }
+
+            List<float> values = new();
+
+            for (int i = 0; i <= 1000; i++)
+            {
+                for (int j = 0; j <= 1000; j++)
+                {
+                    values.Add(CalculateValue((i, j), randoms));
+                }
+            }
+
+            float min = values.Min();
+            float max = values.Max();
+
+            watch.Stop();
+            Debug.Log($"{min}:{max}");
         }
 
         #endregion Public
@@ -70,30 +143,28 @@ namespace Entities
 
         #region Private
 
-        public float CalculateValue((int x, int y) cell, float random)
+        private bool IsValueInRange(
+            (int x, int y) cell,
+            (float, float)[] randoms,
+            Range range,
+            out float value)
         {
-            return (Mathf.PerlinNoise(
-                (cell.x + random) / _perlinScale,
-                (cell.y + random) / _perlinScale)
-                + Mathf.PerlinNoise(
-                    (cell.x + random) / _perlinScale / _perlinModifier,
-                    (cell.y + random) / _perlinScale / _perlinModifier))
-                / 2F;
+            value = CalculateValue(cell, randoms);
+            return range.IsIncluding(value);
         }
 
-        //private class Cell
-        //{
-        //    private Vector2Int _position;
+        private float CalculateValue((int x, int y) cell, (float a, float b)[] randoms)
+        {
+            float result = 0F;
+            for (int i = 0; i < randoms.Length; i++)
+            {
+                result += Mathf.PerlinNoise(
+                (cell.x + randoms[i].a) / _perlinScale,
+                (cell.y + randoms[i].b) / _perlinScale);
+            }
 
-        //    public int X => _position.x;
-        //    public int Y => _position.y;
-        //    public bool IsSet { get; set; } = false;
-
-        //    public Cell(int x, int y)
-        //    {
-        //        _position = new Vector2Int(x, y);
-        //    }
-        //}
+            return result / randoms.Length;
+        }
 
         #endregion Private
     }

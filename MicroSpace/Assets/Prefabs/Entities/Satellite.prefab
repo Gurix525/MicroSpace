@@ -551,8 +551,9 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  _perlinScale: 50
-  _perlinModifier: 2
+  _perlinScale: 25
+  _perlinModifier: 4
+  _treshold: 0.8
 --- !u!1 &8406514125010487001
 GameObject:
   m_ObjectHideFlags: 0
