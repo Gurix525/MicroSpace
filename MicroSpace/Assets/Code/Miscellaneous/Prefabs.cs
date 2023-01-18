@@ -61,6 +61,10 @@ namespace Miscellaneous
         [SerializeField]
         private GameObject _pointer;
 
+        [Header("Curves")]
+        [SerializeField]
+        private AnimationCurve _pointerCurve;
+
         #endregion Fields
 
         #region Properties
@@ -83,6 +87,8 @@ namespace Miscellaneous
         public static GameObject ModelButton => Instance._modelButton;
         public static GameObject ShapeButton => Instance._shapeButton;
         public static GameObject Pointer => Instance._pointer;
+
+        public static AnimationCurve PointerCurve => Instance._pointerCurve;
 
         #endregion Properties
 

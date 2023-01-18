@@ -10,6 +10,12 @@ public class DistanceActivator : MonoBehaviour
 
     #endregion Fields
 
+    #region Properties
+
+    public bool IsLoaded => _isSatelliteLoaded;
+
+    #endregion Properties
+
     #region Unity
 
     private void FixedUpdate()

@@ -8,12 +8,14 @@ namespace Main
 {
     public class PointerSource : MonoBehaviour
     {
+        #region Fields
+
         private GameObject _pointer;
         private Image _image;
-        private float _hue = 0;
 
-        private readonly float _greaterBound = 0.99F;
-        private readonly float _lesserBound = 0.01F;
+        #endregion Fields
+
+        #region Unity
 
         private void Awake()
         {
@@ -25,18 +27,7 @@ namespace Main
         {
             if (Camera.main == null)
                 return;
-            Vector2 viewportPosition = Camera.main.WorldToViewportPoint(transform.position);
-            if (viewportPosition.x < 0
-                || viewportPosition.x > 1
-                || viewportPosition.y < 0
-                || viewportPosition.y > 1)
-            {
-                _pointer.SetActive(true);
-                SetPointerPosition(viewportPosition);
-                ChangePointerColor();
-            }
-            else
-                _pointer.SetActive(false);
+            ControlPointer();
         }
 
         private void OnDestroy()
@@ -44,10 +35,37 @@ namespace Main
             Destroy(_pointer);
         }
 
-        private void ChangePointerColor()
+        #endregion Unity
+
+        #region Private
+
+        private void ControlPointer()
         {
-            _image.color = Color.HSVToRGB(_hue, 1, 1);
-            _hue = _hue >= 1 ? 0 : _hue + 0.001F;
+            Vector2 viewportPosition = Camera.main
+                .WorldToViewportPoint(transform.position);
+            float distanceFromCamera = Vector2
+                .Distance(transform.position, Camera.main.transform.position);
+            if (distanceFromCamera < 500)
+            {
+                if (viewportPosition.x < 0
+                    || viewportPosition.x > 1
+                    || viewportPosition.y < 0
+                    || viewportPosition.y > 1)
+                {
+                    _pointer.SetActive(true);
+                    SetPointerPosition(viewportPosition);
+                    ChangePointerColor(distanceFromCamera);
+                    return;
+                }
+            }
+            _pointer.SetActive(false);
+        }
+
+        private void ChangePointerColor(float distanceFromCamera)
+        {
+            _image.color = new(
+                1, 1, 1,
+                Prefabs.PointerCurve.Evaluate(distanceFromCamera / 500));
         }
 
         private void SetPointerPosition(Vector2 viewportPosition)
@@ -56,7 +74,8 @@ namespace Main
                 ((Vector2)transform.position
                 - (Vector2)Camera.main.transform.position)
                 .normalized;
-            _pointer.transform.eulerAngles = new(0, 0, Vector2.SignedAngle(Vector2.up, direction) + 45);
+            _pointer.transform.eulerAngles = new(
+                0, 0, Vector2.SignedAngle(Vector2.up, direction) + 45);
             Vector2 intersection = GetCameraIntersection(viewportPosition);
             _pointer.transform.position = intersection;
         }
@@ -74,10 +93,10 @@ namespace Main
                         new Line(
                             new(
                                 Screen.width - 16F,
-                                16F),
+                                0),
                             new(
                                 Screen.width - 16F,
-                                Screen.height - 16F)),
+                                Screen.height)),
                         out Vector2 intersection);
                     return intersection;
                 }
@@ -87,10 +106,10 @@ namespace Main
                         new Line(
                             new(
                                 16F,
-                                16F),
+                                00),
                             new(
                                 16F,
-                                Screen.height - 16F)),
+                                Screen.height)),
                         out Vector2 intersection);
                     return intersection;
                 }
@@ -102,10 +121,10 @@ namespace Main
                     lineOfSight.IsIntersecting(
                         new Line(
                             new(
-                                16F,
+                                0,
                                 Screen.height - 16F),
                             new(
-                                Screen.width - 16F,
+                                Screen.width,
                                 Screen.height - 16F)),
                         out Vector2 intersection);
                     return intersection;
@@ -115,15 +134,17 @@ namespace Main
                     lineOfSight.IsIntersecting(
                         new Line(
                             new(
-                                16F,
+                                0,
                                 16F),
                             new(
-                                Screen.width - 16F,
+                                Screen.width,
                                 16F)),
                         out Vector2 intersection);
                     return intersection;
                 }
             }
         }
+
+        #endregion Private
     }
 }

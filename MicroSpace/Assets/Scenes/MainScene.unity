@@ -694,6 +694,39 @@ MonoBehaviour:
   _modelButton: {fileID: 3864066361280169147, guid: ecd533d35bb306a4586e3d2510c26c17, type: 3}
   _shapeButton: {fileID: 3864066361280169147, guid: a99c786c4816ac94485b0ea66b83a6e1, type: 3}
   _pointer: {fileID: 9066202826648773540, guid: 82716f6b02e399d4ba0b746e2ad28466, type: 3}
+  _pointerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0041339155
+      value: 0.751097
+      inSlope: -0.37020946
+      outSlope: -0.37020946
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.6178613
+    - serializedVersion: 3
+      time: 0.94897175
+      value: 0.1840502
+      inSlope: -0.92355525
+      outSlope: -0.92355525
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11879187
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0053029
+      value: 0.0054044463
+      inSlope: -3.9623706
+      outSlope: -3.9623706
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.049062338
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &311547051
 GameObject:
   m_ObjectHideFlags: 0
