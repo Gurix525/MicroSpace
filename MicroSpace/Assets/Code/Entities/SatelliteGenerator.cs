@@ -5,6 +5,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using ExtensionMethods;
+using Miscellaneous;
 
 namespace Entities
 {
@@ -29,8 +30,12 @@ namespace Entities
 
         public void Generate()
         {
-            ClearTilemaps();
-            FillTilemaps();
+            if (!TryGetRandomShifts(
+                out float originalValue,
+                out Vector2[] randomShifts))
+                return;
+            CreateWalls(originalValue, randomShifts);
+            CreateFloors(originalValue, randomShifts);
         }
 
         #endregion Public
@@ -46,50 +51,42 @@ namespace Entities
 
         #region Private
 
-        private void ClearTilemaps()
+        private void CreateWalls(float originalValue, Vector2[] randomShifts)
         {
-            _satellite.WallsTilemap.ClearAllTiles();
-            _satellite.FloorsTilemap.ClearAllTiles();
-        }
-
-        private void FillTilemaps()
-        {
-            if (!TryGetRandomShifts(
-                out float originalValue,
-                out Vector2[] randomShifts))
-                return;
-            FillTilemap(_satellite.WallsTilemap, originalValue, randomShifts, true);
-            FillTilemap(_satellite.FloorsTilemap, originalValue, randomShifts, false);
-        }
-
-        private void FillTilemap(
-            Tilemap tilemap,
-            float originalValue,
-            Vector2[] randomShifts,
-            bool isWall)
-        {
-            foreach (var cell in CreateCells(originalValue, randomShifts, isWall))
+            foreach (var cell in CreateCells(originalValue, randomShifts))
             {
-                tilemap.SetTile(
-                    new(cell.Key.x, cell.Key.y, 0),
-                    BlockModel.GetModel(0).Tile);
-                tilemap.SetTileFlags(
-                    new(cell.Key.x, cell.Key.y, 0),
-                    TileFlags.None);
+                GameObject wall = Instantiate(
+                    Prefabs.Wall,
+                    _satellite.transform);
+                wall.transform.SetLocalPositionAndRotation(
+                    new(cell.Key.x, cell.Key.y),
+                    Quaternion.identity);
+            }
+        }
+
+        private void CreateFloors(float originalValue, Vector2[] randomShifts)
+        {
+            foreach (var cell in CreateCells(originalValue, randomShifts))
+            {
+                GameObject floor = Instantiate(
+                    Prefabs.Floor,
+                    _satellite.transform);
+                floor.transform.SetLocalPositionAndRotation(
+                    new(cell.Key.x, cell.Key.y),
+                    Quaternion.identity);
             }
         }
 
         private Dictionary<Vector2Int, float> CreateCells(
             float originalValue,
-            Vector2[] randomShifts,
-            bool isWall)
+            Vector2[] randomShifts)
         {
             Dictionary<Vector2Int, float> cells = new();
             Dictionary<Vector2Int, float> openCells = new();
             openCells.Add(new(0, 0), originalValue);
             while (openCells.Count > 0)
             {
-                OpenNewCells(randomShifts, cells, openCells, isWall);
+                OpenNewCells(randomShifts, cells, openCells);
             }
             return cells;
         }
@@ -97,8 +94,7 @@ namespace Entities
         private void OpenNewCells(
             Vector2[] randomShifts,
             Dictionary<Vector2Int, float> cells,
-            Dictionary<Vector2Int, float> openCells,
-            bool isWall)
+            Dictionary<Vector2Int, float> openCells)
         {
             var cell = openCells.Last();
             foreach (var sideCell in GetSideCells(ref cell))
