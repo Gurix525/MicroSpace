@@ -12,11 +12,14 @@ namespace Entities
     {
         #region Fields
 
-        [SerializeField]
-        private float _perlinScale = 100F;
+        [SerializeField, Range(1F, 50F)]
+        private float _additivePerlinScale = 25F;
 
         [SerializeField, Range(0F, 1F)]
-        private float _treshold = 0.5F;
+        private float _treshold = 0.67F;
+
+        [SerializeField]
+        private int _maxOpenCells = 500;
 
         private Satellite _satellite;
 
@@ -26,90 +29,8 @@ namespace Entities
 
         public void Generate()
         {
-            _satellite.WallsTilemap.ClearAllTiles();
-
-            int size = 500;
-            (float a, float b)[] randoms = new (float, float)[5];
-            float originalValue = 0F;
-            for (int j = 0; j < 10000; j++)
-            {
-                for (int i = 0; i < randoms.Length; i++)
-                {
-                    randoms[i].a = Random.value * 1000000;
-                    randoms[i].b = Random.value * 1000000;
-                }
-                originalValue = CalculateValue((0, 0), randoms);
-                if (originalValue > _treshold)
-                    break;
-                if (j == 999)
-                {
-                    Debug.LogException(new System.InvalidOperationException("Brak wyniku"));
-                    return;
-                }
-            }
-
-            Range range = new(
-                _treshold,
-                1 - _treshold / 10F);
-            Dictionary<(int x, int y), float> cells = new();
-            Dictionary<(int x, int y), float> openCells = new();
-            openCells.Add((0, 0), originalValue);
-
-            while (openCells.Count > 0 && cells.Count < size)
-            {
-                var cell = openCells.Last();
-
-                (int x, int y)[] sideCells =
-                {
-                    (x: cell.Key.x + 1, y: cell.Key.y),
-                    (x: cell.Key.x - 1, y: cell.Key.y),
-                    (x: cell.Key.x, y: cell.Key.y + 1),
-                    (x: cell.Key.x, y: cell.Key.y - 1)
-                };
-
-                foreach (var sideCell in sideCells)
-                {
-                    if (!cells.ContainsKey(sideCell)
-                        && !openCells.ContainsKey(sideCell))
-                        if (IsValueInRange(sideCell, randoms, range, out float value))
-                            openCells.Add(sideCell, value);
-                }
-                cells.Add(cell.Key, cell.Value);
-                openCells.Remove(cell.Key);
-            }
-
-            while (openCells.Count > 0)
-            {
-                var cell = openCells.Last();
-
-                (int x, int y)[] sideCells =
-                {
-                    (x: cell.Key.x + 1, y: cell.Key.y),
-                    (x: cell.Key.x - 1, y: cell.Key.y),
-                    (x: cell.Key.x, y: cell.Key.y + 1),
-                    (x: cell.Key.x, y: cell.Key.y - 1)
-                };
-
-                foreach (var sideCell in sideCells)
-                {
-                    if (!cells.ContainsKey(sideCell)
-                        && !openCells.ContainsKey(sideCell))
-                        if (IsValueInRange(sideCell, randoms, range, out float value))
-                            cells.Add(sideCell, value);
-                }
-                cells.Add(cell.Key, cell.Value);
-                openCells.Remove(cell.Key);
-            }
-
-            foreach (var cell in cells)
-            {
-                _satellite.WallsTilemap.SetTile(
-                    new(cell.Key.x, cell.Key.y, 0),
-                    BlockModel.GetModel(0).Tile);
-                _satellite.WallsTilemap.SetTileFlags(
-                    new(cell.Key.x, cell.Key.y, 0),
-                    TileFlags.None);
-            }
+            ClearTilemaps();
+            FillTilemaps();
         }
 
         #endregion Public
@@ -125,27 +46,165 @@ namespace Entities
 
         #region Private
 
-        private bool IsValueInRange(
-            (int x, int y) cell,
-            (float, float)[] randoms,
+        private void ClearTilemaps()
+        {
+            _satellite.WallsTilemap.ClearAllTiles();
+            _satellite.FloorsTilemap.ClearAllTiles();
+        }
+
+        private void FillTilemaps()
+        {
+            if (!TryGetRandomShifts(
+                out float originalValue,
+                out Vector2[] randomShifts))
+                return;
+            FillTilemap(_satellite.WallsTilemap, originalValue, randomShifts, true);
+            FillTilemap(_satellite.FloorsTilemap, originalValue, randomShifts, false);
+        }
+
+        private void FillTilemap(
+            Tilemap tilemap,
+            float originalValue,
+            Vector2[] randomShifts,
+            bool isWall)
+        {
+            foreach (var cell in CreateCells(originalValue, randomShifts, isWall))
+            {
+                tilemap.SetTile(
+                    new(cell.Key.x, cell.Key.y, 0),
+                    BlockModel.GetModel(0).Tile);
+                tilemap.SetTileFlags(
+                    new(cell.Key.x, cell.Key.y, 0),
+                    TileFlags.None);
+            }
+        }
+
+        private Dictionary<Vector2Int, float> CreateCells(
+            float originalValue,
+            Vector2[] randomShifts,
+            bool isWall)
+        {
+            Dictionary<Vector2Int, float> cells = new();
+            Dictionary<Vector2Int, float> openCells = new();
+            openCells.Add(new(0, 0), originalValue);
+            while (openCells.Count > 0)
+            {
+                OpenNewCells(randomShifts, cells, openCells, isWall);
+            }
+            return cells;
+        }
+
+        private void OpenNewCells(
+            Vector2[] randomShifts,
+            Dictionary<Vector2Int, float> cells,
+            Dictionary<Vector2Int, float> openCells,
+            bool isWall)
+        {
+            var cell = openCells.Last();
+            foreach (var sideCell in GetSideCells(ref cell))
+            {
+                OpenSideCell(randomShifts, cells, openCells, sideCell);
+            }
+            cells.Add(cell.Key, cell.Value);
+            openCells.Remove(cell.Key);
+        }
+
+        private void OpenSideCell(
+            Vector2[] randomShifts,
+            Dictionary<Vector2Int, float> cells,
+            Dictionary<Vector2Int, float> openCells,
+            Vector2Int sideCell)
+        {
+            if (DoesCellExist(cells, openCells, ref sideCell))
+            {
+                if (IsCellValueInRange(
+                    sideCell,
+                    randomShifts,
+                    GetRange(),
+                    out float value))
+                {
+                    if (cells.Count < _maxOpenCells)
+                        openCells.Add(sideCell, value);
+                    else
+                        cells.Add(sideCell, value);
+                }
+            }
+        }
+
+        private static bool DoesCellExist(Dictionary<Vector2Int, float> cells, Dictionary<Vector2Int, float> openCells, ref Vector2Int sideCell)
+        {
+            return !cells.ContainsKey(sideCell)
+                            && !openCells.ContainsKey(sideCell);
+        }
+
+        private Range GetRange()
+        {
+            float modifier = Random.Range(-1F, 1F);
+            return new(
+                _treshold + modifier * (_treshold / 10F),
+                1 - modifier * (_treshold / 10F));
+        }
+
+        private static Vector2Int[] GetSideCells(
+            ref KeyValuePair<Vector2Int, float> cell)
+        {
+            return new Vector2Int[]{
+                new(cell.Key.x + 1, cell.Key.y),
+                new(cell.Key.x - 1, cell.Key.y),
+                new(cell.Key.x, cell.Key.y + 1),
+                new(cell.Key.x, cell.Key.y - 1)
+            };
+        }
+
+        private bool TryGetRandomShifts(
+            out float originalValue,
+            out Vector2[] randomShifts)
+        {
+            originalValue = 0F;
+            randomShifts = new Vector2[5];
+            for (int j = 0; j < 10000; j++)
+            {
+                for (int i = 0; i < randomShifts.Length; i++)
+                {
+                    randomShifts[i].x = Random.value * 1000000;
+                    randomShifts[i].y = Random.value * 1000000;
+                }
+                originalValue = CalculateValue(new(0, 0), randomShifts);
+                if (originalValue > _treshold)
+                    break;
+                if (j == 999)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsCellValueInRange(
+            Vector2Int cell,
+            Vector2[] randomShifts,
             Range range,
             out float value)
         {
-            value = CalculateValue(cell, randoms);
+            value = CalculateValue(cell, randomShifts);
             return range.IsIncluding(value);
         }
 
-        private float CalculateValue((int x, int y) cell, (float a, float b)[] randoms)
+        private float CalculateValue(
+            Vector2Int cell,
+            Vector2[] randomShifts)
         {
-            float result = 0F;
-            for (int i = 0; i < randoms.Length; i++)
+            float sum = 0F;
+            for (int i = 0; i < randomShifts.Length; i++)
             {
-                result += Mathf.PerlinNoise(
-                (cell.x + randoms[i].a) / _perlinScale,
-                (cell.y + randoms[i].b) / _perlinScale);
+                sum += Mathf.PerlinNoise(
+                    (cell.x + randomShifts[i].x) / _additivePerlinScale,
+                    (cell.y + randomShifts[i].y) / _additivePerlinScale);
             }
 
-            return (result / randoms.Length).Map(0.16F, 0.77F, 0F, 1F);
+            sum /= randomShifts.Length;
+
+            return sum.Map(0.16F, 0.77F, 0F, 1F);
         }
 
         #endregion Private
