@@ -66,7 +66,7 @@ namespace Entities
         private void SetObstructed()
         {
             _satellite.FloorDesignationsTilemap.SetColor(
-                Vector3Int.RoundToInt(FixedLocalPosition),
+                (Vector3Int)FixedLocalPosition,
                 _colors.FloorDesignationObstructed);
             IsObstructed = true;
         }
@@ -74,7 +74,7 @@ namespace Entities
         private void SetUnobstructed()
         {
             _satellite.FloorDesignationsTilemap.SetColor(
-                Vector3Int.RoundToInt(FixedLocalPosition),
+                (Vector3Int)FixedLocalPosition,
                 _colors.FloorDesignationNormal);
             IsObstructed = false;
         }
@@ -90,10 +90,10 @@ namespace Entities
         private void AddTile()
         {
             _satellite.FloorDesignationsTilemap.SetTile(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 BlockModel.GetModel(ModelId).Tile);
             _satellite.FloorDesignationsTilemap.SetTileFlags(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
         }
 
@@ -108,7 +108,7 @@ namespace Entities
         private void RemoveTile()
         {
             _satellite.FloorDesignationsTilemap.SetTile(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 null);
         }
 

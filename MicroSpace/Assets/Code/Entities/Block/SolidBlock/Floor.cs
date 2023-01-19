@@ -120,10 +120,10 @@ namespace Entities
         private void AddTile()
         {
             _satellite.FloorsTilemap.SetTile(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 BlockModel.GetModel(ModelId).Tile);
             _satellite.FloorsTilemap.SetTileFlags(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
         }
 
@@ -139,7 +139,7 @@ namespace Entities
         private void RemoveTile()
         {
             _satellite.FloorsTilemap.SetTile(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 null);
         }
 

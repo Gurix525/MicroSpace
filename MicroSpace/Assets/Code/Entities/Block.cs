@@ -56,7 +56,7 @@ namespace Entities
 
         public Square Square => new(transform.position, 0.48F, transform.eulerAngles.z);
 
-        public Vector3Int FixedLocalPosition { get; private set; }
+        public Vector2Int FixedLocalPosition { get; private set; }
 
         public Vector2 LocalPosition => transform.localPosition;
 
@@ -108,7 +108,7 @@ namespace Entities
 
         private void SetFixedLocalPosition()
         {
-            FixedLocalPosition = Vector3Int.RoundToInt(transform.localPosition);
+            FixedLocalPosition = Vector2Int.RoundToInt(transform.localPosition);
         }
 
         #endregion Private

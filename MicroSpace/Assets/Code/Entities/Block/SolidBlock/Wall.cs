@@ -58,17 +58,17 @@ namespace Entities
         private void AddTile()
         {
             _satellite.WallsTilemap.SetTile(
-               FixedLocalPosition,
+               (Vector3Int)FixedLocalPosition,
                BlockModel.GetModel(ModelId).Tile);
             _satellite.WallsTilemap.SetTileFlags(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 UnityEngine.Tilemaps.TileFlags.None);
         }
 
         private void RemoveTile()
         {
             _satellite.WallsTilemap.SetTile(
-                FixedLocalPosition,
+                (Vector3Int)FixedLocalPosition,
                 null);
         }
 

@@ -10,11 +10,9 @@ namespace Entities
     {
         #region Fields
 
-        [SerializeField]
-        private GameObject _light;
-
         private Rigidbody2D _rigidbody;
         private int _lightTimer = 0;
+        private bool _isEnlighted = false;
 
         #endregion Fields
 
@@ -57,12 +55,12 @@ namespace Entities
             Destroy(gameObject);
         }
 
-        public void SetLightActive(bool state)
+        public void SetEnlighted(bool state)
         {
-            if (_lightTimer < 10 || _light.activeInHierarchy == state)
+            if (_lightTimer < 10 || _isEnlighted == state)
                 return;
             _lightTimer = 0;
-            _light.SetActive(state);
+            _isEnlighted = state;
         }
 
         #endregion Public

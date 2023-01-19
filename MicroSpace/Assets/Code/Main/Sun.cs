@@ -70,11 +70,11 @@ namespace Main
             {
                 if (wallRange.IsCovered(range))
                 {
-                    wall.SetLightActive(false);
+                    wall.SetEnlighted(false);
                     return;
                 }
             }
-            wall.SetLightActive(true);
+            wall.SetEnlighted(true);
             _ranges.Add(wallRange);
             OrganiseRanges();
         }
@@ -86,11 +86,11 @@ namespace Main
             {
                 if (floorRange.IsCovered(range))
                 {
-                    floor.SetLightActive(false);
+                    floor.SetEnlighted(false);
                     return;
                 }
             }
-            floor.SetLightActive(true);
+            floor.SetEnlighted(true);
         }
 
         private void IlluminateRigidEntity(RigidEntity rigidEntity)
