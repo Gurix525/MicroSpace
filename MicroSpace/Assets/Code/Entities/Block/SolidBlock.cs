@@ -3,6 +3,7 @@ using ExtensionMethods;
 using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Entities
 {
@@ -23,26 +24,21 @@ namespace Entities
         {
             get
             {
-                float rightAngle = 0F;
-                float leftAngle = 0F;
-                float currentMultiplier = 1F;
-                while (rightAngle == 0F || leftAngle == 0F)
-                {
-                    Vector2 perpendicular = Vector2
-                    .Perpendicular(transform.position).normalized;
-                    float rotation = Math.Abs((transform.eulerAngles.z
-                        + Vector2.SignedAngle(Vector2.up, transform.position)) % 90);
-                    float scaledRotation = rotation < 45 ? rotation : 90 - rotation;
-                    float oneSideWidth = 0.6F + scaledRotation
-                        / 45 * 0.5F / 2;
-                    leftAngle = Vector2.SignedAngle(
-                        Vector2.up * 10000F,
-                        (Vector2)transform.position - perpendicular * oneSideWidth * currentMultiplier);
-                    rightAngle = Vector2.SignedAngle(
-                        Vector2.up * 10000F,
-                        (Vector2)transform.position + perpendicular * oneSideWidth * currentMultiplier);
-                    currentMultiplier *= _multiplier;
-                }
+                Profiler.BeginSample("ShadowRange", this);
+                Vector2 perpendicular = Vector2
+                .Perpendicular(transform.position).normalized;
+                float rotation = Math.Abs((transform.eulerAngles.z
+                    + Vector2.SignedAngle(Vector2.up, transform.position)) % 90);
+                float scaledRotation = rotation < 45 ? rotation : 90 - rotation;
+                float oneSideWidth = 0.6F + scaledRotation
+                    / 45 * 0.5F / 2;
+                float leftAngle = Vector2.SignedAngle(
+                    Vector2.up * 10000F,
+                    (Vector2)transform.position - perpendicular * oneSideWidth);
+                float rightAngle = Vector2.SignedAngle(
+                    Vector2.up * 10000F,
+                    (Vector2)transform.position + perpendicular * oneSideWidth);
+                Profiler.EndSample();
                 return new Maths.Range(leftAngle, rightAngle);
             }
         }

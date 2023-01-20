@@ -3,6 +3,7 @@ using System.Linq;
 using Entities;
 using Maths;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.Rendering.Universal;
 
 namespace Main
@@ -30,6 +31,7 @@ namespace Main
 
         private void Illuminate()
         {
+            Profiler.BeginSample("Illuminate");
             Dictionary<Entity, int> entities = new();
             foreach (var wall in Wall.EnabledWalls)
                 entities.Add(wall.Value, 0);
@@ -45,10 +47,12 @@ namespace Main
                 SetSurfaceBasedOnType(entity);
             }
             IlluminateWalls();
+            Profiler.EndSample();
         }
 
         private void IlluminateWalls()
         {
+            Profiler.BeginSample("IlluminateWalls");
             var surfaceWalls = Wall.EnabledWalls
                 .Where(wall => wall.Value.IsSurface)
                 .ToDictionary(wall => wall.Key, wall => wall.Value)
@@ -83,6 +87,7 @@ namespace Main
                     stacks.Add(closedWalls);
                 }
             }
+            Profiler.EndSample();
         }
 
         private static Vector2Int[] GetSideBlocks(
@@ -116,32 +121,38 @@ namespace Main
 
         private void SetWallSurface(Wall wall)
         {
+            Profiler.BeginSample("SetWallSurface");
             Range wallRange = wall.ShadowRange;
             foreach (var range in _ranges)
             {
                 if (wallRange.IsCovered(range))
                 {
                     wall.SetEnlighted(false);
+                    Profiler.EndSample();
                     return;
                 }
             }
             wall.SetEnlighted(true);
             _ranges.Add(wallRange);
             OrganiseRanges();
+            Profiler.EndSample();
         }
 
         private void SetFloorSurface(Floor floor)
         {
+            Profiler.BeginSample("SetFloorSurface");
             Range floorRange = floor.ShadowRange;
             foreach (var range in _ranges)
             {
                 if (floorRange.IsCovered(range))
                 {
                     floor.SetEnlighted(false);
+                    Profiler.EndSample();
                     return;
                 }
             }
             floor.SetEnlighted(true);
+            Profiler.EndSample();
         }
 
         private void SetRigidEntitySurface(RigidEntity rigidEntity)
@@ -160,6 +171,7 @@ namespace Main
 
         private void OrganiseRanges()
         {
+            Profiler.BeginSample("OrganiseRanges");
             _ranges = _ranges.OrderBy(range => range.Start).ToList();
             for (int i = 0; i < _ranges.Count - 1; i++)
             {
@@ -170,6 +182,7 @@ namespace Main
                     i--;
                 }
             }
+            Profiler.EndSample();
         }
 
         #endregion Private
