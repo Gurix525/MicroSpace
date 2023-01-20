@@ -31,9 +31,9 @@ namespace Main
         {
             Dictionary<Entity, int> entities = new();
             foreach (var wall in Wall.EnabledWalls)
-                entities.Add(wall, 0);
+                entities.Add(wall.Value, 0);
             foreach (var floor in Floor.EnabledFloors)
-                entities.Add(floor, 1);
+                entities.Add(floor.Value, 1);
             foreach (var rigidEntity in RigidEntity.EnabledRigidEntities)
                 entities.Add(rigidEntity, 2);
             entities = entities
@@ -42,6 +42,11 @@ namespace Main
             foreach (var entity in entities)
             {
                 IlluminateBasedOnType(entity);
+            }
+            foreach (var range in _ranges)
+            {
+                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.Start) * Vector3.up * 20000, Color.magenta);
+                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.End) * Vector3.up * 20000, Color.magenta);
             }
         }
 
@@ -116,6 +121,7 @@ namespace Main
                 {
                     _ranges[i] = combinedRange;
                     _ranges.RemoveAt(i + 1);
+                    i--;
                 }
             }
         }

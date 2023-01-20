@@ -69,7 +69,7 @@ namespace Maths
 
         public bool IsCovered(Range other)
         {
-            if (_start > other.Start && _end < other.End)
+            if (_start >= other.Start && _end <= other.End)
                 return true;
             return false;
         }
@@ -77,7 +77,9 @@ namespace Maths
         public bool IsOverlapping(Range other)
         {
             if ((_start <= other.Start && _end >= other.Start)
-                || (_end >= other.End && _start <= other.End))
+                || (_end >= other.End && _start <= other.End)
+                || IsCovered(other)
+                || other.IsCovered(this))
                 return true;
             return false;
         }
@@ -87,8 +89,8 @@ namespace Maths
             if (IsOverlapping(other))
             {
                 combinedRange = new(
-                    _start < other.Start ? _start : other.Start,
-                    _end > other.End ? _end : other.End);
+                    _start <= other.Start ? _start : other.Start,
+                    _end >= other.End ? _end : other.End);
                 return true;
             }
             combinedRange = this;

@@ -13,6 +13,7 @@ namespace Entities
         private Rigidbody2D _rigidbody;
         private int _lightTimer = 0;
         private bool _isEnlighted = false;
+        private float _multiplier = 1.1F;
 
         #endregion Fields
 
@@ -22,19 +23,26 @@ namespace Entities
         {
             get
             {
-                Vector2 perpendicular = Vector2
+                float rightAngle = 0F;
+                float leftAngle = 0F;
+                float currentMultiplier = 1F;
+                while (rightAngle == 0F || leftAngle == 0F)
+                {
+                    Vector2 perpendicular = Vector2
                     .Perpendicular(transform.position).normalized;
-                float rotation = Math.Abs((transform.eulerAngles.z
-                    + Vector2.SignedAngle(Vector2.up, transform.position)) % 90);
-                float scaledRotation = rotation < 45 ? rotation : 90 - rotation;
-                float oneSideWidth = 0.5F + scaledRotation
-                    / 45 * 0.41F / 2;
-                float leftAngle = Vector2.SignedAngle(
-                    Vector2.up,
-                    (Vector2)transform.position - perpendicular * oneSideWidth);
-                float rightAngle = Vector2.SignedAngle(
-                    Vector2.up,
-                    (Vector2)transform.position + perpendicular * oneSideWidth);
+                    float rotation = Math.Abs((transform.eulerAngles.z
+                        + Vector2.SignedAngle(Vector2.up, transform.position)) % 90);
+                    float scaledRotation = rotation < 45 ? rotation : 90 - rotation;
+                    float oneSideWidth = 0.6F + scaledRotation
+                        / 45 * 0.5F / 2;
+                    leftAngle = Vector2.SignedAngle(
+                        Vector2.up * 10000F,
+                        (Vector2)transform.position - perpendicular * oneSideWidth * currentMultiplier);
+                    rightAngle = Vector2.SignedAngle(
+                        Vector2.up * 10000F,
+                        (Vector2)transform.position + perpendicular * oneSideWidth * currentMultiplier);
+                    currentMultiplier *= _multiplier;
+                }
                 return new Maths.Range(leftAngle, rightAngle);
             }
         }

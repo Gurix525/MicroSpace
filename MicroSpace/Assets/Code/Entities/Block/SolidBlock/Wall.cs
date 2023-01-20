@@ -12,7 +12,7 @@ namespace Entities
 
         public bool IsIncludedInObstacle { get; set; }
 
-        public static List<Wall> EnabledWalls { get; } = new();
+        public static Dictionary<Vector2Int, Wall> EnabledWalls { get; } = new();
 
         #endregion Properties
 
@@ -83,14 +83,14 @@ namespace Entities
 
         private void AddSelfToEnabledList()
         {
-            if (!EnabledWalls.Contains(this))
-                EnabledWalls.Add(this);
+            if (!EnabledWalls.ContainsKey(FixedLocalPosition))
+                EnabledWalls.Add(FixedLocalPosition, this);
         }
 
         private void RemoveSelfFromEnabledList()
         {
-            if (EnabledWalls.Contains(this))
-                EnabledWalls.Remove(this);
+            if (EnabledWalls.ContainsKey(FixedLocalPosition))
+                EnabledWalls.Remove(FixedLocalPosition);
         }
 
         private void TrySetSpriteMaskRange()

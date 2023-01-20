@@ -76,6 +76,7 @@ namespace Entities
         protected override void Awake()
         {
             base.Awake();
+            SetFixedLocalPosition();
             SetBlockType();
         }
 

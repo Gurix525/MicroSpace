@@ -39,7 +39,7 @@ namespace Entities
 
         public Dictionary<int, int> Gasses { get; set; } = new();
 
-        public static List<Floor> EnabledFloors { get; } = new();
+        public static Dictionary<Vector2Int, Floor> EnabledFloors { get; } = new();
 
         #endregion Properties
 
@@ -145,14 +145,14 @@ namespace Entities
 
         private void AddSelfToEnabledList()
         {
-            if (!EnabledFloors.Contains(this))
-                EnabledFloors.Add(this);
+            if (!EnabledFloors.ContainsKey(FixedLocalPosition))
+                EnabledFloors.Add(FixedLocalPosition, this);
         }
 
         private void RemoveSelfFromEnabledList()
         {
-            if (EnabledFloors.Contains(this))
-                EnabledFloors.Remove(this);
+            if (EnabledFloors.ContainsKey(FixedLocalPosition))
+                EnabledFloors.Remove(FixedLocalPosition);
         }
 
         #endregion Private

@@ -57,10 +57,13 @@ namespace Entities
             {
                 GameObject wall = Instantiate(
                     Prefabs.Wall,
+                    _satellite.transform.TransformPoint(new(cell.Key.x, cell.Key.y)),
+                    Quaternion.identity,
                     _satellite.transform);
-                wall.transform.SetLocalPositionAndRotation(
-                    new(cell.Key.x, cell.Key.y),
-                    Quaternion.identity);
+                Destroy(wall.GetComponent<SpriteMask>());
+                //wall.transform.SetLocalPositionAndRotation(
+                //    new(cell.Key.x, cell.Key.y),
+                //    Quaternion.identity);
             }
         }
 
@@ -70,10 +73,12 @@ namespace Entities
             {
                 GameObject floor = Instantiate(
                     Prefabs.Floor,
+                    _satellite.transform.TransformPoint(new(cell.Key.x, cell.Key.y)),
+                    Quaternion.identity,
                     _satellite.transform);
-                floor.transform.SetLocalPositionAndRotation(
-                    new(cell.Key.x, cell.Key.y),
-                    Quaternion.identity);
+                //floor.transform.SetLocalPositionAndRotation(
+                //    new(cell.Key.x, cell.Key.y),
+                //    Quaternion.identity);
             }
         }
 
