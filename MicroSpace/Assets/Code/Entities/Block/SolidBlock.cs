@@ -1,5 +1,6 @@
 ﻿using System;
 using ExtensionMethods;
+using Maths;
 using Miscellaneous;
 using ScriptableObjects;
 using UnityEngine;
@@ -14,7 +15,6 @@ namespace Entities
         private Rigidbody2D _rigidbody;
         private int _lightTimer = 0;
         private bool _isSurface = false;
-        private float _multiplier = 1.1F;
 
         #endregion Fields
 
@@ -32,12 +32,18 @@ namespace Entities
                 float scaledRotation = rotation < 45 ? rotation : 90 - rotation;
                 float oneSideWidth = 0.6F + scaledRotation
                     / 45 * 0.5F / 2;
-                float leftAngle = Vector2.SignedAngle(
+                float leftAngle = Geometry.GetAngle(
                     Vector2.up * 10000F,
-                    (Vector2)transform.position - perpendicular * oneSideWidth);
-                float rightAngle = Vector2.SignedAngle(
+                    ((Vector2)transform.position - perpendicular * oneSideWidth) * 100F);
+                float rightAngle = Geometry.GetAngle(
                     Vector2.up * 10000F,
-                    (Vector2)transform.position + perpendicular * oneSideWidth);
+                    ((Vector2)transform.position + perpendicular * oneSideWidth) * 100F);
+                //float leftAngle = Vector2.SignedAngle(
+                //    Vector2.up * 10000F,
+                //    ((Vector2)transform.position - perpendicular * oneSideWidth).normalized * 10000F);
+                //float rightAngle = Vector2.SignedAngle(
+                //    Vector2.up * 10000F,
+                //    ((Vector2)transform.position + perpendicular * oneSideWidth).normalized * 10000F);
                 Profiler.EndSample();
                 return new Maths.Range(leftAngle, rightAngle);
             }

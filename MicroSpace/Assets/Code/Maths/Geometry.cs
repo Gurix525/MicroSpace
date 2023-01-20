@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Maths
@@ -182,6 +183,18 @@ namespace Maths
                 }
             }
             return false;
+        }
+
+        public static float GetAngle(Vector2 lhs, Vector2 rhs)
+        {
+            float sign = Math.Sign(rhs.x);
+            double dot = (double)lhs.x * rhs.x + (double)lhs.y * rhs.y;
+            double lhsMagnitude = Math.Sqrt(Math.Pow(lhs.x, 2) + Math.Pow(lhs.y, 2));
+            double rhsMagnitude = Math.Sqrt(Math.Pow(rhs.x, 2) + Math.Pow(rhs.y, 2));
+            double cos = dot / (lhsMagnitude * rhsMagnitude);
+            double radians = Math.Acos(cos);
+            double angle = radians * 180D / Math.PI;
+            return (float)angle * sign;
         }
 
         #endregion Public

@@ -48,6 +48,11 @@ namespace Main
             }
             IlluminateWalls();
             Profiler.EndSample();
+            foreach (var range in _ranges)
+            {
+                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.Start) * Vector3.up * 20000, Color.magenta);
+                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.End) * Vector3.up * 20000, Color.magenta);
+            }
         }
 
         private void IlluminateWalls()
