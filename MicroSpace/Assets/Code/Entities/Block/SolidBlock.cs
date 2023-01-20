@@ -38,12 +38,6 @@ namespace Entities
                 float rightAngle = Geometry.GetAngle(
                     Vector2.up * 10000F,
                     ((Vector2)transform.position + perpendicular * oneSideWidth) * 100F);
-                //float leftAngle = Vector2.SignedAngle(
-                //    Vector2.up * 10000F,
-                //    ((Vector2)transform.position - perpendicular * oneSideWidth).normalized * 10000F);
-                //float rightAngle = Vector2.SignedAngle(
-                //    Vector2.up * 10000F,
-                //    ((Vector2)transform.position + perpendicular * oneSideWidth).normalized * 10000F);
                 Profiler.EndSample();
                 return new Maths.Range(leftAngle, rightAngle);
             }

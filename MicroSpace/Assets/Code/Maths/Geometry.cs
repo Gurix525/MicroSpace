@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 namespace Maths
 {
@@ -187,7 +190,7 @@ namespace Maths
 
         public static float GetAngle(Vector2 lhs, Vector2 rhs)
         {
-            float sign = Math.Sign(rhs.x);
+            float sign = -Math.Sign(rhs.x);
             double dot = (double)lhs.x * rhs.x + (double)lhs.y * rhs.y;
             double lhsMagnitude = Math.Sqrt(Math.Pow(lhs.x, 2) + Math.Pow(lhs.y, 2));
             double rhsMagnitude = Math.Sqrt(Math.Pow(rhs.x, 2) + Math.Pow(rhs.y, 2));
