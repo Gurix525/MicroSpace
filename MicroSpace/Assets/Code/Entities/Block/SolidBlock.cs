@@ -12,7 +12,7 @@ namespace Entities
 
         private Rigidbody2D _rigidbody;
         private int _lightTimer = 0;
-        private bool _isEnlighted = false;
+        private bool _isSurface = false;
         private float _multiplier = 1.1F;
 
         #endregion Fields
@@ -47,6 +47,8 @@ namespace Entities
             }
         }
 
+        public bool IsSurface => _isSurface;
+
         private Rigidbody2D Rigidbody =>
             _rigidbody ??= _satellite.GetComponent<Rigidbody2D>();
 
@@ -65,10 +67,10 @@ namespace Entities
 
         public void SetEnlighted(bool state)
         {
-            if (_lightTimer < 10 || _isEnlighted == state)
+            if (_lightTimer < 10 || _isSurface == state)
                 return;
             _lightTimer = 0;
-            _isEnlighted = state;
+            _isSurface = state;
         }
 
         #endregion Public

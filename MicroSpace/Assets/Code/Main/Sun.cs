@@ -3,6 +3,7 @@ using System.Linq;
 using Entities;
 using Maths;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Main
 {
@@ -41,34 +42,79 @@ namespace Main
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
             foreach (var entity in entities)
             {
-                IlluminateBasedOnType(entity);
+                SetSurfaceBasedOnType(entity);
             }
-            foreach (var range in _ranges)
+            IlluminateWalls();
+        }
+
+        private void IlluminateWalls()
+        {
+            var surfaceWalls = Wall.EnabledWalls
+                .Where(wall => wall.Value.IsSurface)
+                .ToDictionary(wall => wall.Key, wall => wall.Value)
+                .GroupBy(wall => wall.Value.Satellite)
+                .ToArray();
+            List<Dictionary<Vector2Int, Block>> stacks = new();
+            foreach (var satelliteWalls in surfaceWalls)
             {
-                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.Start) * Vector3.up * 20000, Color.magenta);
-                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.End) * Vector3.up * 20000, Color.magenta);
+                var originalWalls = satelliteWalls.ToDictionary(x => x.Key, x => x.Value);
+                while (originalWalls.Count > 0)
+                {
+                    Dictionary<Vector2Int, Block> closedWalls = new();
+                    Dictionary<Vector2Int, Block> openedWalls = new();
+                    openedWalls.Add(originalWalls.Last().Key, originalWalls.Last().Value);
+                    originalWalls.Remove(originalWalls.Last().Key);
+                    while (openedWalls.Count > 0)
+                    {
+                        var lastWall = openedWalls.Last();
+                        KeyValuePair<Vector2Int, Block> currentWall =
+                            new(lastWall.Key, lastWall.Value);
+                        foreach (var wall in GetSideBlocks(ref currentWall))
+                        {
+                            if (originalWalls.ContainsKey(wall) && !closedWalls.ContainsKey(wall))
+                            {
+                                openedWalls.TryAdd(wall, originalWalls[wall]);
+                                originalWalls.Remove(wall);
+                            }
+                        }
+                        closedWalls.Add(currentWall.Key, currentWall.Value);
+                        openedWalls.Remove(currentWall.Key);
+                    }
+                    stacks.Add(closedWalls);
+                }
             }
         }
 
-        private void IlluminateBasedOnType(KeyValuePair<Entity, int> entity)
+        private static Vector2Int[] GetSideBlocks(
+            ref KeyValuePair<Vector2Int, Block> block)
+        {
+            return new Vector2Int[]{
+                new(block.Key.x + 1, block.Key.y),
+                new(block.Key.x - 1, block.Key.y),
+                new(block.Key.x, block.Key.y + 1),
+                new(block.Key.x, block.Key.y - 1)
+            };
+        }
+
+        private void SetSurfaceBasedOnType(KeyValuePair<Entity, int> entity)
         {
             switch (entity.Value)
             {
                 default:
-                    IlluminateWall((Wall)entity.Key);
+                    SetWallSurface((Wall)entity.Key);
                     break;
 
                 case 1:
-                    IlluminateFloor((Floor)entity.Key);
+                    SetFloorSurface((Floor)entity.Key);
                     break;
 
                 case 2:
-                    IlluminateRigidEntity((RigidEntity)entity.Key);
+                    SetRigidEntitySurface((RigidEntity)entity.Key);
                     break;
             }
         }
 
-        private void IlluminateWall(Wall wall)
+        private void SetWallSurface(Wall wall)
         {
             Range wallRange = wall.ShadowRange;
             foreach (var range in _ranges)
@@ -84,7 +130,7 @@ namespace Main
             OrganiseRanges();
         }
 
-        private void IlluminateFloor(Floor floor)
+        private void SetFloorSurface(Floor floor)
         {
             Range floorRange = floor.ShadowRange;
             foreach (var range in _ranges)
@@ -98,7 +144,7 @@ namespace Main
             floor.SetEnlighted(true);
         }
 
-        private void IlluminateRigidEntity(RigidEntity rigidEntity)
+        private void SetRigidEntitySurface(RigidEntity rigidEntity)
         {
             Range rigidEntityRange = rigidEntity.ShadowRange;
             foreach (var range in _ranges)

@@ -62,6 +62,8 @@ namespace Entities
 
         public float LocalRotation => transform.localEulerAngles.z;
 
+        public Satellite Satellite => _satellite;
+
         public BlockType BlockType { get; private set; }
 
         public int ModelId { get => _modelId; set => _modelId = value; }
