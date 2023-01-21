@@ -169,7 +169,38 @@ namespace Main
                 .OrderBy(block => block.Key.y)
                 .ThenBy(block =>  block.Key.x)
                 .ToDictionary(block => block.Key, block => block.Value);
-            List<Vector2Int>
+            List<Vector2Int> blockPath = new();
+            blockPath.Add(sortedBlocks.First().Key);
+
+            var currentBlock = blockPath.First();
+            int direction = 0;
+            while (true)
+            {
+                if (blockPath.Count > 1 && blockPath[0] == blockPath[^blockPath.Count])
+                    break;
+                int attempts = 0;
+                var sideBlocks = GetSideBlocks(currentBlock);
+                while (true)
+                {
+                    attempts++;
+                    if (sortedBlocks.ContainsKey(sideBlocks[direction]))
+                    {
+                        blockPath.Add(sideBlocks[direction]);
+                        direction--;
+                        direction = direction < 0 ? 3 : direction;
+                        currentBlock = blockPath.First();
+                        break;
+                    }
+                    direction++;
+                    direction = direction > 3 ? 0 : direction;
+                    if (attempts > 3)
+                        break;
+                }
+                if (attempts > 3)
+                    break;
+            }
+            Profiler.EndSample();
+            return blockPath.ToArray();
         }
 
         //private static Vector2Int[] GetBlocksPolygonPath(Dictionary<Vector2Int, SolidBlock> chunk)
@@ -229,6 +260,17 @@ namespace Main
         //        .Select(block => block.Key)
         //        .ToArray();
         //}
+
+        private static Vector2Int[] GetSideBlocks(
+            Vector2Int block)
+        {
+            return new Vector2Int[]{
+                block + Vector2Int.right,
+                block + Vector2Int.up,
+                block + Vector2Int.left,
+                block + Vector2Int.down
+            };
+        }
 
         private static Vector2Int[] GetSideBlocks(
             KeyValuePair<Vector2Int, SolidBlock> block)
