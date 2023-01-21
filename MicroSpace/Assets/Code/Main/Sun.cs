@@ -172,14 +172,13 @@ namespace Main
             List<Vector2Int> blockPath = new();
             blockPath.Add(sortedBlocks.First().Key);
 
-            var currentBlock = blockPath.First();
             int direction = 0;
             while (true)
             {
-                if (blockPath.Count > 1 && blockPath[0] == blockPath[^blockPath.Count])
+                if (blockPath.Count > 1 && blockPath[0] == blockPath[^1])
                     break;
                 int attempts = 0;
-                var sideBlocks = GetSideBlocks(currentBlock);
+                var sideBlocks = GetSideBlocks(blockPath[^1]);
                 while (true)
                 {
                     attempts++;
@@ -188,15 +187,14 @@ namespace Main
                         blockPath.Add(sideBlocks[direction]);
                         direction--;
                         direction = direction < 0 ? 3 : direction;
-                        currentBlock = blockPath.First();
                         break;
                     }
                     direction++;
                     direction = direction > 3 ? 0 : direction;
-                    if (attempts > 3)
+                    if (attempts > 4)
                         break;
                 }
-                if (attempts > 3)
+                if (attempts > 4)
                     break;
             }
             Profiler.EndSample();
