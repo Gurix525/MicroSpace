@@ -107,6 +107,7 @@ namespace Main
             {
                 var blocksPolygonPath = GetBlocksPolygonPath(chunk);
                 Vector2Int[] polygonPath = GetPolygonPath(blocksPolygonPath);
+                Debug.Log(blocksPolygonPath.Length);
             }
             Profiler.EndSample();
         }
@@ -167,7 +168,7 @@ namespace Main
             Profiler.BeginSample("GetBlocksPolygonPath");
             var sortedBlocks = chunk
                 .OrderBy(block => block.Key.y)
-                .ThenBy(block =>  block.Key.x)
+                .ThenBy(block => block.Key.x)
                 .ToDictionary(block => block.Key, block => block.Value);
             List<Vector2Int> blockPath = new();
             blockPath.Add(sortedBlocks.First().Key);
@@ -175,7 +176,12 @@ namespace Main
             int direction = 0;
             while (true)
             {
-                if (blockPath.Count > 1 && blockPath[0] == blockPath[^1])
+                if (blockPath.Count > 1
+                    && blockPath[0] == blockPath[^1]
+                    && !sortedBlocks.Any(
+                        sorted => !blockPath
+                        .Distinct()
+                        .ToDictionary(block => block, block => false).ContainsKey(sorted.Key)))
                     break;
                 int attempts = 0;
                 var sideBlocks = GetSideBlocks(blockPath[^1]);
