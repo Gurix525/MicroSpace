@@ -107,7 +107,10 @@ namespace Main
             {
                 var blocksPolygonPath = GetBlocksPolygonPath(chunk);
                 Vector2Int[] polygonPath = GetPolygonPath(blocksPolygonPath);
-                Debug.Log(blocksPolygonPath.Length);
+                for (int i = 0; i < polygonPath.Length - 1; i++)
+                {
+                    Debug.DrawLine((Vector2)polygonPath[i], (Vector2)polygonPath[i + 1], Color.yellow);
+                }
             }
             Profiler.EndSample();
         }
@@ -123,22 +126,30 @@ namespace Main
                 if (path.Count > 1 && path[0] == path[^1])
                     break;
                 var sideNodes = GetSideNodes(path[^1]);
-                foreach (var sideNode in sideNodes)
+                //foreach (var sideNode in sideNodes)
+                while (true)
                 {
+                    var sideNode = sideNodes[direction];
                     if (index < blocksPolygonPath.Length - 1)
                     {
                         if (GetBlockVertices(blocksPolygonPath[index + 1]).ContainsKey(sideNode))
                         {
                             path.Add(sideNode);
                             index++;
+                            direction--;
+                            direction = direction < 0 ? 3 : direction;
                             break;
                         }
                     }
                     if (GetBlockVertices(blocksPolygonPath[index]).ContainsKey(sideNode))
                     {
                         path.Add(sideNode);
+                        direction--;
+                        direction = direction < 0 ? 3 : direction;
                         break;
                     }
+                    direction++;
+                    direction = direction > 3 ? 0 : direction;
                 }
             }
             path.RemoveAt(path.Count - 1);
