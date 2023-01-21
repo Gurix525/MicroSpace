@@ -105,17 +105,20 @@ namespace Main
             }
             foreach (var chunk in blockChunks)
             {
-                var blocksPolygonPath = GetBlocksPolygonPath(chunk);
-                Vector2Int[] polygonPath = GetPolygonPath(blocksPolygonPath);
+                var blocksPolygonPath = GetBlocksPolygonPath(chunk, out Satellite satellite);
+                Vector2[] polygonPath = GetPolygonPath(blocksPolygonPath, satellite.transform);
                 for (int i = 0; i < polygonPath.Length - 1; i++)
                 {
-                    Debug.DrawLine((Vector2)polygonPath[i], (Vector2)polygonPath[i + 1], Color.yellow);
+                    Debug.DrawLine(polygonPath[i], polygonPath[i + 1], Color.yellow);
                 }
+                Debug.DrawLine(polygonPath[^1], polygonPath[0], Color.yellow);
             }
             Profiler.EndSample();
         }
 
-        private static Vector2Int[] GetPolygonPath(Vector2Int[] blocksPolygonPath)
+        private static Vector2[] GetPolygonPath(
+            Vector2Int[] blocksPolygonPath,
+            Transform satellite)
         {
             List<Vector2Int> path = new();
             int direction = 0;
@@ -126,7 +129,6 @@ namespace Main
                 if (path.Count > 1 && path[0] == path[^1])
                     break;
                 var sideNodes = GetSideNodes(path[^1]);
-                //foreach (var sideNode in sideNodes)
                 while (true)
                 {
                     var sideNode = sideNodes[direction];
@@ -153,11 +155,14 @@ namespace Main
                 }
             }
             path.RemoveAt(path.Count - 1);
-            return path.ToArray();
+            return path
+                .Select(node => (Vector2)satellite.TransformPoint(
+                    ((Vector2)node) - (Vector2.one / 2F)))
+                .ToArray();
         }
 
         private static Vector2Int[] GetBlocksPolygonPath(
-            Dictionary<Vector2Int, SolidBlock> chunk)
+            Dictionary<Vector2Int, SolidBlock> chunk, out Satellite satellite)
         {
             Profiler.BeginSample("GetBlocksPolygonPath");
             var sortedBlocks = chunk
@@ -198,6 +203,7 @@ namespace Main
                     break;
             }
             Profiler.EndSample();
+            satellite = chunk.Values.First().Satellite;
             return blockPath.ToArray();
         }
 
