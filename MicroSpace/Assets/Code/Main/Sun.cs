@@ -114,52 +114,35 @@ namespace Main
 
         private static Vector2Int[] GetPolygonPath(Vector2Int[] blocksPolygonPath)
         {
-            Dictionary<Vector2Int, bool> path = new();
-            int index = 0;
+            List<Vector2Int> path = new();
             int direction = 0;
-            Vector2Int currentNode = blocksPolygonPath[0];
-            path.Add(currentNode, false);
+            path.Add(blocksPolygonPath[0]);
+            int index = 0;
             while (true)
             {
-                var sideNodes = GetSideNodes(currentNode);
-                while (true)
+                if (path.Count > 1 && path[0] == path[^1])
+                    break;
+                var sideNodes = GetSideNodes(path[^1]);
+                foreach (var sideNode in sideNodes)
                 {
                     if (index < blocksPolygonPath.Length - 1)
                     {
-                        var nextBlockVertices = GetBlockVertices(blocksPolygonPath[index + 1]);
-                        if (nextBlockVertices.ContainsKey(sideNodes[direction]))
+                        if (GetBlockVertices(blocksPolygonPath[index + 1]).ContainsKey(sideNode))
                         {
-                            currentNode = sideNodes[direction];
-                            if (path.ContainsKey(currentNode))
-                                break;
-                            path.Add(currentNode, false);
+                            path.Add(sideNode);
                             index++;
-                            direction--;
-                            direction = direction < 0 ? 3 : direction;
                             break;
                         }
                     }
-                    var currentBlockVertices = GetBlockVertices(blocksPolygonPath[index]);
-                    if (currentBlockVertices.ContainsKey(sideNodes[direction]))
+                    if (GetBlockVertices(blocksPolygonPath[index]).ContainsKey(sideNode))
                     {
-                        currentNode = sideNodes[direction];
-                        if (path.ContainsKey(currentNode))
-                            break;
-                        path.Add(currentNode, false);
-                        direction--;
-                        direction = direction < 0 ? 3 : direction;
+                        path.Add(sideNode);
                         break;
                     }
-                    direction++;
-                    direction = direction > 3 ? 0 : direction;
-                    continue;
                 }
-                if (path.ContainsKey(currentNode))
-                    break;
             }
-            return path
-                .Select(node => node.Key)
-                .ToArray();
+            path.RemoveAt(path.Count - 1);
+            return path.ToArray();
         }
 
         private static Vector2Int[] GetBlocksPolygonPath(
@@ -206,64 +189,6 @@ namespace Main
             Profiler.EndSample();
             return blockPath.ToArray();
         }
-
-        //private static Vector2Int[] GetBlocksPolygonPath(Dictionary<Vector2Int, SolidBlock> chunk)
-        //{
-        //    Profiler.BeginSample("GetBlocksPolygonPath");
-        //    var sortedBlocks = chunk
-        //        .OrderBy(block => block.Key.y)
-        //        .ThenBy(block => block.Key.x)
-        //        .ToDictionary(block => block.Key, block => block.Value);
-        //    Dictionary<Vector2Int, int> blockPath = new();
-        //    blockPath.Add(sortedBlocks.First().Key, 0);
-        //    var currentBlock = blockPath.First();
-        //    int currentDirection = 0;
-        //    int currentBlockNumber = 1;
-        //    int reversingBlock = 0;
-        //    while (true)
-        //    {
-        //        int attempts = 0;
-        //        var sideBlocks = GetSideBlocks(
-        //            new(currentBlock.Key, sortedBlocks[currentBlock.Key]));
-        //        while (true)
-        //        {
-        //            attempts++;
-        //            if (blockPath.ContainsKey(sideBlocks[currentDirection]))
-        //                break;
-        //            if (sortedBlocks.ContainsKey(sideBlocks[currentDirection]))
-        //            {
-        //                blockPath.Add(
-        //                    sideBlocks[currentDirection],
-        //                    currentBlockNumber);
-        //                currentBlockNumber++;
-        //                currentDirection--;
-        //                currentDirection = currentDirection < 0 ? 3 : currentDirection;
-        //                currentBlock = blockPath.First();
-        //                break;
-        //            }
-        //            currentDirection++;
-        //            currentDirection = currentDirection > 3 ? 0 : currentDirection;
-        //            if (attempts > 4)
-        //                break;
-        //        }
-        //        if (blockPath.ContainsKey(sideBlocks[currentDirection]))
-        //        {
-        //            reversingBlock = blockPath[sideBlocks[currentDirection]];
-        //            break;
-        //        }
-        //        if (attempts > 4)
-        //            break;
-        //    }
-        //    var numberedBlockPath = blockPath.OrderBy(block => block.Value).ToList();
-        //    for (int i = reversingBlock - 1; i >= 0; i--)
-        //    {
-        //        numberedBlockPath.Add(numberedBlockPath[i]);
-        //    }
-        //    Profiler.EndSample();
-        //    return numberedBlockPath
-        //        .Select(block => block.Key)
-        //        .ToArray();
-        //}
 
         private static Vector2Int[] GetSideBlocks(
             Vector2Int block)
