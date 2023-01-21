@@ -32,6 +32,19 @@ namespace Main
         private void Illuminate()
         {
             Profiler.BeginSample("Illuminate");
+            foreach (var entity in GetEntities())
+                SetSurfaceBasedOnType(entity);
+            IlluminateBlocks();
+            Profiler.EndSample();
+            //foreach (var range in _ranges)
+            //{
+            //    Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.Start) * Vector3.up * 20000, Color.magenta);
+            //    Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.End) * Vector3.up * 20000, Color.magenta);
+            //}
+        }
+
+        private static Dictionary<Entity, int> GetEntities()
+        {
             Dictionary<Entity, int> entities = new();
             foreach (var wall in Wall.EnabledWalls)
                 entities.Add(wall.Value, 0);
@@ -42,67 +55,199 @@ namespace Main
             entities = entities
                 .OrderBy(entity => entity.Key.transform.position.magnitude)
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
-            foreach (var entity in entities)
-            {
-                SetSurfaceBasedOnType(entity);
-            }
-            IlluminateWalls();
-            Profiler.EndSample();
-            foreach (var range in _ranges)
-            {
-                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.Start) * Vector3.up * 20000, Color.magenta);
-                Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.End) * Vector3.up * 20000, Color.magenta);
-            }
+            return entities;
         }
 
-        private void IlluminateWalls()
+        private void IlluminateBlocks()
         {
             Profiler.BeginSample("IlluminateWalls");
-            var surfaceWalls = Wall.EnabledWalls
+            Dictionary<Vector2Int, SolidBlock> surfaceBlocks = Wall.EnabledWalls
                 .Where(wall => wall.Value.IsSurface)
-                .ToDictionary(wall => wall.Key, wall => wall.Value)
-                .GroupBy(wall => wall.Value.Satellite)
-                .ToArray();
-            List<Dictionary<Vector2Int, Block>> stacks = new();
-            foreach (var satelliteWalls in surfaceWalls)
+                .ToDictionary(wall => wall.Key, wall => (SolidBlock)wall.Value);
+            var surfaceFloors = Floor.EnabledFloors
+                .Where(floor => floor.Value.IsSurface)
+                .ToDictionary(floor => floor.Key, floor => floor.Value);
+            foreach (var floor in surfaceFloors)
             {
-                var originalWalls = satelliteWalls.ToDictionary(x => x.Key, x => x.Value);
-                while (originalWalls.Count > 0)
+                surfaceBlocks.TryAdd(floor.Key, floor.Value);
+            }
+            var blocksSatelliteGrouping = surfaceBlocks
+                .GroupBy(block => block.Value.Satellite)
+                .ToArray();
+            List<Dictionary<Vector2Int, SolidBlock>> blockChunks = new();
+            foreach (var satelliteBlocks in blocksSatelliteGrouping)
+            {
+                var originalBlocks = satelliteBlocks.ToDictionary(x => x.Key, x => x.Value);
+                while (originalBlocks.Count > 0)
                 {
-                    Dictionary<Vector2Int, Block> closedWalls = new();
-                    Dictionary<Vector2Int, Block> openedWalls = new();
-                    openedWalls.Add(originalWalls.Last().Key, originalWalls.Last().Value);
-                    originalWalls.Remove(originalWalls.Last().Key);
-                    while (openedWalls.Count > 0)
+                    Dictionary<Vector2Int, SolidBlock> closedBlocks = new();
+                    Dictionary<Vector2Int, SolidBlock> openedBlocks = new();
+                    openedBlocks.Add(originalBlocks.Last().Key, originalBlocks.Last().Value);
+                    originalBlocks.Remove(originalBlocks.Last().Key);
+                    while (openedBlocks.Count > 0)
                     {
-                        var lastWall = openedWalls.Last();
-                        KeyValuePair<Vector2Int, Block> currentWall =
+                        var lastWall = openedBlocks.Last();
+                        KeyValuePair<Vector2Int, SolidBlock> currentBlock =
                             new(lastWall.Key, lastWall.Value);
-                        foreach (var wall in GetSideBlocks(ref currentWall))
+                        foreach (var wall in GetSideBlocks(currentBlock))
                         {
-                            if (originalWalls.ContainsKey(wall) && !closedWalls.ContainsKey(wall))
+                            if (originalBlocks.ContainsKey(wall) && !closedBlocks.ContainsKey(wall))
                             {
-                                openedWalls.TryAdd(wall, originalWalls[wall]);
-                                originalWalls.Remove(wall);
+                                openedBlocks.TryAdd(wall, originalBlocks[wall]);
+                                originalBlocks.Remove(wall);
                             }
                         }
-                        closedWalls.Add(currentWall.Key, currentWall.Value);
-                        openedWalls.Remove(currentWall.Key);
+                        closedBlocks.Add(currentBlock.Key, currentBlock.Value);
+                        openedBlocks.Remove(currentBlock.Key);
                     }
-                    stacks.Add(closedWalls);
+                    blockChunks.Add(closedBlocks);
                 }
             }
+            foreach (var chunk in blockChunks)
+            {
+                var blocksPolygonPath = GetBlocksPolygonPath(chunk);
+                Vector2Int[] polygonPath = GetPolygonPath(blocksPolygonPath);
+            }
             Profiler.EndSample();
+        }
+
+        private static Vector2Int[] GetPolygonPath(Vector2Int[] blocksPolygonPath)
+        {
+            Dictionary<Vector2Int, bool> path = new();
+            int index = 0;
+            int direction = 0;
+            Vector2Int currentNode = blocksPolygonPath[0];
+            path.Add(currentNode, false);
+            while (true)
+            {
+                var sideNodes = GetSideNodes(currentNode);
+                while (true)
+                {
+                    if (index < blocksPolygonPath.Length - 1)
+                    {
+                        var nextBlockVertices = GetBlockVertices(blocksPolygonPath[index + 1]);
+                        if (nextBlockVertices.ContainsKey(sideNodes[direction]))
+                        {
+                            currentNode = sideNodes[direction];
+                            if (path.ContainsKey(currentNode))
+                                break;
+                            path.Add(currentNode, false);
+                            index++;
+                            direction--;
+                            direction = direction < 0 ? 3 : direction;
+                            break;
+                        }
+                    }
+                    var currentBlockVertices = GetBlockVertices(blocksPolygonPath[index]);
+                    if (currentBlockVertices.ContainsKey(sideNodes[direction]))
+                    {
+                        currentNode = sideNodes[direction];
+                        if (path.ContainsKey(currentNode))
+                            break;
+                        path.Add(currentNode, false);
+                        direction--;
+                        direction = direction < 0 ? 3 : direction;
+                        break;
+                    }
+                    direction++;
+                    direction = direction > 3 ? 0 : direction;
+                    continue;
+                }
+                if (path.ContainsKey(currentNode))
+                    break;
+            }
+            return path
+                .Select(node => node.Key)
+                .ToArray();
+        }
+
+        private static Vector2Int[] GetBlocksPolygonPath(Dictionary<Vector2Int, SolidBlock> chunk)
+        {
+            Profiler.BeginSample("GetBlocksPolygonPath");
+            var sortedBlocks = chunk
+                .OrderBy(block => block.Key.y)
+                .ThenBy(block => block.Key.x)
+                .ToDictionary(block => block.Key, block => block.Value);
+            Dictionary<Vector2Int, int> blockPath = new();
+            blockPath.Add(sortedBlocks.First().Key, 0);
+            var currentBlock = blockPath.First();
+            int currentDirection = 0;
+            int currentBlockNumber = 1;
+            int reversingBlock = 0;
+            while (true)
+            {
+                int attempts = 0;
+                var sideBlocks = GetSideBlocks(
+                    new(currentBlock.Key, sortedBlocks[currentBlock.Key]));
+                while (true)
+                {
+                    attempts++;
+                    if (blockPath.ContainsKey(sideBlocks[currentDirection]))
+                        break;
+                    if (sortedBlocks.ContainsKey(sideBlocks[currentDirection]))
+                    {
+                        blockPath.Add(
+                            sideBlocks[currentDirection],
+                            currentBlockNumber);
+                        currentBlockNumber++;
+                        currentDirection--;
+                        currentDirection = currentDirection < 0 ? 3 : currentDirection;
+                        currentBlock = blockPath.First();
+                        break;
+                    }
+                    currentDirection++;
+                    currentDirection = currentDirection > 3 ? 0 : currentDirection;
+                    if (attempts > 4)
+                        break;
+                }
+                if (blockPath.ContainsKey(sideBlocks[currentDirection]))
+                {
+                    reversingBlock = blockPath[sideBlocks[currentDirection]];
+                    break;
+                }
+                if (attempts > 4)
+                    break;
+            }
+            var numberedBlockPath = blockPath.OrderBy(block => block.Value).ToList();
+            for (int i = reversingBlock - 1; i >= 0; i--)
+            {
+                numberedBlockPath.Add(numberedBlockPath[i]);
+            }
+            Profiler.EndSample();
+            return numberedBlockPath
+                .Select(block => block.Key)
+                .ToArray();
         }
 
         private static Vector2Int[] GetSideBlocks(
-            ref KeyValuePair<Vector2Int, Block> block)
+            KeyValuePair<Vector2Int, SolidBlock> block)
         {
             return new Vector2Int[]{
-                new(block.Key.x + 1, block.Key.y),
-                new(block.Key.x - 1, block.Key.y),
-                new(block.Key.x, block.Key.y + 1),
-                new(block.Key.x, block.Key.y - 1)
+                block.Key + Vector2Int.right,
+                block.Key + Vector2Int.up,
+                block.Key + Vector2Int.left,
+                block.Key + Vector2Int.down
+            };
+        }
+
+        private static Dictionary<Vector2Int, bool> GetBlockVertices(Vector2Int position)
+        {
+            return new Dictionary<Vector2Int, bool>()
+            {
+                { position, false },
+                { position + Vector2Int.right,false },
+                { position + Vector2Int.up,false },
+                { position + Vector2Int.one,false }
+            };
+        }
+
+        private static Vector2Int[] GetSideNodes(Vector2Int node)
+        {
+            return new Vector2Int[]{
+                node + Vector2Int.right,
+                node + Vector2Int.up,
+                node + Vector2Int.left,
+                node + Vector2Int.down
             };
         }
 
