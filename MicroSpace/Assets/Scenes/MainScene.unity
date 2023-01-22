@@ -67,9 +67,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -104,7 +101,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +114,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -389,167 +386,167 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 4c871651-1d2e-40ff-9404-2de5dbea339a
-    m_ActionName: Default/Pause[/Keyboard/p]
+    m_ActionName: 'Default/Pause[/Keyboard/p]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 08163af9-c4f9-49f7-b038-817708e6650d
-    m_ActionName: Default/Zoom[/Mouse/scroll/y,/Mouse/scroll/x]
+    m_ActionName: 'Default/Zoom[/Mouse/scroll/y,/Mouse/scroll/x]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: edc3bbf7-f45c-4af7-87c9-a7a2b0f25225
-    m_ActionName: Default/QuickSave[/Keyboard/f5]
+    m_ActionName: 'Default/QuickSave[/Keyboard/f5]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 07d30c13-bfc7-4c08-a33d-7ac0ce4b5709
-    m_ActionName: Default/QuickLoad[/Keyboard/f9]
+    m_ActionName: 'Default/QuickLoad[/Keyboard/f9]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 2096a8be-701c-4623-a45f-03ddcb549166
-    m_ActionName: Default/EnableSteering[/Keyboard/tab]
+    m_ActionName: 'Default/EnableSteering[/Keyboard/tab]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 173105ab-f201-4351-9b66-cd75586a9829
-    m_ActionName: Steering/SteeringDirection[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: 'Steering/SteeringDirection[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 5cbeb0ad-529e-41d2-88b6-bff416d0da03
-    m_ActionName: Steering/DisableSteering[/Keyboard/tab]
+    m_ActionName: 'Steering/DisableSteering[/Keyboard/tab]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: c3a21b41-0069-401a-9228-d9159247502e
-    m_ActionName: Steering/Pause[/Keyboard/space]
+    m_ActionName: 'Steering/Pause[/Keyboard/space]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 157d5c89-ac76-4ab8-a0d8-369902b58fea
-    m_ActionName: Steering/Zoom[/Mouse/scroll]
+    m_ActionName: 'Steering/Zoom[/Mouse/scroll]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: eb050ffb-d8c2-426a-bf11-03378d858f9d
-    m_ActionName: Steering/QuickSave[/Keyboard/f5]
+    m_ActionName: 'Steering/QuickSave[/Keyboard/f5]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 20d9cc4d-2610-43d5-ba8e-9eedd9df85cf
-    m_ActionName: Steering/QuickLoad[/Keyboard/f9]
+    m_ActionName: 'Steering/QuickLoad[/Keyboard/f9]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 3adcaca2-7835-4485-85b8-05c48a0cac33
-    m_ActionName: Default/EnableBuilding[/Keyboard/b]
+    m_ActionName: 'Default/EnableBuilding[/Keyboard/b]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 72270dd7-97a9-4fcf-8df9-d7033b80d4eb
-    m_ActionName: Building/DisableBuilding[/Keyboard/escape]
+    m_ActionName: 'Building/DisableBuilding[/Keyboard/escape]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 37504135-d4c5-4be6-a5cf-8bad37f828cf
-    m_ActionName: Steering/Rotation[/Keyboard/e,/Keyboard/q]
+    m_ActionName: 'Steering/Rotation[/Keyboard/e,/Keyboard/q]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 22f39af7-3803-49ff-81b9-700f0cf42bd3
-    m_ActionName: Steering/AdjustSpeed[/Keyboard/r]
+    m_ActionName: 'Steering/AdjustSpeed[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 0dc10936-b7f4-4215-ae2e-ea63f808d363
-    m_ActionName: Default/Click[/Mouse/leftButton]
+    m_ActionName: 'Default/Click[/Mouse/leftButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: c0e33841-9994-47eb-9c23-026933d012fc
-    m_ActionName: Default/RightClick[/Mouse/rightButton]
+    m_ActionName: 'Default/RightClick[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: af9c3a51-6807-466d-afcc-4475e2d153af
-    m_ActionName: Default/Point[/Mouse/position]
+    m_ActionName: 'Default/Point[/Mouse/position]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: e463fcad-d8f5-43b0-b292-fef2c2ced0a3
-    m_ActionName: Steering/Point[/Mouse/position]
+    m_ActionName: 'Steering/Point[/Mouse/position]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: b884e849-db6d-47de-ad24-8f299ec6c379
-    m_ActionName: Steering/RightClick[/Mouse/rightButton]
+    m_ActionName: 'Steering/RightClick[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: ac840c18-a72b-4ba3-9280-584653d8a416
-    m_ActionName: Steering/Click[/Mouse/leftButton]
+    m_ActionName: 'Steering/Click[/Mouse/leftButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 8775bb73-51c9-460e-b05a-e05de0e5036c
-    m_ActionName: Building/Click[/Mouse/leftButton]
+    m_ActionName: 'Building/Click[/Mouse/leftButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: c85ad811-bb15-4a58-ad33-500037f36c6c
-    m_ActionName: Building/RightClick[/Mouse/rightButton]
+    m_ActionName: 'Building/RightClick[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 5c24e5a8-0a10-417f-ace3-c9ea45ca5b9f
-    m_ActionName: Building/Point[/Mouse/position]
+    m_ActionName: 'Building/Point[/Mouse/position]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 8312b67d-3214-45ae-8943-23a8fa36beb9
-    m_ActionName: Building/Pause[/Keyboard/space]
+    m_ActionName: 'Building/Pause[/Keyboard/space]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: a78cc46f-878d-4561-b3fa-29df2a88ff67
-    m_ActionName: Building/Wall[/Keyboard/1]
+    m_ActionName: 'Building/Wall[/Keyboard/1]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: ba87e3c1-6795-47ae-af3c-b6191491f3b2
-    m_ActionName: Building/Floor[/Keyboard/2]
+    m_ActionName: 'Building/Floor[/Keyboard/2]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: ee6630c3-bcdc-45d2-b783-42bd4f9ed37c
-    m_ActionName: Building/Equipment[/Keyboard/3]
+    m_ActionName: 'Building/Equipment[/Keyboard/3]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 3c3b7be5-00f1-4c3c-9d53-754c5d3b4f6e
-    m_ActionName: Building/Mining[/Keyboard/x,/Keyboard/4]
+    m_ActionName: 'Building/Mining[/Keyboard/x,/Keyboard/4]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 5622701c-8b6c-4fdb-8a31-7e3851e3c7e4
-    m_ActionName: Building/Cancel[/Keyboard/c,/Keyboard/5]
+    m_ActionName: 'Building/Cancel[/Keyboard/c,/Keyboard/5]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 61c16f4b-c175-4782-9665-2ed9ba3ffce6
-    m_ActionName: Building/ChangeRotation[/Keyboard/r]
+    m_ActionName: 'Building/ChangeRotation[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 71782a84-1b3e-499d-ab04-5ea846a79705
-    m_ActionName: Steering/SwitchToBuilding[/Keyboard/tab]
+    m_ActionName: 'Steering/SwitchToBuilding[/Keyboard/tab]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: b488ff3c-f2cc-4a69-8e60-b8da0496f531
-    m_ActionName: Building/Zoom[/Mouse/scroll]
+    m_ActionName: 'Building/Zoom[/Mouse/scroll]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: de1f3647-52d2-4318-83b1-7131b8dee7e0
-    m_ActionName: Default/Direction[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: 'Default/Direction[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: fdec19d7-ce01-454d-9e48-f9cc4abba5c8
-    m_ActionName: Building/Direction[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: 'Building/Direction[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 97a72e63-eb90-4296-8145-2dd5c9a381c6
-    m_ActionName: Default/Rotation[/Keyboard/e,/Keyboard/q]
+    m_ActionName: 'Default/Rotation[/Keyboard/e,/Keyboard/q]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: cc971252-7ee7-4ae2-93f0-25546aa694f6
-    m_ActionName: Building/Rotation[/Keyboard/e,/Keyboard/q]
+    m_ActionName: 'Building/Rotation[/Keyboard/e,/Keyboard/q]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 15c8daac-4d47-4cdb-8e19-e178c9fbb182
-    m_ActionName: Default/AlignCamera[/Keyboard/v]
+    m_ActionName: 'Default/AlignCamera[/Keyboard/v]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 925bc20d-11a3-4d06-aaa8-edbb67db610b
-    m_ActionName: Steering/AlignCamera[/Keyboard/v]
+    m_ActionName: 'Steering/AlignCamera[/Keyboard/v]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 62862a7c-71d9-46b0-b644-03964f902205
-    m_ActionName: Building/AlignCamera[/Keyboard/v]
+    m_ActionName: 'Building/AlignCamera[/Keyboard/v]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 3b92e1b3-6c7a-4fe0-8ed1-b72626acc548
-    m_ActionName: Default/SetNavTarget[/Keyboard/f]
+    m_ActionName: 'Default/SetNavTarget[/Keyboard/f]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Default
@@ -688,6 +685,7 @@ MonoBehaviour:
   _navMesh: {fileID: 4996609623112498550, guid: 91653e3fdbdd82342a35f2db9b9021b2, type: 3}
   _obstacle: {fileID: 5302452992096335850, guid: 58cd496381a149c489d1131a2c45524e, type: 3}
   _satellite: {fileID: 8310065123803728149, guid: 00c32c06acab8aa4398fc86fab680f1c, type: 3}
+  _light: {fileID: 9171573839353334117, guid: 37f79a1c0b9ef534c873917585aad6a1, type: 3}
   _massItem: {fileID: 1938864459101416298, guid: 10513411bca298b41aedae0c58f7e64a, type: 3}
   _singleItem: {fileID: 2160315549646813676, guid: e1ca0c99d3c66d440bd3c1023d14c79d, type: 3}
   _contextualMenuButton: {fileID: 7772782357545991682, guid: 4eea43d0bb779ad4488b4411ac2cc049, type: 3}
@@ -771,14 +769,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
+  m_ComponentVersion: 2
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0.1
   m_LightVolumeIntensity: 1
-  m_LightVolumeIntensityEnabled: 0
+  m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 7d9d3da963d634b6c1add6df00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
@@ -788,8 +786,10 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowIntensityEnabled: 0
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
+  m_ShadowSoftness: 0
+  m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_Vertices:
@@ -1003,9 +1003,19 @@ MonoBehaviour:
   m_Dithering: 0
   m_ClearDepth: 1
   m_AllowXRRendering: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1020,9 +1030,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -1332,6 +1350,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -2031,14 +2050,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
+  m_ComponentVersion: 2
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.6745098, g: 0.8392157, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
-  m_LightVolumeIntensityEnabled: 0
+  m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 7b7e45495328e2d9cd02f304
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
@@ -2048,8 +2067,10 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowIntensityEnabled: 0
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
+  m_ShadowSoftness: 0
+  m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_Vertices:
@@ -2127,14 +2148,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
+  m_ComponentVersion: 2
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
-  m_LightVolumeIntensityEnabled: 0
+  m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 058c9ce703180f3d
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
@@ -2144,8 +2165,10 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowIntensityEnabled: 0
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
+  m_ShadowSoftness: 0
+  m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_Vertices:

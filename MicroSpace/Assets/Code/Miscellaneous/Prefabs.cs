@@ -41,6 +41,9 @@ namespace Miscellaneous
         [SerializeField]
         private GameObject _satellite;
 
+        [SerializeField]
+        private GameObject _light;
+
         [Header("RigidEntities")]
         [SerializeField]
         private GameObject _massItem;
@@ -87,6 +90,7 @@ namespace Miscellaneous
         public static GameObject ModelButton => Instance._modelButton;
         public static GameObject ShapeButton => Instance._shapeButton;
         public static GameObject Pointer => Instance._pointer;
+        public static GameObject Light => Instance._light;
 
         public static AnimationCurve PointerCurve => Instance._pointerCurve;
 

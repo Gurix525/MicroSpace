@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Entities;
 using Maths;
+using Miscellaneous;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering.Universal;
@@ -14,6 +15,7 @@ namespace Main
 
         private int _timer;
         private List<Range> _ranges = new();
+        private List<Light2D> _lights = new();
 
         #endregion Fields
 
@@ -60,7 +62,7 @@ namespace Main
 
         private void IlluminateBlocks()
         {
-            Profiler.BeginSample("IlluminateWalls");
+            Profiler.BeginSample("IlluminateBlocks");
             Dictionary<Vector2Int, SolidBlock> surfaceBlocks = Wall.EnabledWalls
                 .Where(wall => wall.Value.IsSurface)
                 .ToDictionary(wall => wall.Key, wall => (SolidBlock)wall.Value);
@@ -103,23 +105,39 @@ namespace Main
                     blockChunks.Add(closedBlocks);
                 }
             }
+            List<Vector3[]> polygonPaths = new();
             foreach (var chunk in blockChunks)
             {
-                var blocksPolygonPath = GetBlocksPolygonPath(chunk, out Satellite satellite);
-                Vector2[] polygonPath = GetPolygonPath(blocksPolygonPath, satellite.transform);
-                for (int i = 0; i < polygonPath.Length - 1; i++)
+                var blocksPolygonPath = GetPolygonBlocks(chunk, out Satellite satellite);
+                polygonPaths.Add(GetPolygonPath(blocksPolygonPath, satellite.transform));
+            }
+            if (polygonPaths.Count > _lights.Count)
+            {
+                for (int i = 0; i < polygonPaths.Count - _lights.Count; i++)
                 {
-                    Debug.DrawLine(polygonPath[i], polygonPath[i + 1], Color.yellow);
+                    _lights.Add(Instantiate(Prefabs.Light).GetComponent<Light2D>());
                 }
-                Debug.DrawLine(polygonPath[^1], polygonPath[0], Color.yellow);
+            }
+            if (polygonPaths.Count < _lights.Count)
+            {
+                for (int i = _lights.Count - 1; i > polygonPaths.Count; i--)
+                {
+                    _lights[i].gameObject.SetActive(false);
+                }
+            }
+            for (int i = 0; i < polygonPaths.Count; i++)
+            {
+                _lights[i].gameObject.SetActive(true);
+                _lights[i].SetShapePath(polygonPaths[i]);
             }
             Profiler.EndSample();
         }
 
-        private static Vector2[] GetPolygonPath(
+        private static Vector3[] GetPolygonPath(
             Vector2Int[] blocksPolygonPath,
             Transform satellite)
         {
+            Profiler.BeginSample("GetPolygonPath");
             List<Vector2Int> path = new();
             int direction = 0;
             path.Add(blocksPolygonPath[0]);
@@ -155,16 +173,17 @@ namespace Main
                 }
             }
             path.RemoveAt(path.Count - 1);
+            Profiler.EndSample();
             return path
-                .Select(node => (Vector2)satellite.TransformPoint(
+                .Select(node => satellite.TransformPoint(
                     ((Vector2)node) - (Vector2.one / 2F)))
                 .ToArray();
         }
 
-        private static Vector2Int[] GetBlocksPolygonPath(
+        private static Vector2Int[] GetPolygonBlocks(
             Dictionary<Vector2Int, SolidBlock> chunk, out Satellite satellite)
         {
-            Profiler.BeginSample("GetBlocksPolygonPath");
+            Profiler.BeginSample("GetPolygonBlocks");
             var sortedBlocks = chunk
                 .OrderBy(block => block.Key.y)
                 .ThenBy(block => block.Key.x)
@@ -173,15 +192,21 @@ namespace Main
             blockPath.Add(sortedBlocks.First().Key);
 
             int direction = 0;
+            bool isOriginRevisited = false;
             while (true)
             {
                 if (blockPath.Count > 1
                     && blockPath[0] == blockPath[^1]
-                    && !sortedBlocks.Any(
+                    && (!sortedBlocks.Any(
                         sorted => !blockPath
                         .Distinct()
                         .ToDictionary(block => block, block => false).ContainsKey(sorted.Key)))
+                        || isOriginRevisited)
+                {
                     break;
+                }
+                if (blockPath.Count > 1 && blockPath[0] == blockPath[^1])
+                    isOriginRevisited = true;
                 int attempts = 0;
                 var sideBlocks = GetSideBlocks(blockPath[^1]);
                 while (true)
@@ -202,8 +227,10 @@ namespace Main
                 if (attempts > 4)
                     break;
             }
-            Profiler.EndSample();
+            if (isOriginRevisited)
+                blockPath.Add(blockPath[0]);
             satellite = chunk.Values.First().Satellite;
+            Profiler.EndSample();
             return blockPath.ToArray();
         }
 
