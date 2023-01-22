@@ -38,11 +38,6 @@ namespace Main
                 SetSurfaceBasedOnType(entity);
             IlluminateBlocks();
             Profiler.EndSample();
-            //foreach (var range in _ranges)
-            //{
-            //    Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.Start) * Vector3.up * 20000, Color.magenta);
-            //    Debug.DrawRay(Vector3.zero, Quaternion.Euler(0, 0, range.End) * Vector3.up * 20000, Color.magenta);
-            //}
         }
 
         private static Dictionary<Entity, int> GetEntities()
@@ -113,7 +108,8 @@ namespace Main
             }
             if (polygonPaths.Count > _lights.Count)
             {
-                for (int i = 0; i < polygonPaths.Count - _lights.Count; i++)
+                int desiredLightsCount = polygonPaths.Count - _lights.Count;
+                for (int i = 0; i < desiredLightsCount; i++)
                 {
                     _lights.Add(Instantiate(Prefabs.Light).GetComponent<Light2D>());
                 }
@@ -125,7 +121,7 @@ namespace Main
                     _lights[i].gameObject.SetActive(false);
                 }
             }
-            for (int i = 0; i < polygonPaths.Count; i++)
+            for (int i = 0; i < _lights.Count; i++)
             {
                 _lights[i].gameObject.SetActive(true);
                 _lights[i].SetShapePath(polygonPaths[i]);
