@@ -14,37 +14,10 @@ namespace Entities
         #region Fields
 
         private Rigidbody2D _rigidbody;
-        private int _lightTimer = 0;
-        private bool _isSurface = false;
 
         #endregion Fields
 
         #region Properties
-
-        public Maths.Range ShadowRange
-        {
-            get
-            {
-                Profiler.BeginSample("ShadowRange", this);
-                Vector2 perpendicular = Vector2
-                .Perpendicular(transform.position).normalized;
-                float rotation = Math.Abs((transform.eulerAngles.z
-                    + Vector2.SignedAngle(Vector2.up, transform.position)) % 90);
-                float scaledRotation = rotation < 45 ? rotation : 90 - rotation;
-                float oneSideWidth = 0.6F + scaledRotation
-                    / 45 * 0.5F / 2;
-                float leftAngle = Geometry.GetAngle(
-                    Vector2.up * 10000F,
-                    ((Vector2)transform.position - perpendicular * oneSideWidth) * 100F);
-                float rightAngle = Geometry.GetAngle(
-                    Vector2.up * 10000F,
-                    ((Vector2)transform.position + perpendicular * oneSideWidth) * 100F);
-                Profiler.EndSample();
-                return new Maths.Range(leftAngle, rightAngle);
-            }
-        }
-
-        public bool IsSurface => _isSurface;
 
         private Rigidbody2D Rigidbody =>
             _rigidbody ??= _satellite.GetComponent<Rigidbody2D>();
@@ -62,24 +35,7 @@ namespace Entities
             Destroy(gameObject);
         }
 
-        public void SetEnlighted(bool state)
-        {
-            if (_lightTimer < 10 || _isSurface == state)
-                return;
-            _lightTimer = 0;
-            _isSurface = state;
-        }
-
         #endregion Public
-
-        #region Unity
-
-        protected virtual void FixedUpdate()
-        {
-            _lightTimer++;
-        }
-
-        #endregion Unity
 
         #region Private
 
